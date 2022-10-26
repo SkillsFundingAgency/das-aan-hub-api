@@ -1,0 +1,6 @@
+﻿CREATE TABLE [dbo].[Region]
+(
+	[Id] INT IDENTITY(1, 1) NOT NULL PRIMARY KEY, 
+    [Area] NVARCHAR(MAX) NOT NULL, 
+    [Ordering] NVARCHAR(MAX) NOT NULL 
+)

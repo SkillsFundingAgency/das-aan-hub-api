@@ -1,0 +1,10 @@
+﻿CREATE TABLE [dbo].[Partner]
+(
+	[MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [UKPRN] NVARCHAR(MAX) NOT NULL, 
+    [Email] NVARCHAR(MAX) NOT NULL, 
+    [Name] NVARCHAR(MAX) NOT NULL, 
+    [LastUpdated] DATETIME NOT NULL, 
+    [IsActive] BIT NOT NULL
+    CONSTRAINT [FK_Partner_Member] FOREIGN KEY ([MemberId]) REFERENCES [Member]([Id])
+)
