@@ -75,6 +75,8 @@
     <Build Include="Tables\CalendarPermission.sql" />
     <Build Include="Tables\Attendance.sql" />
     <Build Include="Tables\AttendanceProfile.sql" />
+    <Build Include="Tables\Notifications.sql" />
+    <Build Include="Tables\NotificationTemplate.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
