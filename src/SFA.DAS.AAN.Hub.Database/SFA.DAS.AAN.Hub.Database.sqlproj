@@ -70,6 +70,11 @@
     <Build Include="Tables\Profile.sql" />
     <Build Include="Tables\MemberPermission.sql" />
     <Build Include="Tables\Permission.sql" />
+    <Build Include="Tables\Calendar.sql" />
+    <Build Include="Tables\CalendarEvent.sql" />
+    <Build Include="Tables\CalendarPermission.sql" />
+    <Build Include="Tables\Attendance.sql" />
+    <Build Include="Tables\AttendanceProfile.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
