@@ -69,6 +69,7 @@
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
     <Build Include="Tables\MemberPermission.sql" />
+    <Build Include="Tables\Permission.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />

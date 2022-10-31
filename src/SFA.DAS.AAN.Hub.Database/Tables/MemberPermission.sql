@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[MemberPermission]
 (
-	[MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
-    [PermissionId] NVARCHAR(MAX) NOT NULL, 
+	[MemberId] BIGINT NOT NULL PRIMARY KEY, 
+    [PermissionId] BIGINT NOT NULL, 
     [IsActive] BIT NOT NULL
 )
