@@ -78,6 +78,7 @@
     <Build Include="Tables\Notifications.sql" />
     <Build Include="Tables\NotificationTemplate.sql" />
     <Build Include="Tables\Documents.sql" />
+    <Build Include="Tables\Audit.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
