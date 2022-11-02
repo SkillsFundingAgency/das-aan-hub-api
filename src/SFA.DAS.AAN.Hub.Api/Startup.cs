@@ -1,4 +1,7 @@
-﻿using Microsoft.OpenApi.Models;
+﻿using Microsoft.Extensions.Options;
+using Microsoft.OpenApi.Models;
+using SFA.DAS.AAN.Domain.Configuration;
+using SFA.DAS.AAN.Hub.Api.AppStart;
 
 namespace SFA.DAS.AAN.Hub.Api
 {
@@ -28,6 +31,12 @@ namespace SFA.DAS.AAN.Hub.Api
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.AAN.Hub.Api", Version = "v1" });
             });
+            services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
+            services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
+
+            services.AddDatabaseRegistration(Configuration);
+            services.AddControllers();
+            services.AddServices();
 
         }
 
@@ -43,6 +52,12 @@ namespace SFA.DAS.AAN.Hub.Api
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+                //endpoints.MapHealthChecks("/ping");
+            });
         }
     }
 }
