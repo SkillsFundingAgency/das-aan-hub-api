@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Apprentice]
 (
-	[MemberId] BIGINT NOT NULL PRIMARY KEY, 
+	[MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
     [ApprenticeId] BIGINT NOT NULL, 
     [Email] NVARCHAR(256) NOT NULL, 
     [Name] NVARCHAR(200) NOT NULL, 
