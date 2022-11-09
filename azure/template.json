@@ -104,7 +104,7 @@
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-        "configNames": "SFA.DAS.AAN.Hub.Api"
+        "configNames": "SFA.DAS.AAN.Hub"
     },
     "resources": [
         {
