@@ -7,16 +7,16 @@ namespace SFA.DAS.AAN.Application.Queries.GetAllRegions
 {
     public class GetAllRegionsQueryHandler : IRequestHandler<GetAllRegionsQuery, GetAllRegionsResult>
     {
-        private readonly IMembersContext _membersContext;
+        private readonly IRegionsContext _regionsContext;
 
-        public GetAllRegionsQueryHandler(IMembersContext membersContext)
+        public GetAllRegionsQueryHandler(IRegionsContext regionsContext)
         {
-            _membersContext = membersContext;
+            _regionsContext = regionsContext;
         }
 
         public async Task<GetAllRegionsResult> Handle(GetAllRegionsQuery request, CancellationToken cancellationToken)
         {
-            var regionSummary = await _membersContext.Entities.ToListAsync(cancellationToken);
+            var regionSummary = await _regionsContext.Entities.ToListAsync(cancellationToken);
 
             return regionSummary.Any()
                 ? new GetAllRegionsResult
