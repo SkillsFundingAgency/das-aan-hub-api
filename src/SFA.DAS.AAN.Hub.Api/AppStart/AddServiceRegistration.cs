@@ -10,7 +10,7 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
         public static void AddServices(this IServiceCollection services)
         {
             services.AddMediatR(typeof(CreateMemberCommand).Assembly);
-            services.AddScoped<IMembersContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<IRegionsContext>(s => s.GetRequiredService<AanDataContext>());
         }
     }
 }

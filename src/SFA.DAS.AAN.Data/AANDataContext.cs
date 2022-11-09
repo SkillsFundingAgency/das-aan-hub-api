@@ -9,7 +9,7 @@ using SFA.DAS.AAN.Domain.Interfaces;
 namespace SFA.DAS.AAN.Data
 {
     public class AanDataContext : DbContext,
-        IMembersContext
+        IRegionsContext
     {
         private readonly ApplicationSettings? _configuration;
 

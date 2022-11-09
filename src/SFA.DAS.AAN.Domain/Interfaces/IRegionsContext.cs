@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.AAN.Domain.Interfaces
 {
-    public interface IMembersContext : IEntityContext<Region>
+    public interface IRegionsContext : IEntityContext<Region>
     {
     }
 }
