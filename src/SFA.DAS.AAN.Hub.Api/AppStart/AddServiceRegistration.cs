@@ -1,7 +1,9 @@
-﻿using MediatR;
-using SFA.DAS.AAN.Application.Commands;
+﻿
+using MediatR;
+using SFA.DAS.AAN.Application.Commands.CreateMember;
 using SFA.DAS.AAN.Data;
 using SFA.DAS.AAN.Domain.Interfaces;
+
 
 namespace SFA.DAS.AAN.Hub.Api.AppStart
 {
@@ -11,6 +13,7 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
         {
             services.AddMediatR(typeof(CreateMemberCommand).Assembly);
             services.AddScoped<IRegionsContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<IMembersContext>(s => s.GetRequiredService<AanDataContext>());
         }
     }
 }

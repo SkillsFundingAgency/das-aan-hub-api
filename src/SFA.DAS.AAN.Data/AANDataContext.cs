@@ -9,13 +9,16 @@ using SFA.DAS.AAN.Domain.Interfaces;
 namespace SFA.DAS.AAN.Data
 {
     public class AanDataContext : DbContext,
-        IRegionsContext
+        IRegionsContext,
+        IMembersContext
     {
         private readonly ApplicationSettings? _configuration;
 
         public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<Member> Members { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
+        DbSet<Member> IEntityContext<Member>.Entities => Members;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -45,6 +48,7 @@ namespace SFA.DAS.AAN.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -79,17 +83,17 @@ namespace SFA.DAS.AAN.Data
                     {
                         case EntityState.Modified:
                             // set the updated date to "now"
-                            trackable.UpdatedOn = utcNow;
+                            trackable.Updated = utcNow;
 
                             // mark property as "don't touch"
                             // we don't want to update on a Modify operation
-                            entry.Property("CreatedOn").IsModified = false;
+                            entry.Property("Created").IsModified = false;
                             break;
 
                         case EntityState.Added:
                             // set both updated and created date to "now"
-                            trackable.CreatedOn = utcNow;
-                            trackable.UpdatedOn = utcNow;
+                            trackable.Created = utcNow;
+                            trackable.Updated = utcNow;
                             break;
                     }
 
