@@ -14,6 +14,7 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
             services.AddMediatR(typeof(CreateMemberCommand).Assembly);
             services.AddScoped<IRegionsContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IMembersContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<IApprenticesContext>(s => s.GetRequiredService<AanDataContext>());
         }
     }
 }

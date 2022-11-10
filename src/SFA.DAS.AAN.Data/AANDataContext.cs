@@ -10,15 +10,18 @@ namespace SFA.DAS.AAN.Data
 {
     public class AanDataContext : DbContext,
         IRegionsContext,
-        IMembersContext
+        IMembersContext,
+        IApprenticesContext
     {
         private readonly ApplicationSettings? _configuration;
 
         public virtual DbSet<Region> Regions { get; set; } = null!;
         public virtual DbSet<Member> Members { get; set; } = null!;
+        public virtual DbSet<Apprentice> Apprentices { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<Member> IEntityContext<Member>.Entities => Members;
+        DbSet<Apprentice> IEntityContext<Apprentice>.Entities => Apprentices;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -49,6 +52,7 @@ namespace SFA.DAS.AAN.Data
         {
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
             modelBuilder.ApplyConfiguration(new MemberConfiguration());
+            modelBuilder.ApplyConfiguration(new ApprenticeConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

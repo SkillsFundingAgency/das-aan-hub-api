@@ -33,7 +33,7 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to retrieve list of regions");
+                _logger.LogError(e, $"Error attempting to create apprentice member");
                 return BadRequest();
             }
         }
