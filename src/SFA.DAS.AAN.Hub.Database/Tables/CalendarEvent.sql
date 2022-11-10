@@ -16,4 +16,5 @@
     [Updated] DATETIME NULL, 
     [Deleted] DATETIME NULL, 
     [IsActive] BIT NOT NULL
+    CONSTRAINT [FK_CalendarEvent_Calendar] FOREIGN KEY ([CalendarId]) REFERENCES [Calendar]([Id])
 )
