@@ -102,9 +102,9 @@
         "resourceNamePrefix": "[toLower(concat('das-', parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), '-rg')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
-        "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
+        "apiAppServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
         "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-        "configNames": "SFA.DAS.AAN.Hub"
+        "configNames": "SFA.DAS.AAN.Hub.Api"
     },
     "resources": [
         {
