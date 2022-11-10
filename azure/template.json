@@ -360,7 +360,7 @@
             }
         }
     ],
-        "outputs": {
+    "outputs": {
         "AppServiceName": {
             "type": "string",
             "value": "[variables('apiAppServiceName')]"
