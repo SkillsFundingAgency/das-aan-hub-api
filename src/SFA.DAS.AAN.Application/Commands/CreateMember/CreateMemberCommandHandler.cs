@@ -51,8 +51,8 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                         {
                             MemberId = memberId,
                             ApprenticeId = id,
-                            Email = "",
-                            Name = "",
+                            Email = null,
+                            Name = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         }
