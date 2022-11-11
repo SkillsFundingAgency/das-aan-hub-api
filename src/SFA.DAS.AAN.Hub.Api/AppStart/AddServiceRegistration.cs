@@ -1,6 +1,8 @@
 ﻿
 using MediatR;
 using SFA.DAS.AAN.Application.Commands.CreateMember;
+using SFA.DAS.AAN.Application.Interfaces;
+using SFA.DAS.AAN.Application.Services;
 using SFA.DAS.AAN.Data;
 using SFA.DAS.AAN.Domain.Interfaces;
 
@@ -21,6 +23,8 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
             services.AddScoped<ICalendarsContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<ICalendarPermissionsContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IMemberPermissionsContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<IAuditContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped(typeof(IAuditLogService<>), typeof(AuditLogService<>));
         }
     }
 }

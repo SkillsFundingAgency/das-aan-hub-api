@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using SFA.DAS.AAN.Data.Configuration;
 using SFA.DAS.AAN.Domain.Configuration;
 using SFA.DAS.AAN.Domain.Entities;
+using SFA.DAS.AAN.Domain.Entities.Audit;
 using SFA.DAS.AAN.Domain.Interfaces;
 using Calendar = SFA.DAS.AAN.Domain.Entities.Calendar;
 
@@ -20,7 +21,8 @@ namespace SFA.DAS.AAN.Data
         IAdminsContext,
         ICalendarsContext,
         ICalendarPermissionsContext,
-        IMemberPermissionsContext
+        IMemberPermissionsContext,
+        IAuditContext
     {
         private readonly ApplicationSettings? _configuration;
 
@@ -33,6 +35,7 @@ namespace SFA.DAS.AAN.Data
         public virtual DbSet<Calendar> Calendars { get; set; } = null!;
         public virtual DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
         public virtual DbSet<MemberPermission> MemberPermissions { get; set; } = null!;
+        public virtual DbSet<AuditData> AuditData { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<Member> IEntityContext<Member>.Entities => Members;
@@ -43,6 +46,7 @@ namespace SFA.DAS.AAN.Data
         DbSet<Calendar> IEntityContext<Calendar>.Entities => Calendars;
         DbSet<CalendarPermission> IEntityContext<CalendarPermission>.Entities => CalendarPermissions;
         DbSet<MemberPermission> IEntityContext<MemberPermission>.Entities => MemberPermissions;
+        DbSet<AuditData> IEntityContext<AuditData>.Entities => AuditData;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -80,6 +84,7 @@ namespace SFA.DAS.AAN.Data
             modelBuilder.ApplyConfiguration(new CalendarConfiguration());
             modelBuilder.ApplyConfiguration(new CalendarPermissionConfiguration());
             modelBuilder.ApplyConfiguration(new MemberPermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new AuditConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
