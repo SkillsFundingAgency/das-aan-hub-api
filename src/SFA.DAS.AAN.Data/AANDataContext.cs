@@ -13,7 +13,8 @@ namespace SFA.DAS.AAN.Data
         IMembersContext,
         IApprenticesContext,
         IEmployersContext,
-        IPartnersContext
+        IPartnersContext,
+        IAdminsContext
     {
         private readonly ApplicationSettings? _configuration;
 
@@ -22,12 +23,14 @@ namespace SFA.DAS.AAN.Data
         public virtual DbSet<Apprentice> Apprentices { get; set; } = null!;
         public virtual DbSet<Employer> Employers { get; set; } = null!;
         public virtual DbSet<Partner> Partners { get; set; } = null!;
+        public virtual DbSet<Admin> Admins { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<Member> IEntityContext<Member>.Entities => Members;
         DbSet<Apprentice> IEntityContext<Apprentice>.Entities => Apprentices;
         DbSet<Employer> IEntityContext<Employer>.Entities => Employers;
         DbSet<Partner> IEntityContext<Partner>.Entities => Partners;
+        DbSet<Admin> IEntityContext<Admin>.Entities => Admins;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -61,6 +64,7 @@ namespace SFA.DAS.AAN.Data
             modelBuilder.ApplyConfiguration(new ApprenticeConfiguration());
             modelBuilder.ApplyConfiguration(new EmployerConfiguration());
             modelBuilder.ApplyConfiguration(new PartnerConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

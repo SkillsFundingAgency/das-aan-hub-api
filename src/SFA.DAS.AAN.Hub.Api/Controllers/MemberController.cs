@@ -71,5 +71,22 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("admin")]
+        public async Task<IActionResult> CreateApprenticeAdmin([FromBody] CreateMemberRequest request)
+        {
+            try
+            {
+                CreateMemberResponse result = await _mediator.Send(
+                    new CreateMemberCommand(request.id, "Admin", request.joined, request.region, request.information, request.organisation)
+                );
+                return Ok(new CreateMemberApiResponse(result));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to create admin member");
+                return BadRequest();
+            }
+        }
     }
 }

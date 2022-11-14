@@ -14,13 +14,20 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
         private readonly IApprenticesContext _apprenticesContext;
         private readonly IEmployersContext _employersContext;
         private readonly IPartnersContext _partnersContext;
+        private readonly IAdminsContext _adminsContext;
 
-        public CreateMemberCommandHandler(IMembersContext membersContext, IApprenticesContext apprenticesContext, IEmployersContext employersContext, IPartnersContext partnersContext)
+        public CreateMemberCommandHandler(
+            IMembersContext membersContext,
+            IApprenticesContext apprenticesContext,
+            IEmployersContext employersContext,
+            IPartnersContext partnersContext,
+            IAdminsContext adminsContext)
         {
             _membersContext = membersContext;
             _apprenticesContext = apprenticesContext;
             _employersContext = employersContext;
             _partnersContext = partnersContext;
+            _adminsContext = adminsContext;
         }
 
         public async Task<CreateMemberResponse> Handle(CreateMemberCommand command, CancellationToken cancellationToken)
@@ -95,7 +102,18 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     break;
 
                 case "admin":
+                    EntityEntry<Admin> admin = await _adminsContext.Entities.AddAsync(
+                        new Admin()
+                        {
+                            MemberId = memberId,
+                            Email = null,
+                            LastUpdated = DateTime.Now,
+                            IsActive = true
+                        }
+                    );
+                    await _adminsContext.SaveChangesAsync();
                     break;
+
                 default:
                     break;
             }
