@@ -16,6 +16,7 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
             services.AddScoped<IMembersContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IApprenticesContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IEmployersContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<IPartnersContext>(s => s.GetRequiredService<AanDataContext>());
         }
     }
 }

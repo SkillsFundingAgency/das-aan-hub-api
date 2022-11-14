@@ -54,5 +54,22 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("partner")]
+        public async Task<IActionResult> CreateApprenticePartner([FromBody] CreateMemberRequest request)
+        {
+            try
+            {
+                CreateMemberResponse result = await _mediator.Send(
+                    new CreateMemberCommand(request.id, "Partner", request.joined, request.region, request.information, request.organisation)
+                );
+                return Ok(new CreateMemberApiResponse(result));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to create partner member");
+                return BadRequest();
+            }
+        }
     }
 }

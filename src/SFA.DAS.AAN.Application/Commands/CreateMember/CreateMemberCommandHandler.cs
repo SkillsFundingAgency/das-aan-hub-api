@@ -12,13 +12,15 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
     {
         private readonly IMembersContext _membersContext;
         private readonly IApprenticesContext _apprenticesContext;
-        private readonly IEmployersContext _employerssContext;
+        private readonly IEmployersContext _employersContext;
+        private readonly IPartnersContext _partnersContext;
 
-        public CreateMemberCommandHandler(IMembersContext membersContext, IApprenticesContext apprenticesContext, IEmployersContext employerssContext)
+        public CreateMemberCommandHandler(IMembersContext membersContext, IApprenticesContext apprenticesContext, IEmployersContext employersContext, IPartnersContext partnersContext)
         {
             _membersContext = membersContext;
             _apprenticesContext = apprenticesContext;
-            _employerssContext = employerssContext;
+            _employersContext = employersContext;
+            _partnersContext = partnersContext;
         }
 
         public async Task<CreateMemberResponse> Handle(CreateMemberCommand command, CancellationToken cancellationToken)
@@ -62,7 +64,7 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     break;
 
                 case "employer":
-                    EntityEntry<Employer> employer = await _employerssContext.Entities.AddAsync(
+                    EntityEntry<Employer> employer = await _employersContext.Entities.AddAsync(
                         new Employer()
                         {
                             MemberId = memberId,
@@ -74,11 +76,24 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                             IsActive = true
                         }
                     );
-                    await _employerssContext.SaveChangesAsync();
+                    await _employersContext.SaveChangesAsync();
                     break;
 
                 case "partner":
+                    EntityEntry<Partner> partner = await _partnersContext.Entities.AddAsync(
+                        new Partner()
+                        {
+                            MemberId = memberId,
+                            UKPRN = id,
+                            Email = null,
+                            Name = null,
+                            LastUpdated = DateTime.Now,
+                            IsActive = true
+                        }
+                    );
+                    await _partnersContext.SaveChangesAsync();
                     break;
+
                 case "admin":
                     break;
                 default:
