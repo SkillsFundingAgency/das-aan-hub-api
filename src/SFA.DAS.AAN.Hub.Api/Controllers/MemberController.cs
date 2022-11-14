@@ -37,5 +37,22 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost("employer")]
+        public async Task<IActionResult> CreateApprenticeEmployer([FromBody] CreateMemberRequest request)
+        {
+            try
+            {
+                CreateMemberResponse result = await _mediator.Send(
+                    new CreateMemberCommand(request.id, "Employer", request.joined, request.region, request.information, request.organisation)
+                );
+                return Ok(new CreateMemberApiResponse(result));
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to create apprentice member");
+                return BadRequest();
+            }
+        }
     }
 }

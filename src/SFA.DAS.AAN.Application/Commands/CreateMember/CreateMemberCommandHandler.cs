@@ -1,6 +1,5 @@
 ﻿
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using SFA.DAS.AAN.Domain.Entities;
 using SFA.DAS.AAN.Domain.Enums;
@@ -13,11 +12,13 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
     {
         private readonly IMembersContext _membersContext;
         private readonly IApprenticesContext _apprenticesContext;
+        private readonly IEmployersContext _employerssContext;
 
-        public CreateMemberCommandHandler(IMembersContext membersContext, IApprenticesContext apprenticesContext)
+        public CreateMemberCommandHandler(IMembersContext membersContext, IApprenticesContext apprenticesContext, IEmployersContext employerssContext)
         {
             _membersContext = membersContext;
             _apprenticesContext = apprenticesContext;
+            _employerssContext = employerssContext;
         }
 
         public async Task<CreateMemberResponse> Handle(CreateMemberCommand command, CancellationToken cancellationToken)
@@ -41,11 +42,11 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
             );
             await _membersContext.SaveChangesAsync();
 
+            long id = long.TryParse(command.id, out id) ? id : 0;
+
             switch (command.UserType.ToLower())
             {
                 case "apprentice":
-                    long id = 0;
-                    bool success = long.TryParse(command.id, out id);
                     EntityEntry<Apprentice> apprentice = await _apprenticesContext.Entities.AddAsync(
                         new Apprentice()
                         {
@@ -61,7 +62,21 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     break;
 
                 case "employer":
+                    EntityEntry<Employer> employer = await _employerssContext.Entities.AddAsync(
+                        new Employer()
+                        {
+                            MemberId = memberId,
+                            AccountId = id,
+                            UserId = null,
+                            Email = null,
+                            Name = null,
+                            LastUpdated = DateTime.Now,
+                            IsActive = true
+                        }
+                    );
+                    await _employerssContext.SaveChangesAsync();
                     break;
+
                 case "partner":
                     break;
                 case "admin":
