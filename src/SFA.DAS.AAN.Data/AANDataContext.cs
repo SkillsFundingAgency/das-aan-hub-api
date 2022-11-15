@@ -1,10 +1,13 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SFA.DAS.AAN.Data.Configuration;
 using SFA.DAS.AAN.Domain.Configuration;
 using SFA.DAS.AAN.Domain.Entities;
 using SFA.DAS.AAN.Domain.Interfaces;
+using Calendar = SFA.DAS.AAN.Domain.Entities.Calendar;
+
 
 namespace SFA.DAS.AAN.Data
 {
@@ -14,7 +17,9 @@ namespace SFA.DAS.AAN.Data
         IApprenticesContext,
         IEmployersContext,
         IPartnersContext,
-        IAdminsContext
+        IAdminsContext,
+        ICalendarsContext,
+        ICalendarPermissionsContext
     {
         private readonly ApplicationSettings? _configuration;
 
@@ -24,6 +29,8 @@ namespace SFA.DAS.AAN.Data
         public virtual DbSet<Employer> Employers { get; set; } = null!;
         public virtual DbSet<Partner> Partners { get; set; } = null!;
         public virtual DbSet<Admin> Admins { get; set; } = null!;
+        public virtual DbSet<Calendar> Calendars { get; set; } = null!;
+        public virtual DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<Member> IEntityContext<Member>.Entities => Members;
@@ -31,6 +38,8 @@ namespace SFA.DAS.AAN.Data
         DbSet<Employer> IEntityContext<Employer>.Entities => Employers;
         DbSet<Partner> IEntityContext<Partner>.Entities => Partners;
         DbSet<Admin> IEntityContext<Admin>.Entities => Admins;
+        DbSet<Calendar> IEntityContext<Calendar>.Entities => Calendars;
+        DbSet<CalendarPermission> IEntityContext<CalendarPermission>.Entities => CalendarPermissions;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -65,6 +74,8 @@ namespace SFA.DAS.AAN.Data
             modelBuilder.ApplyConfiguration(new EmployerConfiguration());
             modelBuilder.ApplyConfiguration(new PartnerConfiguration());
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarPermissionConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 

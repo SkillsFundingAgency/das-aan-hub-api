@@ -18,6 +18,8 @@ namespace SFA.DAS.AAN.Hub.Api.AppStart
             services.AddScoped<IEmployersContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IPartnersContext>(s => s.GetRequiredService<AanDataContext>());
             services.AddScoped<IAdminsContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<ICalendarsContext>(s => s.GetRequiredService<AanDataContext>());
+            services.AddScoped<ICalendarPermissionsContext>(s => s.GetRequiredService<AanDataContext>());
         }
     }
 }
