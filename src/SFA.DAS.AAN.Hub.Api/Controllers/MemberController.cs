@@ -1,9 +1,9 @@
 ﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.AAN.Application.ApiResponses;
 using SFA.DAS.AAN.Application.Commands.CreateMember;
 using SFA.DAS.AAN.Domain.Enums;
-using SFA.DAS.AAN.Hub.Api.Responses;
 
 
 namespace SFA.DAS.AAN.Hub.Api.Controllers
