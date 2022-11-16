@@ -38,7 +38,7 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                 new Member()
                 {
                     Id = memberId,
-                    UserType = command.UserType,
+                    UserType = command.UserType?.ToString() ?? "unknown",
                     Joined = command.joined,
                     RegionId = command.region,
                     Information = command.information,
@@ -53,9 +53,9 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
 
             long id = long.TryParse(command.id, out id) ? id : 0;
 
-            switch (command.UserType.ToLower())
+            switch (command.UserType)
             {
-                case "apprentice":
+                case MembershipUserTypes.Apprentice:
                     EntityEntry<Apprentice> apprentice = await _apprenticesContext.Entities.AddAsync(
                         new Apprentice()
                         {
@@ -70,7 +70,7 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     await _apprenticesContext.SaveChangesAsync();
                     break;
 
-                case "employer":
+                case MembershipUserTypes.Employer:
                     EntityEntry<Employer> employer = await _employersContext.Entities.AddAsync(
                         new Employer()
                         {
@@ -86,7 +86,7 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     await _employersContext.SaveChangesAsync();
                     break;
 
-                case "partner":
+                case MembershipUserTypes.Partner:
                     EntityEntry<Partner> partner = await _partnersContext.Entities.AddAsync(
                         new Partner()
                         {
@@ -101,7 +101,7 @@ namespace SFA.DAS.AAN.Application.Commands.CreateMember
                     await _partnersContext.SaveChangesAsync();
                     break;
 
-                case "admin":
+                case MembershipUserTypes.Admin:
                     EntityEntry<Admin> admin = await _adminsContext.Entities.AddAsync(
                         new Admin()
                         {
