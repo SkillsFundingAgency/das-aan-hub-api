@@ -1,9 +1,9 @@
 ﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.AAN.Application.ApiResponses;
 using SFA.DAS.AAN.Application.Commands.CreateMember;
-using SFA.DAS.AAN.Hub.Api.Requests;
-using SFA.DAS.AAN.Hub.Api.Responses;
+using SFA.DAS.AAN.Domain.Enums;
 
 
 namespace SFA.DAS.AAN.Hub.Api.Controllers
@@ -22,69 +22,43 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
         }
 
         [HttpPost("apprentice")]
-        public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberRequest request)
+        public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)
         {
-            try
-            {
-                CreateMemberResponse result = await _mediator.Send(
-                    new CreateMemberCommand(request.id, "Apprentice", request.joined, request.region, request.information, request.organisation)
-                );
-                return Ok(new CreateMemberApiResponse(result));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error attempting to create apprentice member");
-                return BadRequest();
-            }
+            request.UserType = MembershipUserTypes.Apprentice;
+            return await CreateMember(request);
         }
 
         [HttpPost("employer")]
-        public async Task<IActionResult> CreateApprenticeEmployer([FromBody] CreateMemberRequest request)
+        public async Task<IActionResult> CreateEmployerMember([FromBody] CreateMemberCommand request)
         {
-            try
-            {
-                CreateMemberResponse result = await _mediator.Send(
-                    new CreateMemberCommand(request.id, "Employer", request.joined, request.region, request.information, request.organisation)
-                );
-                return Ok(new CreateMemberApiResponse(result));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error attempting to create apprentice member");
-                return BadRequest();
-            }
+            request.UserType = MembershipUserTypes.Employer;
+            return await CreateMember(request);
         }
 
         [HttpPost("partner")]
-        public async Task<IActionResult> CreateApprenticePartner([FromBody] CreateMemberRequest request)
+        public async Task<IActionResult> CreatePartnerMember([FromBody] CreateMemberCommand request)
         {
-            try
-            {
-                CreateMemberResponse result = await _mediator.Send(
-                    new CreateMemberCommand(request.id, "Partner", request.joined, request.region, request.information, request.organisation)
-                );
-                return Ok(new CreateMemberApiResponse(result));
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error attempting to create partner member");
-                return BadRequest();
-            }
+            request.UserType = MembershipUserTypes.Partner;
+            return await CreateMember(request);
         }
 
         [HttpPost("admin")]
-        public async Task<IActionResult> CreateApprenticeAdmin([FromBody] CreateMemberRequest request)
+        public async Task<IActionResult> CreateAdminMember([FromBody] CreateMemberCommand request)
+        {
+            request.UserType = MembershipUserTypes.Admin;
+            return await CreateMember(request);
+        }
+
+        private async Task<IActionResult> CreateMember(CreateMemberCommand request)
         {
             try
             {
-                CreateMemberResponse result = await _mediator.Send(
-                    new CreateMemberCommand(request.id, "Admin", request.joined, request.region, request.information, request.organisation)
-                );
+                CreateMemberResponse result = await _mediator.Send(request);
                 return Ok(new CreateMemberApiResponse(result));
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to create admin member");
+                _logger.LogError(e, $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member");
                 return BadRequest();
             }
         }

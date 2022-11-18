@@ -3,8 +3,6 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AAN.Application.Queries.GetCalendars;
 using SFA.DAS.AAN.Application.Queries.GetCalendarsForUser;
-using SFA.DAS.AAN.Hub.Api.Requests;
-using SFA.DAS.AAN.Hub.Api.Responses;
 
 
 namespace SFA.DAS.AAN.Hub.Api.Controllers

@@ -2,7 +2,7 @@
 using SFA.DAS.AAN.Application.Commands.CreateMember;
 
 
-namespace SFA.DAS.AAN.Hub.Api.Responses
+namespace SFA.DAS.AAN.Application.ApiResponses
 {
     public class CreateMemberApiResponse
     {
