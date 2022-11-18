@@ -11,7 +11,7 @@ namespace SFA.DAS.AAN.Data.Configuration
         public void Configure(EntityTypeBuilder<CalendarPermission> builder)
         {
             builder.ToTable("CalendarPermission");
-            builder.HasKey(x => x.CalendarId);
+            builder.HasKey(x => new { x.CalendarId, x.PermissionId });
         }
     }
 }

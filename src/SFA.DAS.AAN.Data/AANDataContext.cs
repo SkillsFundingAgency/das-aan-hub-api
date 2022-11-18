@@ -19,7 +19,8 @@ namespace SFA.DAS.AAN.Data
         IPartnersContext,
         IAdminsContext,
         ICalendarsContext,
-        ICalendarPermissionsContext
+        ICalendarPermissionsContext,
+        IMemberPermissionsContext
     {
         private readonly ApplicationSettings? _configuration;
 
@@ -31,6 +32,7 @@ namespace SFA.DAS.AAN.Data
         public virtual DbSet<Admin> Admins { get; set; } = null!;
         public virtual DbSet<Calendar> Calendars { get; set; } = null!;
         public virtual DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
+        public virtual DbSet<MemberPermission> MemberPermissions { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
         DbSet<Member> IEntityContext<Member>.Entities => Members;
@@ -40,6 +42,7 @@ namespace SFA.DAS.AAN.Data
         DbSet<Admin> IEntityContext<Admin>.Entities => Admins;
         DbSet<Calendar> IEntityContext<Calendar>.Entities => Calendars;
         DbSet<CalendarPermission> IEntityContext<CalendarPermission>.Entities => CalendarPermissions;
+        DbSet<MemberPermission> IEntityContext<MemberPermission>.Entities => MemberPermissions;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -76,6 +79,7 @@ namespace SFA.DAS.AAN.Data
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new CalendarConfiguration());
             modelBuilder.ApplyConfiguration(new CalendarPermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberPermissionConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
