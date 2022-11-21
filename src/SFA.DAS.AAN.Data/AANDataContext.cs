@@ -1,21 +1,48 @@
-﻿using Microsoft.Data.SqlClient;
+﻿
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using SFA.DAS.AAN.Data.Configuration;
 using SFA.DAS.AAN.Domain.Configuration;
 using SFA.DAS.AAN.Domain.Entities;
 using SFA.DAS.AAN.Domain.Interfaces;
+using Calendar = SFA.DAS.AAN.Domain.Entities.Calendar;
+
 
 namespace SFA.DAS.AAN.Data
 {
     public class AanDataContext : DbContext,
-        IMembersContext
+        IRegionsContext,
+        IMembersContext,
+        IApprenticesContext,
+        IEmployersContext,
+        IPartnersContext,
+        IAdminsContext,
+        ICalendarsContext,
+        ICalendarPermissionsContext,
+        IMemberPermissionsContext
     {
         private readonly ApplicationSettings? _configuration;
 
         public virtual DbSet<Region> Regions { get; set; } = null!;
+        public virtual DbSet<Member> Members { get; set; } = null!;
+        public virtual DbSet<Apprentice> Apprentices { get; set; } = null!;
+        public virtual DbSet<Employer> Employers { get; set; } = null!;
+        public virtual DbSet<Partner> Partners { get; set; } = null!;
+        public virtual DbSet<Admin> Admins { get; set; } = null!;
+        public virtual DbSet<Calendar> Calendars { get; set; } = null!;
+        public virtual DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
+        public virtual DbSet<MemberPermission> MemberPermissions { get; set; } = null!;
 
         DbSet<Region> IEntityContext<Region>.Entities => Regions;
+        DbSet<Member> IEntityContext<Member>.Entities => Members;
+        DbSet<Apprentice> IEntityContext<Apprentice>.Entities => Apprentices;
+        DbSet<Employer> IEntityContext<Employer>.Entities => Employers;
+        DbSet<Partner> IEntityContext<Partner>.Entities => Partners;
+        DbSet<Admin> IEntityContext<Admin>.Entities => Admins;
+        DbSet<Calendar> IEntityContext<Calendar>.Entities => Calendars;
+        DbSet<CalendarPermission> IEntityContext<CalendarPermission>.Entities => CalendarPermissions;
+        DbSet<MemberPermission> IEntityContext<MemberPermission>.Entities => MemberPermissions;
 
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options)
         {
@@ -45,6 +72,14 @@ namespace SFA.DAS.AAN.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfiguration(new RegionConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberConfiguration());
+            modelBuilder.ApplyConfiguration(new ApprenticeConfiguration());
+            modelBuilder.ApplyConfiguration(new EmployerConfiguration());
+            modelBuilder.ApplyConfiguration(new PartnerConfiguration());
+            modelBuilder.ApplyConfiguration(new AdminConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarPermissionConfiguration());
+            modelBuilder.ApplyConfiguration(new MemberPermissionConfiguration());
             base.OnModelCreating(modelBuilder);
         }
 
@@ -79,17 +114,17 @@ namespace SFA.DAS.AAN.Data
                     {
                         case EntityState.Modified:
                             // set the updated date to "now"
-                            trackable.UpdatedOn = utcNow;
+                            trackable.Updated = utcNow;
 
                             // mark property as "don't touch"
                             // we don't want to update on a Modify operation
-                            entry.Property("CreatedOn").IsModified = false;
+                            entry.Property("Created").IsModified = false;
                             break;
 
                         case EntityState.Added:
                             // set both updated and created date to "now"
-                            trackable.CreatedOn = utcNow;
-                            trackable.UpdatedOn = utcNow;
+                            trackable.Created = utcNow;
+                            trackable.Updated = utcNow;
                             break;
                     }
 
