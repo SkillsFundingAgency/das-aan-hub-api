@@ -19,6 +19,7 @@ namespace SFA.DAS.AAN.Data
         IPartnersContext,
         IAdminsContext,
         ICalendarsContext,
+        ICalendarEventsContext,
         ICalendarPermissionsContext,
         IMemberPermissionsContext
     {
@@ -31,6 +32,7 @@ namespace SFA.DAS.AAN.Data
         public virtual DbSet<Partner> Partners { get; set; } = null!;
         public virtual DbSet<Admin> Admins { get; set; } = null!;
         public virtual DbSet<Calendar> Calendars { get; set; } = null!;
+        public virtual DbSet<CalendarEvent> CalendarEvents { get; set; } = null!;
         public virtual DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
         public virtual DbSet<MemberPermission> MemberPermissions { get; set; } = null!;
 
@@ -41,6 +43,7 @@ namespace SFA.DAS.AAN.Data
         DbSet<Partner> IEntityContext<Partner>.Entities => Partners;
         DbSet<Admin> IEntityContext<Admin>.Entities => Admins;
         DbSet<Calendar> IEntityContext<Calendar>.Entities => Calendars;
+        DbSet<CalendarEvent> IEntityContext<CalendarEvent>.Entities => CalendarEvents;
         DbSet<CalendarPermission> IEntityContext<CalendarPermission>.Entities => CalendarPermissions;
         DbSet<MemberPermission> IEntityContext<MemberPermission>.Entities => MemberPermissions;
 
@@ -78,6 +81,7 @@ namespace SFA.DAS.AAN.Data
             modelBuilder.ApplyConfiguration(new PartnerConfiguration());
             modelBuilder.ApplyConfiguration(new AdminConfiguration());
             modelBuilder.ApplyConfiguration(new CalendarConfiguration());
+            modelBuilder.ApplyConfiguration(new CalendarEventConfiguration());
             modelBuilder.ApplyConfiguration(new CalendarPermissionConfiguration());
             modelBuilder.ApplyConfiguration(new MemberPermissionConfiguration());
             base.OnModelCreating(modelBuilder);

@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Attendance]
 (
 	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
-    [CalendarEventId] BIGINT NOT NULL, 
+    [CalendarEventId] UNIQUEIDENTIFIER NOT NULL,
     [MemberId] UNIQUEIDENTIFIER NOT NULL, 
     [ShowProfile] BIT NOT NULL, 
     [NotifyEmail] BIT NOT NULL, 

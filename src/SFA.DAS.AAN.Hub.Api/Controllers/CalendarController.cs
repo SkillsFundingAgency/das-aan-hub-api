@@ -1,6 +1,7 @@
 ﻿
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.AAN.Application.Commands.CreateCalendarEvent;
 using SFA.DAS.AAN.Application.Queries.GetCalendars;
 using SFA.DAS.AAN.Application.Queries.GetCalendarsForUser;
 
@@ -38,5 +39,23 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpPost]
+        [Route("{calendarid}/calendarevent")]
+        public async Task<IActionResult> CreateCalendarEvent([FromRoute] long calendarid, [FromBody] CreateCalendarEventCommand command)
+        {
+            try
+            {
+                command.calendarid = calendarid;
+                CreateCalendarEventResponse result = await _mediator.Send(command) as CreateCalendarEventResponse;
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to create event for Calendar {calendarid}");
+                return BadRequest();
+            }
+        }
+
     }
 }
