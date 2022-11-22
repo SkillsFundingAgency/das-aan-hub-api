@@ -49,6 +49,10 @@ namespace SFA.DAS.AAN.Hub.Api
             services.AddDatabaseRegistration(Configuration);
             services.AddControllers();
             services.AddServices();
+
+            services.AddDatabaseRegistration(Configuration);
+            services.AddControllers();
+            services.AddServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

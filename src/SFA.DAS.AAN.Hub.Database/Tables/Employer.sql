@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Employer]
 (
-	[MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+    [MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
     [AccountId] BIGINT NOT NULL, 
     [UserId] BIGINT NULL, 
     [Email] NVARCHAR(256) NULL, 
