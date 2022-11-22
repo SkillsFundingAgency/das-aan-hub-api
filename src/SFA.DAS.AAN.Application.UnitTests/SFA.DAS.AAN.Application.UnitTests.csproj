@@ -29,13 +29,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Commands\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.AAN.Application\SFA.DAS.AAN.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.AAN.Data\SFA.DAS.AAN.Data.csproj" />
     <ProjectReference Include="..\SFA.DAS.AAN.Domain\SFA.DAS.AAN.Domain.csproj" />
+    <ProjectReference Include="..\SFA.DAS.AAN.Hub.Api\SFA.DAS.AAN.Hub.Api.csproj" />
   </ItemGroup>
 
 </Project>
