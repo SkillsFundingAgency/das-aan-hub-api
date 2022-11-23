@@ -1,66 +1,102 @@
-﻿
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.AAN.Application.ApiResponses;
 using SFA.DAS.AAN.Application.Commands.CreateMember;
+using SFA.DAS.AAN.Application.Commands.ModifyMember;
+using SFA.DAS.AAN.Application.Responses;
 using SFA.DAS.AAN.Domain.Enums;
 
+namespace SFA.DAS.AAN.Hub.Api.Controllers;
 
-namespace SFA.DAS.AAN.Hub.Api.Controllers
+[ApiController]
+[Route("api/[controller]/")]
+public class MemberController : Controller
 {
-    [ApiController]
-    [Route("api/[controller]/")]
-    public class MemberController : Controller
+    private readonly IMediator _mediator;
+    private readonly ILogger<MemberController> _logger;
+
+    public MemberController(IMediator mediator, ILogger<MemberController> logger)
     {
-        private readonly IMediator _mediator;
-        private readonly ILogger<MemberController> _logger;
+        _mediator = mediator;
+        _logger = logger;
+    }
 
-        public MemberController(IMediator mediator, ILogger<MemberController> logger)
+    [HttpPost("apprentice")]
+    public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)
+    {
+        request.UserType = MembershipUserTypes.Apprentice;
+        return await CreateMember(request);
+    }
+
+    [HttpPost("employer")]
+    public async Task<IActionResult> CreateEmployerMember([FromBody] CreateMemberCommand request)
+    {
+        request.UserType = MembershipUserTypes.Employer;
+        return await CreateMember(request);
+    }
+
+    [HttpPost("partner")]
+    public async Task<IActionResult> CreatePartnerMember([FromBody] CreateMemberCommand request)
+    {
+        request.UserType = MembershipUserTypes.Partner;
+        return await CreateMember(request);
+    }
+
+    [HttpPost("admin")]
+    public async Task<IActionResult> CreateAdminMember([FromBody] CreateMemberCommand request)
+    {
+        request.UserType = MembershipUserTypes.Admin;
+        return await CreateMember(request);
+    }
+
+    [HttpPatch("{memberId}")]
+    public async Task<IActionResult> ManageMembership([FromBody] ModifyMemberCommand request, string memberId)
+    {
+        if (string.IsNullOrEmpty(memberId) || string.IsNullOrEmpty(request.UserId))
         {
-            _mediator = mediator;
-            _logger = logger;
+            var error = "UserId missing";
+            _logger.LogError("{error}", error);
+            return BadRequest(error);
         }
 
-        [HttpPost("apprentice")]
-        public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)
+        if (memberId != request.UserId)
         {
-            request.UserType = MembershipUserTypes.Apprentice;
-            return await CreateMember(request);
+            var error = "UserId mismatch";
+            _logger.LogError("{error}", error);
+            return BadRequest(error);
         }
 
-        [HttpPost("employer")]
-        public async Task<IActionResult> CreateEmployerMember([FromBody] CreateMemberCommand request)
+        try
         {
-            request.UserType = MembershipUserTypes.Employer;
-            return await CreateMember(request);
+            await _mediator.Send(request);
+            return Ok(null);
         }
-
-        [HttpPost("partner")]
-        public async Task<IActionResult> CreatePartnerMember([FromBody] CreateMemberCommand request)
+        catch (Exception e)
         {
-            request.UserType = MembershipUserTypes.Partner;
-            return await CreateMember(request);
-        }
+            var errorMessage = $"Error attempting to modify member {memberId}";
 
-        [HttpPost("admin")]
-        public async Task<IActionResult> CreateAdminMember([FromBody] CreateMemberCommand request)
-        {
-            request.UserType = MembershipUserTypes.Admin;
-            return await CreateMember(request);
-        }
-
-        private async Task<IActionResult> CreateMember(CreateMemberCommand request)
-        {
-            try
+            if (e.GetType() == typeof(KeyNotFoundException))
             {
-                CreateMemberResponse result = await _mediator.Send(request);
-                return Ok(new CreateMemberApiResponse(result));
+                errorMessage = $"MemberId is unknown {memberId}";
+                _logger.LogError(e, "{errorMessage}", errorMessage);
+                return NotFound(errorMessage);
             }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member");
-                return BadRequest();
-            }
+
+            _logger.LogError(e, "{errorMessage}", errorMessage);
+            return BadRequest(errorMessage);
+        }
+    }
+
+    private async Task<IActionResult> CreateMember(CreateMemberCommand request)
+    {
+        try
+        {
+            var result = await _mediator.Send(request);
+            return Ok(new CreateMemberApiResponse(result));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError(e, $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member");
+            return BadRequest();
         }
     }
 }

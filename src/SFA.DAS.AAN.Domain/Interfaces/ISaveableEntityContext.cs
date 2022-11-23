@@ -1,5 +1,4 @@
-﻿
-namespace SFA.DAS.AAN.Domain.Interfaces
+﻿namespace SFA.DAS.AAN.Domain.Interfaces
 {
     public interface ISaveableEntityContext<T> : IEntityContext<T> where T : class
     {

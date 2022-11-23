@@ -9,10 +9,7 @@ namespace SFA.DAS.AAN.Application.Queries.GetAllRegions
     {
         private readonly IRegionsContext _regionsContext;
 
-        public GetAllRegionsQueryHandler(IRegionsContext regionsContext)
-        {
-            _regionsContext = regionsContext;
-        }
+        public GetAllRegionsQueryHandler(IRegionsContext regionsContext) => _regionsContext = regionsContext;
 
         public async Task<GetAllRegionsResult> Handle(GetAllRegionsQuery request, CancellationToken cancellationToken)
         {

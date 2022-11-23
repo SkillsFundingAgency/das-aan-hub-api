@@ -2,8 +2,8 @@
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.AAN.Domain.Configuration;
-using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.AAN.Hub.Api.AppStart;
+using SFA.DAS.Configuration.AzureTableStorage;
 
 
 namespace SFA.DAS.AAN.Hub.Api

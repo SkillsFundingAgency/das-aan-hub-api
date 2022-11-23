@@ -1,22 +1,21 @@
-﻿
-using SFA.DAS.AAN.Application.Commands.CreateMember;
+﻿using SFA.DAS.AAN.Application.Commands.CreateMember;
 
 
-namespace SFA.DAS.AAN.Application.ApiResponses
+namespace SFA.DAS.AAN.Application.Responses
 {
     public class CreateMemberApiResponse
     {
-        public Guid memberid { get; set; }
-        public string usertype { get; set; }
-        public string status { get; set; }
-        public DateTime created { get; set; }
+        public Guid MemberId { get; set; }
+        public string? UserType { get; set; }
+        public string? Status { get; set; }
+        public DateTime Created { get; set; }
 
         public CreateMemberApiResponse(CreateMemberResponse result)
         {
-            this.memberid = result.Member.Id;
-            this.usertype = result.Member.UserType;
-            this.status = result.Member.Status;
-            this.created = result.Member.Created;
+            MemberId = result.Member.Id;
+            UserType = result.Member.UserType;
+            Status = result.Member.Status;
+            Created = result.Member.Created;
         }
     }
 }
