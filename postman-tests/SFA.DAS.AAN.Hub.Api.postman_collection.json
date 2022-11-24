@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "54742dbe-484c-42df-a51a-2d16bdfe4d17",
+		"_postman_id": "22446418-3b0c-4fe5-a42d-087fe8d641dc",
 		"name": "SFA.DAS.AAN.Hub.Api",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5594608"
+		"_exporter_id": "5834156"
 	},
 	"item": [
 		{
@@ -192,6 +192,85 @@
 					"response": []
 				}
 			]
+		},
+		{
+			"name": "CalendarEvent",
+			"item": [
+				{
+					"name": "CreateCalendarEvent",
+					"item": [
+						{
+							"name": "CreateCalendarEvent",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"start\": \"2022-11-24T16:56:24.226Z\",\r\n  \"end\": \"2022-11-24T16:56:24.226Z\",\r\n  \"description\": \"description\",\r\n  \"regionid\": 4,\r\n  \"location\": \"location\",\r\n  \"postcode\": \"B1 2JP\",\r\n  \"eventlink\": \"http://www.google.com\",\r\n  \"contact\": \"contact\",\r\n  \"email\": \"a@b.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PatchCalendarEvent",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"start\": \"2022-11-24T17:02:26.239Z\",\r\n  \"end\": \"2022-11-24T17:02:26.239Z\",\r\n  \"description\": \"description2\",\r\n  \"regionid\": 5,\r\n  \"location\": \"location2\",\r\n  \"postcode\": \"B2 3JP\",\r\n  \"eventlink\": \"http://www.bbc.co.uk\",\r\n  \"contact\": \"contact2\",\r\n  \"email\": \"d@e.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent/{{calendareventid}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent",
+										"{{calendareventid}}"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "calendarid",
+			"value": "2"
+		},
+		{
+			"key": "calendareventid",
+			"value": "B7DE39AA-7805-4542-A64C-26E2FBDE46CB"
 		}
 	]
 }
