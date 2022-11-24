@@ -3,9 +3,9 @@ using MediatR;
 using SFA.DAS.AAN.Domain.Enums;
 
 
-namespace SFA.DAS.AAN.Application.Commands.CreateCalendarEvent
+namespace SFA.DAS.AAN.Application.Commands.CalendarEventCommands
 {
-    public class CreateCalendarEventCommand : IRequest<CreateCalendarEventResponse>
+    public class CalendarEventCommandBase
     {
         public Guid userid { get; set; }
         public long calendarid { get; set; }

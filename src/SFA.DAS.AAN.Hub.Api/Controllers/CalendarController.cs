@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AAN.Application.Commands.CreateCalendarEvent;
+using SFA.DAS.AAN.Application.Commands.PatchCalendarEvent;
 using SFA.DAS.AAN.Application.Queries.GetCalendars;
 using SFA.DAS.AAN.Application.Queries.GetCalendarsForUser;
 
@@ -57,5 +58,26 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
         }
 
+        [HttpPatch]
+        [Route("{calendarid}/calendarevent/{calendareventid}")]
+        public async Task<IActionResult> PatchCalendarEvent([FromRoute] long calendarid, [FromRoute] Guid calendareventid, [FromBody] PatchCalendarEventCommand command)
+        {
+            try
+            {
+                command.calendarid = calendarid;
+                command.calendareventid = calendareventid;
+                PatchCalendarEventResponse result = await _mediator.Send(command) as PatchCalendarEventResponse;
+
+                if (result?.warnings != null && result.warnings.Any())
+                    return Ok(result);
+                else
+                    return NoContent();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to patch event {calendareventid} for Calendar {calendarid}");
+                return BadRequest();
+            }
+        }
     }
 }

@@ -8,6 +8,6 @@ namespace SFA.DAS.AAN.Application.Commands.CreateCalendarEvent
     {
         public Guid calendareventid { get; set; }
         public DateTime created { get; set; }
-        public string? warnings { get; set; }
+        public IEnumerable<string>? warnings { get; set; }
     }
 }

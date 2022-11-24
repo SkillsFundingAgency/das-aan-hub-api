@@ -4,12 +4,12 @@ namespace SFA.DAS.AAN.Domain.Entities
     public class CalendarEvent : EntityBase
     {
         public Guid Id { get; set; }
-        public long CalendarId { get; set; }
+        public Int64 CalendarId { get; set; }
         public Guid CreatedByUserId { get; set; }
         public DateTime Start { get; set; }
         public DateTime End { get; set; }
         public string Description { get; set; }
-        public long RegionId { get; set; }
+        public Int32 RegionId { get; set; }
         public string? Location { get; set; }
         public string? Postcode { get; set; }
         public string? EventLink { get; set; }
