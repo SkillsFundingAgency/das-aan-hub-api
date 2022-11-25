@@ -1,7 +1,9 @@
 using NLog.Web;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Api
 {
+    [ExcludeFromCodeCoverage]
     public static class Program
     {
         public static void Main(string[] args)

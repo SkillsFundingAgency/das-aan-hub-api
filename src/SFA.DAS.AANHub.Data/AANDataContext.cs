@@ -5,11 +5,13 @@ using SFA.DAS.AANHub.Data.Configuration;
 using SFA.DAS.AANHub.Domain.Configuration;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 using Calendar = SFA.DAS.AANHub.Domain.Entities.Calendar;
 
 
 namespace SFA.DAS.AANHub.Data
 {
+    [ExcludeFromCodeCoverage]
     public class AanDataContext : DbContext,
         IRegionsContext,
         IMembersContext,

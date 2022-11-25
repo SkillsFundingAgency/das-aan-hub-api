@@ -3,9 +3,11 @@ using Microsoft.OpenApi.Models;
 using SFA.DAS.AANHub.Api.AppStart;
 using SFA.DAS.AANHub.Domain.Configuration;
 using SFA.DAS.Configuration.AzureTableStorage;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Api
 {
+    [ExcludeFromCodeCoverage]
     public class Startup
     {
         public IConfiguration Configuration { get; }
