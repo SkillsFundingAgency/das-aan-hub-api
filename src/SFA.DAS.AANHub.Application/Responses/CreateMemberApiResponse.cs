@@ -12,6 +12,11 @@ namespace SFA.DAS.AANHub.Application.Responses
 
         public CreateMemberApiResponse(CreateMemberResponse result)
         {
+            if (result.Member == null)
+            {
+                throw new ArgumentNullException(nameof(result), "Member is null");
+            }
+
             MemberId = result.Member.Id;
             UserType = result.Member.UserType;
             Status = result.Member.Status;

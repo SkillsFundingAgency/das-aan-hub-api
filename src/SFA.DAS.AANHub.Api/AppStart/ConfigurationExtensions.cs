@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.AANHub.Api.AppStart
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.AANHub.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class ConfigurationExtensions
     {
         public static bool IsLocalAcceptanceOrDev(this IConfiguration config)

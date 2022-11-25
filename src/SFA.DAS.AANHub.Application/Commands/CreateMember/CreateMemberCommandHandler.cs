@@ -45,15 +45,15 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                     Deleted = null,
                     Status = MembershipStatuses.Live.ToString()
                 }
-            );
-            await _membersContext.SaveChangesAsync();
+            , cancellationToken);
+            await _membersContext.SaveChangesAsync(cancellationToken);
 
             long id = long.TryParse(command.Id, out id) ? id : 0;
 
             switch (command.UserType)
             {
                 case MembershipUserTypes.Apprentice:
-                    var apprentice = await _apprenticesContext.Entities.AddAsync(
+                    await _apprenticesContext.Entities.AddAsync(
                         new Apprentice()
                         {
                             MemberId = memberId,
@@ -63,12 +63,12 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         }
-                    );
-                    await _apprenticesContext.SaveChangesAsync();
+                    , cancellationToken);
+                    await _apprenticesContext.SaveChangesAsync(cancellationToken);
                     break;
 
                 case MembershipUserTypes.Employer:
-                    var employer = await _employersContext.Entities.AddAsync(
+                    await _employersContext.Entities.AddAsync(
                         new Employer()
                         {
                             MemberId = memberId,
@@ -79,12 +79,12 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         }
-                    );
-                    await _employersContext.SaveChangesAsync();
+                    , cancellationToken);
+                    await _employersContext.SaveChangesAsync(cancellationToken);
                     break;
 
                 case MembershipUserTypes.Partner:
-                    var partner = await _partnersContext.Entities.AddAsync(
+                    await _partnersContext.Entities.AddAsync(
                         new Partner()
                         {
                             MemberId = memberId,
@@ -94,12 +94,12 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         }
-                    );
-                    await _partnersContext.SaveChangesAsync();
+                    , cancellationToken);
+                    await _partnersContext.SaveChangesAsync(cancellationToken);
                     break;
 
                 case MembershipUserTypes.Admin:
-                    var admin = await _adminsContext.Entities.AddAsync(
+                    await _adminsContext.Entities.AddAsync(
                         new Admin()
                         {
                             MemberId = memberId,
@@ -107,8 +107,8 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         }
-                    );
-                    await _adminsContext.SaveChangesAsync();
+                    , cancellationToken);
+                    await _adminsContext.SaveChangesAsync(cancellationToken);
                     break;
 
                 default:

@@ -56,7 +56,8 @@ namespace SFA.DAS.AANHub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member");
+                var error = $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }

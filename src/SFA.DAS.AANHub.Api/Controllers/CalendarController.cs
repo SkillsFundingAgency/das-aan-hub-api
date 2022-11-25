@@ -32,7 +32,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}");
+                var error =
+                    $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }

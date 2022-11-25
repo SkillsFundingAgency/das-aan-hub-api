@@ -2,9 +2,11 @@
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Api.AppStart
 {
+    [ExcludeFromCodeCoverage]
     public static class AddServiceRegistration
     {
         public static void AddServices(this IServiceCollection services)

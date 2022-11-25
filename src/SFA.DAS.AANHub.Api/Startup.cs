@@ -8,7 +8,6 @@ namespace SFA.DAS.AANHub.Api
 {
     public class Startup
     {
-        private readonly IWebHostEnvironment Environment;
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
@@ -30,7 +29,6 @@ namespace SFA.DAS.AANHub.Api
 #endif
 
             Configuration = config.Build();
-            Environment = environment;
         }
 
         public void ConfigureServices(IServiceCollection services)

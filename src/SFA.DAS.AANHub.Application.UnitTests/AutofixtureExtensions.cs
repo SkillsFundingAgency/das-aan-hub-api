@@ -45,7 +45,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests
         {
             if (fixture == null)
             {
-                throw new ArgumentNullException("fixture");
+                throw new ArgumentNullException(nameof(fixture));
             }
 
             fixture.Customizations.Add(new AANDataContextBuilder());
