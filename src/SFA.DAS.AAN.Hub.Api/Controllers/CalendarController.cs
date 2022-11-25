@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AAN.Application.Commands.CreateCalendarEvent;
+using SFA.DAS.AAN.Application.Commands.DeleteCalendarEvent;
 using SFA.DAS.AAN.Application.Commands.PatchCalendarEvent;
 using SFA.DAS.AAN.Application.Queries.GetCalendars;
 using SFA.DAS.AAN.Application.Queries.GetCalendarsForUser;
@@ -76,6 +77,24 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             catch (Exception e)
             {
                 _logger.LogError(e, $"Error attempting to patch event {calendareventid} for Calendar {calendarid}");
+                return BadRequest();
+            }
+        }
+
+        [HttpDelete]
+        [Route("{calendarid}/calendarevent/{calendareventid}")]
+        public async Task<IActionResult> DeleteCalendarEvent([FromRoute] long calendarid, [FromRoute] Guid calendareventid, [FromBody] DeleteCalendarEventCommand command)
+        {
+            try
+            {
+                command.calendareventid = calendareventid;
+                DeleteCalendarEventResponse result = await _mediator.Send(command) as DeleteCalendarEventResponse;
+
+                return NoContent();
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to delete event {calendareventid} for Calendar {calendarid}");
                 return BadRequest();
             }
         }
