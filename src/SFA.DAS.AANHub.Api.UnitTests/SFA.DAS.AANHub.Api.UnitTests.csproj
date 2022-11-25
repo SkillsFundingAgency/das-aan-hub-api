@@ -36,6 +36,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.AANHub.Api\SFA.DAS.AANHub.Api.csproj" />
+    <ProjectReference Include="..\SFA.DAS.AANHub.Application.UnitTests\SFA.DAS.AANHub.Application.UnitTests.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Application\SFA.DAS.AANHub.Application.csproj" />
   </ItemGroup>
 </Project>

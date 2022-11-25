@@ -31,21 +31,21 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
         {
             var memberId = Guid.NewGuid();
 
-            var member = await _membersContext.Entities.AddAsync(
-                new Member()
-                {
-                    Id = memberId,
-                    UserType = command.UserType?.ToString() ?? "unknown",
-                    Joined = command.Joined,
-                    RegionId = command.Region,
-                    Information = command.Information,
-                    Organisation = command.Organisation,
-                    Created = DateTime.Now,
-                    Updated = DateTime.Now,
-                    Deleted = null,
-                    Status = MembershipStatuses.Live.ToString()
-                }
-            , cancellationToken);
+            var member = new Member()
+            {
+                Id = memberId,
+                UserType = command.UserType?.ToString() ?? "unknown",
+                Joined = command.Joined,
+                RegionId = command.Region,
+                Information = command.Information,
+                Organisation = command.Organisation,
+                Created = DateTime.Now,
+                Updated = DateTime.Now,
+                Deleted = null,
+                Status = MembershipStatuses.Live.ToString()
+            };
+
+            await _membersContext.Entities.AddAsync(member, cancellationToken);
             await _membersContext.SaveChangesAsync(cancellationToken);
 
             long id = long.TryParse(command.Id, out id) ? id : 0;
@@ -110,12 +110,9 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                     , cancellationToken);
                     await _adminsContext.SaveChangesAsync(cancellationToken);
                     break;
-
-                default:
-                    break;
             }
 
-            return new CreateMemberResponse() { Member = member.Entity };
+            return new CreateMemberResponse() { Member = member };
         }
     }
 }

@@ -6,9 +6,10 @@ using Moq;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
+using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Enums;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Commands
+namespace SFA.DAS.AANHub.Api.UnitTests.Members
 {
     public class WhenPostingCreateMember
     {
@@ -27,7 +28,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands
             CreateMemberResponse response
             )
         {
-            var result = await ExecuteMediatorCommand(command, response, MembershipUserTypes.Apprentice);
+            command.UserType = MembershipUserTypes.Apprentice;
+            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            var result = await _controller.CreateApprenticeMember(command);
             ApplyTests(result, response);
         }
 
@@ -37,7 +40,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands
             CreateMemberResponse response
             )
         {
-            var result = await ExecuteMediatorCommand(command, response, MembershipUserTypes.Employer);
+            command.UserType = MembershipUserTypes.Employer;
+            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            var result = await _controller.CreateEmployerMember(command);
+
             ApplyTests(result, response);
         }
 
@@ -47,9 +53,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands
             CreateMemberResponse response
             )
         {
-            var result = await ExecuteMediatorCommand(command, response, MembershipUserTypes.Partner);
+            command.UserType = MembershipUserTypes.Partner;
+            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            var result = await _controller.CreatePartnerMember(command);
             ApplyTests(result, response);
         }
+
 
         [Theory, AutoMoqData]
         public async Task And_MediatorAdminCommandSuccessful_Then_ReturnOk(
@@ -60,9 +69,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands
             var result = await ExecuteMediatorCommand(command, response, MembershipUserTypes.Admin);
             ApplyTests(result, response);
         }
-
-
-
 
         private async Task<IActionResult> ExecuteMediatorCommand(
             CreateMemberCommand command,

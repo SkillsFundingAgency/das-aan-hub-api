@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Application.Queries.GetCalendars
             IEnumerable<Calendar> calendars = await _calendarsContext.Entities.ToListAsync(cancellationToken);
             IEnumerable<CalendarPermission> permissions = await _calendarPermissionsContext.Entities.ToListAsync(cancellationToken);
 
-            IEnumerable<GetCalendarsResultItem> items =
+            var items =
                 calendars.Select(c => new GetCalendarsResultItem()
                 {
                     Calendar = c.CalendarName,
