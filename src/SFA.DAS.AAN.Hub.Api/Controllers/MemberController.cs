@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AAN.Application.ApiResponses;
 using SFA.DAS.AAN.Application.Commands.CreateMember;
+using SFA.DAS.AAN.Domain.Entities;
 using SFA.DAS.AAN.Domain.Enums;
 
 
@@ -58,7 +59,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member");
+                string foo = $"Error attempting to create {request.UserType?.ToString()?.ToLower()} member";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }

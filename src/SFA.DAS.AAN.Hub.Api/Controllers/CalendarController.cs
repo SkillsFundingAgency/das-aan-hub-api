@@ -38,7 +38,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}");
+                string foo = $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }
@@ -50,12 +51,13 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             try
             {
                 command.calendarid = calendarid;
-                CreateCalendarEventResponse result = await _mediator.Send(command) as CreateCalendarEventResponse;
+                var result = await _mediator.Send(command);
                 return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to create event for Calendar {calendarid}");
+                string foo = $"Error attempting to create event for Calendar {calendarid}";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }
@@ -68,7 +70,7 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             {
                 command.calendarid = calendarid;
                 command.calendareventid = calendareventid;
-                PatchCalendarEventResponse result = await _mediator.Send(command) as PatchCalendarEventResponse;
+                var result = await _mediator.Send(command);
 
                 if (result?.warnings != null && result.warnings.Any())
                     return Ok(result);
@@ -77,7 +79,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to patch event {calendareventid} for Calendar {calendarid}");
+                string foo = $"Error attempting to patch event {calendareventid} for Calendar {calendarid}";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }
@@ -95,7 +98,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to delete event {calendareventid} for Calendar {calendarid}");
+                string foo = $"Error attempting to delete event {calendareventid} for Calendar {calendarid}";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }
@@ -123,7 +127,7 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 if (warnings.Any())
                     return BadRequest(new { errors = warnings });
 
-                IEnumerable<GetCalendarEventsResultItem> result =
+                var result =
                     await _mediator.Send(new GetCalendarEventsQuery()
                     {
                         memberid = memberid,
@@ -132,12 +136,13 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                         region = region,
                         fromdate = fromdate,
                         todate = todate
-                    }) as IEnumerable<GetCalendarEventsResultItem>;
+                    });
                 return Ok(result);
             }
             catch (Exception e)
             {
-                _logger.LogError(e, $"Error attempting to get Calendar events for member {memberid.ToString()}");
+                string foo = $"Error attempting to get Calendar events for member {memberid.ToString()}";
+                _logger.LogError(e, foo);
                 return BadRequest();
             }
         }
