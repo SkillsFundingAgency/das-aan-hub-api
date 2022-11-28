@@ -35,8 +35,4 @@
     <ProjectReference Include="..\SFA.DAS.AAN.Hub.Api\SFA.DAS.AAN.Hub.Api.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="CalendarEvents\" />
-  </ItemGroup>
-
 </Project>
