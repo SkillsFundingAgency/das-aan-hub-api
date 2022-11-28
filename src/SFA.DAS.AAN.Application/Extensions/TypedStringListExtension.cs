@@ -4,7 +4,7 @@ namespace SFA.DAS.AAN.Application.Extensions
 {
     public static class TypedStringListExtension
     {
-        public static IEnumerable<Guid> ToGuidList(this string source, string separator)
+        public static IEnumerable<Guid> ToGuidList(this string? source, string separator)
         {
             if (string.IsNullOrWhiteSpace(source) || string.IsNullOrEmpty(separator))
                 return Enumerable.Empty<Guid>();
@@ -14,7 +14,7 @@ namespace SFA.DAS.AAN.Application.Extensions
                          .Select(g => Guid.Parse(g));
         }
 
-        public static IEnumerable<Int64> ToIntList(this string source, string separator)
+        public static IEnumerable<Int64> ToIntList(this string? source, string separator)
         {
             if (string.IsNullOrWhiteSpace(source) || string.IsNullOrEmpty(separator))
                 return Enumerable.Empty<Int64>();

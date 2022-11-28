@@ -35,13 +35,10 @@ namespace SFA.DAS.AAN.Application.Commands.PatchCalendarEvent
                 calendarEvent.EventLink = command.eventlink;
                 calendarEvent.Contact = command.contact;
                 calendarEvent.ContactEmail = command.email;
-                //calendarEvent.Created = DateTime.Now;
                 calendarEvent.Updated = DateTime.Now;
-                //calendarEvent.CreatedByUserId = command.userid;
                 calendarEvent.UpdatedByUserId = command.userid;
-                //calendarEvent.IsActive = true
 
-                await _calendarEventsContext.SaveChangesAsync();
+                await _calendarEventsContext.SaveChangesAsync(cancellationToken);
             }
 
             return new PatchCalendarEventResponse()

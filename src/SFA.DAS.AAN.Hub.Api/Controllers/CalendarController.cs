@@ -89,7 +89,7 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             try
             {
                 command.calendareventid = calendareventid;
-                DeleteCalendarEventResponse result = await _mediator.Send(command) as DeleteCalendarEventResponse;
+                await _mediator.Send(command);
 
                 return NoContent();
             }
@@ -113,7 +113,7 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             try
             {
                 List<string> warnings = new List<string>();
-                if (memberid == null || memberid == Guid.Empty)
+                if (memberid == Guid.Empty)
                     warnings.Add("memberid missing");
                 if (fromdate == DateTime.MinValue)
                     warnings.Add("fromdate missing");

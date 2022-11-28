@@ -10,19 +10,13 @@ namespace SFA.DAS.AAN.Application.Queries.GetCalendarEvents
 {
     public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQuery, IEnumerable<GetCalendarEventsResultItem>>
     {
-        private readonly ICalendarsContext _calendarsContext;
         private readonly ICalendarEventsContext _calendarEventsContext;
-        private readonly ICalendarPermissionsContext _calendarPermissionsContext;
         private readonly IMemberPermissionsContext _memberPermissionsContext;
 
-        public GetCalendarEventsQueryHandler(ICalendarsContext calendarsContext,
-            ICalendarEventsContext calendarEventsContext,
-            ICalendarPermissionsContext calendarPermissionsContext,
+        public GetCalendarEventsQueryHandler(ICalendarEventsContext calendarEventsContext,
             IMemberPermissionsContext memberPermissionsContext)
         {
-            _calendarsContext = calendarsContext;
             _calendarEventsContext = calendarEventsContext;
-            _calendarPermissionsContext = calendarPermissionsContext;
             _memberPermissionsContext = memberPermissionsContext;
         }
 

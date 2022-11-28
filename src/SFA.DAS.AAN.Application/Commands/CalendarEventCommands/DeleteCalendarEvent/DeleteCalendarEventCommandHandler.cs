@@ -27,7 +27,7 @@ namespace SFA.DAS.AAN.Application.Commands.DeleteCalendarEvent
             else
             {
                 _calendarEventsContext.Entities.Remove(calendarEvent);
-                await _calendarEventsContext.SaveChangesAsync();
+                await _calendarEventsContext.SaveChangesAsync(cancellationToken);
             }
 
             return new DeleteCalendarEventResponse();

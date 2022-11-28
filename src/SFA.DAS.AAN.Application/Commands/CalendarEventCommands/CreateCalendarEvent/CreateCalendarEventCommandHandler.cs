@@ -37,9 +37,9 @@ namespace SFA.DAS.AAN.Application.Commands.CreateCalendarEvent
                     CreatedByUserId = command.userid,
                     UpdatedByUserId = command.userid,
                     IsActive = true
-                }
+                }, cancellationToken
             );
-            await _calendarEventsContext.SaveChangesAsync();
+            await _calendarEventsContext.SaveChangesAsync(cancellationToken);
 
             CalendarEvent result = calendarEvent.Entity;
             return new CreateCalendarEventResponse()
