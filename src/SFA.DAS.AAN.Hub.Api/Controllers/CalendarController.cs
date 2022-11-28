@@ -6,6 +6,7 @@ using SFA.DAS.AAN.Application.Commands.DeleteCalendarEvent;
 using SFA.DAS.AAN.Application.Commands.PatchCalendarEvent;
 using SFA.DAS.AAN.Application.Queries.GetCalendars;
 using SFA.DAS.AAN.Application.Queries.GetCalendarsForUser;
+using SFA.DAS.AAN.Application.Queries.GetCalendarEvents;
 
 
 namespace SFA.DAS.AAN.Hub.Api.Controllers
@@ -98,5 +99,48 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
                 return BadRequest();
             }
         }
+
+        [HttpGet]
+        [Route("{calendarid}/calendarevents")]
+        public async Task<IActionResult> GetCalendarEvents(
+            [FromRoute] long calendarid,
+            [FromQuery] Guid memberid,
+            [FromQuery] string? calendareventid,
+            [FromQuery] string? region,
+            [FromQuery] DateTime fromdate,
+            [FromQuery] DateTime todate)
+        {
+            try
+            {
+                List<string> warnings = new List<string>();
+                if (memberid == null || memberid == Guid.Empty)
+                    warnings.Add("memberid missing");
+                if (fromdate == DateTime.MinValue)
+                    warnings.Add("fromdate missing");
+                if (todate == DateTime.MinValue)
+                    warnings.Add("todate missing");
+
+                if (warnings.Any())
+                    return BadRequest(new { errors = warnings });
+
+                IEnumerable<GetCalendarEventsResultItem> result =
+                    await _mediator.Send(new GetCalendarEventsQuery()
+                    {
+                        memberid = memberid,
+                        calendarid = calendarid,
+                        calendareventid = calendareventid,
+                        region = region,
+                        fromdate = fromdate,
+                        todate = todate
+                    }) as IEnumerable<GetCalendarEventsResultItem>;
+                return Ok(result);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e, $"Error attempting to get Calendar events for member {memberid.ToString()}");
+                return BadRequest();
+            }
+        }
+
     }
 }

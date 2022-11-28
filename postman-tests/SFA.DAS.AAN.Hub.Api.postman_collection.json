@@ -257,6 +257,74 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "DeleteCalendarEvent",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"reason\": \"string\",\r\n  \"notifications\": [\r\n    \"email\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent/{{calendareventid}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent",
+										"{{calendareventid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCalendarEvents",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevents?memberid={{memberid}}&region={{regionlist}}&fromdate={{fromdate}}&todate={{todate}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevents"
+									],
+									"query": [
+										{
+											"key": "memberid",
+											"value": "{{memberid}}"
+										},
+										{
+											"key": "region",
+											"value": "{{regionlist}}"
+										},
+										{
+											"key": "fromdate",
+											"value": "{{fromdate}}"
+										},
+										{
+											"key": "todate",
+											"value": "{{todate}}"
+										}
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				}
@@ -271,6 +339,22 @@
 		{
 			"key": "calendareventid",
 			"value": "B7DE39AA-7805-4542-A64C-26E2FBDE46CB"
+		},
+		{
+			"key": "memberid",
+			"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+		},
+		{
+			"key": "regionlist",
+			"value": "1%2C2%2C3%2C6%2C7"
+		},
+		{
+			"key": "fromdate",
+			"value": "2022-01-01T06%3A00%3A00.000Z"
+		},
+		{
+			"key": "todate",
+			"value": "2022-12-31T22%3A00%3A00.000Z"
 		}
 	]
 }
