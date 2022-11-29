@@ -38,8 +38,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                string foo = $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}";
-                _logger.LogError(e, foo);
+                string error = $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }
@@ -56,8 +56,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                string foo = $"Error attempting to create event for Calendar {calendarid}";
-                _logger.LogError(e, foo);
+                string error = $"Error attempting to create event for Calendar {calendarid}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }
@@ -79,8 +79,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                string foo = $"Error attempting to patch event {calendareventid} for Calendar {calendarid}";
-                _logger.LogError(e, foo);
+                string error = $"Error attempting to patch event {calendareventid} for Calendar {calendarid}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }
@@ -98,8 +98,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                string foo = $"Error attempting to delete event {calendareventid} for Calendar {calendarid}";
-                _logger.LogError(e, foo);
+                string error = $"Error attempting to delete event {calendareventid} for Calendar {calendarid}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }
@@ -141,8 +141,8 @@ namespace SFA.DAS.AAN.Hub.Api.Controllers
             }
             catch (Exception e)
             {
-                string foo = $"Error attempting to get Calendar events for member {memberid.ToString()}";
-                _logger.LogError(e, foo);
+                string error = $"Error attempting to get Calendar events for member {memberid.ToString()}";
+                _logger.LogError(e, "{error}", error);
                 return BadRequest();
             }
         }

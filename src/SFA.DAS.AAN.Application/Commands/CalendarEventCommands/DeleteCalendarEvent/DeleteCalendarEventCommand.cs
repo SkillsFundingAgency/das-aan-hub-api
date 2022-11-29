@@ -8,7 +8,7 @@ namespace SFA.DAS.AAN.Application.Commands.DeleteCalendarEvent
     {
         public Guid calendareventid { get; set; }
         public Guid userid { get; set; }
-        public string reason { get; set; }
-        public IEnumerable<string> notifications { get; set; }
+        public string? reason { get; set; }
+        public IEnumerable<string>? notifications { get; set; }
     }
 }

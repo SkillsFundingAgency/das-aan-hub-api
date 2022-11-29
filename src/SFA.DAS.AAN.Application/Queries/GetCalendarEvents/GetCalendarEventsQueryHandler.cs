@@ -25,11 +25,6 @@ namespace SFA.DAS.AAN.Application.Queries.GetCalendarEvents
             IEnumerable<Guid> eventIds = request.calendareventid.ToGuidList(",");
             IEnumerable<Int64> regionIds = request.region.ToIntList(",");
 
-            IEnumerable<MemberPermission> memberPermissions =
-                await _memberPermissionsContext.Entities
-                                               .Where(m => m.MemberId == request.memberid && m.IsActive)
-                                               .ToListAsync(cancellationToken);
-
             IQueryable<CalendarEvent> events =
                 _calendarEventsContext.Entities
                                       .Where(x => x.CalendarId == request.calendarid);
