@@ -1,0 +1,360 @@
+{
+	"info": {
+		"_postman_id": "22446418-3b0c-4fe5-a42d-087fe8d641dc",
+		"name": "SFA.DAS.AAN.Hub.Api",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5834156"
+	},
+	"item": [
+		{
+			"name": "Region",
+			"item": [
+				{
+					"name": "GetAllRegions",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-base-url}}/api/region",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"region"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Member",
+			"item": [
+				{
+					"name": "CreateApprenticeMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-base-url}}/api/member/apprentice",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"member",
+								"apprentice"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateEmployerMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-base-url}}/api/member/employer",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"member",
+								"employer"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreatePartnerMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-base-url}}/api/member/partner",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"member",
+								"partner"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "CreateAdminMember",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{api-base-url}}/api/member/partner",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"member",
+								"partner"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Calendar",
+			"item": [
+				{
+					"name": "GetCalendars",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-base-url}}/api/calendar",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "GetCalendarsForUser",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{api-base-url}}/api/calendar?memberid=df9397a9-e2b5-4925-bdac-5506969bd201",
+							"host": [
+								"{{api-base-url}}"
+							],
+							"path": [
+								"api",
+								"calendar"
+							],
+							"query": [
+								{
+									"key": "memberid",
+									"value": "df9397a9-e2b5-4925-bdac-5506969bd201"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CalendarEvent",
+			"item": [
+				{
+					"name": "CreateCalendarEvent",
+					"item": [
+						{
+							"name": "CreateCalendarEvent",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"start\": \"2022-11-24T16:56:24.226Z\",\r\n  \"end\": \"2022-11-24T16:56:24.226Z\",\r\n  \"description\": \"description\",\r\n  \"regionid\": 4,\r\n  \"location\": \"location\",\r\n  \"postcode\": \"B1 2JP\",\r\n  \"eventlink\": \"http://www.google.com\",\r\n  \"contact\": \"contact\",\r\n  \"email\": \"a@b.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "PatchCalendarEvent",
+							"request": {
+								"method": "PATCH",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"start\": \"2022-11-24T17:02:26.239Z\",\r\n  \"end\": \"2022-11-24T17:02:26.239Z\",\r\n  \"description\": \"description2\",\r\n  \"regionid\": 5,\r\n  \"location\": \"location2\",\r\n  \"postcode\": \"B2 3JP\",\r\n  \"eventlink\": \"http://www.bbc.co.uk\",\r\n  \"contact\": \"contact2\",\r\n  \"email\": \"d@e.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent/{{calendareventid}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent",
+										"{{calendareventid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "DeleteCalendarEvent",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userid\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\r\n  \"reason\": \"string\",\r\n  \"notifications\": [\r\n    \"email\"\r\n  ]\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevent/{{calendareventid}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevent",
+										"{{calendareventid}}"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "GetCalendarEvents",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "{{api-base-url}}/api/Calendar/{{calendarid}}/calendarevents?memberid={{memberid}}&region={{regionlist}}&fromdate={{fromdate}}&todate={{todate}}",
+									"host": [
+										"{{api-base-url}}"
+									],
+									"path": [
+										"api",
+										"Calendar",
+										"{{calendarid}}",
+										"calendarevents"
+									],
+									"query": [
+										{
+											"key": "memberid",
+											"value": "{{memberid}}"
+										},
+										{
+											"key": "region",
+											"value": "{{regionlist}}"
+										},
+										{
+											"key": "fromdate",
+											"value": "{{fromdate}}"
+										},
+										{
+											"key": "todate",
+											"value": "{{todate}}"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		}
+	],
+	"variable": [
+		{
+			"key": "calendarid",
+			"value": "2"
+		},
+		{
+			"key": "calendareventid",
+			"value": "B7DE39AA-7805-4542-A64C-26E2FBDE46CB"
+		},
+		{
+			"key": "memberid",
+			"value": "3fa85f64-5717-4562-b3fc-2c963f66afa6"
+		},
+		{
+			"key": "regionlist",
+			"value": "1%2C2%2C3%2C6%2C7"
+		},
+		{
+			"key": "fromdate",
+			"value": "2022-01-01T06%3A00%3A00.000Z"
+		},
+		{
+			"key": "todate",
+			"value": "2022-12-31T22%3A00%3A00.000Z"
+		}
+	]
+}
