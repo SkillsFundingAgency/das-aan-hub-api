@@ -1,8 +1,7 @@
-﻿
+
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
-using SFA.DAS.AANHub.Data.Configuration;
 using SFA.DAS.AANHub.Data.Configuration;
 using SFA.DAS.AANHub.Domain.Configuration;
 using SFA.DAS.AANHub.Domain.Entities;

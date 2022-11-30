@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Attendance]
+CREATE TABLE [dbo].[Attendance]
 (
 	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
     [CalendarEventId] UNIQUEIDENTIFIER NOT NULL, 
