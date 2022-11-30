@@ -78,14 +78,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests
     // Handy for unit testing - make sure any IDateTimeHelper instances are "now"
     public class DateTimeHelperBuilder : ISpecimenBuilder
     {
-        public object Create(object request, ISpecimenContext context)
-        {
-            if (request is Type type && type == typeof(IDateTimeHelper))
-            {
-                return new UtcTimeProvider();
-            }
-
-            return new NoSpecimen();
-        }
+        public object Create(object request, ISpecimenContext context) =>
+            request is Type type && type == typeof(IDateTimeHelper) ? new UtcTimeProvider() : (object)new NoSpecimen();
     }
 }

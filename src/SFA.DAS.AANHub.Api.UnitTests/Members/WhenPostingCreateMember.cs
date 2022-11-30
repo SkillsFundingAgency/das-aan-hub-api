@@ -44,7 +44,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             command.UserType = MembershipUserTypes.Employer;
             _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateEmployerMember(command);
-
             ApplyTests(result, response);
         }
 

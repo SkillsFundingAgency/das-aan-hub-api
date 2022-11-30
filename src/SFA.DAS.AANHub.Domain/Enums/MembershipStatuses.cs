@@ -5,6 +5,7 @@ namespace SFA.DAS.AANHub.Domain.Enums
     {
         Pending,
         Cancelled,
+        Rejected,
         Live,
         Withdrawn,
         Deleted

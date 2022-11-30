@@ -1,4 +1,3 @@
-﻿
 namespace SFA.DAS.AANHub.Domain.Entities
 {
     public class Member : EntityBase
