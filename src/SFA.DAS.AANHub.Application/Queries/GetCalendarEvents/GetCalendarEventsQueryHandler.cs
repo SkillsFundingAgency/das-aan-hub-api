@@ -11,13 +11,10 @@ namespace SFA.DAS.AANHub.Application.Queries.GetCalendarEvents
     public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQuery, IEnumerable<GetCalendarEventsResultItem>>
     {
         private readonly ICalendarEventsContext _calendarEventsContext;
-        private readonly IMemberPermissionsContext _memberPermissionsContext;
 
-        public GetCalendarEventsQueryHandler(ICalendarEventsContext calendarEventsContext,
-            IMemberPermissionsContext memberPermissionsContext)
+        public GetCalendarEventsQueryHandler(ICalendarEventsContext calendarEventsContext)
         {
             _calendarEventsContext = calendarEventsContext;
-            _memberPermissionsContext = memberPermissionsContext;
         }
 
         public async Task<IEnumerable<GetCalendarEventsResultItem>> Handle(GetCalendarEventsQuery request, CancellationToken cancellationToken)
