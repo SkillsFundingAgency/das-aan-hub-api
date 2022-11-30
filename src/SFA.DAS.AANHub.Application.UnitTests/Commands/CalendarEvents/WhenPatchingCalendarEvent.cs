@@ -1,8 +1,9 @@
-﻿
+
 using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using NUnit.Framework;
 using Moq;
 using SFA.DAS.AANHub.Application.Commands.PatchCalendarEvent;
 using SFA.DAS.AANHub.Api.Controllers;
@@ -22,7 +23,7 @@ namespace SFA.DAS.AAN.Hub.Api.UnitTests.CreateCalendarEvent
             _controller = new CalendarController(_mediator.Object, Mock.Of<ILogger<CalendarController>>());
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorCommandSuccessful_Then_ReturnNoContentk(
             PatchCalendarEventCommand command,
             PatchCalendarEventResponse response
@@ -36,7 +37,7 @@ namespace SFA.DAS.AAN.Hub.Api.UnitTests.CreateCalendarEvent
             result.Should().BeAssignableTo<NoContentResult>();
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorCommandUnsuccessful_Then_ReturnOk(
             PatchCalendarEventCommand command,
             PatchCalendarEventResponse response
