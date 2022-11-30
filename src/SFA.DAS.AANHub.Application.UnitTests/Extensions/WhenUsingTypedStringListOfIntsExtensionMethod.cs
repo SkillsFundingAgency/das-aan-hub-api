@@ -1,4 +1,5 @@
 ﻿
+using NUnit.Framework;
 using FluentAssertions;
 using SFA.DAS.AANHub.Application.Extensions;
 
@@ -7,7 +8,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
 {
     public class WhenUsingTypedStringListOfIntsExtensionMethod
     {
-        [Fact]
+        [Test]
         public void And_PassingValidStringIntList_Then_ReturnEnumerable()
         {
             var input = "1,2,3";
@@ -19,7 +20,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
             output.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
+        [Test]
         public void And_PassingEmptyStringIntList_Then_ReturnEmptyEnumerable()
         {
             var input = "";
@@ -32,7 +33,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
             output.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
+        [Test]
         public void And_PassingStringIntListWithInvalidElements_Then_ReturnEnumerableWithValidElements()
         {
             var input = "1,2,a,3,4,b,c";

@@ -1,4 +1,5 @@
 ﻿
+using NUnit.Framework;
 using FluentAssertions;
 using SFA.DAS.AANHub.Application.Extensions;
 
@@ -16,7 +17,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
         private readonly Guid guid3 = new Guid(str3);
         private readonly Guid guid4 = new Guid(str4);
 
-        [Fact]
+        [Test]
         public void And_PassingValidStringGuidList_Then_ReturnEnumerable()
         {
             var input = $"{str1},{str2},{str3}";
@@ -28,7 +29,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
             output.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
+        [Test]
         public void And_PassingEmptyStringGuidList_Then_ReturnEmptyEnumerable()
         {
             var input = "";
@@ -41,7 +42,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Application.Extensions
             output.Should().BeEquivalentTo(expected);
         }
 
-        [Fact]
+        [Test]
         public void And_PassingStringGuidListWithInvalidElements_Then_ReturnEnumerableWithValidElements()
         {
             var input = $"{str1},{str2},123,{str3},{str4},4x6,789";
