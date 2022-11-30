@@ -1,7 +1,7 @@
 ﻿using AutoFixture;
 using AutoFixture.AutoMoq;
 using AutoFixture.Kernel;
-using AutoFixture.Xunit2;
+using AutoFixture.NUnit3;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Data;
@@ -33,10 +33,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
     public class AutoMoqInlineAutoDataAttribute : InlineAutoDataAttribute
     {
-        public AutoMoqInlineAutoDataAttribute(params object[] arguments)
-            : base(AutofixtureExtensions.AanFixture(), arguments)
-        {
-        }
     }
 
     public class ApprenticeFeedbackCustomization : ICustomization

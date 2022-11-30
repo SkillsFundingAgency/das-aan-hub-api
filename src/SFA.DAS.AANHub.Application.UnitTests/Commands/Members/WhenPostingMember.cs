@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
@@ -28,7 +29,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _handler = new CreateMemberCommandHandler(_memberContext.Object, _apprenticeContext.Object, _employerContext.Object, _partnerContext.Object, _adminContext.Object);
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_HandleSuccessfulApprenticeMember_Then_ReturnResponse(CreateMemberCommand command)
         {
             command.UserType = MembershipUserTypes.Apprentice;
@@ -38,7 +39,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             result?.Member?.UserType.Should().Be("Apprentice");
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_HandleSuccessfulEmployerMember_Then_ReturnResponse(CreateMemberCommand command)
         {
             command.UserType = MembershipUserTypes.Employer;
@@ -48,7 +49,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             result?.Member?.UserType.Should().Be("Employer");
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_HandleSuccessfulAdminMember_Then_ReturnResponse(CreateMemberCommand command)
         {
             command.UserType = MembershipUserTypes.Admin;
@@ -57,7 +58,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             result.Member.Should().NotBeNull();
             result?.Member?.UserType.Should().Be("Admin");
         }
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_HandleSuccessfulPartnerMember_Then_ReturnResponse(CreateMemberCommand command)
         {
             command.UserType = MembershipUserTypes.Partner;
