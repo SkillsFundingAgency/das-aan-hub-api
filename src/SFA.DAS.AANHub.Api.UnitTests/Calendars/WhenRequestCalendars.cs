@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Queries.GetCalendars;
 
@@ -19,7 +20,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Calendars
             _logger = new Mock<ILogger<CalendarController>>();
         }
 
-        [Fact]
+        [Test]
         public async Task And_MediatorCommandSuccessful_Then_ReturnOk()
         {
             IEnumerable<GetCalendarsResultItem> response = new List<GetCalendarsResultItem>();
