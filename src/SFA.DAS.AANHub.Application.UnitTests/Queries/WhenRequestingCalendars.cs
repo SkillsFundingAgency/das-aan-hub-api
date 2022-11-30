@@ -1,5 +1,6 @@
-﻿using AutoFixture.Xunit2;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Queries.GetCalendars;
 using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -8,7 +9,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 {
     public class WhenRequestingCalendars
     {
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task ThenAllCalendarsAreReturned(
             GetCalendarsQuery query,
             [Frozen(Matching.ImplementedInterfaces)] AanDataContext context,
@@ -26,7 +27,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
             result?.Should().NotBeNull();
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task ThenAllCalendarsForCreateAreReturned(
             GetCalendarsQuery query,
             [Frozen(Matching.ImplementedInterfaces)] AanDataContext context,

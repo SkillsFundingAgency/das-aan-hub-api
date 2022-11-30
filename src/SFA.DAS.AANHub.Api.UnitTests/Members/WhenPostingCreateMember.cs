@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
+using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
@@ -22,7 +23,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             _controller = new MemberController(_mediator.Object, Mock.Of<ILogger<MemberController>>());
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorApprenticeCommandSuccessful_Then_ReturnOk(
             CreateMemberCommand command,
             CreateMemberResponse response
@@ -34,7 +35,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             ApplyTests(result, response);
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorEmployerCommandSuccessful_Then_ReturnOk(
             CreateMemberCommand command,
             CreateMemberResponse response
@@ -47,7 +48,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             ApplyTests(result, response);
         }
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorPartnerCommandSuccessful_Then_ReturnOk(
             CreateMemberCommand command,
             CreateMemberResponse response
@@ -60,7 +61,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
         }
 
 
-        [Theory, AutoMoqData]
+        [Test, AutoMoqData]
         public async Task And_MediatorAdminCommandSuccessful_Then_ReturnOk(
             CreateMemberCommand command,
             CreateMemberResponse response
