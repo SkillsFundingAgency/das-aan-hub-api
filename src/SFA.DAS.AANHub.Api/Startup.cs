@@ -1,9 +1,15 @@
-﻿using Microsoft.Extensions.Options;
+﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using SFA.DAS.AANHub.Api.AppStart;
 using SFA.DAS.AANHub.Domain.Configuration;
+using SFA.DAS.Api.Common.AppStart;
+using SFA.DAS.Api.Common.Configuration;
+using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
 
 namespace SFA.DAS.AANHub.Api
 {
@@ -35,21 +41,48 @@ namespace SFA.DAS.AANHub.Api
 
         public void ConfigureServices(IServiceCollection services)
         {
+            if (!IsEnvironmentLocalOrDev)
+            {
+                var azureAdConfiguration = Configuration
+                    .GetSection("AzureAd")
+                    .Get<AzureActiveDirectoryConfiguration>();
+
+                var policies = new Dictionary<string, string>
+                {
+                    { "Default", "Default" }
+                };
+
+                services.AddAuthentication(azureAdConfiguration, policies);
+            }
+
+            services.AddHealthChecks();
+
             services.AddApplicationInsightsTelemetry();
-            services.AddEndpointsApiExplorer();
+
+            services.AddApiVersioning(opt =>
+            {
+                opt.ApiVersionReader = new HeaderApiVersionReader("X-Version");
+                opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            });
+
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "SFA.DAS.AANHub.Api", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AAN Hub API"});
+                c.OperationFilter<SwaggerVersionHeaderFilter>();
             });
+
+            services
+                .AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
+
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
 
             services.AddDatabaseRegistration(Configuration);
-            services.AddControllers();
-            services.AddServices();
 
-            services.AddDatabaseRegistration(Configuration);
-            services.AddControllers();
             services.AddServices();
         }
 
@@ -59,15 +92,39 @@ namespace SFA.DAS.AANHub.Api
             {
                 app.UseDeveloperExceptionPage();
             }
+            app.UseAuthentication();
             app.UseSwagger();
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SFA.DAS.AANHub.Api v1"));
             app.UseHttpsRedirection();
             app.UseRouting();
+
+            app.UseHealthChecks("/health", new HealthCheckOptions
+            {
+                ResponseWriter = HealthCheckResponseWriter.WriteJsonResponse
+            });
+
+            if (!IsEnvironmentLocalOrDev)
+            {
+
+                app.UseHealthChecks("/ping", new HealthCheckOptions
+                {
+                    Predicate = (_) => false,
+                    ResponseWriter = (context, report) =>
+                    {
+                        context.Response.ContentType = "application/json";
+                        return context.Response.WriteAsync("");
+                    }
+                });
+            }
 
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
             });
         }
+
+        private bool IsEnvironmentLocalOrDev => 
+            Configuration["Environment"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+            || Configuration["Environment"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
     }
 }
