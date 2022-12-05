@@ -83,7 +83,7 @@
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), 'api-rg')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
-        "configNames": "SFA.DAS.AANHub"
+        "configNames": "SFA.DAS.AanHub.Api"
     },
     "resources": [
         {
@@ -168,36 +168,36 @@
                     },
                     "appServiceAppSettings": {
                         "value": {
-                            "array": [
-                                {
-                                    "name": "EnvironmentName",
-                                    "value": "[parameters('environmentName')]"
-                                },
-                                {
-                                    "name": "ConfigurationStorageConnectionString",
-                                    "value": "[parameters('configurationStorageConnectionString')]"
-                                },
-                                {
-                                    "name": "ConfigNames",
-                                    "value": "[variables('configNames')]"
-                                },
-                                {
-                                    "name": "Version",
-                                    "value": "1.0"
-                                },
-                                {
-                                    "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                                    "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
-                                },
-                                {
-                                    "name": "LoggingRedisConnectionString",
-                                    "value": "[parameters('loggingRedisConnectionString')]"
-                                },
-                                {
-                                    "name": "LoggingRedisKey",
-                                    "value": "[parameters('loggingRedisKey')]"
-                                }
-                            ]
+                          "array": [
+                            {
+                              "name": "EnvironmentName",
+                              "value": "[parameters('environmentName')]"
+                            },
+                            {
+                              "name": "ConfigurationStorageConnectionString",
+                              "value": "[parameters('configurationStorageConnectionString')]"
+                            },
+                            {
+                              "name": "ConfigNames",
+                              "value": "[variables('configNames')]"
+                            },
+                            {
+                              "name": "Version",
+                              "value": "1.0"
+                            },
+                            {
+                              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
+                              "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                            },
+                            {
+                              "name": "LoggingRedisConnectionString",
+                              "value": "[parameters('loggingRedisConnectionString')]"
+                            },
+                            {
+                              "name": "LoggingRedisKey",
+                              "value": "[parameters('loggingRedisKey')]"
+                            }
+                          ]
                         }
                     },
                     "customHostName": {
