@@ -174,10 +174,6 @@
                               "value": "[parameters('environmentName')]"
                             },
                             {
-                              "name": "Environment",
-                              "value": "[parameters('environmentName')]"
-                            },
-                            {
                               "name": "ConfigurationStorageConnectionString",
                               "value": "[parameters('configurationStorageConnectionString')]"
                             },

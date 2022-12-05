@@ -16,22 +16,21 @@ namespace SFA.DAS.AANHub.Api
     [ExcludeFromCodeCoverage]
     public class Startup
     {
+        private readonly string _environmentName;
         public IConfiguration Configuration { get; }
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
+            _environmentName = configuration["EnvironmentName"];
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
-                .SetBasePath(Directory.GetCurrentDirectory())
-                .AddEnvironmentVariables();
-
-            config.AddAzureTableStorage(options =>
-            {
-                options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
-                options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
-                options.EnvironmentName = configuration["EnvironmentName"];
-                options.PreFixConfigurationKeys = false;
-            });
+                .AddAzureTableStorage(options =>
+                {
+                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
+                    options.EnvironmentName = _environmentName;
+                    options.PreFixConfigurationKeys = false;
+                });
 #if DEBUG
             config.AddJsonFile($"appsettings.Development.json", optional: true);
 #endif
@@ -66,7 +65,11 @@ namespace SFA.DAS.AANHub.Api
             });
 
             services
-                .AddControllers()
+                .AddControllers(options =>
+                {
+                    if (!IsEnvironmentLocalOrDev)
+                        options.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -127,8 +130,8 @@ namespace SFA.DAS.AANHub.Api
             });
         }
 
-        private bool IsEnvironmentLocalOrDev => 
-            Configuration["Environment"].Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
-            || Configuration["Environment"].Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
+        private bool IsEnvironmentLocalOrDev =>
+            _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
+            || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
     }
 }
