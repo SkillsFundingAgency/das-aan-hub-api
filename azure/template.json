@@ -83,7 +83,7 @@
         "resourceGroupName": "[concat(variables('resourceNamePrefix'), 'api-rg')]",
         "databaseName": "[concat(variables('resourceNamePrefix'), '-db')]",
         "apiAppServiceName": "[concat(variables('resourceNamePrefix'), 'api-as')]",
-        "configNames": "SFA.DAS.AanHub"
+        "configNames": "SFA.DAS.AanHub.Api"
     },
     "resources": [
         {
