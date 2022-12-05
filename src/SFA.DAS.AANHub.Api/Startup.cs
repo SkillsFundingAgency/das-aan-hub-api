@@ -65,18 +65,18 @@ namespace SFA.DAS.AANHub.Api
                 opt.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
             });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AAN Hub API"});
-                c.OperationFilter<SwaggerVersionHeaderFilter>();
-            });
-
             services
                 .AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "AAN Hub API" });
+                c.OperationFilter<SwaggerVersionHeaderFilter>();
+            });
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
@@ -94,7 +94,11 @@ namespace SFA.DAS.AANHub.Api
             }
             app.UseAuthentication();
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "SFA.DAS.AANHub.Api v1"));
+            app.UseSwaggerUI(options =>
+            {
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "SFA.DAS.AANHub.Api v1");
+                options.RoutePrefix = string.Empty;
+            });
             app.UseHttpsRedirection();
             app.UseRouting();
 
