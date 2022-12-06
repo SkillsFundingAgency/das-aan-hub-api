@@ -1,19 +1,30 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Queries.GetCalendarsForUser;
-using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 {
     public class WhenRequestingCalendarsForUser
     {
+        private readonly Mock<ICalendarsReadRepository> _calendarsReadRepository;
+        private readonly Mock<ICalendarsPermissionsReadRepository> _calendarsPermissionsReadRepository;
+        private readonly Mock<IMembersPermissionsReadRepository> _membersPermissionsReadRepository;
+        private readonly GetCalendarsForUserQueryHandler _handler;
+
+        public WhenRequestingCalendarsForUser()
+        {
+            _calendarsReadRepository = new Mock<ICalendarsReadRepository>();
+            _calendarsPermissionsReadRepository = new Mock<ICalendarsPermissionsReadRepository>();
+            _membersPermissionsReadRepository = new Mock<IMembersPermissionsReadRepository>();
+            _handler = new GetCalendarsForUserQueryHandler(_calendarsReadRepository.Object, _calendarsPermissionsReadRepository.Object, _membersPermissionsReadRepository.Object);
+        }
+
         [Test, AutoMoqData]
         public async Task ThenAllCalendarsForUserAreReturned(
-            GetCalendarsForUserQuery query,
-            [Frozen(Matching.ImplementedInterfaces)] AanDataContext context,
-            GetCalendarsForUserQueryHandler handler)
+            GetCalendarsForUserQuery query)
         {
             var memberGuid = Guid.NewGuid();
 
@@ -38,20 +49,14 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
                 View = true
             }};
 
-            var memberPermissions = new List<MemberPermission>{
-                new()
-                {
-                    IsActive = true,
-                    MemberId = memberGuid,
-                    PermissionId = 2345
-                }};
+            var memberPermissions = new List<long> { 2345 };
 
-            context.Calendars.AddRange(calendar);
-            context.CalendarPermissions.AddRange(calendarPermission);
-            context.MemberPermissions.AddRange(memberPermissions);
-            await context.SaveChangesAsync();
+            _calendarsReadRepository.Setup(m => m.GetAllCalendars()).ReturnsAsync(calendar);
+            _calendarsPermissionsReadRepository.Setup(m => m.GetAllCalendarsPermissionsForUser(It.IsAny<Guid>())).ReturnsAsync(calendarPermission);
+            _membersPermissionsReadRepository.Setup(m => m.GetAllMemberPermissionsForUser(It.IsAny<Guid>())).ReturnsAsync(memberPermissions);
 
-            var result = await handler.Handle(query, CancellationToken.None);
+
+            var result = await _handler.Handle(query, CancellationToken.None);
 
 
             result?.Should().NotBeNull();

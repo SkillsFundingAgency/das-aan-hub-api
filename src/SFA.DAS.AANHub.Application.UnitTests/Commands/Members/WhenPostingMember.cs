@@ -4,29 +4,29 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
-using SFA.DAS.AANHub.Domain.Interfaces;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
 {
     public class WhenPostingMember
     {
         private readonly CreateMemberCommandHandler _handler;
-        private readonly Mock<IMembersContext> _memberContext;
-        private readonly Mock<IApprenticesContext> _apprenticeContext;
-        private readonly Mock<IAdminsContext> _adminContext;
-        private readonly Mock<IPartnersContext> _partnerContext;
-        private readonly Mock<IEmployersContext> _employerContext;
+        private readonly Mock<IMembersWriteRepository> _membersWriteRepository;
+        private readonly Mock<IApprenticesWriteRepository> _apprenticesWriteRepository;
+        private readonly Mock<IAdminsWriteRepository> _adminsWriteRepository;
+        private readonly Mock<IPartnersWriteRepository> _partnersWriteRepository;
+        private readonly Mock<IEmployersWriteRepository> _employersWriteRepository;
 
         public WhenPostingMember()
         {
 
-            _memberContext = new Mock<IMembersContext>();
-            _adminContext = new Mock<IAdminsContext>();
-            _apprenticeContext = new Mock<IApprenticesContext>();
-            _employerContext = new Mock<IEmployersContext>();
-            _partnerContext = new Mock<IPartnersContext>();
+            _membersWriteRepository = new Mock<IMembersWriteRepository>();
+            _adminsWriteRepository = new Mock<IAdminsWriteRepository>();
+            _apprenticesWriteRepository = new Mock<IApprenticesWriteRepository>();
+            _employersWriteRepository = new Mock<IEmployersWriteRepository>();
+            _partnersWriteRepository = new Mock<IPartnersWriteRepository>();
 
-            _handler = new CreateMemberCommandHandler(_memberContext.Object, _apprenticeContext.Object, _employerContext.Object, _partnerContext.Object, _adminContext.Object);
+            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object);
         }
 
         [Test, AutoMoqData]
@@ -72,17 +72,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             CreateMemberCommand command
         )
         {
-            _memberContext.Setup(m => m.Entities.AddAsync(It.IsAny<Member>(), It.IsAny<CancellationToken>()));
-            _apprenticeContext.Setup(m => m.Entities.AddAsync(It.IsAny<Apprentice>(), It.IsAny<CancellationToken>()));
-            _adminContext.Setup(m => m.Entities.AddAsync(It.IsAny<Admin>(), It.IsAny<CancellationToken>()));
-            _partnerContext.Setup(m => m.Entities.AddAsync(It.IsAny<Partner>(), It.IsAny<CancellationToken>()));
-            _employerContext.Setup(m => m.Entities.AddAsync(It.IsAny<Employer>(), It.IsAny<CancellationToken>()));
+            _membersWriteRepository.Setup(m => m.Create(It.IsAny<Member>()));
+            _apprenticesWriteRepository.Setup(m => m.Create(It.IsAny<Apprentice>()));
+            _adminsWriteRepository.Setup(m => m.Create(It.IsAny<Admin>()));
+            _partnersWriteRepository.Setup(m => m.Create(It.IsAny<Partner>()));
+            _employersWriteRepository.Setup(m => m.Create(It.IsAny<Employer>()));
 
-            _memberContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
-            _apprenticeContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
-            _adminContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
-            _employerContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
-            _partnerContext.Setup(m => m.SaveChangesAsync(It.IsAny<CancellationToken>())).ReturnsAsync(0);
             return await _handler.Handle(command, CancellationToken.None);
         }
     }

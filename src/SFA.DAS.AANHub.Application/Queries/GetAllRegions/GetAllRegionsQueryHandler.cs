@@ -1,22 +1,18 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Queries.GetAllRegions
 {
     public class GetAllRegionsQueryHandler : IRequestHandler<GetAllRegionsQuery, GetAllRegionsResult>
     {
-        private readonly IRegionsContext _regionsContext;
+        private readonly IRegionsReadRepository _regionsReadRepository;
 
-        public GetAllRegionsQueryHandler(IRegionsContext regionsContext)
-        {
-            _regionsContext = regionsContext;
-        }
+        public GetAllRegionsQueryHandler(IRegionsReadRepository regionsReadRepository) => _regionsReadRepository = regionsReadRepository;
 
         public async Task<GetAllRegionsResult> Handle(GetAllRegionsQuery request, CancellationToken cancellationToken)
         {
-            var regionSummary = await _regionsContext.Entities.ToListAsync(cancellationToken);
+            var regionSummary = await _regionsReadRepository.GetAllRegions();
 
             return regionSummary.Any()
                 ? new GetAllRegionsResult

@@ -1,14 +1,28 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Queries.GetCalendars;
 using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 {
     public class WhenRequestingCalendars
     {
+
+        private readonly Mock<ICalendarsReadRepository> _calendarsReadRepository;
+        private readonly Mock<ICalendarsPermissionsReadRepository> _calendarsPermissionsReadRepository;
+        private readonly GetCalendarsQueryHandler _handler;
+
+        public WhenRequestingCalendars()
+        {
+            _calendarsReadRepository = new Mock<ICalendarsReadRepository>();
+            _calendarsPermissionsReadRepository = new Mock<ICalendarsPermissionsReadRepository>();
+            _handler = new GetCalendarsQueryHandler(_calendarsReadRepository.Object, _calendarsPermissionsReadRepository.Object);
+        }
+
         [Test, AutoMoqData]
         public async Task ThenAllCalendarsAreReturned(
             GetCalendarsQuery query,
@@ -29,9 +43,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 
         [Test, AutoMoqData]
         public async Task ThenAllCalendarsForCreateAreReturned(
-            GetCalendarsQuery query,
-            [Frozen(Matching.ImplementedInterfaces)] AanDataContext context,
-            GetCalendarsQueryHandler handler)
+            GetCalendarsQuery query)
         {
             var calendar = new Calendar
             {
@@ -56,12 +68,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
             var calendars = new List<Calendar> { calendar };
             var calendarPermissions = new List<CalendarPermission> { calendarPermission };
 
-            context.Calendars.AddRange(calendars);
-            context.CalendarPermissions.AddRange(calendarPermissions);
-            await context.SaveChangesAsync();
+            _calendarsReadRepository.Setup(m => m.GetAllCalendars()).ReturnsAsync(calendars);
+            _calendarsPermissionsReadRepository.Setup(m => m.GetAllCalendarsPermissions()).ReturnsAsync(calendarPermissions);
 
-            var result = await handler.Handle(query, CancellationToken.None);
-
+            var result = await _handler.Handle(query, CancellationToken.None);
 
             var getCalendarsResultItems = result.ToList();
 

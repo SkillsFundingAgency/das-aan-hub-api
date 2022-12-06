@@ -1,43 +1,30 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
-using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Queries.GetCalendarsForUser
 {
     public class GetCalendarsForUserQueryHandler : IRequestHandler<GetCalendarsForUserQuery, GetCalendarsForUserResult>
     {
-        private readonly ICalendarsContext _calendarsContext;
-        private readonly ICalendarPermissionsContext _calendarPermissionsContext;
-        private readonly IMemberPermissionsContext _memberPermissionsContext;
+        private readonly ICalendarsReadRepository _calendarsReadRepository;
+        private readonly ICalendarsPermissionsReadRepository _calendarsPermissionsReadRepository;
+        private readonly IMembersPermissionsReadRepository _membersPermissionsReadRepository;
 
-        public GetCalendarsForUserQueryHandler(ICalendarsContext calendarsContext,
-            ICalendarPermissionsContext calendarPermissionsContext,
-            IMemberPermissionsContext memberPermissionsContext)
+        public GetCalendarsForUserQueryHandler(ICalendarsReadRepository calendarsReadRepository,
+            ICalendarsPermissionsReadRepository calendarsPermissionsReadRepository,
+            IMembersPermissionsReadRepository membersPermissionsReadRepository)
         {
-            _calendarsContext = calendarsContext;
-            _calendarPermissionsContext = calendarPermissionsContext;
-            _memberPermissionsContext = memberPermissionsContext;
+            _calendarsReadRepository = calendarsReadRepository;
+            _calendarsPermissionsReadRepository = calendarsPermissionsReadRepository;
+            _membersPermissionsReadRepository = membersPermissionsReadRepository;
         }
 
         public async Task<GetCalendarsForUserResult> Handle(GetCalendarsForUserQuery request, CancellationToken cancellationToken)
         {
-            IEnumerable<long> permissionIds =
-                await _memberPermissionsContext.Entities
-                                               .Where(m => m.MemberId == request.MemberId && m.IsActive)
-                                               .Select(m => m.PermissionId)
-                                               .Distinct()
-                                               .ToListAsync(cancellationToken);
-            IEnumerable<CalendarPermission> calendarPermissions =
-                await _calendarPermissionsContext.Entities
-                                                 .Where(cp => permissionIds.Contains(cp.PermissionId))
-                                                 .ToListAsync(cancellationToken);
-            var calendarIds = calendarPermissions.Select(cp => cp.CalendarId)
+            var permissionIds = await _membersPermissionsReadRepository.GetAllMemberPermissionsForUser(request.MemberId);
+            var calendarPermissionsForUser = await _calendarsPermissionsReadRepository.GetAllCalendarsPermissionsForUser(request.MemberId);
+            var calendarIds = calendarPermissionsForUser.Select(cp => cp.CalendarId)
                                                                .Distinct();
-            IEnumerable<Calendar> calendars =
-                await _calendarsContext.Entities
-                                       .Where(c => calendarIds.Contains(c.Id))
-                                       .ToListAsync(cancellationToken);
+            var calendars = _calendarsReadRepository.GetAllCalendars().Result.Where(c => calendarIds.Contains(c.Id));
 
 
             var result = new GetCalendarsForUserResult()
@@ -47,10 +34,10 @@ namespace SFA.DAS.AANHub.Application.Queries.GetCalendarsForUser
                 {
                     Calendar = c.CalendarName,
                     CalendarId = c.Id,
-                    Create = calendarPermissions.Any(cp => cp.CalendarId == c.Id && cp.Create),
-                    Update = calendarPermissions.Any(cp => cp.CalendarId == c.Id && cp.Update),
-                    View = calendarPermissions.Any(cp => cp.CalendarId == c.Id && cp.View),
-                    Delete = calendarPermissions.Any(cp => cp.CalendarId == c.Id && cp.Delete),
+                    Create = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Create),
+                    Update = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Update),
+                    View = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.View),
+                    Delete = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Delete),
                 })
             };
 
