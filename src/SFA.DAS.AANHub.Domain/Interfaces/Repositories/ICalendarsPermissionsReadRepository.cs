@@ -5,6 +5,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
     public interface ICalendarsPermissionsReadRepository
     {
         Task<List<CalendarPermission>> GetAllCalendarsPermissions();
-        Task<List<CalendarPermission>> GetAllCalendarsPermissionsForUser(Guid id);
+        Task<List<CalendarPermission>> GetAllCalendarsPermissionsByPermissionIds(List<long> permissionIds);
     }
 }

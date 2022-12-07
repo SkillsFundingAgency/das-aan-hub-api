@@ -9,6 +9,5 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public bool Update { get; set; }
         public bool View { get; set; }
         public bool Delete { get; set; }
-        public virtual List<MemberPermission> MemberPermissions { get; set; } = new List<MemberPermission>();
     }
 }

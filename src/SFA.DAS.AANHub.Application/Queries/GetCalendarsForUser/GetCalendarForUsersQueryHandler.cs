@@ -20,24 +20,23 @@ namespace SFA.DAS.AANHub.Application.Queries.GetCalendarsForUser
 
         public async Task<GetCalendarsForUserResult> Handle(GetCalendarsForUserQuery request, CancellationToken cancellationToken)
         {
-            var permissionIds = await _membersPermissionsReadRepository.GetAllMemberPermissionsForUser(request.MemberId);
-            var calendarPermissionsForUser = await _calendarsPermissionsReadRepository.GetAllCalendarsPermissionsForUser(request.MemberId);
+            var userPermissionIds = await _membersPermissionsReadRepository.GetAllMemberPermissionsForUser(request.MemberId);
+            var calendarPermissionsForUser = await _calendarsPermissionsReadRepository.GetAllCalendarsPermissionsByPermissionIds(userPermissionIds);
             var calendarIds = calendarPermissionsForUser.Select(cp => cp.CalendarId)
                                                                .Distinct();
             var calendars = _calendarsReadRepository.GetAllCalendars().Result.Where(c => calendarIds.Contains(c.Id));
 
-
             var result = new GetCalendarsForUserResult()
             {
-                Permissions = permissionIds,
+                Permissions = userPermissionIds,
                 Calendars = calendars.Select(c => new GetCalendarsForUserResultItem()
                 {
                     Calendar = c.CalendarName,
                     CalendarId = c.Id,
-                    Create = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Create),
-                    Update = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Update),
-                    View = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.View),
-                    Delete = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Delete),
+                    HasCreate = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Create),
+                    HasUpdate = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Update),
+                    HasView = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.View),
+                    HasDelete = calendarPermissionsForUser.Any(cp => cp.CalendarId == c.Id && cp.Delete),
                 })
             };
 

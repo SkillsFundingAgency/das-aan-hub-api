@@ -9,26 +9,14 @@ namespace SFA.DAS.AANHub.Data.Repositories
     internal class CalendarsPermissionsReadRepository : ICalendarsPermissionsReadRepository
     {
         private readonly AanDataContext _aanDataContext;
-        private readonly IMembersPermissionsReadRepository _membersPermissionsReadRepository;
 
-        public CalendarsPermissionsReadRepository(AanDataContext aanDataContext,
-            IMembersPermissionsReadRepository membersPermissionsReadRepository)
-        {
-            _aanDataContext = aanDataContext;
-            _membersPermissionsReadRepository = membersPermissionsReadRepository;
-        }
+        public CalendarsPermissionsReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
         public async Task<List<CalendarPermission>> GetAllCalendarsPermissions() => await _aanDataContext.CalendarPermissions.AsNoTracking()
                 .ToListAsync();
 
-        public async Task<List<CalendarPermission>> GetAllCalendarsPermissionsForUser(Guid id)
-        {
-            var permissionIds = await _membersPermissionsReadRepository.GetAllMemberPermissionsForUser(id);
-
-            return await _aanDataContext.CalendarPermissions
+        public async Task<List<CalendarPermission>> GetAllCalendarsPermissionsByPermissionIds(List<long> permissionIds) => await _aanDataContext.CalendarPermissions
                     .Where(cp => permissionIds.Contains(cp.PermissionId)).AsNoTracking()
                     .ToListAsync();
-
-        }
     }
 }

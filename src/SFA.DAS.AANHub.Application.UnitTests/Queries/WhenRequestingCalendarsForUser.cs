@@ -52,18 +52,15 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
             var memberPermissions = new List<long> { 2345 };
 
             _calendarsReadRepository.Setup(m => m.GetAllCalendars()).ReturnsAsync(calendar);
-            _calendarsPermissionsReadRepository.Setup(m => m.GetAllCalendarsPermissionsForUser(It.IsAny<Guid>())).ReturnsAsync(calendarPermission);
+            _calendarsPermissionsReadRepository.Setup(m => m.GetAllCalendarsPermissionsByPermissionIds(It.IsAny<List<long>>())).ReturnsAsync(calendarPermission);
             _membersPermissionsReadRepository.Setup(m => m.GetAllMemberPermissionsForUser(It.IsAny<Guid>())).ReturnsAsync(memberPermissions);
 
-
             var result = await _handler.Handle(query, CancellationToken.None);
-
 
             result?.Should().NotBeNull();
 
             result?.Calendars?.ToList().Count.Should().Be(1);
             result?.Permissions?.ToList()[0].Should().Be(2345);
-
 
         }
     }

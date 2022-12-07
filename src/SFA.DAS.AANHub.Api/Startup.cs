@@ -86,8 +86,7 @@ namespace SFA.DAS.AANHub.Api
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
 
-            services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"]);
-            services.AddControllers();
+            services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"], _environmentName);
             services.AddApplicationRegistrations();
 
         }
@@ -115,7 +114,6 @@ namespace SFA.DAS.AANHub.Api
 
             if (!IsEnvironmentLocalOrDev)
             {
-
                 app.UseHealthChecks("/ping", new HealthCheckOptions
                 {
                     Predicate = (_) => false,
