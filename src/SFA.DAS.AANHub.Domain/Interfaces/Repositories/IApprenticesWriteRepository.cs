@@ -4,7 +4,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IApprenticesWriteRepository
     {
-        Task Create(Apprentice apprentice);
+        void Create(Apprentice apprentice);
 
     }
 }

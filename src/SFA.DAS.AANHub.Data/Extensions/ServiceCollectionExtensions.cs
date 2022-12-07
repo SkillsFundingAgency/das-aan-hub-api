@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using System.Diagnostics.CodeAnalysis;
 
@@ -20,6 +21,8 @@ namespace SFA.DAS.AANHub.Data.Extensions
                     connection,
                     o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds));
             });
+
+            services.AddTransient<IAanDataContext, AanDataContext>(provider => provider.GetService<AanDataContext>()!);
             RegisterServices(services);
             return services;
         }

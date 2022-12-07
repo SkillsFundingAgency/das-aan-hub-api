@@ -1,11 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data
 {
     [ExcludeFromCodeCoverage]
-    public class AanDataContext : DbContext
+    public class AanDataContext : DbContext, IAanDataContext
     {
         public DbSet<Region> Regions { get; set; } = null!;
         public DbSet<Member> Members { get; set; } = null!;

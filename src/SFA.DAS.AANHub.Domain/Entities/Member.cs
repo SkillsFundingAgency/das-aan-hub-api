@@ -11,5 +11,7 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public string? Organisation { get; set; }
         public DateTime Joined { get; set; }
         public DateTime? Deleted { get; set; }
+
+        public virtual Apprentice? Apprentice { get; set; }
     }
 }

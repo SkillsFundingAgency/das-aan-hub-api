@@ -45,14 +45,14 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                 Status = MembershipStatuses.Live.ToString()
             };
 
-            await _membersWriteRepository.Create(member);
+            _membersWriteRepository.Create(member);
 
             long id = long.TryParse(command.Id, out id) ? id : 0;
 
             switch (command.UserType)
             {
                 case MembershipUserTypes.Apprentice:
-                    await _apprenticesWriteRepository.Create(
+                    _apprenticesWriteRepository.Create(
                         new Apprentice()
                         {
                             MemberId = memberId,
