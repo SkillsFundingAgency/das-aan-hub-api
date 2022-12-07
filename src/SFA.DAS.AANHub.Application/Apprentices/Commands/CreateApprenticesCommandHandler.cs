@@ -3,18 +3,21 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands
 {
     public class CreateApprenticesCommandHandler : IRequestHandler<CreateApprenticesCommand, Guid>
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
+        private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
 
-        public CreateApprenticesCommandHandler(IMembersWriteRepository membersWriteRepository, IApprenticesWriteRepository apprenticesWriteRepository, IAanDataContext aanDataContext)
+        public CreateApprenticesCommandHandler(IMembersWriteRepository membersWriteRepository, IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
         {
             _membersWriteRepository = membersWriteRepository;
             _aanDataContext = aanDataContext;
+            _auditWriteRepository = auditWriteRepository;
         }
 
         public async Task<Guid> Handle(CreateApprenticesCommand command, CancellationToken cancellationToken)
@@ -44,6 +47,15 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
             };
 
             _membersWriteRepository.Create(member);
+
+            _auditWriteRepository.Create(new Audit
+            {
+                Action = "Create",
+                Member = member,
+                AuditTime = DateTime.UtcNow,
+                After = JsonSerializer.Serialize(member),
+                Resource = "Apprentice"
+            });
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 

@@ -38,7 +38,7 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<ICalendarsReadRepository, CalendarsReadRepository>();
             services.AddTransient<ICalendarsPermissionsReadRepository, CalendarsPermissionsReadRepository>();
             services.AddTransient<IMembersPermissionsReadRepository, MembersPermissionsReadRepository>();
-
+            services.AddTransient<IAuditWriteRepository, AuditWriteRepository>();
         }
     }
 }
