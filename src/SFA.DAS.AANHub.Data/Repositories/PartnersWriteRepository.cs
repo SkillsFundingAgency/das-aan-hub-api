@@ -11,10 +11,6 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public PartnersWriteRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task Create(Partner partner)
-        {
-            _aanDataContext.Partners.Add(partner);
-            await _aanDataContext.SaveChangesAsync();
-        }
+        public void Create(Partner partner) => _aanDataContext.Partners.Add(partner);
     }
 }

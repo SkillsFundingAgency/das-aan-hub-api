@@ -11,10 +11,6 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public EmployersWriteRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task Create(Employer employer)
-        {
-            _aanDataContext.Employers.Add(employer);
-            await _aanDataContext.SaveChangesAsync();
-        }
+        public void Create(Employer employer) => _aanDataContext.Employers.Add(employer);
     }
 }

@@ -4,6 +4,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
@@ -16,6 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
         private readonly Mock<IAdminsWriteRepository> _adminsWriteRepository;
         private readonly Mock<IPartnersWriteRepository> _partnersWriteRepository;
         private readonly Mock<IEmployersWriteRepository> _employersWriteRepository;
+        private readonly Mock<IAanDataContext> _aanDataContext;
 
         public WhenPostingMember()
         {
@@ -25,8 +27,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _apprenticesWriteRepository = new Mock<IApprenticesWriteRepository>();
             _employersWriteRepository = new Mock<IEmployersWriteRepository>();
             _partnersWriteRepository = new Mock<IPartnersWriteRepository>();
+            _aanDataContext = new Mock<IAanDataContext>();
 
-            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object);
+            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _aanDataContext.Object);
         }
 
         [Test, AutoMoqData]

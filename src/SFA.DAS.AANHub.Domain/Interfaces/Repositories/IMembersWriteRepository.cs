@@ -4,7 +4,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IMembersWriteRepository
     {
-        Task Create(Member member);
+        void Create(Member member);
 
     }
 }

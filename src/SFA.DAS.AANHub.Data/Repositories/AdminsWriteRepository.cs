@@ -11,10 +11,6 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public AdminsWriteRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task Create(Admin admin)
-        {
-            _aanDataContext.Admins.Add(admin);
-            await _aanDataContext.SaveChangesAsync();
-        }
+        public void Create(Admin admin) => _aanDataContext.Admins.Add(admin);
     }
 }

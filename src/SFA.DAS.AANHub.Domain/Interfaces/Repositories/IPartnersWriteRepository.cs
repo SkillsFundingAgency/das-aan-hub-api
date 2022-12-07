@@ -4,6 +4,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IPartnersWriteRepository
     {
-        Task Create(Partner partner);
+        void Create(Partner partner);
     }
 }

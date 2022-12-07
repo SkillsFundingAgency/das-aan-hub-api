@@ -4,6 +4,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IAdminsWriteRepository
     {
-        Task Create(Admin admin);
+        void Create(Admin admin);
     }
 }
