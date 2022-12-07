@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 
 namespace SFA.DAS.AANHub.Api.Controllers
@@ -18,6 +19,10 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _mediator = mediator;
             _logger = logger;
         }
+
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<Member> GetMember(Guid id) => Ok(new Member() { Id = id });
 
         [HttpPost("apprentice")]
         public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)

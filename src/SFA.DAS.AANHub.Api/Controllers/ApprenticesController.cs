@@ -1,8 +1,6 @@
 ﻿using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
-using SFA.DAS.AANHub.Application.Commands.CreateMember;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
@@ -18,10 +16,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
         }
 
         [HttpPost]
+        [ProducesResponseType(201)]
         public async Task<IActionResult> CreateApprentice(CreateApprenticesCommand request)
         {
             var response = await _mediator.Send(request);
-            return Ok(response);
+            return new CreatedAtActionResult(nameof(MemberController.GetMember), "Member", new { id = response }, new { memberId = response, status = "Live" } );
         }
     }
 }
