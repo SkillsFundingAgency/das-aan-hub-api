@@ -1,7 +1,7 @@
 ﻿
 namespace SFA.DAS.AANHub.Domain.Entities
 {
-    public class Member : EntityBase
+    public class Member
     {
         public Guid Id { get; set; }
         public string? UserType { get; set; }
@@ -10,7 +10,6 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public int? RegionId { get; set; }
         public string? Organisation { get; set; }
         public DateTime Joined { get; set; }
-        public DateTime? Deleted { get; set; }
 
         public virtual Apprentice? Apprentice { get; set; }
     }

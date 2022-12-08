@@ -7,7 +7,6 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public long ApprenticeId { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
-        public DateTime? LastUpdated { get; set; }
         public bool IsActive { get; set; }
     }
 }
