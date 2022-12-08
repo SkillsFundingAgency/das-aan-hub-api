@@ -8,15 +8,15 @@ namespace SFA.DAS.AANHub.Data
     [ExcludeFromCodeCoverage]
     public class AanDataContext : DbContext, IAanDataContext
     {
-        public DbSet<Region> Regions { get; set; } = null!;
-        public DbSet<Member> Members { get; set; } = null!;
-        public DbSet<Apprentice> Apprentices { get; set; } = null!;
-        public DbSet<Employer> Employers { get; set; } = null!;
-        public DbSet<Partner> Partners { get; set; } = null!;
-        public DbSet<Admin> Admins { get; set; } = null!;
-        public DbSet<Calendar> Calendars { get; set; } = null!;
-        public DbSet<CalendarPermission> CalendarPermissions { get; set; } = null!;
-        public DbSet<MemberPermission> MemberPermissions { get; set; } = null!;
+        public DbSet<Region> Regions => Set<Region>();
+        public DbSet<Member> Members => Set<Member>();
+        public DbSet<Apprentice> Apprentices => Set<Apprentice>();
+        public DbSet<Employer> Employers => Set<Employer>();
+        public DbSet<Partner> Partners => Set<Partner>();
+        public DbSet<Admin> Admins => Set<Admin>();
+        public DbSet<Calendar> Calendars => Set<Calendar>();
+        public DbSet<CalendarPermission> CalendarPermissions => Set<CalendarPermission>();
+        public DbSet<MemberPermission> MemberPermissions => Set<MemberPermission>();
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
