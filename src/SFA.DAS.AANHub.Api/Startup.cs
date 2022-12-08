@@ -2,7 +2,8 @@
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
-using SFA.DAS.AANHub.Api.AppStart;
+using SFA.DAS.AANHub.Application.Extensions;
+using SFA.DAS.AANHub.Data.Extensions;
 using SFA.DAS.AANHub.Domain.Configuration;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
@@ -13,6 +14,7 @@ using System.Text.Json.Serialization;
 
 namespace SFA.DAS.AANHub.Api
 {
+
     [ExcludeFromCodeCoverage]
     public class Startup
     {
@@ -84,9 +86,9 @@ namespace SFA.DAS.AANHub.Api
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
 
-            services.AddDatabaseRegistration(Configuration);
+            services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"], _environmentName);
+            services.AddApplicationRegistrations();
 
-            services.AddServices();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -112,7 +114,6 @@ namespace SFA.DAS.AANHub.Api
 
             if (!IsEnvironmentLocalOrDev)
             {
-
                 app.UseHealthChecks("/ping", new HealthCheckOptions
                 {
                     Predicate = (_) => false,

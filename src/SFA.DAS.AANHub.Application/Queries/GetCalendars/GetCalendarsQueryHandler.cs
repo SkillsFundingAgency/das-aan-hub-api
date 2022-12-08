@@ -1,25 +1,24 @@
 ﻿using MediatR;
-using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Queries.GetCalendars
 {
     public class GetCalendarsQueryHandler : IRequestHandler<GetCalendarsQuery, IEnumerable<GetCalendarsResultItem>>
     {
-        private readonly ICalendarsContext _calendarsContext;
-        private readonly ICalendarPermissionsContext _calendarPermissionsContext;
+        private readonly ICalendarsReadRepository _calendarsReadRepository;
+        private readonly ICalendarsPermissionsReadRepository _calendarsPermissionsReadRepository;
 
-        public GetCalendarsQueryHandler(ICalendarsContext calendarsContext, ICalendarPermissionsContext calendarPermissionsContext)
+        public GetCalendarsQueryHandler(ICalendarsReadRepository calendarsReadRepository, ICalendarsPermissionsReadRepository calendarsPermissionsReadRepository)
         {
-            _calendarsContext = calendarsContext;
-            _calendarPermissionsContext = calendarPermissionsContext;
+            _calendarsReadRepository = calendarsReadRepository;
+            _calendarsPermissionsReadRepository = calendarsPermissionsReadRepository;
         }
 
         public async Task<IEnumerable<GetCalendarsResultItem>> Handle(GetCalendarsQuery request, CancellationToken cancellationToken)
         {
-            IEnumerable<Calendar> calendars = await _calendarsContext.Entities.ToListAsync(cancellationToken);
-            IEnumerable<CalendarPermission> permissions = await _calendarPermissionsContext.Entities.ToListAsync(cancellationToken);
+            IEnumerable<Calendar> calendars = await _calendarsReadRepository.GetAllCalendars();
+            IEnumerable<CalendarPermission> permissions = await _calendarsPermissionsReadRepository.GetAllCalendarsPermissions();
 
             var items =
                 calendars.Select(c => new GetCalendarsResultItem()

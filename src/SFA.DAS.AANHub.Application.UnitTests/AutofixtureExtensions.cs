@@ -5,7 +5,6 @@ using AutoFixture.NUnit3;
 using Microsoft.Data.Sqlite;
 using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Data;
-using SFA.DAS.AANHub.Domain.Interfaces;
 
 namespace SFA.DAS.AANHub.Application.UnitTests
 {
@@ -45,7 +44,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests
             }
 
             fixture.Customizations.Add(new AANDataContextBuilder());
-            fixture.Customizations.Add(new DateTimeHelperBuilder());
         }
     }
 
@@ -75,17 +73,4 @@ namespace SFA.DAS.AANHub.Application.UnitTests
         }
     }
 
-    // Handy for unit testing - make sure any IDateTimeHelper instances are "now"
-    public class DateTimeHelperBuilder : ISpecimenBuilder
-    {
-        public object Create(object request, ISpecimenContext context)
-        {
-            if (request is Type type && type == typeof(IDateTimeHelper))
-            {
-                return new UtcTimeProvider();
-            }
-
-            return new NoSpecimen();
-        }
-    }
 }

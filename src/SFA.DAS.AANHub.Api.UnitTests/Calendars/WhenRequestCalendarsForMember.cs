@@ -13,7 +13,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Calendars
     {
         private readonly Mock<IMediator> _mediator;
         private readonly Mock<ILogger<CalendarController>> _logger;
-        //private readonly Mock<GetCalendarsForUserQuery> _query;
 
         public WhenRequestCalendarsForMember()
         {

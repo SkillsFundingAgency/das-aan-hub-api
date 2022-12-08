@@ -10,6 +10,7 @@ namespace SFA.DAS.AANHub.Data.Configuration
         {
             builder.ToTable("CalendarPermission");
             builder.HasKey(x => new { x.CalendarId, x.PermissionId });
+
         }
     }
 }

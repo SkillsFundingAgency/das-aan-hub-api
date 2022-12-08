@@ -2,29 +2,32 @@
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 {
     public class CreateMemberCommandHandler : IRequestHandler<CreateMemberCommand, CreateMemberResponse>
     {
-        private readonly IMembersContext _membersContext;
-        private readonly IApprenticesContext _apprenticesContext;
-        private readonly IEmployersContext _employersContext;
-        private readonly IPartnersContext _partnersContext;
-        private readonly IAdminsContext _adminsContext;
-
+        private readonly IMembersWriteRepository _membersWriteRepository;
+        private readonly IApprenticesWriteRepository _apprenticesWriteRepository;
+        private readonly IEmployersWriteRepository _employersWriteRepository;
+        private readonly IPartnersWriteRepository _partnersWriteRepository;
+        private readonly IAdminsWriteRepository _adminsWriteRepository;
+        private readonly IAanDataContext _aanDataContext;
         public CreateMemberCommandHandler(
-            IMembersContext membersContext,
-            IApprenticesContext apprenticesContext,
-            IEmployersContext employersContext,
-            IPartnersContext partnersContext,
-            IAdminsContext adminsContext)
+            IMembersWriteRepository membersWriteRepository,
+            IApprenticesWriteRepository apprenticesRepository,
+            IEmployersWriteRepository employersWriteRepository,
+            IPartnersWriteRepository partnersWriteRepository,
+            IAdminsWriteRepository adminsWriteRepository,
+            IAanDataContext aanDataContext)
         {
-            _membersContext = membersContext;
-            _apprenticesContext = apprenticesContext;
-            _employersContext = employersContext;
-            _partnersContext = partnersContext;
-            _adminsContext = adminsContext;
+            _membersWriteRepository = membersWriteRepository;
+            _apprenticesWriteRepository = apprenticesRepository;
+            _employersWriteRepository = employersWriteRepository;
+            _partnersWriteRepository = partnersWriteRepository;
+            _adminsWriteRepository = adminsWriteRepository;
+            _aanDataContext = aanDataContext;
         }
 
         public async Task<CreateMemberResponse> Handle(CreateMemberCommand command, CancellationToken cancellationToken)
@@ -45,15 +48,14 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                 Status = MembershipStatuses.Live.ToString()
             };
 
-            await _membersContext.Entities.AddAsync(member, cancellationToken);
-            await _membersContext.SaveChangesAsync(cancellationToken);
+            _membersWriteRepository.Create(member);
 
             long id = long.TryParse(command.Id, out id) ? id : 0;
 
             switch (command.UserType)
             {
                 case MembershipUserTypes.Apprentice:
-                    await _apprenticesContext.Entities.AddAsync(
+                    _apprenticesWriteRepository.Create(
                         new Apprentice()
                         {
                             MemberId = memberId,
@@ -62,13 +64,11 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             Name = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
-                        }
-                    , cancellationToken);
-                    await _apprenticesContext.SaveChangesAsync(cancellationToken);
+                        });
                     break;
 
                 case MembershipUserTypes.Employer:
-                    await _employersContext.Entities.AddAsync(
+                    _employersWriteRepository.Create(
                         new Employer()
                         {
                             MemberId = memberId,
@@ -78,13 +78,11 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             Name = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
-                        }
-                    , cancellationToken);
-                    await _employersContext.SaveChangesAsync(cancellationToken);
+                        });
                     break;
 
                 case MembershipUserTypes.Partner:
-                    await _partnersContext.Entities.AddAsync(
+                    _partnersWriteRepository.Create(
                         new Partner()
                         {
                             MemberId = memberId,
@@ -93,24 +91,22 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             Name = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
-                        }
-                    , cancellationToken);
-                    await _partnersContext.SaveChangesAsync(cancellationToken);
+                        });
                     break;
 
                 case MembershipUserTypes.Admin:
-                    await _adminsContext.Entities.AddAsync(
+                    _adminsWriteRepository.Create(
                         new Admin()
                         {
                             MemberId = memberId,
                             Email = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
-                        }
-                    , cancellationToken);
-                    await _adminsContext.SaveChangesAsync(cancellationToken);
+                        });
                     break;
             }
+
+            await _aanDataContext.SaveChangesAsync(cancellationToken);
 
             return new CreateMemberResponse() { Member = member };
         }
