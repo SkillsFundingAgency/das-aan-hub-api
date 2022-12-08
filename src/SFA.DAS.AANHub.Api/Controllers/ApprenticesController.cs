@@ -20,7 +20,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         public async Task<IActionResult> CreateApprentice(CreateApprenticesCommand request)
         {
             var response = await _mediator.Send(request);
-            return new CreatedAtActionResult(nameof(MemberController.GetMember), "Member", new { id = response }, new { memberId = response, status = "Live" } );
+            return new CreatedAtActionResult(nameof(MemberController.GetMember), "Member", new { id = response.MemberId }, response);
         }
     }
 }

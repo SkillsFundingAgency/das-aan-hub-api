@@ -10,9 +10,6 @@ namespace SFA.DAS.AANHub.Data.Configuration
         {
             builder.ToTable("Audit");
             builder.Property(a => a.ActionedBy).IsRequired();
-            builder.HasOne(a => a.Member)
-                .WithMany(m => m.Audits)
-                .HasForeignKey(a => a.ActionedBy);
         }
     }
 

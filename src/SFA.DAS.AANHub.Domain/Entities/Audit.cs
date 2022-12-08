@@ -9,6 +9,5 @@
         public string Resource { get; set; } = null!;
         public string? Before { get; set; }
         public string? After { get; set; }
-        public virtual Member Member { get; set; } = null!;
     }
 }

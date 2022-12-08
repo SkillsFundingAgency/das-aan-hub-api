@@ -13,6 +13,5 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public DateTime? Deleted { get; set; }
 
         public virtual Apprentice? Apprentice { get; set; }
-        public virtual List<Audit> Audits { get; set; } = new List<Audit>();
     }
 }
