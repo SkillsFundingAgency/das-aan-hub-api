@@ -1,11 +1,10 @@
 ﻿CREATE TABLE [dbo].[Audit]
 (
-	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
+    [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
     [AuditTime] DATETIME2 NOT NULL, 
     [ActionedBy] UNIQUEIDENTIFIER NOT NULL, 
     [Action] NVARCHAR(10) NOT NULL, 
     [Resource] NVARCHAR(256) NOT NULL, 
-    [Before] NVARCHAR(MAX) NOT NULL, 
-    [After] NVARCHAR(MAX) NOT NULL
-    CONSTRAINT [FK_Audit_Member] FOREIGN KEY ([ActionedBy]) REFERENCES [Member]([Id])
+    [Before] NVARCHAR(MAX) NULL, 
+    [After] NVARCHAR(MAX) NULL
 )

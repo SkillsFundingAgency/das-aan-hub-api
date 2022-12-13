@@ -5,6 +5,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces
 {
     public interface IAanDataContext
     {
+        DbSet<Audit> Audits { get; }
         DbSet<Region> Regions { get; }
         DbSet<Member> Members { get; }
         DbSet<Apprentice> Apprentices { get; }

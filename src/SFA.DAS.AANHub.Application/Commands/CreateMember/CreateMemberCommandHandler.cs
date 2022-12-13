@@ -3,6 +3,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 {
@@ -13,6 +14,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
         private readonly IEmployersWriteRepository _employersWriteRepository;
         private readonly IPartnersWriteRepository _partnersWriteRepository;
         private readonly IAdminsWriteRepository _adminsWriteRepository;
+        private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
         public CreateMemberCommandHandler(
             IMembersWriteRepository membersWriteRepository,
@@ -20,6 +22,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
             IEmployersWriteRepository employersWriteRepository,
             IPartnersWriteRepository partnersWriteRepository,
             IAdminsWriteRepository adminsWriteRepository,
+            IAuditWriteRepository auditWriteRepository,
             IAanDataContext aanDataContext)
         {
             _membersWriteRepository = membersWriteRepository;
@@ -27,6 +30,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
             _employersWriteRepository = employersWriteRepository;
             _partnersWriteRepository = partnersWriteRepository;
             _adminsWriteRepository = adminsWriteRepository;
+            _auditWriteRepository = auditWriteRepository;
             _aanDataContext = aanDataContext;
         }
 
@@ -49,6 +53,15 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
             };
 
             _membersWriteRepository.Create(member);
+
+            _auditWriteRepository.Create(new Audit
+            {
+                Action = "Create",
+                ActionedBy = member.Id,
+                AuditTime = DateTime.UtcNow,
+                After = JsonSerializer.Serialize(member),
+                Resource = member.UserType
+            });
 
             long id = long.TryParse(command.Id, out id) ? id : 0;
 
