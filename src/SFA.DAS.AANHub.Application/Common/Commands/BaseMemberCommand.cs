@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.AANHub.Application.Common.Commands
 {
-    public class BaseMemberCommand : ICreateMemberCommand
+    public abstract class BaseMemberCommand : ICreateMemberCommand
     {
         public string? Email { get; set; }
         public string? Name { get; set; }

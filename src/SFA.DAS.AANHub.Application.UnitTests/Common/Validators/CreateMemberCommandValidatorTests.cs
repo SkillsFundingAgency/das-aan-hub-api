@@ -8,14 +8,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
     [TestFixture]
     public class CreateMemberCommandValidatorTests
     {
-        [TestCase("ThisIsAValidNameLength", true)]
-        [TestCase("ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName", false)]
-        public async Task Validates_Name_Length(string name, bool isValid)
+        [TestCase(250, true)]
+        [TestCase(251, false)]
+        [TestCase(0, false)]
+        public async Task Validates_Name_Length(int stringLength, bool isValid)
         {
-            var command = new CreateMemberCommand() { Name = name };
+            var command = new CreateMemberCommand { Name = new string('a', stringLength) };
             var sut = new CreateMemberCommandValidator();
 
             var result = await sut.TestValidateAsync(command);
@@ -25,14 +23,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
             else
                 result.ShouldHaveValidationErrorFor(c => c.Name);
         }
-        [TestCase("ThisIsAValidInformationLength", true)]
-        [TestCase("ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName" +
-                  "ThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfANameThisIsTooLongOfAName", false)]
-        public async Task Validates_Information_Length(string information, bool isValid)
+        [TestCase(250, true)]
+        [TestCase(251, false)]
+        [TestCase(0, false)]
+        public async Task Validates_Information_Length(int stringLength, bool isValid)
         {
-            var command = new CreateMemberCommand() { Information = information };
+            var command = new CreateMemberCommand { Information = new string('a', stringLength) };
             var sut = new CreateMemberCommandValidator();
 
             var result = await sut.TestValidateAsync(command);
@@ -42,15 +38,13 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
             else
                 result.ShouldHaveValidationErrorFor(c => c.Information);
         }
-        [TestCase("thisIsAValid@email.com", true)]
-        [TestCase("thisIsAnInvalid @email/com", false)]
-        [TestCase("ThisIsTooLongOfAnEmailThisIsTooLongOfAnEmailThisIsTooLongOfAnEmailThisIsTooLongOfAnEmailThisIsTooLongOfAnEmailThisIsTooLongOfAnEmailThisIsTooLongOfAnEmail" +
-                  "ThisIsTooLongOfAnEmailThisIsTooLongOfAnEmail" +
-                  "ThisIsTooLongOfAnEmailThisIsTooLongOfAnEmail" +
-                  "ThisIsTooLongOfAnEmail@email.com", false)]
-        public async Task Validates_Email(string email, bool isValid)
+        [TestCase(10, "@email.com", true)]
+        [TestCase(257, "@email.com", false)]
+        [TestCase(0, "", false)]
+        public async Task Validates_Email_Length(int stringLength, string emailSuffix, bool isValid)
         {
-            var command = new CreateMemberCommand() { Email = email };
+            var emailString = new string('a', stringLength) + emailSuffix;
+            var command = new CreateMemberCommand { Email = emailString };
             var sut = new CreateMemberCommandValidator();
 
             var result = await sut.TestValidateAsync(command);

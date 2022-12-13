@@ -17,6 +17,8 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
                 .NotEmpty()
                 .MaximumLength(256)
                 .Matches(Constants.RegularExpressions.EmailRegex);
+            RuleFor(x => x.Joined)
+                .NotEmpty();
         }
 
     }
