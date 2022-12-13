@@ -17,6 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
         private readonly Mock<IAdminsWriteRepository> _adminsWriteRepository;
         private readonly Mock<IPartnersWriteRepository> _partnersWriteRepository;
         private readonly Mock<IEmployersWriteRepository> _employersWriteRepository;
+        private readonly Mock<IAuditWriteRepository> _auditWriteRepository;
         private readonly Mock<IAanDataContext> _aanDataContext;
 
         public WhenPostingMember()
@@ -27,9 +28,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _apprenticesWriteRepository = new Mock<IApprenticesWriteRepository>();
             _employersWriteRepository = new Mock<IEmployersWriteRepository>();
             _partnersWriteRepository = new Mock<IPartnersWriteRepository>();
+            _auditWriteRepository = new Mock<IAuditWriteRepository>();
             _aanDataContext = new Mock<IAanDataContext>();
 
-            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _aanDataContext.Object);
+            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _auditWriteRepository.Object, _aanDataContext.Object);
         }
 
         [Test, AutoMoqData]
@@ -80,6 +82,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _adminsWriteRepository.Setup(m => m.Create(It.IsAny<Admin>()));
             _partnersWriteRepository.Setup(m => m.Create(It.IsAny<Partner>()));
             _employersWriteRepository.Setup(m => m.Create(It.IsAny<Employer>()));
+            _auditWriteRepository.Setup(m => m.Create(It.IsAny<Audit>()));
 
             return await _handler.Handle(command, CancellationToken.None);
         }

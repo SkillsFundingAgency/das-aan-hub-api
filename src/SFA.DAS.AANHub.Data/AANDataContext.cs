@@ -8,6 +8,7 @@ namespace SFA.DAS.AANHub.Data
     [ExcludeFromCodeCoverage]
     public class AanDataContext : DbContext, IAanDataContext
     {
+        public DbSet<Audit> Audits => Set<Audit>();
         public DbSet<Region> Regions => Set<Region>();
         public DbSet<Member> Members => Set<Member>();
         public DbSet<Apprentice> Apprentices => Set<Apprentice>();
