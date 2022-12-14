@@ -8,7 +8,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
     {
         public string? Id { get; set; }
         public MembershipUserTypes? UserType { get; set; }
-        public int? Region { get; set; }
         public string? Organisation { get; set; }
     }
 }

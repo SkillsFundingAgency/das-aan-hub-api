@@ -1,9 +1,9 @@
 ﻿using FluentValidation;
-using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Commands.CreateMember;
 
 namespace SFA.DAS.AANHub.Application.Common.Validators
 {
-    public class CreateMemberCommandValidator : AbstractValidator<BaseMemberCommand>
+    public class CreateMemberCommandValidator : AbstractValidator<CreateMemberCommand>
     {
         public CreateMemberCommandValidator()
         {
@@ -18,6 +18,25 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
                 .MaximumLength(256)
                 .Matches(Constants.RegularExpressions.EmailRegex);
             RuleFor(x => x.Joined)
+                .NotEmpty();
+            RuleFor(x => x.Regions).Custom((regions, context) =>
+            {
+                if (regions == null) return;
+                foreach (var region in regions)
+                {
+                    if (region is < 0 or > 9)
+                    {
+                        context.AddFailure("Region value must be in range");
+                    }
+                }
+            });
+            RuleFor(x => x.Id)
+                .NotEmpty()
+                .MaximumLength(250);
+            RuleFor(x => x.Organisation)
+                .NotEmpty()
+                .MaximumLength(250);
+            RuleFor(x => x.UserType)
                 .NotEmpty();
         }
 

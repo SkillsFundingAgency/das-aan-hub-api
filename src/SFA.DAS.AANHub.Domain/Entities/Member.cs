@@ -7,9 +7,13 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public string? UserType { get; set; }
         public string? Status { get; set; }
         public string? Information { get; set; }
-        public int? RegionId { get; set; }
         public string? Organisation { get; set; }
         public DateTime Joined { get; set; }
         public DateTime? Deleted { get; set; }
+        public virtual Admin? Admin { get; set; }
+        public virtual Apprentice? Apprentice { get; set; }
+        public virtual Employer? Employer { get; set; }
+        public virtual Partner? Partner { get; set; }
+        public virtual List<MemberRegion>? MemberRegions { get; set; }
     }
 }

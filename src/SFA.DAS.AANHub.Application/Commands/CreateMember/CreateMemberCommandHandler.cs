@@ -43,13 +43,12 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                 Id = memberId,
                 UserType = command.UserType?.ToString() ?? "unknown",
                 Joined = command.Joined,
-                RegionId = command.Region,
                 Information = command.Information,
                 Organisation = command.Organisation,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
                 Deleted = null,
-                Status = MembershipStatuses.Live.ToString()
+                Status = MembershipStatuses.Live.ToString(),
             };
 
             _membersWriteRepository.Create(member);

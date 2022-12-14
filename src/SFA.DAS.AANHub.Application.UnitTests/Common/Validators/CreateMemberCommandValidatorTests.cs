@@ -54,5 +54,21 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
             else
                 result.ShouldHaveValidationErrorFor(c => c.Email);
         }
+        [Test]
+        [TestCase(new[] { 0, 1, 2 }, true)]
+        [TestCase(new[] { -1 }, false)]
+        [TestCase(new[] { 10 }, false)]
+        public async Task Validates_Region_Range(int[] regions, bool isValid)
+        {
+            var command = new CreateMemberCommand { Regions = regions };
+            var sut = new CreateMemberCommandValidator();
+
+            var result = await sut.TestValidateAsync(command);
+
+            if (isValid)
+                result.ShouldNotHaveValidationErrorFor(c => c.Regions);
+            else
+                result.ShouldHaveValidationErrorFor(c => c.Regions);
+        }
     }
 }
