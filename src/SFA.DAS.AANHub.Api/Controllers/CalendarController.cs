@@ -19,24 +19,28 @@ namespace SFA.DAS.AANHub.Api.Controllers
         }
 
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetCalendarsResultItem), 200)]
+        [ProducesResponseType(typeof(GetCalendarsForUserResultItem), 200)]
         public async Task<IActionResult> GetCalendar(Guid? memberId)
         {
-            try
+            object result;
+            if (!memberId.HasValue)
             {
-                object result;
-                if (!memberId.HasValue)
-                    result = await _mediator.Send(new GetCalendarsQuery());
-                else
-                    result = await _mediator.Send(new GetCalendarsForUserQuery() { MemberId = memberId.Value });
-                return Ok(result);
+                result = await _mediator.Send(new GetCalendarsQuery());
+                _logger.LogInformation("All calendars returned");
             }
-            catch (Exception e)
+
+            else
             {
-                var error =
-                    $"Error attempting to get Calendars {(memberId.HasValue ? "for member " + memberId.ToString() : "")}";
-                _logger.LogError(e, "{error}", error);
-                return BadRequest();
+                result = await _mediator.Send(new GetCalendarsForUserQuery() { MemberId = memberId.Value });
+                _logger.LogInformation("All calendars returned for user {memberId}", memberId);
             }
+
+            return Ok(result);
+
         }
     }
 }
