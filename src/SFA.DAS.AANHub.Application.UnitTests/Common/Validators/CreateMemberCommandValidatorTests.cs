@@ -32,7 +32,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
         {
 
             var command = new CreateMemberCommand { Name = new string('a', stringLength) };
-            var sut = new CreateMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new BaseMemberValidator(_regionsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -47,7 +47,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
         public async Task Validates_Information_Length(int stringLength, bool isValid)
         {
             var command = new CreateMemberCommand { Information = new string('a', stringLength) };
-            var sut = new CreateMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new BaseMemberValidator(_regionsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -63,7 +63,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
         {
             var emailString = new string('a', stringLength) + emailSuffix;
             var command = new CreateMemberCommand { Email = emailString };
-            var sut = new CreateMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new BaseMemberValidator(_regionsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -79,7 +79,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
         public async Task Validates_Region_Range(int[] regions, bool isValid)
         {
             var command = new CreateMemberCommand { Regions = regions };
-            var sut = new CreateMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new BaseMemberValidator(_regionsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 

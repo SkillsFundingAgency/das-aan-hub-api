@@ -4,9 +4,9 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Common.Validators
 {
-    public class CreateMemberCommandValidator : AbstractValidator<IBaseMemberCommand>
+    public class BaseMemberValidator : AbstractValidator<IBaseMemberCommand>
     {
-        public CreateMemberCommandValidator(IRegionsReadRepository regionsReadRepository)
+        public BaseMemberValidator(IRegionsReadRepository regionsReadRepository)
         {
             RuleFor(c => c.Name)
                 .NotEmpty()
@@ -31,9 +31,6 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
 
             }).WithMessage("Region value must be in range");
 
-            RuleFor(x => x.Id)
-                .NotEmpty()
-                .MaximumLength(250);
             RuleFor(x => x.Organisation)
                 .NotEmpty()
                 .MaximumLength(250);
