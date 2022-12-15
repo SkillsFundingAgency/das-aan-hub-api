@@ -1,7 +1,6 @@
-﻿
-namespace SFA.DAS.AANHub.Domain.Enums
+﻿namespace SFA.DAS.AANHub.Domain.Enums
 {
-    public enum MembershipStatuses
+    public enum MembershipStatus
     {
         Pending,
         Cancelled,

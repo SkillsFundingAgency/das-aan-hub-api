@@ -2,13 +2,15 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
+
     [ApiController]
     [Route("api/[controller]/")]
-    public class MemberController : Controller
+    public class MemberController : ControllerBase
     {
         private readonly IMediator _mediator;
         private readonly ILogger<MemberController> _logger;
@@ -19,6 +21,10 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _logger = logger;
         }
 
+        [HttpGet]
+        [Route("{id}")]
+        public ActionResult<Member> GetMember(Guid id) => Ok(new Member() { Id = id });
+
         [HttpPost("apprentice")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
@@ -26,18 +32,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
         public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)
         {
-            request.UserType = MembershipUserTypes.Apprentice;
-            return await CreateMember(request);
-        }
-
-        [HttpPost("employer")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
-        public async Task<IActionResult> CreateEmployerMember([FromBody] CreateMemberCommand request)
-        {
-            request.UserType = MembershipUserTypes.Employer;
+            request.UserType = MembershipUserType.Apprentice;
             return await CreateMember(request);
         }
 
@@ -48,7 +43,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
         public async Task<IActionResult> CreatePartnerMember([FromBody] CreateMemberCommand request)
         {
-            request.UserType = MembershipUserTypes.Partner;
+            request.UserType = MembershipUserType.Partner;
             return await CreateMember(request);
         }
 
@@ -59,7 +54,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
         public async Task<IActionResult> CreateAdminMember([FromBody] CreateMemberCommand request)
         {
-            request.UserType = MembershipUserTypes.Admin;
+            request.UserType = MembershipUserType.Admin;
             return await CreateMember(request);
         }
 

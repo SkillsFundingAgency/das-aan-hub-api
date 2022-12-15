@@ -18,8 +18,8 @@ namespace SFA.DAS.AANHub.Application.Responses
             }
 
             MemberId = result.Member.Id;
-            UserType = result.Member.UserType;
-            Status = result.Member.Status;
+            UserType = result.Member.UserType.ToString();
+            Status = result.Member.Status.ToString();
             Created = result.Member.Created;
         }
     }

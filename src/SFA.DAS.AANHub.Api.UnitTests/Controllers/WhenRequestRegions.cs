@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Queries.GetAllRegions;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Members
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
     public class WhenRequestRegions
     {

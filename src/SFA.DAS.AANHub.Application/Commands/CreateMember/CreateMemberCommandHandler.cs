@@ -11,7 +11,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
         private readonly IApprenticesWriteRepository _apprenticesWriteRepository;
-        private readonly IEmployersWriteRepository _employersWriteRepository;
         private readonly IPartnersWriteRepository _partnersWriteRepository;
         private readonly IAdminsWriteRepository _adminsWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
@@ -19,7 +18,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
         public CreateMemberCommandHandler(
             IMembersWriteRepository membersWriteRepository,
             IApprenticesWriteRepository apprenticesRepository,
-            IEmployersWriteRepository employersWriteRepository,
             IPartnersWriteRepository partnersWriteRepository,
             IAdminsWriteRepository adminsWriteRepository,
             IAuditWriteRepository auditWriteRepository,
@@ -27,7 +25,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
         {
             _membersWriteRepository = membersWriteRepository;
             _apprenticesWriteRepository = apprenticesRepository;
-            _employersWriteRepository = employersWriteRepository;
             _partnersWriteRepository = partnersWriteRepository;
             _adminsWriteRepository = adminsWriteRepository;
             _auditWriteRepository = auditWriteRepository;
@@ -41,14 +38,14 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
             var member = new Member()
             {
                 Id = memberId,
-                UserType = command.UserType?.ToString() ?? "unknown",
+                UserType = command.UserType,
                 Joined = command.Joined,
                 Information = command.Information,
-                Organisation = command.Organisation,
                 Created = DateTime.Now,
                 Updated = DateTime.Now,
+                ReviewStatus = MembershipReviewStatus.New,
                 Deleted = null,
-                Status = MembershipStatuses.Live.ToString(),
+                Status = MembershipStatus.Live
             };
 
             _membersWriteRepository.Create(member);
@@ -59,19 +56,16 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                 ActionedBy = member.Id,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member),
-                Resource = member.UserType
+                Resource = member?.UserType?.ToString() ?? string.Empty,
             });
-
-            long id = long.TryParse(command.Id, out id) ? id : 0;
 
             switch (command.UserType)
             {
-                case MembershipUserTypes.Apprentice:
+                case MembershipUserType.Apprentice:
                     _apprenticesWriteRepository.Create(
                         new Apprentice()
                         {
                             MemberId = memberId,
-                            ApprenticeId = id,
                             Email = null,
                             Name = null,
                             LastUpdated = DateTime.Now,
@@ -79,26 +73,11 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                         });
                     break;
 
-                case MembershipUserTypes.Employer:
-                    _employersWriteRepository.Create(
-                        new Employer()
-                        {
-                            MemberId = memberId,
-                            AccountId = id,
-                            UserId = null,
-                            Email = null,
-                            Name = null,
-                            LastUpdated = DateTime.Now,
-                            IsActive = true
-                        });
-                    break;
-
-                case MembershipUserTypes.Partner:
+                case MembershipUserType.Partner:
                     _partnersWriteRepository.Create(
                         new Partner()
                         {
                             MemberId = memberId,
-                            UKPRN = id,
                             Email = null,
                             Name = null,
                             LastUpdated = DateTime.Now,
@@ -106,7 +85,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                         });
                     break;
 
-                case MembershipUserTypes.Admin:
+                case MembershipUserType.Admin:
                     _adminsWriteRepository.Create(
                         new Admin()
                         {

@@ -31,9 +31,6 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
 
             }).WithMessage("Region value must be in range");
 
-            RuleFor(x => x.Organisation)
-                .NotEmpty()
-                .MaximumLength(250);
             RuleFor(x => x.UserType)
                 .NotEmpty();
         }
