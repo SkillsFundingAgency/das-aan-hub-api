@@ -1,7 +1,8 @@
 ﻿CREATE TABLE [dbo].[MemberRegion]
 (
-	[MemberId] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY, 
+	[MemberId] UNIQUEIDENTIFIER NOT NULL, 
     [RegionId] INT NOT NULL
+	PRIMARY KEY (MemberId, RegionId)
 	CONSTRAINT [FK_MemberRegion_Member] FOREIGN KEY ([MemberId]) REFERENCES [Member]([Id])
 	CONSTRAINT [FK_MemberRegion_Region] FOREIGN KEY ([RegionId]) REFERENCES [Region]([Id])
 )
