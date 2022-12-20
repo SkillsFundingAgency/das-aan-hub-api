@@ -27,7 +27,7 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
                 var dbRegions = await regionsReadRepository.GetAllRegions();
                 var regionList = dbRegions.Select(item => item.Id).ToList();
 
-                return regions.Any(region => regionList.Contains(region));
+                return regions.All(region => regionList.Contains(region));
 
             }).WithMessage("Region value must be in range");
 

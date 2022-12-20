@@ -19,11 +19,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
             new Region { Id = 2, Area = "Area2", Ordering = 2 }
         };
 
-        public CreateMemberCommandValidatorTests()
-        {
-            _regionsReadRepository = new Mock<IRegionsReadRepository>();
-            _regionsReadRepository.Setup(m => m.GetAllRegions()).ReturnsAsync(_regions);
-        }
+        public CreateMemberCommandValidatorTests() => _regionsReadRepository = new Mock<IRegionsReadRepository>();
 
         [TestCase(250, true)]
         [TestCase(251, false)]
@@ -73,13 +69,15 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
                 result.ShouldHaveValidationErrorFor(c => c.Email);
         }
         [Test]
-        [TestCase(new[] { 0, 1, 2 }, true)]
+        [TestCase(new[] { 1, 2 }, true)]
         [TestCase(new[] { -1 }, false)]
+        [TestCase(new[] { 1, -1 }, false)]
         [TestCase(new[] { 10 }, false)]
         public async Task Validates_Region_Range(int[] regions, bool isValid)
         {
             var command = new CreateMemberCommand { Regions = regions };
             var sut = new BaseMemberValidator(_regionsReadRepository.Object);
+            _regionsReadRepository.Setup(m => m.GetAllRegions()).ReturnsAsync(_regions);
 
             var result = await sut.TestValidateAsync(command);
 
