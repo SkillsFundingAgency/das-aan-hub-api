@@ -1,9 +1,8 @@
-﻿using SFA.DAS.AANHub.Application.Common.Interfaces;
-using SFA.DAS.AANHub.Domain.Enums;
+﻿using SFA.DAS.AANHub.Domain.Enums;
 
-namespace SFA.DAS.AANHub.Application.Common.Commands
+namespace SFA.DAS.AANHub.Application.Common.Interfaces
 {
-    public abstract class BaseMemberCommand : IBaseMemberCommand
+    public interface IBaseMemberCommand
     {
         public string? Id { get; set; }
         public MembershipUserTypes? UserType { get; set; }

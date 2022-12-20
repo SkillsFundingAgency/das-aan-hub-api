@@ -17,18 +17,16 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _logger = logger;
         }
         [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetAllRegionsResult), 200)]
         public async Task<IActionResult> GetListOfRegions()
         {
-            try
-            {
-                var result = await _mediator.Send(new GetAllRegionsQuery());
-                return Ok(result);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, $"Error attempting to retrieve list of regions");
-                return BadRequest();
-            }
+            var result = await _mediator.Send(new GetAllRegionsQuery());
+            _logger.LogInformation("List of regions found");
+            return new OkObjectResult(result);
+
         }
     }
 }

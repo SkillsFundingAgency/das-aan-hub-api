@@ -124,6 +124,7 @@ namespace SFA.DAS.AANHub.Api
                     }
                 });
             }
+            app.UseFluentValidationExceptionHandler();
 
             app.UseEndpoints(endpoints =>
             {
