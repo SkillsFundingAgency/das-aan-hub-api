@@ -17,15 +17,15 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task CreateEmployer_InvokesRequest(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] EmployersController sut,
-            CreateEmployersCommand model, long userId, long accountId, string organisation)
+            CreateEmployerMemberCommand model, long userId, long accountId, string organisation)
         {
-            var response = new CreateEmployersResponse
+            var response = new CreateEmployerMemberResponse
             {
                 MemberId = model.Id,
                 Status = MembershipStatus.Live.ToString(),
             };
 
-            mediatorMock.Setup(m => m.Send(It.Is<CreateEmployersCommand>(c => c.UserId == userId && c.Organisation == organisation && c.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            mediatorMock.Setup(m => m.Send(It.Is<CreateEmployerMemberCommand>(c => c.UserId == userId && c.Organisation == organisation && c.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await sut.CreateEmployer(model);
 
             result.As<CreatedAtActionResult>().ControllerName.Should().Be("Employer");

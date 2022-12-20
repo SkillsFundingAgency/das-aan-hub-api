@@ -10,16 +10,17 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
 {
-    public class CreateEmployersCommandHandlerTests
+    public class CreateEmployerMemberCommandHandlerTests
     {
         [Test, AutoMoqData]
         public async Task Handle_AddsNewEmployer(
             [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAanDataContext> aanContext,
-            CreateEmployerCommandHandler sut,
-            CreateEmployersCommand command)
+            CreateEmployerMemberCommandHandler sut,
+            CreateEmployerMemberCommand command)
         {
+
             membersWriteRepository.Setup(p => p.Create(It.IsAny<Member>()));
             auditWriteRepository.Setup(p => p.Create(It.IsAny<Audit>()));
             aanContext.Setup(p => p.SaveChangesAsync(It.IsAny<CancellationToken>()));

@@ -6,7 +6,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 {
     public class CreateMemberCommandValidator : AbstractValidator<CreateMemberCommand>
     {
-        public CreateMemberCommandValidator(IRegionsReadRepository regionsReadRepository) => Include(new BaseMemberValidator(regionsReadRepository));
+        public CreateMemberCommandValidator(IRegionsReadRepository regionsReadRepository) => Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
 
     }
 }

@@ -23,9 +23,8 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateEmployer(CreateEmployersCommand request)
+        public async Task<IActionResult> CreateEmployer(CreateEmployerMemberCommand request)
         {
             _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}:", request.AccountId, request.UserId);
 

@@ -3,7 +3,7 @@ using SFA.DAS.AANHub.Application.Common.Commands;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 {
-    public class CreateMemberCommand : BaseMemberCommand, IRequest<CreateMemberResponse>
+    public class CreateMemberCommand : CreateMemberCommandBase, IRequest<CreateMemberResponse>
     {
     }
 }

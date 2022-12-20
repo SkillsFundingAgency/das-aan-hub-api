@@ -7,13 +7,13 @@ using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerCommandHandler : IRequestHandler<CreateEmployersCommand, CreateEmployersResponse>
+    public class CreateEmployerMemberCommandHandler : IRequestHandler<CreateEmployerMemberCommand, CreateEmployerMemberResponse>
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
 
-        public CreateEmployerCommandHandler(IMembersWriteRepository membersWriteRepository,
+        public CreateEmployerMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
             IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
         {
             _membersWriteRepository = membersWriteRepository;
@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<CreateEmployersResponse> Handle(CreateEmployersCommand command,
+        public async Task<CreateEmployerMemberResponse> Handle(CreateEmployerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;

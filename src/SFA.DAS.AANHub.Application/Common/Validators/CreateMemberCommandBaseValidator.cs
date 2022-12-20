@@ -1,12 +1,12 @@
 ﻿using FluentValidation;
-using SFA.DAS.AANHub.Application.Common.Interfaces;
+using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Common.Validators
 {
-    public class BaseMemberValidator : AbstractValidator<IBaseMemberCommand>
+    public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCommandBase>
     {
-        public BaseMemberValidator(IRegionsReadRepository regionsReadRepository)
+        public CreateMemberCommandBaseValidator(IRegionsReadRepository regionsReadRepository)
         {
             RuleFor(c => c.Name)
                 .NotEmpty()

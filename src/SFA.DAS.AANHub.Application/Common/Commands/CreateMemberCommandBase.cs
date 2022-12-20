@@ -1,11 +1,10 @@
-﻿using SFA.DAS.AANHub.Application.Common.Interfaces;
-using SFA.DAS.AANHub.Domain.Enums;
+﻿using SFA.DAS.AANHub.Domain.Enums;
 
 namespace SFA.DAS.AANHub.Application.Common.Commands
 {
-    public abstract class BaseMemberCommand : IBaseMemberCommand
+    public abstract class CreateMemberCommandBase
     {
-        protected BaseMemberCommand() => Id = Guid.NewGuid();
+        protected CreateMemberCommandBase() => Id = Guid.NewGuid();
         public Guid Id { get; }
         public MembershipUserType? UserType { get; set; }
         public MembershipReviewStatus? ReviewStatus { get; set; }

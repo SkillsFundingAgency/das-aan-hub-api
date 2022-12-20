@@ -5,13 +5,13 @@ using SFA.DAS.AANHub.Domain.Enums;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployersCommand : BaseMemberCommand, IRequest<CreateEmployersResponse>
+    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberResponse>
     {
-        public long? AccountId { get; set; }
-        public long? UserId { get; set; }
+        public long AccountId { get; set; }
+        public long UserId { get; set; }
         public string? Organisation { get; set; }
 
-        public static implicit operator Member(CreateEmployersCommand command) => new()
+        public static implicit operator Member(CreateEmployerMemberCommand command) => new()
         {
             Id = command.Id,
             UserType = MembershipUserType.Employer,
