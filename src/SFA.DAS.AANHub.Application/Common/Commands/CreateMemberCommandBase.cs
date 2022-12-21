@@ -6,7 +6,6 @@ namespace SFA.DAS.AANHub.Application.Common.Commands
     {
         protected CreateMemberCommandBase() => Id = Guid.NewGuid();
         public Guid Id { get; }
-        public MembershipUserType? UserType { get; set; }
         public MembershipReviewStatus? ReviewStatus { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }

@@ -75,5 +75,41 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             else
                 result.ShouldHaveValidationErrorFor(c => c.AccountId);
         }
+        [TestCaseSource(nameof(GuidTestCases))]
+        public async Task Validates_RequestedByUserId_NotEmptyGuid(Guid? id, bool isValid)
+        {
+
+            var command = new CreateEmployerMemberCommand() { RequestedByUserId = id };
+
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+
+            var result = await sut.TestValidateAsync(command);
+
+            if (isValid)
+                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByUserId);
+            else
+                result.ShouldHaveValidationErrorFor(c => c.RequestedByUserId);
+        }
+        [TestCase(null, false)]
+        public async Task Validates_RequestedByUserId_NotNull(Guid? id, bool isValid)
+        {
+
+            var command = new CreateEmployerMemberCommand() { RequestedByUserId = id };
+
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+
+            var result = await sut.TestValidateAsync(command);
+
+            if (isValid)
+                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByUserId);
+            else
+                result.ShouldHaveValidationErrorFor(c => c.RequestedByUserId);
+        }
+
+        private static readonly object[] GuidTestCases =
+        {
+            new object[]{ Guid.NewGuid(), true },
+            new object[]{ Guid.Empty, false},
+        };
     }
 }

@@ -16,6 +16,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 .MaximumLength(250);
             RuleFor(c => c.AccountId)
                 .NotEmpty();
+            RuleFor(c => c.RequestedByUserId).NotEqual(Guid.Empty).NotNull();
         }
 
     }

@@ -7,7 +7,7 @@ using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerMemberCommandHandler : IRequestHandler<CreateEmployerMemberCommand, CreateEmployerMemberResponse>
+    public class CreateEmployerMemberCommandHandler : IRequestHandler<CreateEmployerMemberCommand, CreateEmployerMemberCommandResponse>
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<CreateEmployerMemberResponse> Handle(CreateEmployerMemberCommand command,
+        public async Task<CreateEmployerMemberCommandResponse> Handle(CreateEmployerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
@@ -31,7 +31,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             _auditWriteRepository.Create(new Audit
             {
                 Action = "Create",
-                ActionedBy = member.Id,
+                ActionedBy = command.RequestedByUserId ?? Guid.Empty,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member),
                 Resource = MembershipUserType.Employer.ToString()

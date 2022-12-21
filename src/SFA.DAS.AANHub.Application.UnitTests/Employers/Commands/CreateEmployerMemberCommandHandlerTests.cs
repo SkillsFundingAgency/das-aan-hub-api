@@ -21,13 +21,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             CreateEmployerMemberCommand command)
         {
 
-            membersWriteRepository.Setup(p => p.Create(It.IsAny<Member>()));
-            auditWriteRepository.Setup(p => p.Create(It.IsAny<Audit>()));
-            aanContext.Setup(p => p.SaveChangesAsync(It.IsAny<CancellationToken>()));
-
             var response = await sut.Handle(command, new CancellationToken());
             response.MemberId.Should().Be(command.Id);
             response.Status.Should().Be(MembershipStatus.Live.ToString());
+
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByUserId)));
         }
     }
 }

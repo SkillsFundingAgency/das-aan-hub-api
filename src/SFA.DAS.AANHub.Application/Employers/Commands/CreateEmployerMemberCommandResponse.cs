@@ -2,12 +2,12 @@
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerMemberResponse
+    public class CreateEmployerMemberCommandResponse
     {
         public Guid MemberId { get; set; }
         public string? Status { get; set; }
 
-        public static implicit operator CreateEmployerMemberResponse(Member member) => new()
+        public static implicit operator CreateEmployerMemberCommandResponse(Member member) => new()
         {
             MemberId = member.Id,
             Status = member.Status.ToString()

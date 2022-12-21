@@ -5,11 +5,12 @@ using SFA.DAS.AANHub.Domain.Enums;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberResponse>
+    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberCommandResponse>
     {
         public long AccountId { get; set; }
         public long UserId { get; set; }
         public string? Organisation { get; set; }
+        public Guid? RequestedByUserId { get; set; }
 
         public static implicit operator Member(CreateEmployerMemberCommand command) => new()
         {
