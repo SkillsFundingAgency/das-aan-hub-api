@@ -30,6 +30,7 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
                 return regions.All(region => regionList.Contains(region));
 
             }).WithMessage("Region value must be in range");
+            RuleFor(c => c.RequestedByUserId).NotEqual(Guid.Empty).NotNull();
         }
 
     }

@@ -1,12 +1,10 @@
-﻿using SFA.DAS.AANHub.Domain.Entities;
+﻿using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerMemberCommandResponse
+    public class CreateEmployerMemberCommandResponse : CreateMemberCommandResponseBase
     {
-        public Guid MemberId { get; set; }
-        public string? Status { get; set; }
-
         public static implicit operator CreateEmployerMemberCommandResponse(Member member) => new()
         {
             MemberId = member.Id,

@@ -12,5 +12,6 @@ namespace SFA.DAS.AANHub.Application.Common.Commands
         public DateTime Joined { get; set; }
         public int[]? Regions { get; set; }
         public string? Information { get; set; }
+        public Guid? RequestedByUserId { get; set; }
     }
 }
