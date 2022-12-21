@@ -26,13 +26,14 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateEmployer([FromHeader] RequestHeaders headers, CreateEmployerMemberCommand request)
+        public async Task<IActionResult> CreateEmployer([FromHeader] RequestHeaders headers, CreateEmployerModel request)
         {
             _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}:", request.AccountId, request.UserId);
 
-            request.RequestedByUserId = headers.RequestedByUserId;
+            CreateEmployerMemberCommand command = request;
+            command.RequestedByUserId = headers.RequestedByUserId;
 
-            var response = await _mediator.Send(request);
+            var response = await _mediator.Send(command);
             return new CreatedAtActionResult(nameof(CreateEmployer), "Employer", new { id = response.MemberId }, response);
         }
     }

@@ -18,11 +18,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task CreateEmployer_InvokesRequest(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] EmployersController sut,
-            CreateEmployerMemberCommand model, long userId, long accountId, string organisation)
+            CreateEmployerModel model, CreateEmployerMemberCommand command, long userId, long accountId, string organisation)
         {
             var response = new CreateEmployerMemberCommandResponse
             {
-                MemberId = model.Id,
+                MemberId = command.Id,
                 Status = MembershipStatus.Live.ToString(),
             };
 

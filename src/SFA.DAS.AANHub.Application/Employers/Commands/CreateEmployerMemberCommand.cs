@@ -27,6 +27,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             {
                 MemberId = command.Id,
                 AccountId = command.AccountId,
+                UserId = command.UserId,
                 Email = command.Email,
                 Organisation = command.Organisation,
                 LastUpdated = DateTime.Now,
