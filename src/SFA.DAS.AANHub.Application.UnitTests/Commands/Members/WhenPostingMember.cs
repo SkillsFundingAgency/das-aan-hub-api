@@ -13,21 +13,18 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
     {
         private readonly CreateMemberCommandHandler _handler;
         private readonly Mock<IMembersWriteRepository> _membersWriteRepository;
-        private readonly Mock<IAdminsWriteRepository> _adminsWriteRepository;
         private readonly Mock<IPartnersWriteRepository> _partnersWriteRepository;
         private readonly Mock<IAuditWriteRepository> _auditWriteRepository;
         private readonly Mock<IAanDataContext> _aanDataContext;
 
         public WhenPostingMember()
         {
-
             _membersWriteRepository = new Mock<IMembersWriteRepository>();
-            _adminsWriteRepository = new Mock<IAdminsWriteRepository>();
             _partnersWriteRepository = new Mock<IPartnersWriteRepository>();
             _auditWriteRepository = new Mock<IAuditWriteRepository>();
             _aanDataContext = new Mock<IAanDataContext>();
 
-            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _auditWriteRepository.Object, _aanDataContext.Object);
+            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _partnersWriteRepository.Object, _auditWriteRepository.Object, _aanDataContext.Object);
         }
 
         [Test, AutoMoqData]
@@ -74,7 +71,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
         )
         {
             _membersWriteRepository.Setup(m => m.Create(It.IsAny<Member>()));
-            _adminsWriteRepository.Setup(m => m.Create(It.IsAny<Admin>()));
             _partnersWriteRepository.Setup(m => m.Create(It.IsAny<Partner>()));
             _auditWriteRepository.Setup(m => m.Create(It.IsAny<Audit>()));
 

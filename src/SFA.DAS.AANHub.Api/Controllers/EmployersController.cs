@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Employers.Commands;
+using System.ComponentModel.DataAnnotations;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {

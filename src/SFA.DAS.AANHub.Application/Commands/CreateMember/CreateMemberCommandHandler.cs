@@ -1,8 +1,8 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember
@@ -11,19 +11,16 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
         private readonly IPartnersWriteRepository _partnersWriteRepository;
-        private readonly IAdminsWriteRepository _adminsWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
         public CreateMemberCommandHandler(
             IMembersWriteRepository membersWriteRepository,
             IPartnersWriteRepository partnersWriteRepository,
-            IAdminsWriteRepository adminsWriteRepository,
             IAuditWriteRepository auditWriteRepository,
             IAanDataContext aanDataContext)
         {
             _membersWriteRepository = membersWriteRepository;
             _partnersWriteRepository = partnersWriteRepository;
-            _adminsWriteRepository = adminsWriteRepository;
             _auditWriteRepository = auditWriteRepository;
             _aanDataContext = aanDataContext;
         }
@@ -65,17 +62,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                             MemberId = memberId,
                             Email = null,
                             Name = null,
-                            LastUpdated = DateTime.Now,
-                            IsActive = true
-                        });
-                    break;
-
-                case MembershipUserType.Admin:
-                    _adminsWriteRepository.Create(
-                        new Admin()
-                        {
-                            MemberId = memberId,
-                            Email = null,
                             LastUpdated = DateTime.Now,
                             IsActive = true
                         });
