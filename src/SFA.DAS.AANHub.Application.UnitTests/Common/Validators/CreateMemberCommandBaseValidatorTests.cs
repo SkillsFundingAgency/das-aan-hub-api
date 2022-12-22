@@ -21,8 +21,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
 
         public CreateMemberCommandBaseValidatorTests() => _regionsReadRepository = new Mock<IRegionsReadRepository>();
 
-        [TestCase(250, true)]
-        [TestCase(251, false)]
+        [TestCase(200, true)]
+        [TestCase(201, false)]
         [TestCase(0, false)]
         public async Task Validates_Name_Length(int stringLength, bool isValid)
         {

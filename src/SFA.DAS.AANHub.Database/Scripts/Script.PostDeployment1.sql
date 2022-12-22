@@ -11,4 +11,5 @@ Post-Deployment Script Template
 */
 
 :r .\AddRegionData.sql
+:r .\AddMemberData.sql
 
