@@ -18,4 +18,8 @@
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Common\Validators\RequestedByMemberId\" />
+  </ItemGroup>
+
 </Project>
