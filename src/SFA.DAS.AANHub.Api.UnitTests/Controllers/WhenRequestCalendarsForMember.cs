@@ -7,7 +7,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Queries.GetCalendarsForUser;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Calendars
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
     public class WhenRequestCalendarsForMember
     {

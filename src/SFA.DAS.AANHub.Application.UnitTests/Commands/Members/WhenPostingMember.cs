@@ -16,7 +16,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
         private readonly Mock<IApprenticesWriteRepository> _apprenticesWriteRepository;
         private readonly Mock<IAdminsWriteRepository> _adminsWriteRepository;
         private readonly Mock<IPartnersWriteRepository> _partnersWriteRepository;
-        private readonly Mock<IEmployersWriteRepository> _employersWriteRepository;
         private readonly Mock<IAuditWriteRepository> _auditWriteRepository;
         private readonly Mock<IAanDataContext> _aanDataContext;
 
@@ -26,51 +25,50 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _membersWriteRepository = new Mock<IMembersWriteRepository>();
             _adminsWriteRepository = new Mock<IAdminsWriteRepository>();
             _apprenticesWriteRepository = new Mock<IApprenticesWriteRepository>();
-            _employersWriteRepository = new Mock<IEmployersWriteRepository>();
             _partnersWriteRepository = new Mock<IPartnersWriteRepository>();
             _auditWriteRepository = new Mock<IAuditWriteRepository>();
             _aanDataContext = new Mock<IAanDataContext>();
 
-            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _employersWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _auditWriteRepository.Object, _aanDataContext.Object);
+            _handler = new CreateMemberCommandHandler(_membersWriteRepository.Object, _apprenticesWriteRepository.Object, _partnersWriteRepository.Object, _adminsWriteRepository.Object, _auditWriteRepository.Object, _aanDataContext.Object);
         }
 
         [Test, AutoMoqData]
         public async Task And_HandleSuccessfulApprenticeMember_Then_ReturnResponse(CreateMemberCommand command)
         {
-            command.UserType = MembershipUserTypes.Apprentice;
+            command.UserType = MembershipUserType.Apprentice;
             var result = await ExecuteTest(command);
             result.Should().BeOfType<CreateMemberResponse>();
             result.Member.Should().NotBeNull();
-            result?.Member?.UserType.Should().Be("Apprentice");
+            result?.Member?.UserType.Should().Be(MembershipUserType.Apprentice);
         }
 
         [Test, AutoMoqData]
         public async Task And_HandleSuccessfulEmployerMember_Then_ReturnResponse(CreateMemberCommand command)
         {
-            command.UserType = MembershipUserTypes.Employer;
+            command.UserType = MembershipUserType.Employer;
             var result = await ExecuteTest(command);
             result.Should().BeOfType<CreateMemberResponse>();
             result.Member.Should().NotBeNull();
-            result?.Member?.UserType.Should().Be("Employer");
+            result?.Member?.UserType.Should().Be(MembershipUserType.Employer);
         }
 
         [Test, AutoMoqData]
         public async Task And_HandleSuccessfulAdminMember_Then_ReturnResponse(CreateMemberCommand command)
         {
-            command.UserType = MembershipUserTypes.Admin;
+            command.UserType = MembershipUserType.Admin;
             var result = await ExecuteTest(command);
             result.Should().BeOfType<CreateMemberResponse>();
             result.Member.Should().NotBeNull();
-            result?.Member?.UserType.Should().Be("Admin");
+            result?.Member?.UserType.Should().Be(MembershipUserType.Admin);
         }
         [Test, AutoMoqData]
         public async Task And_HandleSuccessfulPartnerMember_Then_ReturnResponse(CreateMemberCommand command)
         {
-            command.UserType = MembershipUserTypes.Partner;
+            command.UserType = MembershipUserType.Partner;
             var result = await ExecuteTest(command);
             result.Should().BeOfType<CreateMemberResponse>();
             result.Member.Should().NotBeNull();
-            result?.Member?.UserType.Should().Be("Partner");
+            result?.Member?.UserType.Should().Be(MembershipUserType.Partner);
         }
 
         private async Task<CreateMemberResponse> ExecuteTest(
@@ -81,7 +79,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Commands.Members
             _apprenticesWriteRepository.Setup(m => m.Create(It.IsAny<Apprentice>()));
             _adminsWriteRepository.Setup(m => m.Create(It.IsAny<Admin>()));
             _partnersWriteRepository.Setup(m => m.Create(It.IsAny<Partner>()));
-            _employersWriteRepository.Setup(m => m.Create(It.IsAny<Employer>()));
             _auditWriteRepository.Setup(m => m.Create(It.IsAny<Audit>()));
 
             return await _handler.Handle(command, CancellationToken.None);

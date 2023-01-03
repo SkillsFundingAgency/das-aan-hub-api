@@ -10,7 +10,7 @@ using SFA.DAS.AANHub.Application.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Enums;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Members
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
     public class WhenPostingCreateMember
     {
@@ -29,22 +29,9 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             CreateMemberResponse response
             )
         {
-            command.UserType = MembershipUserTypes.Apprentice;
+            command.UserType = MembershipUserType.Apprentice;
             _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateApprenticeMember(command);
-            ApplyTests(result, response);
-        }
-
-        [Test, AutoMoqData]
-        public async Task And_MediatorEmployerCommandSuccessful_Then_ReturnOk(
-            CreateMemberCommand command,
-            CreateMemberResponse response
-            )
-        {
-            command.UserType = MembershipUserTypes.Employer;
-            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateEmployerMember(command);
-
             ApplyTests(result, response);
         }
 
@@ -54,12 +41,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             CreateMemberResponse response
             )
         {
-            command.UserType = MembershipUserTypes.Partner;
+            command.UserType = MembershipUserType.Partner;
             _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreatePartnerMember(command);
             ApplyTests(result, response);
         }
-
 
         [Test, AutoMoqData]
         public async Task And_MediatorAdminCommandSuccessful_Then_ReturnOk(
@@ -67,14 +53,14 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Members
             CreateMemberResponse response
             )
         {
-            var result = await ExecuteMediatorCommand(command, response, MembershipUserTypes.Admin);
+            var result = await ExecuteMediatorCommand(command, response, MembershipUserType.Admin);
             ApplyTests(result, response);
         }
 
         private async Task<IActionResult> ExecuteMediatorCommand(
             CreateMemberCommand command,
             CreateMemberResponse response,
-            MembershipUserTypes userType
+            MembershipUserType userType
             )
         {
             command.UserType = userType;
