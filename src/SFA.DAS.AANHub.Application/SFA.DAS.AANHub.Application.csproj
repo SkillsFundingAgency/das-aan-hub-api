@@ -19,6 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Apprentices\Commands\" />
     <Folder Include="Common\Validators\RequestedByMemberId\" />
   </ItemGroup>
 

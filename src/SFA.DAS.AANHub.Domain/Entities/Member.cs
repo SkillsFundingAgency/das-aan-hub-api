@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AANHub.Domain.Enums;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Domain.Entities
 {
@@ -6,7 +7,7 @@ namespace SFA.DAS.AANHub.Domain.Entities
     {
         public Guid Id { get; set; }
         public MembershipUserType? UserType { get; set; }
-        public MembershipStatus? Status { get; set; }
+        public string? Status { get; set; }
         public MembershipReviewStatus? ReviewStatus { get; set; }
         public string? Information { get; set; }
         public DateTime Joined { get; set; }

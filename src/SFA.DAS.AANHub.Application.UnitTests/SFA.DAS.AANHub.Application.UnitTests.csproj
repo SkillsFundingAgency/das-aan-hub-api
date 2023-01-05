@@ -36,4 +36,8 @@
     <ProjectReference Include="..\SFA.DAS.AANHub.Api\SFA.DAS.AANHub.Api.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Apprentices\Commands\" />
+  </ItemGroup>
+
 </Project>

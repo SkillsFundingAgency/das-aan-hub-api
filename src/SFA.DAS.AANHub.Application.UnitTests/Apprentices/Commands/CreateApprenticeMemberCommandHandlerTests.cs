@@ -2,23 +2,23 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Employers.Commands;
+using SFA.DAS.AANHub.Application.Apprentices.Commands;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
 {
-    public class CreateEmployerMemberCommandHandlerTests
+    public class CreateApprenticeMemberCommandHandlerTests
     {
         [Test, AutoMoqData]
-        public async Task Handle_AddsNewEmployer(
+        public async Task Handle_AddsNewApprentice(
             [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAanDataContext> aanContext,
-            CreateEmployerMemberCommandHandler sut,
-            CreateEmployerMemberCommand command)
+            CreateApprenticeMemberCommandHandler sut,
+            CreateApprenticeMemberCommand command)
         {
 
             var response = await sut.Handle(command, new CancellationToken());
@@ -26,7 +26,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             response.Status.Should().Be(MembershipStatus.Live);
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByUserId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
         }
     }
 }
