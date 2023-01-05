@@ -3,18 +3,16 @@ using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Admins.Commands
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberCommandResponse>
+    public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<CreateAdminMemberCommandResponse>
     {
-        public long AccountId { get; set; }
-        public long UserId { get; set; }
-        public string? Organisation { get; set; }
+        public string? UserName { get; set; }
 
-        public static implicit operator Member(CreateEmployerMemberCommand command) => new()
+        public static implicit operator Member(CreateAdminMemberCommand command) => new()
         {
             Id = command.Id,
-            UserType = MembershipUserType.Employer,
+            UserType = MembershipUserType.Admin,
             Joined = command.Joined,
             Information = command.Information,
             Created = DateTime.Now,
@@ -22,18 +20,14 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             ReviewStatus = MembershipReviewStatus.New,
             Deleted = null,
             Status = MembershipStatus.Live,
-            Employer = new Employer
+            Admin = new Admin
             {
                 MemberId = command.Id,
-                AccountId = command.AccountId,
-                UserId = command.UserId,
                 Email = command.Email,
-                Organisation = command.Organisation,
+                UserName = command.UserName,
                 LastUpdated = DateTime.Now,
-                Name = command.Name,
                 IsActive = true
             }
         };
-
     }
 }
