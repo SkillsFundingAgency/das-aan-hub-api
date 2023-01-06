@@ -1,6 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +32,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             result.As<CreatedAtActionResult>().ControllerName.Should().Be("Apprentice");
             result.As<CreatedAtActionResult>().ActionName.Should().Be("CreateApprentice");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(201);
+            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
         }
     }
 }

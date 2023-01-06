@@ -7,7 +7,6 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands
 {
-//    public class CreateApprenticesCommand : IRequest<CreateApprenticeCommandResponse>, ICreateMemberCommand, IRequestedByMemberId
     public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<CreateApprenticeMemberCommandResponse>, IRequestedByMemberId
     {
         public Guid? RequestedByMemberId { get; set; }

@@ -6,7 +6,7 @@ namespace SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId
 {
     public class RequestedByMemberIdValidator : AbstractValidator<IRequestedByMemberId>
     {
-        public const string RequestedByMemberIdEmptyErrorMessage = "RequestedByMemberId can't be empty";
+        public const string RequestedByMemberIdEmptyErrorMessage = "RequestedByMemberId is empty";
         public const string RequestedByMemberIdNotFoundMessage = "RequestedByMemberId was not found";
         public RequestedByMemberIdValidator(IMembersReadRepository membersReadRepository)
         {
