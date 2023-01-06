@@ -2,7 +2,10 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands;
 
@@ -11,11 +14,13 @@ public class CreateApprenticeMemberCommandValidatorTests
 {
     private readonly Mock<IMembersReadRepository> _memberReadRepository;
     private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
+    private readonly Mock<IApprenticesReadRepository> _apprenticesReadRepository;
 
     public CreateApprenticeMemberCommandValidatorTests()
     {
         _memberReadRepository = new Mock<IMembersReadRepository>();
         _regionsReadRepository = new Mock<IRegionsReadRepository>();
+        _apprenticesReadRepository = new Mock<IApprenticesReadRepository>();
     }
 
     [TestCase(123, true)]
@@ -23,9 +28,12 @@ public class CreateApprenticeMemberCommandValidatorTests
     [TestCase(0, false)]
     public async Task Validates_ApprenticeId_NotNull(long apprenticeId, bool isValid)
     {
-
         var command = new CreateApprenticeMemberCommand() { ApprenticeId = apprenticeId };
-        var sut = new CreateApprenticeMemberCommandValidator(_memberReadRepository.Object, _regionsReadRepository.Object);
+
+        var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
+        var apprentice = isValid ? new Apprentice() : null;
+        apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(apprentice);
+        var sut = new CreateApprenticeMemberCommandValidator(_memberReadRepository.Object, _regionsReadRepository.Object, _apprenticesReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 
@@ -33,5 +41,6 @@ public class CreateApprenticeMemberCommandValidatorTests
             result.ShouldNotHaveValidationErrorFor(c => c.ApprenticeId);
         else
             result.ShouldHaveValidationErrorFor(c => c.ApprenticeId);
+
     }
 }
