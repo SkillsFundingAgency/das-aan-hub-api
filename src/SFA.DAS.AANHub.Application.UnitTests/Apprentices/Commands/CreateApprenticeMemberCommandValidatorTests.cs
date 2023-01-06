@@ -34,6 +34,4 @@ public class CreateApprenticeMemberCommandValidatorTests
         else
             result.ShouldHaveValidationErrorFor(c => c.ApprenticeId);
     }
-
-    private CreateApprenticeMemberCommandValidator GetDefaultValidator() => new CreateApprenticeMemberCommandValidator(Mock.Of<IMembersReadRepository>(), Mock.Of<IRegionsReadRepository>());
 }

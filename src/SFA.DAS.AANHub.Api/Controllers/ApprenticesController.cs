@@ -32,13 +32,12 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader), Required] Guid? userId, CreateApprenticeModel request)
         {
-            _logger.LogInformation($"AAN Hub API: Received command to add apprentice by ApprenticeId: {request.ApprenticeId} and UserId: {userId}");
+            _logger.LogInformation("AAN Hub API: Received command to add apprentice by ApprenticeId: {apprenticeId} and UserId: {userId}", request.ApprenticeId, userId);
 
             CreateApprenticeMemberCommand command = request;
             command.RequestedByMemberId = userId;
 
             var response = await _mediator.Send(command);
-            //return new CreatedAtActionResult(nameof(MemberController.GetMember), "Member", new { id = response.MemberId }, response);
             return new CreatedAtActionResult(nameof(CreateApprentice), "Apprentice", new { id = response.MemberId }, response);
         }
     }
