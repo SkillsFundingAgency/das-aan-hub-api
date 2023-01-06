@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using System.Diagnostics.CodeAnalysis;
 
