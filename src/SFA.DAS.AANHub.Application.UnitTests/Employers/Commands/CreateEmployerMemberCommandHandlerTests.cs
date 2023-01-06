@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             command.Regions = new List<int>(new[] { 1 });
             var response = await sut.Handle(command, new CancellationToken());
             response.MemberId.Should().Be(command.Id);
-            response.Status.Should().Be(MembershipStatus.Live.ToString());
+            response.Status.Should().Be(MembershipStatus.Live);
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));

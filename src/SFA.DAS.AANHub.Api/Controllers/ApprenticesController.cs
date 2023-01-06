@@ -2,9 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Queries.GetApprentice;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using System.ComponentModel.DataAnnotations;
+using SFA.DAS.AANHub.Domain.Entities;
+using Azure;
+
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
@@ -39,6 +43,29 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             var response = await _mediator.Send(command);
             return new CreatedAtActionResult(nameof(CreateApprentice), "Apprentice", new { id = response.MemberId }, response);
+        }
+
+        /// <summary>
+        /// Gets an apprentice member
+        /// </summary>
+        /// <param name="apprenticeid"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("/{apprenticeid}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GetApprenticeMemberResult>> GetApprentice(long apprenticeid)
+        {
+            _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeid}", apprenticeid);
+
+            var apprenticeMemberResult = await _mediator.Send(new GetApprenticeMemberQuery(apprenticeid));
+            if (apprenticeMemberResult == null)
+                return NotFound();
+
+            _logger.LogInformation("ApprenticeMember data found for apprenticeid [{apprenticeid}]", apprenticeid);
+            return new OkObjectResult(apprenticeMemberResult);
+
         }
     }
 }
