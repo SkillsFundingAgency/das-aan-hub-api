@@ -47,15 +47,14 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <summary>
         /// Gets an apprentice member
         /// </summary>
-        /// <param name="userId"></param>
-        /// <param name="request"></param>
+        /// <param name="apprenticeid"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("/{apprenticeid}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> GetApprentice(long apprenticeid)
+        [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]
+        public async Task<ActionResult<GetApprenticeMemberResult>> GetApprentice(long apprenticeid)
         {
             _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeid}", apprenticeid);
 
