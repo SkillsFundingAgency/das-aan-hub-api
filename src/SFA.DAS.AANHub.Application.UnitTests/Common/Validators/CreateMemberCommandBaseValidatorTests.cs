@@ -75,7 +75,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators
         [TestCase(new[] { 10 }, false)]
         public async Task Validates_Region_Range(int[] regions, bool isValid)
         {
-            var command = new CreateMemberCommand { Regions = regions };
+            var list = new List<int>();
+            list.AddRange(regions.Select(region => region));
+
+            var command = new CreateMemberCommand { Regions = list };
             var sut = new CreateMemberCommandBaseValidator(_regionsReadRepository.Object);
             _regionsReadRepository.Setup(m => m.GetAllRegions()).ReturnsAsync(_regions);
 

@@ -26,6 +26,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
                 Status = MembershipStatus.Live.ToString(),
             };
 
+            model.Regions = new List<int>(new[] { 1, 2, });
             mediatorMock.Setup(m => m.Send(It.Is<CreateEmployerMemberCommand>(c => c.UserId == userId && c.Organisation == organisation && c.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await sut.CreateEmployer(Guid.NewGuid(), model);
 
