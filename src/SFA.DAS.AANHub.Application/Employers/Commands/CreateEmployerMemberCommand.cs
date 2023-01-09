@@ -23,6 +23,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             ReviewStatus = MembershipReviewStatus.New,
             Deleted = null,
             Status = MembershipStatus.Live,
+            MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Employer = new Employer
             {
                 MemberId = command.Id,

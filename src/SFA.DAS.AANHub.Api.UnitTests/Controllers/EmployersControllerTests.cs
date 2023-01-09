@@ -29,7 +29,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.Is<CreateEmployerMemberCommand>(c => c.UserId == userId && c.Organisation == organisation && c.AccountId == accountId), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await sut.CreateEmployer(Guid.NewGuid(), model);
 
-            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Employer");
+            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Employers");
             result.As<CreatedAtActionResult>().ActionName.Should().Be("CreateEmployer");
             result.As<CreatedAtActionResult>().StatusCode.Should().Be(201);
         }
