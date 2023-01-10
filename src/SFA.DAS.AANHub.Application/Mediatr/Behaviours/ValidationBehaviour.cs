@@ -1,33 +1,57 @@
-﻿using FluentValidation;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using MediatR;
-using System.Diagnostics.CodeAnalysis;
+using Microsoft.Extensions.Logging;
+using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
 namespace SFA.DAS.AANHub.Application.Mediatr.Behaviours
 {
     [ExcludeFromCodeCoverage]
     public class ValidationBehaviour<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
+        where TResponse : ValidatableResponse
         where TRequest : IRequest<TResponse>
     {
-        private readonly IEnumerable<IValidator<TRequest>> _validators;
+        private readonly IValidator<TRequest> _compositeValidator;
+        private readonly ILogger<TRequest> _logger;
 
-        public ValidationBehaviour(IEnumerable<IValidator<TRequest>> validators) => _validators = validators;
-
-        public Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        public ValidationBehaviour(IValidator<TRequest> compositeValidator, ILogger<TRequest> logger)
         {
-            var context = new ValidationContext<TRequest>(request);
+            _compositeValidator = compositeValidator;
+            _logger = logger;
+        }
 
-            var failures = _validators
-                .Select(x => x.ValidateAsync(context, cancellationToken).GetAwaiter().GetResult())
-                .SelectMany(x => x.Errors)
-                .Where(x => x != null)
-                .ToList();
+        public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
+        {
+            _logger.LogTrace("Validating AANHub API request");
 
-            if (failures.Any())
+            var result = await _compositeValidator.ValidateAsync(request, cancellationToken);
+
+            if (!result.IsValid)
             {
-                throw new ValidationException(failures);
+                var errors = result.Errors.Select(s => s.ErrorMessage).Aggregate(
+                    (acc, current) => acc + string.Concat(' ', current)
+                );
+                _logger.LogTrace("{errors}", errors);
+
+                var responseType = typeof(TResponse);
+
+                if (responseType.IsGenericType)
+                {
+                    var resultType = responseType.GetGenericArguments()[0];
+                    var invalidResponseType = typeof(ValidatableResponse<>).MakeGenericType(resultType);
+
+                    if (Activator.CreateInstance(invalidResponseType, null,
+                            result.Errors.Select(s => s.ErrorMessage).ToList()) as TResponse is { } invalidResponse)
+                    {
+                        return invalidResponse;
+                    }
+                }
             }
 
-            return next();
+            _logger.LogTrace("Validation passed");
+            var response = await next();
+
+            return response;
         }
     }
 }
