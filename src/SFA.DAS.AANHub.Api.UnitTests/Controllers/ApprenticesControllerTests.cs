@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
+
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
@@ -37,7 +38,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
-        public async Task GetApprentice_CallsMediator(
+        [Test, AutoMoqData]
+        public async Task GetApprentice_InvokesQueryHandler(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] ApprenticesController sut,
         long apprenticeid,
@@ -45,10 +47,15 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         {
             mediatorMock.Setup(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
 
-            var result = await sut.GetApprentice(apprenticeid);
+            var response = await sut.GetApprentice(apprenticeid);
+            response.Should().NotBeNull();
 
-            (result.Result as OkObjectResult).Value.Should().BeEquivalentTo(handlerResult);
+            var result = response.Result as OkObjectResult;
+            result.Should().NotBeNull();
+            Assert.AreEqual(StatusCodes.Status200OK, (result!).StatusCode);
 
+            var queryResult = result.Value as GetApprenticeMemberResult;
+            queryResult.Should().BeEquivalentTo(handlerResult);
         }
     }
 }

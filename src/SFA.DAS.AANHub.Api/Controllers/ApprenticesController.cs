@@ -7,6 +7,7 @@ using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using System.ComponentModel.DataAnnotations;
 using SFA.DAS.AANHub.Domain.Entities;
+using Azure;
 
 
 namespace SFA.DAS.AANHub.Api.Controllers
@@ -59,6 +60,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeid}", apprenticeid);
 
             var apprenticeMemberResult = await _mediator.Send(new GetApprenticeMemberQuery(apprenticeid));
+            if (apprenticeMemberResult == null)
+                return NotFound();
+
             _logger.LogInformation("ApprenticeMember data found for apprenticeid [{apprenticeid}]", apprenticeid);
             return new OkObjectResult(apprenticeMemberResult);
 
