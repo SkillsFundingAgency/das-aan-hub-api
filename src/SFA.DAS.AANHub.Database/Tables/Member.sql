@@ -4,11 +4,9 @@
     [UserType] NVARCHAR(10) NOT NULL, 
     [ReviewStatus] NVARCHAR(15) NULL, 
     [Status] NVARCHAR(10) NOT NULL, 
-    [Information] NVARCHAR(MAX) NULL, 
-    [RegionId] INT NULL, 
+    [Information] NVARCHAR(MAX) NULL,
     [Joined] DATETIME NOT NULL, 
     [Created] DATETIME NOT NULL DEFAULT GETUTCDATE(),
     [Updated] DATETIME NULL, 
-    [Deleted] DATETIME NULL 
-    CONSTRAINT [FK_Member_Region] FOREIGN KEY ([RegionId]) REFERENCES [Region]([Id])
+    [Deleted] DATETIME NULL
 )

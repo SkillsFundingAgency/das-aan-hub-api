@@ -10,7 +10,7 @@ namespace SFA.DAS.AANHub.Application.Common.Commands
         public string? Email { get; set; }
         public string? Name { get; set; }
         public DateTime Joined { get; set; }
-        public int[]? Regions { get; set; }
+        public List<int>? Regions { get; set; }
         public string? Information { get; set; }
     }
 }

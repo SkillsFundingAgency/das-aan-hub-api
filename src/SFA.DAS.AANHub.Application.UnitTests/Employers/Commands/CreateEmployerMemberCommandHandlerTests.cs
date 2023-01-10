@@ -5,7 +5,6 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
-using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
@@ -16,10 +15,27 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         public async Task Handle_AddsNewEmployer(
             [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAanDataContext> aanContext,
             CreateEmployerMemberCommandHandler sut,
             CreateEmployerMemberCommand command)
         {
+            command.Regions = new List<int>(new[] { 1 });
+            var response = await sut.Handle(command, new CancellationToken());
+            response.MemberId.Should().Be(command.Id);
+            response.Status.Should().Be(MembershipStatus.Live.ToString());
+
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByUserId)));
+        }
+
+        [Test, AutoMoqData]
+        public async Task Handle_AddsNewEmployer_WithNullRegions(
+            [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+            [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
+            CreateEmployerMemberCommandHandler sut,
+            CreateEmployerMemberCommand command)
+        {
+            command.Regions = null;
 
             var response = await sut.Handle(command, new CancellationToken());
             response.MemberId.Should().Be(command.Id);
