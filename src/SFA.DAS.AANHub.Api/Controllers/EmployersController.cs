@@ -36,7 +36,10 @@ namespace SFA.DAS.AANHub.Api.Controllers
             command.RequestedByUserId = userId;
 
             var response = await _mediator.Send(command);
-            return new CreatedAtActionResult(nameof(CreateEmployer), "Employers", new { id = response.MemberId }, response);
+
+            return response.IsValidResponse ? new CreatedAtActionResult(nameof(CreateEmployer), "Employers", new { id = response.Result.MemberId }, response.Result)
+            : new BadRequestObjectResult(response.Errors);
+
         }
     }
 }
