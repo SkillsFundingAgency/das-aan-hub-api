@@ -58,5 +58,25 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
         }
+
+        [Test, AutoMoqData]
+        public async Task GetApprentice_InvokesQueryHandler_NoResultGivesNotFound(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        GetApprenticeMemberQuery query)
+        {
+            long apprenticeId = 0;
+            Guid memberid = new();
+            //mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>())).ReturnsAsync((GetApprenticeMemberResult) null);
+            mediatorMock.Setup(m => m.Send(query, It.IsAny<CancellationToken>()));
+
+            var response = await sut.GetApprentice(apprenticeId);
+
+            var result = response.Result as NotFoundResult;
+            result.Should().NotBeNull();
+            Assert.AreEqual(StatusCodes.Status404NotFound, (result!).StatusCode);
+
+            mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
+        }
     }
 }
