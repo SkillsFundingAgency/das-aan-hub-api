@@ -1,8 +1,8 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentValidation;
+﻿using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Application.Mediatr.Behaviours
 {
@@ -31,7 +31,7 @@ namespace SFA.DAS.AANHub.Application.Mediatr.Behaviours
                 var errors = result.Errors.Select(s => s.ErrorMessage).Aggregate(
                     (acc, current) => acc + string.Concat(' ', current)
                 );
-                _logger.LogTrace("{errors}", errors);
+                _logger.LogInformation("AANHub api request errors: {errors}", errors);
 
                 var responseType = typeof(TResponse);
 
