@@ -51,11 +51,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             response.Should().NotBeNull();
 
             var result = response.Result as OkObjectResult;
-            result.Should().NotBeNull();
             Assert.AreEqual(StatusCodes.Status200OK, (result!).StatusCode);
 
             var queryResult = result.Value as GetApprenticeMemberResult;
             queryResult.Should().BeEquivalentTo(handlerResult);
+
+            mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
         }
     }
 }

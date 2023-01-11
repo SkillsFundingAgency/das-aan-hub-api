@@ -4,7 +4,6 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
@@ -16,7 +15,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         public async Task Handle_AddsNewEmployer(
             [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAanDataContext> aanContext,
             CreateEmployerMemberCommandHandler sut,
             CreateEmployerMemberCommand command)
         {
