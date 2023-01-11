@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
-    <None Include="SFA.DAS.AAN.Hub.Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />

@@ -41,8 +41,6 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
             services.AddTransient<IPartnersWriteRepository, PartnersWriteRepository>();
             services.AddTransient<IMembersWriteRepository, MembersWriteRepository>();
-            services.AddTransient<ICalendarsReadRepository, CalendarsReadRepository>();
-            services.AddTransient<ICalendarsPermissionsReadRepository, CalendarsPermissionsReadRepository>();
             services.AddTransient<IMembersPermissionsReadRepository, MembersPermissionsReadRepository>();
 
         }
