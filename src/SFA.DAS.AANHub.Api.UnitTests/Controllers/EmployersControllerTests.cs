@@ -8,7 +8,7 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Application.UnitTests;
-using SFA.DAS.AANHub.Domain.Enums;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -23,7 +23,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var response = new CreateEmployerMemberCommandResponse
             {
                 MemberId = command.Id,
-                Status = MembershipStatus.Live.ToString(),
+                Status = MembershipStatus.Live,
             };
 
             model.Regions = new List<int>(new[] { 1, 2, });

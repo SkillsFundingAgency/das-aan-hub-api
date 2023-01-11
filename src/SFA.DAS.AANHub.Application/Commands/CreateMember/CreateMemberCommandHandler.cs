@@ -3,6 +3,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember

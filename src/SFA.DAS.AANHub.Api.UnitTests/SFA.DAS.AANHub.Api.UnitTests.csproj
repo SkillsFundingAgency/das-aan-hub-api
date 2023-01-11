@@ -37,4 +37,8 @@
     <ProjectReference Include="..\SFA.DAS.AANHub.Application.UnitTests\SFA.DAS.AANHub.Application.UnitTests.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Application\SFA.DAS.AANHub.Application.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Models\" />
+  </ItemGroup>
 </Project>

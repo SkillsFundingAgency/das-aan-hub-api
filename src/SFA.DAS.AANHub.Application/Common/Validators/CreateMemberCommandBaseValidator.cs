@@ -10,7 +10,7 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
         {
             RuleFor(c => c.Name)
                 .NotEmpty()
-                .MaximumLength(250);
+                .MaximumLength(200);
             RuleFor(c => c.Information)
                 .NotEmpty()
                 .MaximumLength(250);
