@@ -1,14 +1,10 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
 using SFA.DAS.AANHub.Application.Queries.GetApprentice;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using System.ComponentModel.DataAnnotations;
-using SFA.DAS.AANHub.Domain.Entities;
-using Azure;
-
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {

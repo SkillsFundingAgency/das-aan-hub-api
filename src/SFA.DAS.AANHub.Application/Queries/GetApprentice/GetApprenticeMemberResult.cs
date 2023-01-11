@@ -7,7 +7,7 @@ namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
         public Guid MemberId { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
-        public static implicit operator GetApprenticeMemberResult(SFA.DAS.AANHub.Domain.Entities.Apprentice apprentice) =>
+        public static implicit operator GetApprenticeMemberResult(Apprentice apprentice) =>
             new GetApprenticeMemberResult
             {
                 MemberId = apprentice.MemberId,
