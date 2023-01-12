@@ -1,16 +1,16 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Queries.GetAllRegions;
+using SFA.DAS.AANHub.Application.Regions.Queries;
 using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Regions.Queries
 {
     public class WhenRequestingGetAllRegions
     {
         [Test, AutoMoqData]
-        public async Task ThenAllRegionsAreReturned(
+        public async Task Handle_ReturnAllRegions(
             GetAllRegionsQuery query,
             [Frozen(Matching.ImplementedInterfaces)] AanDataContext context,
             GetAllRegionsQueryHandler handler,
