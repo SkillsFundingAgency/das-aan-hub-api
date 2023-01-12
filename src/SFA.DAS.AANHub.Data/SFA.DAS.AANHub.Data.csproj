@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\SFA.DAS.AANHub.Application\SFA.DAS.AANHub.Application.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
   </ItemGroup>
 
