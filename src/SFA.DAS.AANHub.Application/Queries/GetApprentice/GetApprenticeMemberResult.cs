@@ -1,4 +1,5 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
 {

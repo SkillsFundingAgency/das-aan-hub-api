@@ -1,14 +1,10 @@
-﻿using FluentAssertions;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
-using AutoFixture.NUnit3;
-using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Application.Queries.GetApprentice;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
+namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 {
     [TestFixture]
     public class GetApprenticeMemberQueryHandlerTests

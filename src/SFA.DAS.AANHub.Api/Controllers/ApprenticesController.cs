@@ -47,7 +47,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <param name="apprenticeid"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/{apprenticeid}")]
+        [Route("{apprenticeid}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]

@@ -62,10 +62,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         [Test, AutoMoqData]
         public async Task GetApprentice_InvokesQueryHandler_NoResultGivesNotFound(
         [Frozen] Mock<IMediator> mediatorMock,
-        [Greedy] ApprenticesController sut)
+        [Greedy] ApprenticesController sut,
+        GetApprenticeMemberQuery query)
         {
             long apprenticeId = 0;
-            mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>())).ReturnsAsync((GetApprenticeMemberResult?) null);
+            mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId ), It.IsAny<CancellationToken>())).ReturnsAsync((GetApprenticeMemberResult?) null!);
 
             var response = await sut.GetApprentice(apprenticeId);
 
