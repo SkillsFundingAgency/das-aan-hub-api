@@ -2,7 +2,6 @@
 using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Enums;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands
@@ -23,6 +22,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
             ReviewStatus = MembershipReviewStatus.New,
             Deleted = null,
             Status = MembershipStatus.Live,
+            MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Apprentice = new Apprentice
             {
                 ApprenticeId = command.ApprenticeId,

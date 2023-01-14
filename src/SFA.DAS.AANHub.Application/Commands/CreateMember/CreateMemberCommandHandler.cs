@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
@@ -39,7 +38,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
             var member = new Member()
             {
                 Id = memberId,
-                UserType = command.UserType,
+                UserType = command.UserType!,
                 Joined = command.Joined,
                 Information = command.Information,
                 Created = DateTime.Now,
@@ -57,7 +56,7 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
                 ActionedBy = member.Id,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member),
-                Resource = member?.UserType?.ToString() ?? string.Empty,
+                Resource = member?.UserType.ToString() ?? string.Empty,
             });
 
             switch (command.UserType)

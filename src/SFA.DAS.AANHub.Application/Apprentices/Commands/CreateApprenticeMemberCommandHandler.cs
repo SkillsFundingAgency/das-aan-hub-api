@@ -1,8 +1,8 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands
@@ -35,7 +35,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
                 ActionedBy = command.RequestedByMemberId ?? Guid.Empty,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member),
-                Resource = MembershipUserType.Apprentice.ToString()
+                Resource = MembershipUserType.Apprentice
             });
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);

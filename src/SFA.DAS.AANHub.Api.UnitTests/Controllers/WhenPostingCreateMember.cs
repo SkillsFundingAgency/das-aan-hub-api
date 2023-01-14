@@ -8,7 +8,7 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
-using SFA.DAS.AANHub.Domain.Enums;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -53,17 +53,16 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreateMemberResponse response
             )
         {
-            var result = await ExecuteMediatorCommand(command, response, MembershipUserType.Admin);
+            var result = await ExecuteMediatorCommand(command, response);
             ApplyTests(result, response);
         }
 
         private async Task<IActionResult> ExecuteMediatorCommand(
             CreateMemberCommand command,
-            CreateMemberResponse response,
-            MembershipUserType userType
+            CreateMemberResponse response
             )
         {
-            command.UserType = userType;
+            command.UserType = MembershipUserType.Admin;
             _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
             return await _controller.CreateAdminMember(command);
         }

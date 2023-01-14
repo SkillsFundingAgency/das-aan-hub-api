@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using MediatR;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Enums;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
@@ -34,7 +34,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 ActionedBy = command.RequestedByUserId ?? Guid.Empty,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member),
-                Resource = MembershipUserType.Employer.ToString()
+                Resource = MembershipUserType.Employer
             });
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);

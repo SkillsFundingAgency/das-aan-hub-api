@@ -61,7 +61,6 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             _logger.LogInformation("ApprenticeMember data found for apprenticeid [{apprenticeid}]", apprenticeid);
             return new OkObjectResult(apprenticeMemberResult);
-
         }
     }
 }
