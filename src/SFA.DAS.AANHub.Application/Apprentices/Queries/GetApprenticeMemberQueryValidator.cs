@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 {
     public class GetApprenticeMemberQueryValidator : AbstractValidator<GetApprenticeMemberQuery>
     {
@@ -14,7 +14,7 @@ namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
                 .MustAsync(async (apprenticeid, cancellation) =>
                 {
                     var apprentice = await apprenticesReadRepository.GetApprentice(apprenticeid);
-                    return apprentice == null;
+                    return apprentice != null;
                 })
                 .WithMessage(ApprenticeIdNotFoundMessage);
         }

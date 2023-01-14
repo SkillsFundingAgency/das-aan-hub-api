@@ -1,13 +1,8 @@
-﻿using Azure;
-using FluentAssertions;
-using FluentValidation.TestHelper;
-using Moq;
-using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Queries.GetApprentice;
+﻿using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
 {
     [TestFixture]
     public class GetApprenticeMemberResultTest

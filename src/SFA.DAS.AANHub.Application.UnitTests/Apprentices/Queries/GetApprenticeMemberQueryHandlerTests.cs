@@ -1,10 +1,10 @@
 ﻿using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Queries.GetApprentice;
+using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
 {
     [TestFixture]
     public class GetApprenticeMemberQueryHandlerTests
@@ -23,7 +23,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Queries
 
             var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
 
-            Assert.AreEqual(memberid, (result!).MemberId);
+            Assert.AreEqual(memberid, result!.MemberId);
         }
     }
 }

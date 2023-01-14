@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 {
     public class GetApprenticeMemberQuery : IRequest<GetApprenticeMemberResult>
     {

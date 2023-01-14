@@ -1,8 +1,7 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Queries.GetApprentice
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 {
     public class GetApprenticeMemberQueryHandler : IRequestHandler<GetApprenticeMemberQuery, GetApprenticeMemberResult?>
     {
