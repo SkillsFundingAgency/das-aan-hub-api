@@ -14,9 +14,9 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 
             return new GetApprenticeMemberResult
             {
-                MemberId = apprentice.MemberId,
                 Email = apprentice.Email,
                 Name = apprentice.Name,
+                MemberId = apprentice.MemberId,
             };
         }
     }
