@@ -6,7 +6,7 @@ namespace SFA.DAS.AANHub.Api.Models
     {
         public long ApprenticeId { get; set; }
         public DateTime Joined { get; set; }
-        public int? Region { get; set; }
+        public List<int>? Regions { get; set; }
         public string? Information { get; set; }
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
@@ -17,7 +17,8 @@ namespace SFA.DAS.AANHub.Api.Models
             Joined = model.Joined,
             Information = model.Information,
             Email = model.Email,
-            Name = model.Name
+            Name = model.Name,
+            Regions = model.Regions
         };
     }
 }

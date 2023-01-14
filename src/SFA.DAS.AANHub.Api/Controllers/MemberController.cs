@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 using SFA.DAS.AANHub.Application.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Enums;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {

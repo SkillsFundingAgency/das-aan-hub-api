@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AANHub.Domain.Enums;
+﻿using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Common.Commands
 {
@@ -6,7 +6,7 @@ namespace SFA.DAS.AANHub.Application.Common.Commands
     {
         protected CreateMemberCommandBase() => Id = Guid.NewGuid();
         public Guid Id { get; }
-        public MembershipReviewStatus? ReviewStatus { get; set; }
+        public string? ReviewStatus { get; set; }
         public string? Email { get; set; }
         public string? Name { get; set; }
         public DateTime Joined { get; set; }

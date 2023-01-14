@@ -29,12 +29,7 @@ public class CreateApprenticeMemberCommandValidatorTests
     public async Task Validates_ApprenticeId_NotNull(long apprenticeId, bool isValid)
     {
         var command = new CreateApprenticeMemberCommand() { ApprenticeId = apprenticeId };
-
-        var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
-        var apprentice = isValid ? new Apprentice() : null;
-        apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(apprentice);
         var sut = new CreateApprenticeMemberCommandValidator(_memberReadRepository.Object, _regionsReadRepository.Object, _apprenticesReadRepository.Object);
-
         var result = await sut.TestValidateAsync(command);
 
         if (isValid)

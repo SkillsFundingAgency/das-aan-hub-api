@@ -1,6 +1,5 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Primitives;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
@@ -38,7 +37,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
             command.RequestedByMemberId = userId;
 
             var response = await _mediator.Send(command);
-            return new CreatedAtActionResult(nameof(CreateApprentice), "Apprentice", new { id = response.MemberId }, response);
+            return new CreatedAtActionResult(nameof(CreateApprentice), "Apprentices", new { id = response.MemberId }, response);
         }
     }
 }

@@ -13,5 +13,20 @@ namespace SFA.DAS.AANHub.Domain.Common
             public const string Withdrawn = nameof(Withdrawn);
             public const string Deleted = nameof(Deleted);
         }
+
+        public static class MembershipUserType
+        {
+            public const string Apprentice = nameof(Apprentice);
+            public const string Employer = nameof(Employer);
+            public const string Partner = nameof(Partner);
+            public const string Admin = nameof(Admin);
+        }
+
+        public static class MembershipReviewStatus
+        {
+            public const string New = nameof(New);
+            public const string InProgress = nameof(InProgress);
+            public const string Archived = nameof(Archived);
+        }
     }
 }
