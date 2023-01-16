@@ -83,6 +83,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
+        <None Include="Scripts\AddMemberData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />

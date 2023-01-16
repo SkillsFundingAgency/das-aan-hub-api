@@ -1,21 +1,20 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Apprentices.Commands
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberCommandResponse>
+    public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<CreateApprenticeMemberCommandResponse>, IRequestedByMemberId
     {
-        public long AccountId { get; set; }
-        public long UserId { get; set; }
-        public string? Organisation { get; set; }
-        public Guid? RequestedByUserId { get; set; }
+        public Guid? RequestedByMemberId { get; set; }
+        public long ApprenticeId { get; set; }
 
-        public static implicit operator Member(CreateEmployerMemberCommand command) => new()
+        public static implicit operator Member(CreateApprenticeMemberCommand command) => new Member()
         {
             Id = command.Id,
-            UserType = MembershipUserType.Employer,
+            UserType = MembershipUserType.Apprentice,
             Joined = command.Joined,
             Information = command.Information,
             Created = DateTime.Now,
@@ -24,18 +23,15 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             Deleted = null,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
-            Employer = new Employer
+            Apprentice = new Apprentice
             {
+                ApprenticeId = command.ApprenticeId,
                 MemberId = command.Id,
-                AccountId = command.AccountId,
-                UserId = command.UserId,
                 Email = command.Email,
-                Organisation = command.Organisation,
-                LastUpdated = DateTime.Now,
                 Name = command.Name,
+                LastUpdated = DateTime.Now,
                 IsActive = true
             }
         };
-
     }
 }
