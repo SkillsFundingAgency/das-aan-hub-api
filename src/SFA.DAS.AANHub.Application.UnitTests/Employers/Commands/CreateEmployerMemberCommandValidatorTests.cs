@@ -9,8 +9,15 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
     public class CreateEmployerMemberCommandValidatorTests
     {
         private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
+        private readonly Mock<IMembersReadRepository> _membersReadRepository;
+        private readonly Mock<IEmployersReadRepository> _employersReadRepository;
 
-        public CreateEmployerMemberCommandValidatorTests() => _regionsReadRepository = new Mock<IRegionsReadRepository>();
+        public CreateEmployerMemberCommandValidatorTests()
+        {
+            _regionsReadRepository = new Mock<IRegionsReadRepository>();
+            _membersReadRepository = new Mock<IMembersReadRepository>();
+            _employersReadRepository = new Mock<IEmployersReadRepository>();
+        }
 
         [TestCase(123, true)]
         [TestCase(null, false)]
@@ -19,7 +26,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         {
 
             var command = new CreateEmployerMemberCommand() { UserId = id };
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -35,7 +42,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         {
 
             var command = new CreateEmployerMemberCommand() { Organisation = organisation };
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -50,7 +57,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         {
 
             var command = new CreateEmployerMemberCommand() { Organisation = new string('a', stringLength) };
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -66,7 +73,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         {
 
             var command = new CreateEmployerMemberCommand() { AccountId = id };
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -75,40 +82,40 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             else
                 result.ShouldHaveValidationErrorFor(c => c.AccountId);
         }
-        [TestCaseSource(nameof(GuidTestCases))]
+        [TestCaseSource(nameof(FailGuidTestCases))]
         public async Task Validates_RequestedByUserId_NotEmptyGuid(Guid? id, bool isValid)
         {
 
-            var command = new CreateEmployerMemberCommand() { RequestedByUserId = id };
+            var command = new CreateEmployerMemberCommand() { RequestedByMemberId = id };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
             if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByUserId);
+                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByMemberId);
             else
-                result.ShouldHaveValidationErrorFor(c => c.RequestedByUserId);
+                result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
         }
         [TestCase(null, false)]
         public async Task Validates_RequestedByUserId_NotNull(Guid? id, bool isValid)
         {
 
-            var command = new CreateEmployerMemberCommand() { RequestedByUserId = id };
+            var command = new CreateEmployerMemberCommand() { RequestedByMemberId = id };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
             if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByUserId);
+                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByMemberId);
             else
-                result.ShouldHaveValidationErrorFor(c => c.RequestedByUserId);
+                result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
         }
 
-        private static readonly object[] GuidTestCases =
+        private static readonly object[] FailGuidTestCases =
         {
-            new object[]{ Guid.NewGuid(), true },
+            new object[]{ Guid.NewGuid(), false },
             new object[]{ Guid.Empty, false},
         };
     }

@@ -1,8 +1,10 @@
 ﻿
+using System.Diagnostics.CodeAnalysis;
 using SFA.DAS.AANHub.Application.Commands.CreateMember;
 
 namespace SFA.DAS.AANHub.Application.Responses
 {
+    [ExcludeFromCodeCoverage]
     public class CreateMemberApiResponse
     {
         public Guid MemberId { get; set; }
@@ -18,8 +20,8 @@ namespace SFA.DAS.AANHub.Application.Responses
             }
 
             MemberId = result.Member.Id;
-            UserType = result.Member.UserType.ToString();
-            Status = result.Member.Status.ToString();
+            UserType = result.Member.UserType?.ToString();
+            Status = result.Member.Status?.ToString();
             Created = result.Member.Created;
         }
     }

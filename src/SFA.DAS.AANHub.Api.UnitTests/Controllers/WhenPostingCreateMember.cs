@@ -24,18 +24,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         }
 
         [Test, AutoMoqData]
-        public async Task And_MediatorApprenticeCommandSuccessful_Then_ReturnOk(
-            CreateMemberCommand command,
-            CreateMemberResponse response
-            )
-        {
-            command.UserType = MembershipUserType.Apprentice;
-            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateApprenticeMember(command);
-            ApplyTests(result, response);
-        }
-
-        [Test, AutoMoqData]
         public async Task And_MediatorPartnerCommandSuccessful_Then_ReturnOk(
             CreateMemberCommand command,
             CreateMemberResponse response

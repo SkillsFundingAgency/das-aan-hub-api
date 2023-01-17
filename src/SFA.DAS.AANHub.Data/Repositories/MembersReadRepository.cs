@@ -12,9 +12,9 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public MembersReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task<Member?> GetMember(Guid? Id) => await _aanDataContext
+        public async Task<Member?> GetMember(Guid? id) => await _aanDataContext
                 .Members
-                .AsNoTracking().Where(m => m.Id == Id)
+                .AsNoTracking().Where(m => m.Id == id)
                 .SingleOrDefaultAsync();
     }
 }

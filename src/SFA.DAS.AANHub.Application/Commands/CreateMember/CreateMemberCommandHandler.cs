@@ -1,30 +1,27 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
-using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 {
     public class CreateMemberCommandHandler : IRequestHandler<CreateMemberCommand, CreateMemberResponse>
     {
         private readonly IMembersWriteRepository _membersWriteRepository;
-        private readonly IApprenticesWriteRepository _apprenticesWriteRepository;
         private readonly IPartnersWriteRepository _partnersWriteRepository;
         private readonly IAdminsWriteRepository _adminsWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
         public CreateMemberCommandHandler(
             IMembersWriteRepository membersWriteRepository,
-            IApprenticesWriteRepository apprenticesRepository,
             IPartnersWriteRepository partnersWriteRepository,
             IAdminsWriteRepository adminsWriteRepository,
             IAuditWriteRepository auditWriteRepository,
             IAanDataContext aanDataContext)
         {
             _membersWriteRepository = membersWriteRepository;
-            _apprenticesWriteRepository = apprenticesRepository;
             _partnersWriteRepository = partnersWriteRepository;
             _adminsWriteRepository = adminsWriteRepository;
             _auditWriteRepository = auditWriteRepository;
@@ -61,18 +58,6 @@ namespace SFA.DAS.AANHub.Application.Commands.CreateMember
 
             switch (command.UserType)
             {
-                case MembershipUserType.Apprentice:
-                    _apprenticesWriteRepository.Create(
-                        new Apprentice()
-                        {
-                            MemberId = memberId,
-                            Email = null,
-                            Name = null,
-                            LastUpdated = DateTime.Now,
-                            IsActive = true
-                        });
-                    break;
-
                 case MembershipUserType.Partner:
                     _partnersWriteRepository.Create(
                         new Partner()

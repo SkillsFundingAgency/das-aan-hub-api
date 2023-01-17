@@ -1,17 +1,11 @@
-﻿using MediatR;
-using SFA.DAS.AANHub.Application.Common.Commands;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
-using SFA.DAS.AANHub.Domain.Entities;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
-
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+﻿namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatableResponse<CreateEmployerMemberCommandResponse>>
+    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<CreateEmployerMemberCommandResponse>, IRequestedByMemberId
     {
         public long AccountId { get; set; }
         public long UserId { get; set; }
         public string? Organisation { get; set; }
-        public Guid? RequestedByUserId { get; set; }
+        public Guid? RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateEmployerMemberCommand command) => new()
         {
@@ -37,6 +31,5 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 IsActive = true
             }
         };
-
     }
 }
