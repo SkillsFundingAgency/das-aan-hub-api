@@ -10,7 +10,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
         public static implicit operator CreateEmployerMemberCommandResponse(Member member) => new()
         {
             MemberId = member.Id,
-            Status = member.Status.ToString()
+            Status = member.Status?.ToString()
         };
     }
 }

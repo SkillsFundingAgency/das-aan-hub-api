@@ -1,11 +1,11 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Extensions
 {
@@ -38,6 +38,7 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<IRegionsReadRepository, RegionsReadRepository>();
             services.AddTransient<IAdminsWriteRepository, AdminsWriteRepository>();
             services.AddTransient<IEmployersWriteRepository, EmployersWriteRepository>();
+            services.AddTransient<IEmployersReadRepository, EmployersReadRepository>();
             services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
             services.AddTransient<IApprenticesReadRepository, ApprenticesReadRepository>();
             services.AddTransient<IPartnersWriteRepository, PartnersWriteRepository>();

@@ -25,17 +25,6 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Route("{id}")]
         public ActionResult<Member> GetMember(Guid id) => Ok(new Member() { Id = id });
 
-        [HttpPost("apprentice")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
-        public async Task<IActionResult> CreateApprenticeMember([FromBody] CreateMemberCommand request)
-        {
-            request.UserType = MembershipUserType.Apprentice;
-            return await CreateMember(request);
-        }
-
         [HttpPost("partner")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
