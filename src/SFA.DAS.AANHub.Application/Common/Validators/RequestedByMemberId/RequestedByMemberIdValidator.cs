@@ -6,8 +6,8 @@ namespace SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId
 {
     public class RequestedByMemberIdValidator : AbstractValidator<IRequestedByMemberId>
     {
-        public const string RequestedByMemberIdEmptyErrorMessage = "RequestedByMemberId is empty";
-        public const string RequestedByMemberIdNotFoundMessage = "RequestedByMemberId was not found";
+        private const string RequestedByMemberIdEmptyErrorMessage = "RequestedByMemberId is empty";
+        private const string RequestedByMemberIdNotFoundMessage = "RequestedByMemberId was not found";
         public RequestedByMemberIdValidator(IMembersReadRepository membersReadRepository) => RuleFor(x => x.RequestedByMemberId)
                 .NotNull()
                 .NotEmpty()

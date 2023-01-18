@@ -20,14 +20,12 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 .NotEmpty();
             RuleFor(c => c)
                 .NotEmpty()
-                .MustAsync(async (command, cancellation) => await DoesUserAndAccountExist(command.AccountId, command.UserId, employersReadRepository))
+                .MustAsync(async (command, cancellation) =>
+                {
+                    var result = await employersReadRepository.GetEmployerByAccountIdAndUserId(command.AccountId, command.UserId);
+                    return result == null;
+                })
                 .WithMessage("UserId and AccountId pair already exist");
-        }
-
-        private static async Task<bool> DoesUserAndAccountExist(long accountId, long userId, IEmployersReadRepository employersReadRepository)
-        {
-            var result = await employersReadRepository.GetEmployerByAccountIdAndUserId(accountId, userId);
-            return result == null;
         }
     }
 }
