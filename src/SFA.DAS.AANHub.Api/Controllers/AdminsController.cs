@@ -30,9 +30,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
         public async Task<IActionResult> CreateAdmin([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader), Required] Guid? userId, CreateAdminModel request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to add admin by UserId: {userId}:", userId);
+            _logger.LogInformation("AAN Hub API: Received command to add admin by UserId: {userId}", userId);
 
-            CreateAdminMemberCommand command = request;
+            var command = (CreateAdminMemberCommand)request;
             command.RequestedByMemberId = userId;
 
             var response = await _mediator.Send(command);

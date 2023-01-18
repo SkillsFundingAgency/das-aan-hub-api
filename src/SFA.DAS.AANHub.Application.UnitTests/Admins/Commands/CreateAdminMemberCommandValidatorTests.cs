@@ -25,7 +25,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands
         public async Task Validates_UserName_NotNullOrEmpty(string? userName, bool isValid)
         {
 
-            var command = new CreateAdminMemberCommand() { UserName = userName };
+            var command = new CreateAdminMemberCommand() { UserName = userName! };
             var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _adminsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
