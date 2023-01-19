@@ -33,7 +33,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}:", request.AccountId, request.UserId);
 
             CreateEmployerMemberCommand command = request;
-            command.RequestedByUserId = userId;
+            command.RequestedByMemberId = userId;
 
             var response = await _mediator.Send(command);
 

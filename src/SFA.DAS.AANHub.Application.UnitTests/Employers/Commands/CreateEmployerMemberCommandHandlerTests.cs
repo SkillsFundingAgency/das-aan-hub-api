@@ -24,7 +24,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByUserId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
         }
 
         [Test, AutoMoqData]
@@ -42,7 +42,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             response.Result.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live.ToString());
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByUserId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
         }
     }
 }
