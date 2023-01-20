@@ -35,18 +35,6 @@ namespace SFA.DAS.AANHub.Api.Controllers
             request.UserType = MembershipUserType.Partner;
             return await CreateMember(request);
         }
-
-        [HttpPost("admin")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(CreateMemberApiResponse), 200)]
-        public async Task<IActionResult> CreateAdminMember([FromBody] CreateMemberCommand request)
-        {
-            request.UserType = MembershipUserType.Admin;
-            return await CreateMember(request);
-        }
-
         private async Task<IActionResult> CreateMember(CreateMemberCommand request)
         {
             var result = await _mediator.Send(request);

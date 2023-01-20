@@ -35,26 +35,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             ApplyTests(result, response);
         }
 
-        [Test, AutoMoqData]
-        public async Task And_MediatorAdminCommandSuccessful_Then_ReturnOk(
-            CreateMemberCommand command,
-            CreateMemberResponse response
-            )
-        {
-            var result = await ExecuteMediatorCommand(command, response);
-            ApplyTests(result, response);
-        }
-
-        private async Task<IActionResult> ExecuteMediatorCommand(
-            CreateMemberCommand command,
-            CreateMemberResponse response
-            )
-        {
-            command.UserType = MembershipUserType.Admin;
-            _mediator.Setup(m => m.Send(command, It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            return await _controller.CreateAdminMember(command);
-        }
-
         private static void ApplyTests(IActionResult result, CreateMemberResponse response)
         {
             result.Should().NotBeNull();

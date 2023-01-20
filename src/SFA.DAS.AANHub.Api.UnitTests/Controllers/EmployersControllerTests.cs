@@ -1,5 +1,6 @@
 ﻿using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
@@ -10,6 +11,7 @@ using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Common;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -32,7 +34,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             (new CreateEmployerMemberCommandResponse
             {
                 MemberId = command.Id,
-                Status = Constants.MembershipStatus.Live,
+                Status = MembershipStatus.Live,
             });
 
             model.Regions = new List<int>(new[] { 1, 2, });
@@ -41,7 +43,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             result.As<CreatedAtActionResult>().ControllerName.Should().Be("Employers");
             result.As<CreatedAtActionResult>().ActionName.Should().Be("CreateEmployer");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(201);
+            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
         [Test, AutoMoqData]
@@ -53,12 +55,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             {
                 MemberId = command.Id,
                 Status = Constants.MembershipStatus.Live.ToString()
-            }, new List<string> { new string("Error") });
+            }, new List<string> { new("Error") });
             var model = new CreateEmployerModel();
             _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateEmployer(Guid.NewGuid(), model);
 
-            result.As<BadRequestObjectResult>().StatusCode.Should().Be(400);
+            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
     }
 }

@@ -1,6 +1,4 @@
-﻿using static SFA.DAS.AANHub.Domain.Common.Constants;
-
-namespace SFA.DAS.AANHub.Application.Common.Commands
+﻿namespace SFA.DAS.AANHub.Application.Common.Commands
 {
     public abstract class CreateMemberCommandBase
     {
