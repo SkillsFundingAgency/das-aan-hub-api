@@ -3,25 +3,25 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Employers.Commands;
+using SFA.DAS.AANHub.Application.Partners;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployersController : ControllerBase
+    public class PartnersController : ControllerBase
     {
-        private readonly ILogger<EmployersController> _logger;
+        private readonly ILogger<PartnersController> _logger;
         private readonly IMediator _mediator;
 
-        public EmployersController(ILogger<EmployersController> logger, IMediator mediator)
+        public PartnersController(ILogger<PartnersController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
         }
 
         /// <summary>
-        ///     Creates an employer member
+        ///     Creates a partner member
         /// </summary>
         /// <param name="request"></param>
         /// <param name="userId"></param>
@@ -30,21 +30,19 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateEmployer([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid? userId,
-            CreateEmployerModel request)
+        public async Task<IActionResult> CreatePartner([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid? userId,
+            CreatePartnerModel request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}",
-                request.AccountId,
-                request.UserId);
+            _logger.LogInformation("AAN Hub API: Received command to add partner by member {userId}", userId);
 
-            CreateEmployerMemberCommand command = request;
+            var command = (CreatePartnerMemberCommand)request;
             command.RequestedByMemberId = userId;
 
             var response = await _mediator.Send(command);
 
             return response.IsValidResponse
-                ? new CreatedAtActionResult(nameof(CreateEmployer),
-                    "Employers",
+                ? new CreatedAtActionResult(nameof(CreatePartner),
+                    "Partners",
                     new
                     {
                         id = response.Result.MemberId

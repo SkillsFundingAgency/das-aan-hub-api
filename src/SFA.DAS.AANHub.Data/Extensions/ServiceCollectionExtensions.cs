@@ -23,10 +23,12 @@ namespace SFA.DAS.AANHub.Data.Extensions
                     var generateTokenTask = GenerateTokenAsync();
                     connection.AccessToken = generateTokenTask.GetAwaiter().GetResult();
                 }
+
                 options.UseSqlServer(
                     connection,
                     o => o.CommandTimeout((int)TimeSpan.FromMinutes(5).TotalSeconds));
             });
+
             services.AddTransient<IAanDataContext, AanDataContext>(provider => provider.GetService<AanDataContext>()!);
             RegisterServices(services);
             return services;
@@ -43,11 +45,12 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
             services.AddTransient<IApprenticesReadRepository, ApprenticesReadRepository>();
             services.AddTransient<IPartnersWriteRepository, PartnersWriteRepository>();
+            services.AddTransient<IPartnersReadRepository, PartnersReadRepository>();
             services.AddTransient<IMembersWriteRepository, MembersWriteRepository>();
             services.AddTransient<IMembersReadRepository, MembersReadRepository>();
             services.AddTransient<IMembersPermissionsReadRepository, MembersPermissionsReadRepository>();
-
         }
+
         public static async Task<string> GenerateTokenAsync()
         {
             const string AzureResource = "https://database.windows.net/";
