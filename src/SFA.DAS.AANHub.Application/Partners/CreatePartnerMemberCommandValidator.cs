@@ -24,6 +24,9 @@ namespace SFA.DAS.AANHub.Application.Partners
                     return partner == null;
                 })
                 .WithMessage(PartnerAlreadyExistsErrorMessage);
+            RuleFor(c => c.Organisation)
+                .NotEmpty()
+                .MaximumLength(200);
         }
     }
 }

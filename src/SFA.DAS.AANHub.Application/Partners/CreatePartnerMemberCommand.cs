@@ -16,7 +16,7 @@ namespace SFA.DAS.AANHub.Application.Partners
         public static implicit operator Member(CreatePartnerMemberCommand command) => new()
         {
             Id = command.Id,
-            UserType = MembershipUserType.Admin,
+            UserType = MembershipUserType.Partner,
             Joined = command.Joined,
             Information = command.Information,
             Created = DateTime.Now,
