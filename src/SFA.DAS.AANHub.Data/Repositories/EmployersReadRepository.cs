@@ -16,5 +16,10 @@ namespace SFA.DAS.AANHub.Data.Repositories
             .Employers
             .AsNoTracking().Where(m => m.AccountId == accountId && m.UserId == userId)
             .SingleOrDefaultAsync();
+
+        public async Task<Employer?> GetEmployerByUserId(long userId) => await _aanDataContext
+            .Employers
+            .AsNoTracking().Where(m => m.UserId == userId)
+            .SingleOrDefaultAsync();
     }
 }

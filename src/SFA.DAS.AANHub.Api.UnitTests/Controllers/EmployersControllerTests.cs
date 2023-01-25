@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +9,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Employers.Commands;
+using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Common;
@@ -59,6 +61,48 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var model = new CreateEmployerModel();
             _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateEmployer(Guid.NewGuid(), model);
+
+            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Test, AutoMoqData]
+        public async Task GetEmployer_InvokesQueryHandler(
+            GetEmployerMemberQuery query)
+        {
+            var response = new ValidatableResponse<GetEmployerMemberResult>
+            (new GetEmployerMemberResult
+            {
+                Email = "",
+                Name = "",
+                Organisation = "",
+                MemberId = Guid.NewGuid()
+            });
+
+            long userId = 123;
+            _mediator.Setup(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await _controller.GetEmployer(userId);
+
+            result.As<OkObjectResult>().StatusCode.Should().Be(StatusCodes.Status200OK);
+        }
+
+        [Test, AutoMoqData]
+        public async Task GetEmployer_InvokesQueryHandler_NoResultGivesNotFound(
+            GetEmployerMemberQuery query)
+        {
+            var response = new ValidatableResponse<GetEmployerMemberResult>
+            (new GetEmployerMemberResult
+            {
+                Email = "",
+                Name = "",
+                Organisation = "",
+                MemberId = Guid.NewGuid()
+            }, new List<string> { new("Error") });
+
+            long userId = 123;
+            _mediator.Setup(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await _controller.GetEmployer(userId);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
