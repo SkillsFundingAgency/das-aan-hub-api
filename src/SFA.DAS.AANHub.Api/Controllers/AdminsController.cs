@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands;
+using SFA.DAS.AANHub.Application.Admins.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
@@ -51,6 +52,26 @@ namespace SFA.DAS.AANHub.Api.Controllers
                             "id", response.Result?.MemberId.ToString()
                         }
                     }));
+        }
+
+        /// <summary>
+        ///     Gets an Admin member
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{userName}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> GetAdmin(string userName)
+        {
+            _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);
+
+            var response = await _mediator.Send(new GetAdminMemberQuery(userName));
+
+            return GetResponse(response);
         }
     }
 }

@@ -28,6 +28,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
             {
                 MemberId = command.Id,
                 Email = command.Email,
+                Name = command.Name,
                 UserName = command.UserName,
                 LastUpdated = DateTime.Now,
                 IsActive = true

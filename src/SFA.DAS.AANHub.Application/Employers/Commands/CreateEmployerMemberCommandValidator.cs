@@ -7,25 +7,39 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
     public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
     {
-        public CreateEmployerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository, IEmployersReadRepository employersReadRepository)
+        private const string EmployerPairAlreadyCreatedErrorMessage = "UserId and AccountId pair already exist";
+
+        private readonly IEmployersReadRepository _employersReadRepository;
+
+        public CreateEmployerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository,
+            IEmployersReadRepository employersReadRepository)
         {
+            _employersReadRepository = employersReadRepository;
+
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
             Include(new RequestedByMemberIdValidator(membersReadRepository));
             RuleFor(c => c.UserId)
                 .NotEmpty();
+
             RuleFor(c => c.Organisation)
                 .NotEmpty()
                 .MaximumLength(250);
+
             RuleFor(c => c.AccountId)
-                .NotEmpty();
-            RuleFor(c => c)
                 .NotEmpty()
-                .MustAsync(async (command, cancellation) =>
-                {
-                    var result = await employersReadRepository.GetEmployerByAccountIdAndUserId(command.AccountId, command.UserId);
-                    return result == null;
-                })
-                .WithMessage("UserId and AccountId pair already exist");
+                .MustAsync(async (command, _, _) => await CheckAccountIdAndUserIdPair(command.AccountId, command.UserId))
+                .WithMessage(EmployerPairAlreadyCreatedErrorMessage);
+
+            RuleFor(c => c.UserId)
+                .NotEmpty()
+                .MustAsync(async (command, _, _) => await CheckAccountIdAndUserIdPair(command.AccountId, command.UserId))
+                .WithMessage(EmployerPairAlreadyCreatedErrorMessage);
+        }
+
+        private async Task<bool> CheckAccountIdAndUserIdPair(long accountId, long userId)
+        {
+            var result = await _employersReadRepository.GetEmployerByAccountIdAndUserId(accountId, userId);
+            return result == null;
         }
     }
 }

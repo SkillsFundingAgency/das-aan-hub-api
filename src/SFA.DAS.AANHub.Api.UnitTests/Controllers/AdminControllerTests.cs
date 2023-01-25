@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands;
+using SFA.DAS.AANHub.Application.Admins.Queries;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
@@ -70,6 +72,106 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var result = await _controller.CreateAdmin(Guid.NewGuid(), model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task GetAdmin_InvokesQueryHandler(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            string userName,
+            ValidatedResponse<GetAdminMemberResult> handlerResult)
+        {
+            mediatorMock.Setup(m => m.Send(It.IsAny<GetAdminMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
+
+            var response = await sut.GetAdmin(userName);
+            response.Should().NotBeNull();
+
+            var result = response as OkObjectResult;
+            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+
+            var queryResult = result.Value as GetAdminMemberResult;
+            queryResult.Should().BeEquivalentTo(handlerResult.Result);
+
+            mediatorMock.Verify(m => m.Send(It.IsAny<GetAdminMemberQuery>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task GetAdmin_InvokesQueryHandler_NoResultGivesNotFound(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            string userName)
+        {
+            var errorResponse = new ValidatedResponse<GetAdminMemberResult>
+                (new List<ValidationFailure>());
+
+            mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(errorResponse);
+
+            var response = await sut.GetAdmin(userName);
+
+            var result = response as NotFoundResult;
+            result.Should().NotBeNull();
+            Assert.AreEqual(StatusCodes.Status404NotFound, result!.StatusCode);
+
+            mediatorMock.Verify(m => m.Send(It.IsAny<GetAdminMemberQuery>(), It.IsAny<CancellationToken>()));
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task GetAdmin_InvokesQueryHandler_ResultGivesSuccessfulResult(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            string userName)
+        {
+            var response = new ValidatedResponse<GetAdminMemberResult>
+            (new GetAdminMemberResult
+            {
+                Email = "email@email.com",
+                MemberId = new Guid(),
+                Name = "name"
+            });
+
+            mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(response);
+
+            var getResult = await sut.GetAdmin(userName);
+
+            var result = getResult as OkObjectResult;
+            result.Should().NotBeNull();
+            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task GetAdmin_InvokesQueryHandler_BadResultGivesBadRequest(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut, string userName)
+        {
+            var errorResponse = new ValidatedResponse<GetAdminMemberResult>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
+            mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+                .ReturnsAsync(errorResponse);
+
+            var response = await sut.GetAdmin(userName);
+
+            var result = response as BadRequestObjectResult;
+            result.Should().NotBeNull();
+
+            var errorList = result?.Value as List<ValidationFailure>;
+            errorList?.Count.Should().Be(1);
+            errorList?[0].Should().Be(new ValidationFailure
+            {
+                PropertyName = "name",
+                ErrorMessage = "error"
+            });
+
+            Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
         }
     }
 }
