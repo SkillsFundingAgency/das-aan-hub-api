@@ -1,5 +1,5 @@
-using NLog.Web;
 using System.Diagnostics.CodeAnalysis;
+using NLog.Web;
 
 namespace SFA.DAS.AANHub.Api
 {
@@ -27,8 +27,8 @@ namespace SFA.DAS.AANHub.Api
                 .ConfigureWebHostDefaults(webBuilder =>
                 {
                     webBuilder.UseStartup<Startup>();
-                })
-                .UseNLog();
+                    webBuilder.UseNLog();
+                });
         }
     }
 }
