@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using MediatR;
+using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember;
+using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
@@ -72,6 +75,33 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             var response = await _mediator.Send(new GetApprenticeMemberQuery(apprenticeId));
             return GetResponse(response);
+        }
+
+        /// <summary>
+        /// Patch an apprentice member
+        /// </summary>
+        /// <param name="userId"></param>
+        /// <param name="apprenticeId"></param>/// 
+        [HttpPatch]
+        [Route("{apprenticeId}")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
+        public async Task<IActionResult> PatchApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader), Required] Guid userId, [FromRoute] long apprenticeId, [FromBody] JsonPatchDocument<Apprentice> request)
+        {
+            _logger.LogInformation("AAN Hub API: Received command to patch apprentice by ApprenticeId: {apprenticeId} and UserId: {userId}", apprenticeId, userId);
+
+            PatchApprenticeMemberCommand command = new()
+            {
+                RequestedByMemberId = userId,
+                ApprenticeId = apprenticeId,
+                Patchdoc = request
+            };
+
+            var response = await _mediator.Send(command);
+
+            return GetPatchResponse(response);
         }
     }
 }

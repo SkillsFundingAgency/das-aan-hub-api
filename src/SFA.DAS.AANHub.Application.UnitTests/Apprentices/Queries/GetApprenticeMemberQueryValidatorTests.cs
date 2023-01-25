@@ -1,6 +1,9 @@
 ﻿using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
 {
@@ -13,7 +16,11 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
         public async Task Validates_ApprenticeId_NotNull_NotFound(long apprenticeId, bool isValid)
         {
             var query = new GetApprenticeMemberQuery(apprenticeId);
-            var sut = new GetApprenticeMemberQueryValidator();
+            var apprentice = isValid ? new Apprentice() : null;
+            var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
+
+            apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(apprentice);
+            var sut = new GetApprenticeMemberQueryValidator(apprenticesReadRepositoryMock.Object);
             var result = await sut.TestValidateAsync(query);
 
             if (isValid)

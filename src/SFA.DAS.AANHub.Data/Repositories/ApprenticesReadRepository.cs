@@ -16,6 +16,5 @@ namespace SFA.DAS.AANHub.Data.Repositories
                 .Apprentices
                 .AsNoTracking().Where(a => a.ApprenticeId == apprenticeId)
                 .SingleOrDefaultAsync();
-
     }
 }

@@ -1,4 +1,6 @@
 ﻿using AutoFixture.NUnit3;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using FluentAssertions;
 using FluentValidation.Results;
 using MediatR;
@@ -9,9 +11,11 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
+using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
@@ -175,5 +179,75 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
         }
+
+        [Test, AutoMoqData]
+        public async Task PatchApprentice_InvokesRequest(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] ApprenticesController sut,
+            Guid userId, long apprenticeId)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Apprentice>();
+            patchDoc.Operations.Add(new Operation<Apprentice> { op = nameof(OperationType.Replace), path = Email, value = testValue });
+
+            var success = true;
+            var response = new ValidatedResponse<PatchApprenticeMemberCommandResponse>
+                (new PatchApprenticeMemberCommandResponse(success));
+
+            mediatorMock.Setup(m => m.Send(It.Is<PatchApprenticeMemberCommand>(c => c.RequestedByMemberId == userId && c.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
+
+            (result as NoContentResult).Should().NotBeNull();
+        }
+
+        [Test, AutoMoqData]
+        public async Task PatchApprentice_InvokesRequest_NotFound(
+             [Frozen] Mock<IMediator> mediatorMock,
+             [Greedy] ApprenticesController sut,
+             Guid userId, long apprenticeId)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Apprentice>();
+            patchDoc.Operations.Add(new Operation<Apprentice> { op = nameof(OperationType.Replace), path = Email, value = testValue });
+
+            var response = new ValidatedResponse<PatchApprenticeMemberCommandResponse>(new PatchApprenticeMemberCommandResponse(false));
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchApprenticeMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
+
+            result.Should().NotBeNull();
+            result.As<NotFoundResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Test, AutoMoqData]
+        public async Task PatchApprentice_InvokesRequest_WithErrors(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        Guid userId, long apprenticeId)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Apprentice>();
+            patchDoc.Operations.Add(new Operation<Apprentice> { op = nameof(OperationType.Replace), path = Email, value = testValue });
+
+            var response = new ValidatedResponse<PatchApprenticeMemberCommandResponse>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchApprenticeMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
+
+            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+        }
+
     }
 }
