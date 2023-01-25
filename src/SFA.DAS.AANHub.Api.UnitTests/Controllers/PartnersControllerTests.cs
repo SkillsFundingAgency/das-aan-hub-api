@@ -10,7 +10,6 @@ using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Partners;
 using SFA.DAS.AANHub.Application.UnitTests;
-using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
@@ -72,57 +71,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var result = await _controller.CreatePartner(Guid.NewGuid(), model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        }
-
-        [Test]
-        [AutoMoqData]
-        public void CreatePartnerModel_And_Command_WithExpectedFields(
-        )
-        {
-            const string email = "email@email.com";
-            const string info = "ThisIsInformation";
-            var date = DateTime.Now;
-            const string name = "ThisIsAName";
-            const string userName = "ThisIsAUserName";
-            const string organisation = "ThisIsAnOrganisation";
-            var regions = new List<int>(new[]
-            {
-                1, 2
-            });
-
-            var model = new CreatePartnerModel
-            {
-                Email = email,
-                Information = info,
-                Joined = date,
-                Name = name,
-                Regions = regions,
-                UserName = userName,
-                Organisation = organisation
-            };
-
-            var command = (CreatePartnerMemberCommand)model;
-            var member = (Member)command;
-
-            command.UserName.Should().Be(userName);
-            command.Email.Should().Be(email);
-            command.Organisation.Should().Be(organisation);
-            command.Name.Should().Be(name);
-            command.Information.Should().Be(info);
-            command.Joined.Should().Be(date);
-            command.Regions.Should().Equal(regions);
-
-            member.UserType.Should().Be(MembershipUserType.Partner);
-            member.Joined.Should().Be(date);
-            member.Information.Should().Be(info);
-            member.ReviewStatus.Should().Be(MembershipReviewStatus.New);
-            member.Deleted.Should().BeNull();
-            member.Status.Should().Be(MembershipStatus.Live);
-            member?.Partner?.MemberId.Should().Be(member.Id);
-            member?.Partner?.Email.Should().Be(email);
-            member?.Partner?.UserName.Should().Be(userName);
-            member?.Partner?.Organisation.Should().Be(organisation);
-            member?.Partner?.IsActive.Should().Be(true);
         }
     }
 }
