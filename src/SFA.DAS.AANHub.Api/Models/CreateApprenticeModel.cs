@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Api.Models
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
 
-        public static implicit operator CreateApprenticeMemberCommand(CreateApprenticeModel model) => new CreateApprenticeMemberCommand()
+        public static implicit operator CreateApprenticeMemberCommand(CreateApprenticeModel model) => new()
         {
             ApprenticeId = model.ApprenticeId,
             Joined = model.Joined,
