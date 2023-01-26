@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Diagnostics.HealthChecks;
+﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.Json.Serialization;
+using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
@@ -9,8 +11,6 @@ using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
-using System.Diagnostics.CodeAnalysis;
-using System.Text.Json.Serialization;
 
 namespace SFA.DAS.AANHub.Api
 {
@@ -59,6 +59,8 @@ namespace SFA.DAS.AANHub.Api
             services.AddHealthChecks();
 
             services.AddApplicationInsightsTelemetry();
+
+            services.AddLogging();
 
             services.AddApiVersioning(opt =>
             {
