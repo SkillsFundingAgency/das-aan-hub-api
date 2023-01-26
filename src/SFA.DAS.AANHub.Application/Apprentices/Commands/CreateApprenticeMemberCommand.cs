@@ -19,10 +19,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
             UserType = MembershipUserType.Apprentice,
             Joined = command.Joined,
             Information = command.Information,
-            Created = DateTime.Now,
-            Updated = DateTime.Now,
             ReviewStatus = MembershipReviewStatus.New,
-            Deleted = null,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Apprentice = new Apprentice

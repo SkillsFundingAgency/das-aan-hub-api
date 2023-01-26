@@ -4,8 +4,6 @@
     [MemberId] UNIQUEIDENTIFIER NOT NULL, 
     [NotificationTemplateId] BIGINT NOT NULL, 
     [MergeValues] NVARCHAR(MAX) NOT NULL, 
-    [CreatedBy] BIGINT NULL, 
-    [Created] DATETIME NOT NULL DEFAULT GETUTCDATE(), 
     [SentTime] DATETIME NOT NULL, 
     [Viewed] BIT NOT NULL, 
     [ViewedTime] DATETIME NOT NULL
