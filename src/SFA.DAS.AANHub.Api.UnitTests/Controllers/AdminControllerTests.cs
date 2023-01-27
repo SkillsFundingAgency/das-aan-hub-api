@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -16,27 +17,33 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
     public class AdminControllerTests
     {
-        private readonly Mock<IMediator> _mediator;
         private readonly AdminsController _controller;
+        private readonly Mock<IMediator> _mediator;
+
         public AdminControllerTests()
         {
             _mediator = new Mock<IMediator>();
             _controller = new AdminsController(Mock.Of<ILogger<AdminsController>>(), _mediator.Object);
-
         }
-        [Test, AutoMoqData]
+
+        [Test]
+        [AutoMoqData]
         public async Task CreateAdmin_InvokesRequest(
             CreateAdminModel model,
             CreateAdminMemberCommand command)
         {
-            var response = new ValidatableResponse<CreateAdminMemberCommandResponse>
-            (new CreateAdminMemberCommandResponse()
+            var response = new ValidatedResponse<CreateAdminMemberCommandResponse>
+            (new CreateAdminMemberCommandResponse
             {
                 MemberId = command.Id,
-                Status = MembershipStatus.Live,
+                Status = MembershipStatus.Live
             });
 
-            model.Regions = new List<int>(new[] { 1, 2, });
+            model.Regions = new List<int>(new[]
+            {
+                1, 2
+            });
+
             _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateAdmin(Guid.NewGuid(), model);
 
@@ -45,18 +52,20 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
         }
 
-        [Test, AutoMoqData]
+        [Test]
+        [AutoMoqData]
         public async Task CreateAdmin_InvokesRequest_WithErrors(
             CreateAdminMemberCommand command)
         {
-            var response = new ValidatableResponse<CreateAdminMemberCommandResponse>
-            (new CreateAdminMemberCommandResponse
+            var errorResponse = new ValidatedResponse<CreateAdminMemberCommandResponse>
+            (new List<ValidationFailure>
             {
-                MemberId = command.Id,
-                Status = MembershipStatus.Live
-            }, new List<string> { new("Error") });
+                new("Name", "error")
+            });
+
+
             var model = new CreateAdminModel();
-            _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
             var result = await _controller.CreateAdmin(Guid.NewGuid(), model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);

@@ -1,18 +1,18 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Admins.Commands
 {
-    public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMemberCommand, ValidatableResponse<CreateAdminMemberCommandResponse>>
+    public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMemberCommand, ValidatedResponse<CreateAdminMemberCommandResponse>>
     {
-        private readonly IMembersWriteRepository _membersWriteRepository;
-        private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
+        private readonly IAuditWriteRepository _auditWriteRepository;
+        private readonly IMembersWriteRepository _membersWriteRepository;
 
         public CreateAdminMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
             IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
@@ -22,7 +22,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<ValidatableResponse<CreateAdminMemberCommandResponse>> Handle(CreateAdminMemberCommand command,
+        public async Task<ValidatedResponse<CreateAdminMemberCommandResponse>> Handle(CreateAdminMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
@@ -40,7 +40,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return new ValidatableResponse<CreateAdminMemberCommandResponse>(member);
+            return new ValidatedResponse<CreateAdminMemberCommandResponse>(member);
         }
     }
 }

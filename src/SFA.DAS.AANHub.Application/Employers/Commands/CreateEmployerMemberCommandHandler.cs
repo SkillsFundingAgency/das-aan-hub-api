@@ -1,19 +1,19 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
     public class CreateEmployerMemberCommandHandler :
-        IRequestHandler<CreateEmployerMemberCommand, ValidatableResponse<CreateEmployerMemberCommandResponse>>
+        IRequestHandler<CreateEmployerMemberCommand, ValidatedResponse<CreateEmployerMemberCommandResponse>>
     {
-        private readonly IMembersWriteRepository _membersWriteRepository;
-        private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
+        private readonly IAuditWriteRepository _auditWriteRepository;
+        private readonly IMembersWriteRepository _membersWriteRepository;
 
         public CreateEmployerMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
             IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
@@ -23,7 +23,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<ValidatableResponse<CreateEmployerMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
+        public async Task<ValidatedResponse<CreateEmployerMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
@@ -41,7 +41,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return new ValidatableResponse<CreateEmployerMemberCommandResponse>(member);
+            return new ValidatedResponse<CreateEmployerMemberCommandResponse>(member);
         }
     }
 }

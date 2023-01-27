@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreatePartnerModel model,
             CreatePartnerMemberCommand command)
         {
-            var response = new ValidatableResponse<CreatePartnerMemberCommandResponse>
+            var response = new ValidatedResponse<CreatePartnerMemberCommandResponse>
             (new CreatePartnerMemberCommandResponse
             {
                 MemberId = command.Id,
@@ -56,18 +57,15 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task CreatePartner_InvokesRequest_WithErrors(
             CreatePartnerMemberCommand command)
         {
-            var response = new ValidatableResponse<CreatePartnerMemberCommandResponse>(new CreatePartnerMemberCommandResponse
-                {
-                    MemberId = command.Id,
-                    Status = MembershipStatus.Live
-                },
-                new List<string>
-                {
-                    new("Error")
-                });
+            var errorResponse = new ValidatedResponse<CreatePartnerMemberCommandResponse>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
 
             var model = new CreatePartnerModel();
-            _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
             var result = await _controller.CreatePartner(Guid.NewGuid(), model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
