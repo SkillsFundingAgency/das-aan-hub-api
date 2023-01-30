@@ -8,13 +8,8 @@ namespace SFA.DAS.AANHub.Api.Common
     public class ActionResponseControllerBase : ControllerBase
     {
         private readonly string _controllerName;
-        private readonly ILogger<ActionResponseControllerBase> _logger;
 
-        public ActionResponseControllerBase(ILogger<ActionResponseControllerBase> logger, string controllerName)
-        {
-            _logger = logger;
-            _controllerName = controllerName;
-        }
+        public ActionResponseControllerBase(string controllerName) => _controllerName = controllerName;
 
         protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
         {
@@ -28,21 +23,11 @@ namespace SFA.DAS.AANHub.Api.Common
         protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, ReferrerRouteDetails requestDetails) where T : class
         {
             if (response.IsValidResponse)
-            {
-                _logger.LogTrace("Successful POST request for {controllerName}: {actionName}.",
-                    _controllerName,
-                    requestDetails.ActionName);
-
-
                 return new CreatedAtActionResult(requestDetails.ActionName,
                     _controllerName,
                     requestDetails.RouteParameters,
                     response.Result);
-            }
 
-            _logger.LogTrace("Bad POST request for {controllerName}: {actionName}",
-                _controllerName,
-                requestDetails.ActionName);
 
             return new BadRequestObjectResult(FormatErrors(response.Errors));
         }

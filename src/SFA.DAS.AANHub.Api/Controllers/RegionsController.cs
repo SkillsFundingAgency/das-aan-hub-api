@@ -13,7 +13,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         private readonly ILogger<RegionsController> _logger;
         private readonly IMediator _mediator;
 
-        public RegionsController(IMediator mediator, ILogger<RegionsController> logger) : base(logger, ControllerName)
+        public RegionsController(IMediator mediator, ILogger<RegionsController> logger) : base(ControllerName)
         {
             _mediator = mediator;
             _logger = logger;

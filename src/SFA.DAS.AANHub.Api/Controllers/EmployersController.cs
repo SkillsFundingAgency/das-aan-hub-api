@@ -15,7 +15,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         private readonly ILogger<EmployersController> _logger;
         private readonly IMediator _mediator;
 
-        public EmployersController(ILogger<EmployersController> logger, IMediator mediator) : base(logger, ControllerName)
+        public EmployersController(ILogger<EmployersController> logger, IMediator mediator) : base(ControllerName)
         {
             _logger = logger;
             _mediator = mediator;
