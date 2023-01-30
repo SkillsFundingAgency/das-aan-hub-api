@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using FluentValidation.Results;
+using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
@@ -6,65 +7,49 @@ namespace SFA.DAS.AANHub.Api.Common
 {
     public class ActionResponseControllerBase : ControllerBase
     {
+        private readonly string _controllerName;
         private readonly ILogger<ActionResponseControllerBase> _logger;
 
-        public ActionResponseControllerBase(ILogger<ActionResponseControllerBase> logger) => _logger = logger;
-
-        protected IActionResult GetResponse<T>(ValidatedResponse<T> response, BaseRequestDetails requestDetails) where T : class
+        public ActionResponseControllerBase(ILogger<ActionResponseControllerBase> logger, string controllerName)
         {
-            if (response.Result == null && response.Errors.Count == 0)
-            {
-                _logger.LogTrace("No data found for {controllerName}: {actionName}. Id: {id}",
-                    requestDetails.ControllerName,
-                    requestDetails.ActionName,
-                    requestDetails.GetId);
-
-                return NotFound();
-            }
-
-            if (response.IsValidResponse)
-            {
-                _logger.LogTrace("Successful GET request for {controllerName}: {actionName}. Id: {id}",
-                    requestDetails.ControllerName,
-                    requestDetails.ActionName,
-                    requestDetails.GetId);
-
-                return new OkObjectResult(response.Result);
-            }
-
-            _logger.LogTrace("Bad GET request for {controllerName}: {actionName}. Id: {id}",
-                requestDetails.ControllerName,
-                requestDetails.ActionName,
-                requestDetails.GetId);
-
-            return new BadRequestObjectResult(FormatErrors(response));
+            _logger = logger;
+            _controllerName = controllerName;
         }
 
-        protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, BaseRequestDetails requestDetails) where T : class
+        protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
+        {
+            if (response.Result == null && response.IsValidResponse) return NotFound();
+
+            if (response.IsValidResponse) return new OkObjectResult(response.Result);
+
+            return new BadRequestObjectResult(FormatErrors(response.Errors));
+        }
+
+        protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, ReferrerRouteDetails requestDetails) where T : class
         {
             if (response.IsValidResponse)
             {
-                _logger.LogTrace("Successful POST request for {controllerName}: {actionName}. Id: {id}",
-                    requestDetails.ControllerName,
-                    requestDetails.ActionName,
-                    requestDetails.GetId);
+                _logger.LogTrace("Successful POST request for {controllerName}: {actionName}.",
+                    _controllerName,
+                    requestDetails.ActionName);
+
 
                 return new CreatedAtActionResult(requestDetails.ActionName,
-                    requestDetails.ControllerName,
-                    requestDetails.GetParameters,
+                    _controllerName,
+                    requestDetails.RouteParameters,
                     response.Result);
             }
 
             _logger.LogTrace("Bad POST request for {controllerName}: {actionName}",
-                requestDetails.ControllerName,
+                _controllerName,
                 requestDetails.ActionName);
 
-            return new BadRequestObjectResult(FormatErrors(response));
+            return new BadRequestObjectResult(FormatErrors(response.Errors));
         }
 
-        private static List<ValidationError> FormatErrors<T>(ValidatedResponse<T> response) where T : class
+        private static List<ValidationError> FormatErrors(IEnumerable<ValidationFailure> errors)
         {
-            return response.Errors.Select(err => new ValidationError
+            return errors.Select(err => new ValidationError
             {
                 PropertyName = err.PropertyName,
                 ErrorMessage = err.ErrorMessage

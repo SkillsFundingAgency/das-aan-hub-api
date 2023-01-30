@@ -11,10 +11,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
     [ApiController]
     public class AdminsController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Admins";
         private readonly ILogger<AdminsController> _logger;
         private readonly IMediator _mediator;
 
-        public AdminsController(ILogger<AdminsController> logger, IMediator mediator) : base(logger)
+        public AdminsController(ILogger<AdminsController> logger, IMediator mediator) : base(logger, ControllerName)
         {
             _logger = logger;
             _mediator = mediator;
@@ -41,18 +42,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new BaseRequestDetails
+                new ReferrerRouteDetails
                 {
                     ActionName = nameof(CreateAdmin),
-                    ControllerName = "Admins",
-                    GetParameters = response.Errors.Any()
-                        ? null
-                        : new RouteValueDictionary
+                    RouteParameters = new RouteValueDictionary
+                    {
                         {
-                            {
-                                "id", response.Result.MemberId.ToString()
-                            }
+                            "id", response.Result?.MemberId.ToString()
                         }
+                    }
                 });
         }
     }

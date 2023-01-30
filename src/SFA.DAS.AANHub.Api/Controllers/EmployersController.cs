@@ -11,10 +11,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
     [ApiController]
     public class EmployersController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Employers";
         private readonly ILogger<EmployersController> _logger;
         private readonly IMediator _mediator;
 
-        public EmployersController(ILogger<EmployersController> logger, IMediator mediator) : base(logger)
+        public EmployersController(ILogger<EmployersController> logger, IMediator mediator) : base(logger, ControllerName)
         {
             _logger = logger;
             _mediator = mediator;
@@ -43,18 +44,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new BaseRequestDetails
+                new ReferrerRouteDetails
                 {
                     ActionName = nameof(CreateEmployer),
-                    ControllerName = "Employers",
-                    GetParameters = response.Errors.Any()
-                        ? null
-                        : new RouteValueDictionary
+                    RouteParameters = new RouteValueDictionary
+                    {
                         {
-                            {
-                                "id", response.Result.MemberId.ToString()
-                            }
+                            "id", response.Result?.MemberId.ToString()
                         }
+                    }
                 });
         }
     }

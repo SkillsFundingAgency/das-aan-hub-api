@@ -9,10 +9,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
     [Route("api/[controller]")]
     public class RegionsController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Regions";
         private readonly ILogger<RegionsController> _logger;
         private readonly IMediator _mediator;
 
-        public RegionsController(IMediator mediator, ILogger<RegionsController> logger) : base(logger)
+        public RegionsController(IMediator mediator, ILogger<RegionsController> logger) : base(logger, ControllerName)
         {
             _mediator = mediator;
             _logger = logger;
@@ -32,12 +33,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             var result = await _mediator.Send(new GetRegionsQuery());
 
-            return GetResponse(result,
-                new BaseRequestDetails
-                {
-                    ActionName = nameof(GetRegions),
-                    ControllerName = nameof(RegionsController)
-                });
+            return GetResponse(result);
         }
     }
 }

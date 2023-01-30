@@ -12,10 +12,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
     [ApiController]
     public class ApprenticesController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Apprentices";
         private readonly ILogger<ApprenticesController> _logger;
         private readonly IMediator _mediator;
 
-        public ApprenticesController(ILogger<ApprenticesController> logger, IMediator mediator) : base(logger)
+        public ApprenticesController(ILogger<ApprenticesController> logger, IMediator mediator) : base(logger, ControllerName)
         {
             _logger = logger;
             _mediator = mediator;
@@ -44,18 +45,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new BaseRequestDetails
+                new ReferrerRouteDetails
                 {
                     ActionName = nameof(GetApprentice),
-                    ControllerName = "Apprentices",
-                    GetParameters = response.Errors.Any()
-                        ? null
-                        : new RouteValueDictionary
+                    RouteParameters = new RouteValueDictionary
+                    {
                         {
-                            {
-                                "apprenticeId", request.ApprenticeId
-                            }
+                            "apprenticeId", request.ApprenticeId
                         }
+                    }
                 });
         }
 
@@ -74,13 +72,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeId}", apprenticeId);
 
             var response = await _mediator.Send(new GetApprenticeMemberQuery(apprenticeId));
-            return GetResponse(response,
-                new BaseRequestDetails
-                {
-                    ActionName = nameof(GetApprentice),
-                    ControllerName = nameof(ApprenticesController),
-                    GetId = apprenticeId.ToString()
-                });
+            return GetResponse(response);
         }
     }
 }
