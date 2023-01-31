@@ -15,7 +15,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         private readonly ILogger<EmployersController> _logger;
         private readonly IMediator _mediator;
 
-        public EmployersController(ILogger<EmployersController> logger, IMediator mediator) : base(ControllerName)
+        public EmployersController(ILogger<EmployersController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -44,16 +44,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new ReferrerRouteDetails
-                {
-                    ActionName = nameof(CreateEmployer),
-                    RouteParameters = new RouteValueDictionary
+                new ReferrerRouteDetails(
+                    nameof(CreateEmployer),
+                    ControllerName,
+                    new RouteValueDictionary
                     {
                         {
                             "id", response.Result?.MemberId.ToString()
                         }
-                    }
-                });
+                    }));
         }
     }
 }

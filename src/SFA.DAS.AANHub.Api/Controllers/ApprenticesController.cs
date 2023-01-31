@@ -16,7 +16,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         private readonly ILogger<ApprenticesController> _logger;
         private readonly IMediator _mediator;
 
-        public ApprenticesController(ILogger<ApprenticesController> logger, IMediator mediator) : base(ControllerName)
+        public ApprenticesController(ILogger<ApprenticesController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -45,16 +45,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new ReferrerRouteDetails
-                {
-                    ActionName = nameof(GetApprentice),
-                    RouteParameters = new RouteValueDictionary
+                new ReferrerRouteDetails(
+                    nameof(GetApprentice),
+                    ControllerName,
+                    new RouteValueDictionary
                     {
                         {
                             "apprenticeId", request.ApprenticeId
                         }
-                    }
-                });
+                    }));
         }
 
         /// <summary>

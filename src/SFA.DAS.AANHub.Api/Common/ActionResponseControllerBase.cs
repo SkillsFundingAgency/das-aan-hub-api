@@ -7,10 +7,6 @@ namespace SFA.DAS.AANHub.Api.Common
 {
     public class ActionResponseControllerBase : ControllerBase
     {
-        private readonly string _controllerName;
-
-        public ActionResponseControllerBase(string controllerName) => _controllerName = controllerName;
-
         protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
         {
             if (response.Result == null && response.IsValidResponse) return NotFound();
@@ -24,10 +20,9 @@ namespace SFA.DAS.AANHub.Api.Common
         {
             if (response.IsValidResponse)
                 return new CreatedAtActionResult(requestDetails.ActionName,
-                    _controllerName,
+                    requestDetails.ControllerName,
                     requestDetails.RouteParameters,
                     response.Result);
-
 
             return new BadRequestObjectResult(FormatErrors(response.Errors));
         }

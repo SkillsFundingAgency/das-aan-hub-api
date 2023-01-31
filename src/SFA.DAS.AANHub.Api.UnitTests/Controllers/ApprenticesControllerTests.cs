@@ -35,11 +35,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
                 It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await sut.CreateApprentice(Guid.NewGuid(), model);
+            var result = await sut.CreateApprentice(Guid.NewGuid(), model) as CreatedAtActionResult;
 
-            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Apprentices");
-            result.As<CreatedAtActionResult>().ActionName.Should().Be("GetApprentice");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.ControllerName.Should().Be("Apprentices");
+            result?.ActionName.Should().Be("GetApprentice");
+            result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.Value.As<CreateApprenticeMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]

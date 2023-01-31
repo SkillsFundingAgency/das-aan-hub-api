@@ -2,7 +2,15 @@
 {
     public class ReferrerRouteDetails
     {
-        public string ActionName { get; set; } = null!;
-        public RouteValueDictionary? RouteParameters { get; set; }
+        public ReferrerRouteDetails(string? actionName, string? controllerName, RouteValueDictionary routeParameters)
+        {
+            ActionName = actionName;
+            ControllerName = controllerName;
+            RouteParameters = routeParameters;
+        }
+
+        public string? ActionName { get; }
+        public string? ControllerName { get; }
+        public RouteValueDictionary? RouteParameters { get; }
     }
 }

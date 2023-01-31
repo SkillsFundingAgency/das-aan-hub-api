@@ -45,11 +45,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateEmployer(Guid.NewGuid(), model);
+            var result = await _controller.CreateEmployer(Guid.NewGuid(), model) as CreatedAtActionResult;
 
-            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Employers");
-            result.As<CreatedAtActionResult>().ActionName.Should().Be("CreateEmployer");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.ControllerName.Should().Be("Employers");
+            result?.ActionName.Should().Be("CreateEmployer");
+            result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.Value.As<CreateEmployerMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]

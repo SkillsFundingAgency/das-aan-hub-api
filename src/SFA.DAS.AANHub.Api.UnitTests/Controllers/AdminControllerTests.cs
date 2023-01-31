@@ -45,11 +45,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateAdmin(Guid.NewGuid(), model);
+            var result = await _controller.CreateAdmin(Guid.NewGuid(), model) as CreatedAtActionResult;
 
-            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Admins");
-            result.As<CreatedAtActionResult>().ActionName.Should().Be("CreateAdmin");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.ControllerName.Should().Be("Admins");
+            result?.ActionName.Should().Be("CreateAdmin");
+            result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.Value.As<CreateAdminMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]

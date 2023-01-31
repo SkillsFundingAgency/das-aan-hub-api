@@ -15,7 +15,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         private readonly ILogger<AdminsController> _logger;
         private readonly IMediator _mediator;
 
-        public AdminsController(ILogger<AdminsController> logger, IMediator mediator) : base(ControllerName)
+        public AdminsController(ILogger<AdminsController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -42,16 +42,15 @@ namespace SFA.DAS.AANHub.Api.Controllers
             var response = await _mediator.Send(command);
 
             return GetPostResponse(response,
-                new ReferrerRouteDetails
-                {
-                    ActionName = nameof(CreateAdmin),
-                    RouteParameters = new RouteValueDictionary
+                new ReferrerRouteDetails(
+                    nameof(CreateAdmin),
+                    ControllerName,
+                    new RouteValueDictionary
                     {
                         {
                             "id", response.Result?.MemberId.ToString()
                         }
-                    }
-                });
+                    }));
         }
     }
 }
