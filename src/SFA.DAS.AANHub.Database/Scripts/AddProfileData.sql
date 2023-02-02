@@ -38,8 +38,8 @@ WHEN MATCHED THEN
 		TARGET.ProfileDescription = SOURCE.ProfileDescription,
 		TARGET.Ordering = SOURCE.Ordering
 WHEN NOT MATCHED BY TARGET THEN 
-	INSERT (Id,ProfileName, ProfileDescription)
-	VALUES (SOURCE.Id,SOURCE.ProfileName, SOURCE.ProfileDescription);
+	INSERT (Id,ProfileName, ProfileDescription, Ordering)
+	VALUES (SOURCE.Id,SOURCE.ProfileName, SOURCE.ProfileDescription,SOURCE.Ordering);
 
 SET IDENTITY_INSERT [dbo].[Profile] OFF;
 

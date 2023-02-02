@@ -80,8 +80,8 @@
     <Build Include="Tables\Documents.sql" />
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\MemberRegion.sql" />
-    <None Include="Scripts\AddProfileData.sql" />
     <None Include="Scripts\AddPermissionsData.sql" />
+    <None Include="Scripts\AddProfileData.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
