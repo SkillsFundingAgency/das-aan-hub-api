@@ -1,4 +1,5 @@
 ﻿using FluentAssertions;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,7 +32,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreatePartnerModel model,
             CreatePartnerMemberCommand command)
         {
-            var response = new ValidatableResponse<CreatePartnerMemberCommandResponse>
+            var response = new ValidatedResponse<CreatePartnerMemberCommandResponse>
             (new CreatePartnerMemberCommandResponse
             {
                 MemberId = command.Id,
@@ -44,11 +45,12 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreatePartner(Guid.NewGuid(), model);
+            var result = await _controller.CreatePartner(Guid.NewGuid(), model) as CreatedAtActionResult;
 
-            result.As<CreatedAtActionResult>().ControllerName.Should().Be("Partners");
-            result.As<CreatedAtActionResult>().ActionName.Should().Be("CreatePartner");
-            result.As<CreatedAtActionResult>().StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.ControllerName.Should().Be("Partners");
+            result?.ActionName.Should().Be("CreatePartner");
+            result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+            result?.Value.As<CreatePartnerMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]
@@ -56,18 +58,15 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task CreatePartner_InvokesRequest_WithErrors(
             CreatePartnerMemberCommand command)
         {
-            var response = new ValidatableResponse<CreatePartnerMemberCommandResponse>(new CreatePartnerMemberCommandResponse
-                {
-                    MemberId = command.Id,
-                    Status = MembershipStatus.Live
-                },
-                new List<string>
-                {
-                    new("Error")
-                });
+            var errorResponse = new ValidatedResponse<CreatePartnerMemberCommandResponse>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
 
             var model = new CreatePartnerModel();
-            _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+            _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
             var result = await _controller.CreatePartner(Guid.NewGuid(), model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);

@@ -1,14 +1,12 @@
 ﻿using MediatR;
+using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 {
-    public class GetApprenticeMemberQuery : IRequest<GetApprenticeMemberResult>
+    public class GetApprenticeMemberQuery : IRequest<ValidatedResponse<GetApprenticeMemberResult>>
     {
-        public long ApprenticeId { get; }
+        public GetApprenticeMemberQuery(long apprenticeId) => ApprenticeId = apprenticeId;
 
-        public GetApprenticeMemberQuery(long apprenticeid)
-        {
-            ApprenticeId = apprenticeid;
-        }
+        public long ApprenticeId { get; }
     }
 }

@@ -8,7 +8,7 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Partners
 {
-    public class CreatePartnerMemberCommandHandler : IRequestHandler<CreatePartnerMemberCommand, ValidatableResponse<CreatePartnerMemberCommandResponse>>
+    public class CreatePartnerMemberCommandHandler : IRequestHandler<CreatePartnerMemberCommand, ValidatedResponse<CreatePartnerMemberCommandResponse>>
     {
         private readonly IAanDataContext _aanDataContext;
         private readonly IAuditWriteRepository _auditWriteRepository;
@@ -22,7 +22,7 @@ namespace SFA.DAS.AANHub.Application.Partners
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<ValidatableResponse<CreatePartnerMemberCommandResponse>> Handle(CreatePartnerMemberCommand command,
+        public async Task<ValidatedResponse<CreatePartnerMemberCommandResponse>> Handle(CreatePartnerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
@@ -40,7 +40,7 @@ namespace SFA.DAS.AANHub.Application.Partners
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return new ValidatableResponse<CreatePartnerMemberCommandResponse>(member);
+            return new ValidatedResponse<CreatePartnerMemberCommandResponse>(member);
         }
     }
 }

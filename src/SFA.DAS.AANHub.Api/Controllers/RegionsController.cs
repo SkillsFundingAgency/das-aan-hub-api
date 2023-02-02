@@ -1,38 +1,38 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.AANHub.Application.Regions.Queries;
+using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Application.Regions.Queries.GetRegions;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class RegionsController : Controller
+    public class RegionsController : ActionResponseControllerBase
     {
-        private readonly IMediator _mediator;
         private readonly ILogger<RegionsController> _logger;
+        private readonly IMediator _mediator;
 
         public RegionsController(IMediator mediator, ILogger<RegionsController> logger)
         {
             _mediator = mediator;
             _logger = logger;
         }
+
         /// <summary>
-        /// Get list of regions
+        ///     Get list of regions
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(GetAllRegionsQueryResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetAllRegions()
+        [ProducesResponseType(typeof(GetRegionsQueryResult), StatusCodes.Status200OK)]
+        public async Task<IActionResult> GetRegions()
         {
             _logger.LogTrace("Requesting list of regions");
 
-            var result = await _mediator.Send(new GetAllRegionsQuery());
+            var result = await _mediator.Send(new GetRegionsQuery());
 
-            _logger.LogTrace("List of regions found");
-            return new OkObjectResult(result);
-
+            return GetResponse(result);
         }
     }
 }

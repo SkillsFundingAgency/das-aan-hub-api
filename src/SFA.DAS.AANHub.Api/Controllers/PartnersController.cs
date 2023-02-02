@@ -9,8 +9,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PartnersController : ControllerBase
+    public class PartnersController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Partners";
         private readonly ILogger<PartnersController> _logger;
         private readonly IMediator _mediator;
 
@@ -40,15 +41,16 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             var response = await _mediator.Send(command);
 
-            return response.IsValidResponse
-                ? new CreatedAtActionResult(nameof(CreatePartner),
-                    "Partners",
-                    new
+            return GetPostResponse(response,
+                new ReferrerRouteDetails(
+                    nameof(CreatePartner),
+                    ControllerName,
+                    new RouteValueDictionary
                     {
-                        id = response.Result.MemberId
-                    },
-                    response.Result)
-                : new BadRequestObjectResult(response.Errors);
+                        {
+                            "id", response.Result?.MemberId.ToString()
+                        }
+                    }));
         }
     }
 }

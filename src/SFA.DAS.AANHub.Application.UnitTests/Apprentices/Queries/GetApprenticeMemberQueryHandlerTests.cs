@@ -9,7 +9,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
     [TestFixture]
     public class GetApprenticeMemberQueryHandlerTests
     {
-
         [Test]
         public async Task Handle_GetApprenticeMember()
         {
@@ -23,7 +22,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
 
             var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
 
-            Assert.AreEqual(memberid, result!.MemberId);
+            Assert.AreEqual(memberid, result.Result.MemberId);
         }
     }
 }

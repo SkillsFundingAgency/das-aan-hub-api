@@ -9,8 +9,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EmployersController : ControllerBase
+    public class EmployersController : ActionResponseControllerBase
     {
+        private const string ControllerName = "Employers";
         private readonly ILogger<EmployersController> _logger;
         private readonly IMediator _mediator;
 
@@ -42,15 +43,16 @@ namespace SFA.DAS.AANHub.Api.Controllers
 
             var response = await _mediator.Send(command);
 
-            return response.IsValidResponse
-                ? new CreatedAtActionResult(nameof(CreateEmployer),
-                    "Employers",
-                    new
+            return GetPostResponse(response,
+                new ReferrerRouteDetails(
+                    nameof(CreateEmployer),
+                    ControllerName,
+                    new RouteValueDictionary
                     {
-                        id = response.Result.MemberId
-                    },
-                    response.Result)
-                : new BadRequestObjectResult(response.Errors);
+                        {
+                            "id", response.Result?.MemberId.ToString()
+                        }
+                    }));
         }
     }
 }

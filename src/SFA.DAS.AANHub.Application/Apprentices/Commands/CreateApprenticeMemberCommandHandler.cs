@@ -1,17 +1,19 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
+using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
-using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands
 {
-    public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateApprenticeMemberCommand, CreateApprenticeMemberCommandResponse>
+    public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateApprenticeMemberCommand,
+        ValidatedResponse<CreateApprenticeMemberCommandResponse>>
     {
-        private readonly IMembersWriteRepository _membersWriteRepository;
-        private readonly IAuditWriteRepository _auditWriteRepository;
         private readonly IAanDataContext _aanDataContext;
+        private readonly IAuditWriteRepository _auditWriteRepository;
+        private readonly IMembersWriteRepository _membersWriteRepository;
 
         public CreateApprenticeMemberCommandHandler(IMembersWriteRepository membersWriteRepository, IAanDataContext aanDataContext,
             IAuditWriteRepository auditWriteRepository)
@@ -21,10 +23,9 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<CreateApprenticeMemberCommandResponse> Handle(CreateApprenticeMemberCommand command,
+        public async Task<ValidatedResponse<CreateApprenticeMemberCommandResponse>> Handle(CreateApprenticeMemberCommand command,
             CancellationToken cancellationToken)
         {
-
             Member member = command;
 
             _membersWriteRepository.Create(member);
@@ -40,8 +41,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return member;
+            return new ValidatedResponse<CreateApprenticeMemberCommandResponse>(member);
         }
     }
-
 }
