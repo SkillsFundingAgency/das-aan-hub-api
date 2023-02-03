@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <Folder Include="Apprentices\Commands\" />
+    <Folder Include="Partners\Queries\" />
   </ItemGroup>
 
 </Project>

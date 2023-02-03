@@ -45,6 +45,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands
             member.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live);
             member?.Partner?.MemberId.Should().Be(member.Id);
             member?.Partner?.Email.Should().Be(email);
+            member?.Partner?.Name.Should().Be(name);
             member?.Partner?.UserName.Should().Be(userName);
             member?.Partner?.Organisation.Should().Be(organisation);
         }
