@@ -13,14 +13,14 @@ INSERT INTO #TempPermission VALUES
 SET IDENTITY_INSERT [dbo].[Permission] ON;
 
 MERGE Permission TARGET
-USING #TempPermission SOURCE
-ON TARGET.Id=SOURCE.Id
+USING #TempPermission SOURCE ON TARGET.Id=SOURCE.Id
 WHEN MATCHED THEN
-UPDATE SET TARGET.PermissionName = SOURCE.PermissionName,
-TARGET.PermissionDescription = SOURCE.PermissionDescription
+	UPDATE SET 
+		TARGET.PermissionName = SOURCE.PermissionName,
+		TARGET.PermissionDescription = SOURCE.PermissionDescription
 WHEN NOT MATCHED BY TARGET THEN 
-INSERT (Id,PermissionName, PermissionDescription)
-VALUES (SOURCE.Id,SOURCE.PermissionName, SOURCE.PermissionDescription);
+	INSERT (Id,PermissionName, PermissionDescription)
+	VALUES (SOURCE.Id,SOURCE.PermissionName, SOURCE.PermissionDescription);
 
 SET IDENTITY_INSERT [dbo].[Permission] OFF;
 
