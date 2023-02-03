@@ -5,8 +5,8 @@ namespace SFA.DAS.AANHub.Api.Models
     public class CreateEmployerModel
     {
         public long AccountId { get; set; }
-        public long UserId { get; set; }
-        public string? Organisation { get; set; }
+        public Guid UserRef { get; set; }
+        public string Organisation { get; set; } = null!;
         public DateTime Joined { get; set; }
         public List<int>? Regions { get; set; }
         public string? Information { get; set; }
@@ -16,14 +16,13 @@ namespace SFA.DAS.AANHub.Api.Models
         public static implicit operator CreateEmployerMemberCommand(CreateEmployerModel model) => new()
         {
             AccountId = model.AccountId,
-            UserId = model.UserId,
+            UserRef = model.UserRef,
             Organisation = model.Organisation,
             Email = model.Email,
             Name = model.Name,
             Information = model.Information,
             Joined = model.Joined,
-            Regions = model.Regions,
-
+            Regions = model.Regions
         };
     }
 }

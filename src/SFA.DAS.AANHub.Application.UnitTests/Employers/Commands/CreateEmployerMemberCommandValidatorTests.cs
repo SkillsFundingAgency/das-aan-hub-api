@@ -33,14 +33,14 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             _employersReadRepository = new Mock<IEmployersReadRepository>();
         }
 
-        [TestCase(123, true)]
-        [TestCase(null, false)]
-        [TestCase(0, false)]
-        public async Task Validates_UserId_NotNull(long id, bool isValid)
+        [TestCase("00000000-0000-0000-0000-000000000000", false)]
+        [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", true)]
+        public async Task Validates_UserRef_NotNull(string userRef, bool isValid)
         {
+            var guid = Guid.Parse(userRef);
             var command = new CreateEmployerMemberCommand
             {
-                UserId = id
+                UserRef = guid
             };
 
             var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
@@ -48,14 +48,14 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
             var result = await sut.TestValidateAsync(command);
 
             if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.UserId);
+                result.ShouldNotHaveValidationErrorFor(c => c.UserRef);
             else
-                result.ShouldHaveValidationErrorFor(c => c.UserId);
+                result.ShouldHaveValidationErrorFor(c => c.UserRef);
         }
 
         [TestCase("Organisation name", true)]
         [TestCase(null, false)]
-        public async Task Validates_Organisation_NotNull(string? organisation, bool isValid)
+        public async Task Validates_Organisation_NotNull(string organisation, bool isValid)
         {
             var command = new CreateEmployerMemberCommand
             {
@@ -112,7 +112,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
         }
 
         [TestCaseSource(nameof(FailGuidTestCases))]
-        public async Task Validates_RequestedByUserId_NotEmptyGuid(Guid? id, bool isValid)
+        public async Task Validates_RequestedByUserId_NotEmptyGuid(Guid id, bool isValid)
         {
             var command = new CreateEmployerMemberCommand
             {
@@ -131,54 +131,28 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
 
         [TestCase(true)]
         [TestCase(false)]
-        public async Task Validates_AccountId_UserId_Pair_Exist(bool pairExistsAlready)
+        public async Task Validates_UserRef_Exist(bool userRefAlreadyExist)
         {
             Employer? employer = null;
 
-            if (pairExistsAlready) employer = new Employer();
+            if (userRefAlreadyExist) employer = new Employer();
             var command = new CreateEmployerMemberCommand
             {
-                AccountId = 1234,
-                UserId = 2345
+                UserRef = Guid.NewGuid()
             };
 
-            _employersReadRepository.Setup(x => x.GetEmployerByAccountIdAndUserId(It.IsAny<long>(), It.IsAny<long>())).ReturnsAsync(employer);
+            _employersReadRepository.Setup(x => x.GetEmployerByUserRef(It.IsAny<Guid>())).ReturnsAsync(employer);
             var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
-            if (pairExistsAlready)
+            if (userRefAlreadyExist)
             {
-                result.ShouldHaveValidationErrorFor(c => c.AccountId);
-                result.ShouldHaveValidationErrorFor(c => c.UserId);
-                result.Errors[8].PropertyName.Should().Be("AccountId");
-                result.Errors[8].ErrorMessage.Should().Be("UserId and AccountId pair already exist");
-                result.Errors[9].PropertyName.Should().Be("UserId");
-                result.Errors[9].ErrorMessage.Should().Be("UserId and AccountId pair already exist");
+                result.ShouldHaveValidationErrorFor(c => c.UserRef);
+                result.Errors[6].PropertyName.Should().Be("UserRef");
+                result.Errors[6].ErrorMessage.Should().Be("UserRef already exists");
             }
-            else
-            {
-                result.ShouldNotHaveValidationErrorFor(c => c.AccountId);
-                result.ShouldNotHaveValidationErrorFor(c => c.UserId);
-            }
-        }
-
-        [TestCase(null, false)]
-        public async Task Validates_RequestedByUserId_NotNull(Guid? id, bool isValid)
-        {
-            var command = new CreateEmployerMemberCommand
-            {
-                RequestedByMemberId = id
-            };
-
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
-
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByMemberId);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
+            else { result.ShouldNotHaveValidationErrorFor(c => c.UserRef); }
         }
     }
 }

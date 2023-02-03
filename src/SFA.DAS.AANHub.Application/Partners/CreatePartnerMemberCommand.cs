@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Application.Partners
     {
         public string UserName { get; set; } = null!;
         public string Organisation { get; set; } = null!;
-        public Guid? RequestedByMemberId { get; set; }
+        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreatePartnerMemberCommand command) => new()
         {

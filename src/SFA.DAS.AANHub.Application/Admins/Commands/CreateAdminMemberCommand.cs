@@ -10,7 +10,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
     public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateAdminMemberCommandResponse>>, IRequestedByMemberId
     {
         public string UserName { get; set; } = null!;
-        public Guid? RequestedByMemberId { get; set; }
+        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateAdminMemberCommand command) => new()
         {
