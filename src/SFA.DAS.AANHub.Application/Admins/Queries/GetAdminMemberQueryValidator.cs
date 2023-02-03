@@ -7,9 +7,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Queries
         public GetAdminMemberQueryValidator()
         {
             RuleFor(a => a.UserName)
-                .NotNull()
-                .NotEmpty()
-                .MaximumLength(200);
+                .NotEmpty();
         }
     }
 }
