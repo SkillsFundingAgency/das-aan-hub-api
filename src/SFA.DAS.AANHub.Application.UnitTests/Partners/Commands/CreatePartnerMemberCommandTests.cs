@@ -47,7 +47,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands
             member?.Partner?.Email.Should().Be(email);
             member?.Partner?.UserName.Should().Be(userName);
             member?.Partner?.Organisation.Should().Be(organisation);
-            member?.Partner?.IsActive.Should().Be(true);
         }
     }
 }

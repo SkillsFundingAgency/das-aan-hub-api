@@ -1,5 +1,4 @@
-﻿
-namespace SFA.DAS.AANHub.Domain.Entities
+﻿namespace SFA.DAS.AANHub.Domain.Entities
 {
     public class Apprentice
     {
@@ -8,6 +7,5 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public string? Email { get; set; }
         public string? Name { get; set; }
         public DateTime? LastUpdated { get; set; }
-        public bool IsActive { get; set; }
     }
 }

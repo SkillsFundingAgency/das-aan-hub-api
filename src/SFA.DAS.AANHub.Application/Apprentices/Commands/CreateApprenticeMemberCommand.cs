@@ -28,8 +28,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
                 MemberId = command.Id,
                 Email = command.Email,
                 Name = command.Name,
-                LastUpdated = DateTime.Now,
-                IsActive = true
+                LastUpdated = DateTime.Now
             }
         };
     }

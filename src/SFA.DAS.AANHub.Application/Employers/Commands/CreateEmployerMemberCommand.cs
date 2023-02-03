@@ -31,8 +31,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 Email = command.Email,
                 Organisation = command.Organisation,
                 LastUpdated = DateTime.Now,
-                Name = command.Name,
-                IsActive = true
+                Name = command.Name
             }
         };
     }
