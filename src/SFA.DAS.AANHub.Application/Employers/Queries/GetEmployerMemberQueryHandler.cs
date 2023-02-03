@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SFA.DAS.AANHub.Application.Employers.Queries
 {
@@ -12,7 +13,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Queries
 
         public async Task<ValidatableResponse<GetEmployerMemberResult>> Handle(GetEmployerMemberQuery request, CancellationToken cancellationToken)
         {
-            var employer = await _employersReadRepository.GetEmployerByUserId(request.UserId);
+            var employer = await _employersReadRepository.GetEmployerByAccountIdAndUserId(request.AccountId, request.ExternalUserId);
             return new ValidatableResponse<GetEmployerMemberResult>(employer!);
         }
     }

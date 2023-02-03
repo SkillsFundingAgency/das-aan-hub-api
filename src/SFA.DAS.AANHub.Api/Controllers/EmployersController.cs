@@ -5,6 +5,7 @@ using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Employers.Commands;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 using System.ComponentModel.DataAnnotations;
+using static Microsoft.ApplicationInsights.MetricDimensionNames.TelemetryContext;
 
 namespace SFA.DAS.AANHub.Api.Controllers
 {
@@ -46,26 +47,25 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <summary>
         /// Gets an employer member
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="externalUserId"></param>
+        /// <param name="accountId"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("{userId}")]
+        [Route("/employers/{accountId}/users/{externalUserId}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(GetEmployerMemberResult), StatusCodes.Status200OK)]
-        public async Task<ActionResult> GetEmployer(long userId)
+        public async Task<ActionResult> GetEmployer(long accountId, long externalUserId)
         {
-            _logger.LogInformation("AAN Hub API: Received command to get employer by UserId: {userId}", userId);
+            _logger.LogInformation("AAN Hub API: Received command to get employer by AccountId: {accountId} and ExternalUserId: {externalUserId}", accountId, externalUserId);
 
-            var response = await _mediator.Send(new GetEmployerMemberQuery(userId));
-            if (response == null)
+            var response = await _mediator.Send(new GetEmployerMemberQuery(accountId, externalUserId));
+
+            if (response.Result == null && (response.Errors.Count == 0 || response.Errors == null))
                 return NotFound();
 
-            _logger.LogInformation("EmployerMember data found for UserId [{userId}]", userId);
-            //return new OkObjectResult(employerMemberResult);
             return response.IsValidResponse ? new OkObjectResult(response.Result): new BadRequestObjectResult(response.Errors);
-
-
         }
     }
 }

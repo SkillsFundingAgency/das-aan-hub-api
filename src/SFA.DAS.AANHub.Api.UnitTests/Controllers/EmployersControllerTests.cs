@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using Microsoft.Identity.Client;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
@@ -78,10 +79,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
                 MemberId = Guid.NewGuid()
             });
 
-            long userId = 123;
+            var accountId = 123;
+            var externalUserId = 456;
             _mediator.Setup(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await _controller.GetEmployer(userId);
+            var result = await _controller.GetEmployer(accountId, externalUserId);
 
             result.As<OkObjectResult>().StatusCode.Should().Be(StatusCodes.Status200OK);
         }
@@ -99,10 +101,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
                 MemberId = Guid.NewGuid()
             }, new List<string> { new("Error") });
 
-            long userId = 123;
+            var accountId = 123;
+            var externalUserId = 456;
             _mediator.Setup(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await _controller.GetEmployer(userId);
+            var result = await _controller.GetEmployer(accountId, externalUserId);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }

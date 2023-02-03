@@ -5,11 +5,12 @@ namespace SFA.DAS.AANHub.Application.Employers.Queries
 {
     public class GetEmployerMemberQuery : IRequest<ValidatableResponse<GetEmployerMemberResult>>
     {
-        public long UserId { get; }
-
-        public GetEmployerMemberQuery(long userId)
+        public long AccountId { get; }
+        public long ExternalUserId { get; }
+        public GetEmployerMemberQuery(long accountId, long externalUserId)
         {
-            UserId = userId;
+            AccountId = accountId;
+            ExternalUserId = externalUserId;
         }
     }
 }
