@@ -1,8 +1,8 @@
 ﻿CREATE TABLE #TempPermission
 (
 	[Id] INT,
-    [PermissionName] NVARCHAR(200),
-	[PermissionDescription] NVARCHAR(200)
+    [Name] NVARCHAR(200),
+	[Description] NVARCHAR(200)
 )
  
 INSERT INTO #TempPermission VALUES 
@@ -16,11 +16,11 @@ MERGE Permission TARGET
 USING #TempPermission SOURCE ON TARGET.Id=SOURCE.Id
 WHEN MATCHED THEN
 	UPDATE SET 
-		TARGET.PermissionName = SOURCE.PermissionName,
-		TARGET.PermissionDescription = SOURCE.PermissionDescription
+		TARGET.[Name] = SOURCE.[Name],
+		TARGET.[Description] = SOURCE.[Description]
 WHEN NOT MATCHED BY TARGET THEN 
-	INSERT (Id,PermissionName, PermissionDescription)
-	VALUES (SOURCE.Id,SOURCE.PermissionName, SOURCE.PermissionDescription);
+	INSERT (Id, Name, Description)
+	VALUES (SOURCE.Id,SOURCE.Name, SOURCE.Description);
 
 SET IDENTITY_INSERT [dbo].[Permission] OFF;
 
