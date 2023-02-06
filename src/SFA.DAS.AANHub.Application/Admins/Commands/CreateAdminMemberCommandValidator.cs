@@ -8,7 +8,9 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
     public class CreateAdminMemberCommandValidator : AbstractValidator<CreateAdminMemberCommand>
     {
         public const string AdminAlreadyExistsErrorMessage = "Username already exists";
-        public CreateAdminMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository, IAdminsReadRepository adminsReadRepository)
+
+        public CreateAdminMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository,
+            IAdminsReadRepository adminsReadRepository)
         {
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
             Include(new RequestedByMemberIdValidator(membersReadRepository));
