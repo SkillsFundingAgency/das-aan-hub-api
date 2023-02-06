@@ -42,13 +42,11 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands
             member.Joined.Should().Be(date);
             member.Information.Should().Be(info);
             member.ReviewStatus.Should().Be(Domain.Common.Constants.MembershipReviewStatus.New);
-            member.Deleted.Should().BeNull();
             member.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live);
             member?.Partner?.MemberId.Should().Be(member.Id);
             member?.Partner?.Email.Should().Be(email);
             member?.Partner?.UserName.Should().Be(userName);
             member?.Partner?.Organisation.Should().Be(organisation);
-            member?.Partner?.IsActive.Should().Be(true);
         }
     }
 }

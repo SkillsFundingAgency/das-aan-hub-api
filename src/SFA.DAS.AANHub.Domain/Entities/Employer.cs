@@ -1,5 +1,4 @@
-﻿
-namespace SFA.DAS.AANHub.Domain.Entities
+﻿namespace SFA.DAS.AANHub.Domain.Entities
 {
     public class Employer
     {
@@ -10,6 +9,5 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public string? Name { get; set; }
         public string? Organisation { get; set; }
         public DateTime LastUpdated { get; set; }
-        public bool IsActive { get; set; }
     }
 }

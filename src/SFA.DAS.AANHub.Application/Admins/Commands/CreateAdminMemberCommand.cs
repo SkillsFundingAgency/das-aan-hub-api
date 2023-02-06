@@ -18,10 +18,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
             UserType = MembershipUserType.Admin,
             Joined = command.Joined,
             Information = command.Information,
-            Created = DateTime.Now,
-            Updated = DateTime.Now,
             ReviewStatus = MembershipReviewStatus.New,
-            Deleted = null,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Admin = new Admin
@@ -30,8 +27,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands
                 Email = command.Email,
                 Name = command.Name,
                 UserName = command.UserName,
-                LastUpdated = DateTime.Now,
-                IsActive = true
+                LastUpdated = DateTime.Now
             }
         };
     }

@@ -19,10 +19,7 @@ namespace SFA.DAS.AANHub.Application.Partners
             UserType = MembershipUserType.Partner,
             Joined = command.Joined,
             Information = command.Information,
-            Created = DateTime.Now,
-            Updated = DateTime.Now,
             ReviewStatus = MembershipReviewStatus.New,
-            Deleted = null,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Partner = new Partner
@@ -31,8 +28,7 @@ namespace SFA.DAS.AANHub.Application.Partners
                 Email = command.Email,
                 UserName = command.UserName,
                 Organisation = command.Organisation,
-                LastUpdated = DateTime.Now,
-                IsActive = true
+                LastUpdated = DateTime.Now
             }
         };
     }

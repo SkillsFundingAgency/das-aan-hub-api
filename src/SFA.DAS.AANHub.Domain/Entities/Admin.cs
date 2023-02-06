@@ -7,6 +7,5 @@
         public string Name { get; set; } = null!;
         public string UserName { get; set; } = null!;
         public DateTime LastUpdated { get; set; }
-        public bool IsActive { get; set; }
     }
 }

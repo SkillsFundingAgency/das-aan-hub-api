@@ -20,10 +20,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             UserType = MembershipUserType.Employer,
             Joined = command.Joined,
             Information = command.Information,
-            Created = DateTime.Now,
-            Updated = DateTime.Now,
             ReviewStatus = MembershipReviewStatus.New,
-            Deleted = null,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Employer = new Employer
@@ -34,8 +31,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 Email = command.Email,
                 Organisation = command.Organisation,
                 LastUpdated = DateTime.Now,
-                Name = command.Name,
-                IsActive = true
+                Name = command.Name
             }
         };
     }
