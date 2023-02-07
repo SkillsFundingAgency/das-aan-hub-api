@@ -12,4 +12,6 @@ Post-Deployment Script Template
 
 :r .\AddRegionData.sql
 :r .\AddMemberData.sql
+:r .\AddProfileData.sql
+:r .\AddPermissionsData.sql
 
