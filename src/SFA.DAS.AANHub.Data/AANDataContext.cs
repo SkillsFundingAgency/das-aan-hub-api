@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data
 {
@@ -18,6 +18,7 @@ namespace SFA.DAS.AANHub.Data
         public DbSet<Calendar> Calendars => Set<Calendar>();
         public DbSet<CalendarPermission> CalendarPermissions => Set<CalendarPermission>();
         public DbSet<MemberPermission> MemberPermissions => Set<MemberPermission>();
+        public DbSet<Profile> Profiles => Set<Profile>();
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
