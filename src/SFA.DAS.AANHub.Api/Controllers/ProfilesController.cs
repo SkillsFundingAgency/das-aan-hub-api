@@ -25,11 +25,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [HttpGet]
         [Produces("application/json")]
         [ProducesResponseType(typeof(GetProfilesQueryResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProfiles()
+        public async Task<IActionResult> GetProfiles([FromQuery] string userType)
         {
             _logger.LogInformation("AAN Hub API: Received command to get profiles");
 
-            var result = await _mediator.Send(new GetProfilesQuery());
+            var result = await _mediator.Send(new GetProfilesQuery(userType));
 
             return GetResponse(result);
         }
