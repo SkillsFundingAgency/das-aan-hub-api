@@ -4,6 +4,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IProfilesReadRepository
     {
-        Task<List<Profile>> GetAllProfiles();
+        Task<List<Profile>> GetAllProfiles(string userType);
     }
 }

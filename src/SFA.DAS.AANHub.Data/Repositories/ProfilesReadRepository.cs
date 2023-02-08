@@ -10,9 +10,9 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public ProfilesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task<List<Profile>> GetAllProfiles() => await _aanDataContext
+        public async Task<List<Profile>> GetAllProfiles(string userType) => await _aanDataContext
                 .Profiles
-                .AsNoTracking()
+                .AsNoTracking().Where(x => x.UserType.Equals(userType))
                 .ToListAsync();
     }
 }
