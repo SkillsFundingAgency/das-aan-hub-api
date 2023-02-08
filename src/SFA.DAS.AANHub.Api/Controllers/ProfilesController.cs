@@ -18,6 +18,13 @@ namespace SFA.DAS.AANHub.Api.Controllers
             _mediator = mediator;
         }
 
+        /// <summary>
+        /// Get list of profiles
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GetProfilesQueryResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProfiles()
         {
             _logger.LogInformation("AAN Hub API: Received command to get profiles");

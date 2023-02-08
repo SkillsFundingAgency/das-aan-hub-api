@@ -1,0 +1,18 @@
+﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+
+namespace SFA.DAS.AANHub.Data.Repositories
+{
+    internal class ProfilesReadRepository : IProfilesReadRepository
+    {
+        private readonly AanDataContext _aanDataContext;
+
+        public ProfilesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
+
+        public async Task<List<Profile>> GetAllProfiles() => await _aanDataContext
+                .Profiles
+                .AsNoTracking()
+                .ToListAsync();
+    }
+}
