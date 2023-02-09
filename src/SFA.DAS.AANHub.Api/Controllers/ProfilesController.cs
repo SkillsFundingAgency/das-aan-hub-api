@@ -10,9 +10,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
     public class ProfilesController : ActionResponseControllerBase
     {
         private const string ControllerName = "Profiles";
-        private readonly ILogger<AdminsController> _logger;
+        private readonly ILogger<ProfilesController> _logger;
         private readonly IMediator _mediator;
-        public ProfilesController(ILogger<AdminsController> logger, IMediator mediator)
+        public ProfilesController(ILogger<ProfilesController> logger, IMediator mediator)
         {
             _logger = logger;
             _mediator = mediator;
@@ -24,7 +24,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <returns></returns>
         [HttpGet]
         [Produces("application/json")]
-        [ProducesResponseType(typeof(GetProfilesQueryResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(List<ProfileModel>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetProfiles([FromQuery] string userType)
         {
             _logger.LogInformation("AAN Hub API: Received command to get profiles");
