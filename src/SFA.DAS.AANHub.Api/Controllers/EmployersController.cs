@@ -35,9 +35,10 @@ namespace SFA.DAS.AANHub.Api.Controllers
         public async Task<IActionResult> CreateEmployer([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid userId,
             CreateEmployerModel request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}",
+            _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserId: {userId}. Requesting user: {userId}",
                 request.AccountId,
-                request.UserRef);
+                request.UserRef,
+                userId);
 
             CreateEmployerMemberCommand command = request;
             command.RequestedByMemberId = userId;

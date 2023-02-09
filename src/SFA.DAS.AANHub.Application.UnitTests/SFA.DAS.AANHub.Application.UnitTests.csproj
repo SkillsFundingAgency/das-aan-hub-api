@@ -35,7 +35,4 @@
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Api\SFA.DAS.AANHub.Api.csproj" />
   </ItemGroup>
-
-
-
 </Project>

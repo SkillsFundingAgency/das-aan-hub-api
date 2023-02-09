@@ -89,7 +89,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var queryResult = result.Value as GetEmployerMemberResult;
             queryResult.Should().BeEquivalentTo(handlerResult.Result);
 
-            _mediator.Verify(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>()));
+            _mediator.Verify(m => m.Send(It.Is<GetEmployerMemberQuery>(q => q.UserRef == userRef), It.IsAny<CancellationToken>()));
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var result = getResult as OkObjectResult;
             result.Should().NotBeNull();
-            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+            Assert.AreEqual(result?.Value, response.Result);
         }
 
         [Test]

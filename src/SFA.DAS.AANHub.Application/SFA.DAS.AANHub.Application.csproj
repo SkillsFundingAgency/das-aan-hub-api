@@ -17,6 +17,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
   </ItemGroup>
-
-
 </Project>

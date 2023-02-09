@@ -8,4 +8,5 @@
     [Name] NVARCHAR(200) NOT NULL, 
     [LastUpdated] DATETIME NOT NULL
     CONSTRAINT [FK_Employer_Member] FOREIGN KEY ([MemberId]) REFERENCES [Member]([Id])
+    CONSTRAINT [UK_Employer] UNIQUE ([UserRef])
 )

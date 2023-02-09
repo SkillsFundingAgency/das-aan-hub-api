@@ -7,7 +7,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
     public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
     {
-        private const string EmployerPairAlreadyCreatedErrorMessage = "UserRef already exists";
+        private const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
 
         private readonly IEmployersReadRepository _employersReadRepository;
 
@@ -20,8 +20,8 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             Include(new RequestedByMemberIdValidator(membersReadRepository));
             RuleFor(c => c.UserRef)
                 .NotEmpty()
-                .MustAsync(async (command, _, _) => await CheckUserRefExists(command.UserRef))
-                .WithMessage(EmployerPairAlreadyCreatedErrorMessage);
+                .MustAsync(async (command, _, _) => await IsNewUser(command.UserRef))
+                .WithMessage(UserRefAlreadyCreatedErrorMessage);
 
             RuleFor(c => c.Organisation)
                 .NotEmpty()
@@ -31,7 +31,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
                 .NotEmpty();
         }
 
-        private async Task<bool> CheckUserRefExists(Guid userRef)
+        private async Task<bool> IsNewUser(Guid userRef)
         {
             var result = await _employersReadRepository.GetEmployerByUserRef(userRef);
             return result == null;
