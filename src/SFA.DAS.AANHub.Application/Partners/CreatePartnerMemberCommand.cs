@@ -27,6 +27,7 @@ namespace SFA.DAS.AANHub.Application.Partners
                 MemberId = command.Id,
                 Email = command.Email,
                 UserName = command.UserName,
+                Name = command.Name,
                 Organisation = command.Organisation,
                 LastUpdated = DateTime.Now
             }
