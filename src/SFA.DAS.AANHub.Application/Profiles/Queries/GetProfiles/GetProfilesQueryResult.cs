@@ -1,6 +1,4 @@
-﻿using SFA.DAS.AANHub.Domain.Entities;
-
-namespace SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles
+﻿namespace SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles
 {
     public class GetProfilesQueryResult
     {

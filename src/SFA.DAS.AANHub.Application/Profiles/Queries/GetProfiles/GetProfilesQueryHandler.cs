@@ -16,6 +16,5 @@ namespace SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles
             var models = profiles.Select(p => (ProfileModel)p).ToList();
             return new ValidatedResponse<List<ProfileModel>>(models);
         }
-
     }
 }

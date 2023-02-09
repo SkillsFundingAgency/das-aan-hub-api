@@ -7,7 +7,9 @@ namespace SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles
     {
         public GetProfilesQueryValidator()
         {
-            RuleFor(a => a.UserType).IsEnumName(typeof(UserType), caseSensitive: false);
+            RuleFor(a => a.UserType)
+                .NotEmpty()
+                .IsEnumName(typeof(UserType), caseSensitive: false);
         }
     }
 }
