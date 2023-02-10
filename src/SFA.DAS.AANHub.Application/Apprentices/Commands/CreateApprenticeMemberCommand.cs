@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands
         IRequestedByMemberId
     {
         public long ApprenticeId { get; set; }
-        public Guid? RequestedByMemberId { get; set; }
+        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
         {

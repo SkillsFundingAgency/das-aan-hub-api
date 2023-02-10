@@ -17,11 +17,4 @@
   <ItemGroup>
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Apprentices\Commands\" />
-    <Folder Include="Common\Validators\RequestedByMemberId\" />
-    <Folder Include="Partners\Queries\" />
-  </ItemGroup>
-
 </Project>

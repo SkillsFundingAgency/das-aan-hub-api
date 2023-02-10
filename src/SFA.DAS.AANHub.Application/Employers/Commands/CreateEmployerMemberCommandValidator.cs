@@ -7,7 +7,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
 {
     public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
     {
-        private const string EmployerPairAlreadyCreatedErrorMessage = "UserId and AccountId pair already exist";
+        private const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
 
         private readonly IEmployersReadRepository _employersReadRepository;
 
@@ -18,27 +18,22 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
 
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
             Include(new RequestedByMemberIdValidator(membersReadRepository));
-            RuleFor(c => c.UserId)
-                .NotEmpty();
+            RuleFor(c => c.UserRef)
+                .NotEmpty()
+                .MustAsync(async (command, _, _) => await IsNewUser(command.UserRef))
+                .WithMessage(UserRefAlreadyCreatedErrorMessage);
 
             RuleFor(c => c.Organisation)
                 .NotEmpty()
                 .MaximumLength(250);
 
             RuleFor(c => c.AccountId)
-                .NotEmpty()
-                .MustAsync(async (command, _, _) => await CheckAccountIdAndUserIdPair(command.AccountId, command.UserId))
-                .WithMessage(EmployerPairAlreadyCreatedErrorMessage);
-
-            RuleFor(c => c.UserId)
-                .NotEmpty()
-                .MustAsync(async (command, _, _) => await CheckAccountIdAndUserIdPair(command.AccountId, command.UserId))
-                .WithMessage(EmployerPairAlreadyCreatedErrorMessage);
+                .NotEmpty();
         }
 
-        private async Task<bool> CheckAccountIdAndUserIdPair(long accountId, long userId)
+        private async Task<bool> IsNewUser(Guid userRef)
         {
-            var result = await _employersReadRepository.GetEmployerByAccountIdAndUserId(accountId, userId);
+            var result = await _employersReadRepository.GetEmployerByUserRef(userRef);
             return result == null;
         }
     }

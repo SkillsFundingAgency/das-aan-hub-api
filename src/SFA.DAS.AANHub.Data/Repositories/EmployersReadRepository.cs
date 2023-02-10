@@ -12,9 +12,10 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public EmployersReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task<Employer?> GetEmployerByAccountIdAndUserId(long accountId, long userId) => await _aanDataContext
+        public async Task<Employer?> GetEmployerByUserRef(Guid userRef) => await _aanDataContext
             .Employers
-            .AsNoTracking().Where(m => m.AccountId == accountId && m.UserId == userId)
+            .AsNoTracking()
+            .Where(m => m.UserRef == userRef)
             .SingleOrDefaultAsync();
     }
 }

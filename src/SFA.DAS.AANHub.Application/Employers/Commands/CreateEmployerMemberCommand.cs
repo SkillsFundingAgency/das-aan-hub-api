@@ -10,9 +10,9 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
     public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateEmployerMemberCommandResponse>>, IRequestedByMemberId
     {
         public long AccountId { get; init; }
-        public long UserId { get; init; }
-        public string? Organisation { get; init; }
-        public Guid? RequestedByMemberId { get; set; }
+        public Guid UserRef { get; init; }
+        public string Organisation { get; set; } = null!;
+        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateEmployerMemberCommand command) => new()
         {
@@ -27,7 +27,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands
             {
                 MemberId = command.Id,
                 AccountId = command.AccountId,
-                UserId = command.UserId,
+                UserRef = command.UserRef,
                 Email = command.Email,
                 Organisation = command.Organisation,
                 LastUpdated = DateTime.Now,

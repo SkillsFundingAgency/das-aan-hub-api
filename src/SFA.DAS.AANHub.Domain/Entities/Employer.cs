@@ -4,10 +4,10 @@
     {
         public Guid MemberId { get; set; }
         public long AccountId { get; set; }
-        public long UserId { get; set; }
-        public string? Email { get; set; }
-        public string? Name { get; set; }
-        public string? Organisation { get; set; }
+        public Guid UserRef { get; set; }
+        public string Email { get; set; } = null!;
+        public string Name { get; set; } = null!;
+        public string Organisation { get; set; } = null!;
         public DateTime LastUpdated { get; set; }
     }
 }
