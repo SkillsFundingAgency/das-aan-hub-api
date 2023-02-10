@@ -9,7 +9,6 @@ namespace SFA.DAS.AANHub.Api.Controllers
     [ApiController]
     public class ProfilesController : ActionResponseControllerBase
     {
-        private const string ControllerName = "Profiles";
         private readonly ILogger<ProfilesController> _logger;
         private readonly IMediator _mediator;
         public ProfilesController(ILogger<ProfilesController> logger, IMediator mediator)
