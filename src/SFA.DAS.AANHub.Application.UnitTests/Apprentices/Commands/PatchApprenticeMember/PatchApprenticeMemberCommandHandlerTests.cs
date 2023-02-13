@@ -12,8 +12,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
 {
     public class PatchApprenticeMemberCommandHandlerTests
     {
-
-        [Test, AutoMoqData]
+        [Test]
+        [AutoMoqData]
         public async Task Handle_DataFound_Patch(
             [Frozen] Mock<IApprenticesWriteRepository> editRepoMock,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
@@ -23,7 +23,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         {
             var apprenticeId = 123;
             var requestedByMemberId = Guid.NewGuid();
-            editRepoMock.Setup(r => r.GetApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync(apprentice);
+            editRepoMock.Setup(r => r.GetPatchApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync(apprentice);
 
             var patchDoc = new JsonPatchDocument<Apprentice>();
             patchDoc.Replace(path => path.Email, apprentice.Email);
@@ -33,7 +33,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             {
                 ApprenticeId = apprenticeId,
                 RequestedByMemberId = requestedByMemberId,
-                Patchdoc = patchDoc
+                PatchDoc = patchDoc
             };
 
             var response = await sut.Handle(command, cancellationToken);
@@ -45,7 +45,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "Patch" && x.ActionedBy == command.RequestedByMemberId && x.Resource == MembershipUserType.Apprentice)));
         }
 
-        [Test, AutoMoqData]
+        [Test]
+        [AutoMoqData]
         public async Task Handle_NoDataFound(
             [Frozen] Mock<IApprenticesWriteRepository> editRepoMock,
             PatchApprenticeMemberCommandHandler sut,
@@ -54,7 +55,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         {
             var apprenticeId = 123;
             var requestedByMemberId = Guid.NewGuid();
-            editRepoMock.Setup(r => r.GetApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync((Apprentice?)null);
+            editRepoMock.Setup(r => r.GetPatchApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync((Apprentice?)null);
 
             var patchDoc = new JsonPatchDocument<Apprentice>();
             patchDoc.Replace(path => path.Email, apprentice.Email);
@@ -64,7 +65,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             {
                 ApprenticeId = apprenticeId,
                 RequestedByMemberId = requestedByMemberId,
-                Patchdoc = patchDoc
+                PatchDoc = patchDoc
             };
 
             var response = await sut.Handle(command, cancellationToken);

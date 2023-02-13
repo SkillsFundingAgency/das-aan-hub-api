@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories
 {
@@ -14,10 +14,9 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public void Create(Apprentice apprentice) => _aanDataContext.Apprentices.Add(apprentice);
 
-        public async Task<Apprentice?> GetApprentice(long apprenticeId) => await _aanDataContext
+        public async Task<Apprentice?> GetPatchApprentice(long apprenticeId) => await _aanDataContext
             .Apprentices
             .Where(a => a.ApprenticeId == apprenticeId)
             .SingleOrDefaultAsync();
-
     }
 }

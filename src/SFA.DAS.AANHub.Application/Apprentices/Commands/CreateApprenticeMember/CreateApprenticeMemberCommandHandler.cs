@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Commands
+namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
 {
     public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateApprenticeMemberCommand,
         ValidatedResponse<CreateApprenticeMemberCommandResponse>>

@@ -28,9 +28,9 @@ namespace SFA.DAS.AANHub.Api.Common
             return new BadRequestObjectResult(FormatErrors(response.Errors));
         }
 
-        protected IActionResult GetPatchResponse<T>(ValidatedResponse<T> response) where T : PatchMemberCommandResponseBase
+        protected IActionResult GetPatchResponse(ValidatedResponse<PatchMemberCommandResponse> response)
         {
-            if (response.Result != null && !response.Result.IsSuccess) return NotFound();
+            if (response.Result is { IsSuccess: false }) return NotFound();
 
             if (response.IsValidResponse) return NoContent();
 

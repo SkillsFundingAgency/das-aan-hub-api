@@ -29,15 +29,19 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             {
                 RequestedByMemberId = memberId,
                 ApprenticeId = apprenticeId,
-                Patchdoc = new JsonPatchDocument<Apprentice>()
+                PatchDoc = new JsonPatchDocument<Apprentice>()
             };
 
-            command.Patchdoc = new JsonPatchDocument<Apprentice>
+            command.PatchDoc = new JsonPatchDocument<Apprentice>
             {
                 Operations =
                 {
                     new Operation<Apprentice>
-                        { op = nameof(OperationType.Replace), path = Name, value = nameValue }
+                    {
+                        op = nameof(OperationType.Replace),
+                        path = Name,
+                        value = nameValue
+                    }
                 }
             };
 
@@ -63,15 +67,19 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             {
                 RequestedByMemberId = memberId,
                 ApprenticeId = apprenticeId,
-                Patchdoc = new JsonPatchDocument<Apprentice>()
+                PatchDoc = new JsonPatchDocument<Apprentice>()
             };
 
-            command.Patchdoc = new JsonPatchDocument<Apprentice>
+            command.PatchDoc = new JsonPatchDocument<Apprentice>
             {
                 Operations =
                 {
                     new Operation<Apprentice>
-                        { op = nameof(OperationType.Replace), path = Name, value = nameValue }
+                    {
+                        op = nameof(OperationType.Replace),
+                        path = Name,
+                        value = nameValue
+                    }
                 }
             };
 

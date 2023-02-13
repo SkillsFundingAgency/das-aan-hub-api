@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AANHub.Application.Apprentices.Commands;
+﻿using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 
 namespace SFA.DAS.AANHub.Api.Models
 {

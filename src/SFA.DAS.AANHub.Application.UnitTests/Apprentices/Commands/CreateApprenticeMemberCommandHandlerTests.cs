@@ -2,7 +2,7 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;

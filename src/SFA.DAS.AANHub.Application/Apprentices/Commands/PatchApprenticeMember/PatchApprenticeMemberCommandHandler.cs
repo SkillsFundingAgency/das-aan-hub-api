@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using MediatR;
+using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
@@ -8,11 +9,11 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
 {
-    public class PatchApprenticeMemberCommandHandler : IRequestHandler<PatchApprenticeMemberCommand, ValidatedResponse<PatchApprenticeMemberCommandResponse>>
+    public class PatchApprenticeMemberCommandHandler : IRequestHandler<PatchApprenticeMemberCommand, ValidatedResponse<PatchMemberCommandResponse>>
     {
+        private readonly IAanDataContext _aanDataContext;
         private readonly IApprenticesWriteRepository _apprenticesWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
-        private readonly IAanDataContext _aanDataContext;
 
         public PatchApprenticeMemberCommandHandler(IApprenticesWriteRepository apprenticesWriteRepository,
             IAuditWriteRepository auditWriteRepository,
@@ -23,17 +24,16 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
             _aanDataContext = aanDataContext;
         }
 
-        public async Task<ValidatedResponse<PatchApprenticeMemberCommandResponse>> Handle(PatchApprenticeMemberCommand command, CancellationToken cancellationToken)
+        public async Task<ValidatedResponse<PatchMemberCommandResponse>> Handle(PatchApprenticeMemberCommand command,
+            CancellationToken cancellationToken)
         {
-            var success = true;
-
             var apprentice = await
-                _apprenticesWriteRepository.GetApprentice(command.ApprenticeId);
+                _apprenticesWriteRepository.GetPatchApprentice(command.ApprenticeId);
 
             if (apprentice == null)
-                return new ValidatedResponse<PatchApprenticeMemberCommandResponse>(new PatchApprenticeMemberCommandResponse(false));
+                return new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
 
-            var audit = new Audit()
+            var audit = new Audit
             {
                 Action = "Patch",
                 ActionedBy = command.RequestedByMemberId,
@@ -42,7 +42,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
                 Resource = MembershipUserType.Apprentice
             };
 
-            command.Patchdoc.ApplyTo(apprentice);
+            command.PatchDoc.ApplyTo(apprentice);
 
             audit.After = JsonSerializer.Serialize(apprentice);
 
@@ -50,8 +50,8 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return new ValidatedResponse<PatchApprenticeMemberCommandResponse>
-            (new PatchApprenticeMemberCommandResponse(success));
+            return new ValidatedResponse<PatchMemberCommandResponse>
+                (new PatchMemberCommandResponse(true));
         }
     }
 }

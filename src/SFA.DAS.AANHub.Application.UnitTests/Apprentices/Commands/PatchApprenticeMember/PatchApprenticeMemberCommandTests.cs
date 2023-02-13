@@ -20,13 +20,18 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
 
             var testValue = "value";
             var patchDoc = new JsonPatchDocument<Apprentice>();
-            patchDoc.Operations.Add(new Operation<Apprentice> { op = nameof(OperationType.Replace), path = Email, value = testValue });
+            patchDoc.Operations.Add(new Operation<Apprentice>
+            {
+                op = nameof(OperationType.Replace),
+                path = Email,
+                value = testValue
+            });
 
             var command = new PatchApprenticeMemberCommand
             {
                 RequestedByMemberId = memberId,
                 ApprenticeId = apprenticeId,
-                Patchdoc = patchDoc
+                PatchDoc = patchDoc
             };
 
             Assert.AreEqual(testValue, command.Email);
@@ -44,13 +49,18 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
 
             var testValue = "value";
             var patchDoc = new JsonPatchDocument<Apprentice>();
-            patchDoc.Operations.Add(new Operation<Apprentice> { op = nameof(OperationType.Replace), path = Name, value = testValue });
+            patchDoc.Operations.Add(new Operation<Apprentice>
+            {
+                op = nameof(OperationType.Replace),
+                path = Name,
+                value = testValue
+            });
 
             var command = new PatchApprenticeMemberCommand
             {
                 RequestedByMemberId = memberId,
                 ApprenticeId = apprenticeId,
-                Patchdoc = patchDoc
+                PatchDoc = patchDoc
             };
 
             Assert.AreEqual(testValue, command.Name);
@@ -71,7 +81,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             {
                 RequestedByMemberId = memberId,
                 ApprenticeId = apprenticeId,
-                Patchdoc = patchDoc
+                PatchDoc = patchDoc
             };
 
             Assert.AreEqual(null, command.Email);

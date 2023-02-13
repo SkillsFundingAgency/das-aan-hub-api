@@ -1,7 +1,6 @@
-﻿using FluentAssertions;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Application.UnitTests;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Models
@@ -9,7 +8,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Models
     [TestFixture]
     public class CreateApprenticeMemberCommandTests
     {
-        [Test, AutoMoqData]
+        [Test]
+        [AutoMoqData]
         public void Operator_PopulatesModelFromSummaryModel(CreateApprenticeModel createApprenticeModel)
         {
             var model = (CreateApprenticeMemberCommand)createApprenticeModel;
