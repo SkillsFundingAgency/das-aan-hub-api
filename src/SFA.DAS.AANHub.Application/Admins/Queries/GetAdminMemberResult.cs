@@ -9,6 +9,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Queries
         public Guid MemberId { get; set; }
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
+        public string? Status { get; set; }
 
         public static implicit operator GetAdminMemberResult?(Admin? admin)
         {
@@ -19,7 +20,8 @@ namespace SFA.DAS.AANHub.Application.Admins.Queries
             {
                 Email = admin.Email,
                 Name = admin.Name,
-                MemberId = admin.MemberId
+                MemberId = admin.MemberId,
+                Status = admin.Member.Status
             };
         }
     }

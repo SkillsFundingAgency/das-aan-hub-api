@@ -17,6 +17,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Queries
             Assert.AreEqual(partner.MemberId, response!.MemberId);
             Assert.AreEqual(partner.Organisation, response.Organisation);
             Assert.AreEqual(partner.Email, response.Email);
+            Assert.AreEqual(partner.Member.Status, response.Status);
+
 
         }
 

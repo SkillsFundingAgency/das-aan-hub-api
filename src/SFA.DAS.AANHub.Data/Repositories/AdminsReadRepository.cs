@@ -14,7 +14,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public async Task<Admin?> GetAdminByUserName(string userName) => await _aanDataContext
             .Admins
-            .AsNoTracking().Where(a => a.UserName == userName)
+            .AsNoTracking().Where(a => a.UserName == userName).Include(x => x.Member)
             .SingleOrDefaultAsync();
     }
 }
