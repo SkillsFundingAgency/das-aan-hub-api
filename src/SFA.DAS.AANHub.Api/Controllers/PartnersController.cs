@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers

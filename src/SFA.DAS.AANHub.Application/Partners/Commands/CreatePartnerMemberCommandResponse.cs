@@ -1,7 +1,7 @@
 ﻿using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.Partners
+namespace SFA.DAS.AANHub.Application.Partners.Commands
 {
     public class CreatePartnerMemberCommandResponse : CreateMemberCommandResponseBase
     {

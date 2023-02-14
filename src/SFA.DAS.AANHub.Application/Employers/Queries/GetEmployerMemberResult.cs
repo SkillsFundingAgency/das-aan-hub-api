@@ -8,6 +8,8 @@ namespace SFA.DAS.AANHub.Application.Employers.Queries
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Organisation { get; set; } = null!;
+        public string Status { get; set; } = null!;
+
 
         public static implicit operator GetEmployerMemberResult?(Employer? employer)
         {
@@ -19,7 +21,8 @@ namespace SFA.DAS.AANHub.Application.Employers.Queries
                 Email = employer.Email,
                 Name = employer.Name,
                 Organisation = employer.Organisation,
-                MemberId = employer.MemberId
+                MemberId = employer.MemberId,
+                Status = employer.Member.Status!
             };
         }
     }

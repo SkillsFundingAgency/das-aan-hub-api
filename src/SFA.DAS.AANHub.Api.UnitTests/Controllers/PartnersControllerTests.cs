@@ -10,7 +10,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 using SFA.DAS.AANHub.Application.UnitTests;
 using static SFA.DAS.AANHub.Domain.Common.Constants;

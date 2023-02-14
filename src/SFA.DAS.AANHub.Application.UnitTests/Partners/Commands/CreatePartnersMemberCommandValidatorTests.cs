@@ -1,7 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands

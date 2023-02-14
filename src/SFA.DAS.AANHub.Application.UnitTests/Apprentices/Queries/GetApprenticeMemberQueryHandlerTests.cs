@@ -13,16 +13,24 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
         public async Task Handle_GetApprenticeMember()
         {
             long apprenticeId = 0;
-            Guid memberid = new();
 
             var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
-            var apprentice = new Apprentice();
+            var apprentice = new Apprentice
+            {
+                Name = "ThisIsAName",
+                MemberId = Guid.NewGuid(),
+                Email = "email@email.com",
+                Member = new Member() { Status = "live" }
+            };
             apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(apprentice);
             var sut = new GetApprenticeMemberQueryHandler(apprenticesReadRepositoryMock.Object);
 
             var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
 
-            Assert.AreEqual(memberid, result.Result.MemberId);
+            Assert.AreEqual(apprentice.MemberId, result.Result.MemberId);
+            Assert.AreEqual(apprentice.Name, result.Result.Name);
+            Assert.AreEqual(apprentice.Email, result.Result.Email);
+            Assert.AreEqual(apprentice.Member.Status, result.Result.Status);
         }
     }
 }

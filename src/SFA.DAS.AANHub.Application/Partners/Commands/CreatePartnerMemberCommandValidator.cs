@@ -3,7 +3,7 @@ using SFA.DAS.AANHub.Application.Common.Validators;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Partners
+namespace SFA.DAS.AANHub.Application.Partners.Commands
 {
     public class CreatePartnerMemberCommandValidator : AbstractValidator<CreatePartnerMemberCommand>
     {

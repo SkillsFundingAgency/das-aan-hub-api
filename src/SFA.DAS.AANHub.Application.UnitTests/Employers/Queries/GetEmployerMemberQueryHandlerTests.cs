@@ -15,6 +15,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Queries
             var name = "name";
             var email = "email@email.com";
             var organisation = "w3c";
+            var status = "live";
 
             var userRef = new Guid();
             Guid memberId = new();
@@ -24,7 +25,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Queries
             {
                 Name = name,
                 Email = email,
-                Organisation = organisation
+                Organisation = organisation,
+                Member = new Member() { Status = status }
             };
 
             employersReadRepositoryMock.Setup(a => a.GetEmployerByUserRef(userRef)).ReturnsAsync(employer);
@@ -36,6 +38,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Queries
             Assert.AreEqual(name, result!.Result.Name);
             Assert.AreEqual(email, result!.Result.Email);
             Assert.AreEqual(organisation, result!.Result.Organisation);
+            Assert.AreEqual(status, result!.Result.Status);
+
         }
 
         [Test]

@@ -9,5 +9,6 @@
         public string Name { get; set; } = null!;
         public string Organisation { get; set; } = null!;
         public DateTime LastUpdated { get; set; }
+        public Member Member { get; set; } = null!;
     }
 }
