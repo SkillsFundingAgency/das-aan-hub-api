@@ -8,6 +8,7 @@ namespace SFA.DAS.AANHub.Application.Partners.Queries
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
         public string Organisation { get; set; } = null!;
+        public string? Status { get; set; }
 
         public static implicit operator GetPartnerMemberResult?(Partner? partner)
         {
@@ -20,6 +21,7 @@ namespace SFA.DAS.AANHub.Application.Partners.Queries
                 Organisation = partner.Organisation,
                 Name = partner.Name,
                 MemberId = partner.MemberId,
+                Status = partner.Member.Status
             };
         }
     }
