@@ -5,6 +5,8 @@ namespace SFA.DAS.AANHub.Application.Common.Commands
 {
     public abstract class PatchMemberCommandBase<T> where T : class
     {
+        public DateTime LastUpdated { get; } = DateTime.Now;
+
         public JsonPatchDocument<T> PatchDoc { get; set; } = null!;
 
         protected static string? GetReplacementValue(JsonPatchDocument<T> patchDoc, string propertyIdentifier) => patchDoc.Operations

@@ -1,6 +1,7 @@
-﻿using SFA.DAS.AANHub.Domain.Entities;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories
 {
@@ -12,5 +13,10 @@ namespace SFA.DAS.AANHub.Data.Repositories
         public AdminsWriteRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
         public void Create(Admin admin) => _aanDataContext.Admins.Add(admin);
+
+        public async Task<Admin?> GetPatchAdmin(string userName) => await _aanDataContext
+            .Admins
+            .Where(a => a.UserName == userName)
+            .SingleOrDefaultAsync();
     }
 }

@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AANHub.Application.Admins.Commands;
+﻿using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 
 namespace SFA.DAS.AANHub.Api.Models
 {
