@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Partners
+namespace SFA.DAS.AANHub.Application.Partners.Commands
 {
     public class CreatePartnerMemberCommandHandler : IRequestHandler<CreatePartnerMemberCommand, ValidatedResponse<CreatePartnerMemberCommandResponse>>
     {
