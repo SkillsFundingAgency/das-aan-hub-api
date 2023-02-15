@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Apprentices.Commands;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
@@ -7,7 +7,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
     [TestFixture]
     public class MemberTest
     {
-        [Test, AutoMoqData]
+        [Test]
+        [AutoMoqData]
         public void Apprentice_PopulatesMemberFromCreateApprenticeMemberCommand(CreateApprenticeMemberCommand createApprenticeMemberCommand)
         {
             var command = (Member)createApprenticeMemberCommand;
@@ -20,4 +21,3 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
         }
     }
 }
-

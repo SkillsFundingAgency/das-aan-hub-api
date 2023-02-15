@@ -5,7 +5,7 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Commands
+namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
 {
     public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateApprenticeMemberCommandResponse>>,
         IRequestedByMemberId

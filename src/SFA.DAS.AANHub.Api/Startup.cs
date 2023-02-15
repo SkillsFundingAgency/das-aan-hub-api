@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Data.Extensions;
 using SFA.DAS.AANHub.Domain.Configuration;
@@ -79,7 +81,12 @@ namespace SFA.DAS.AANHub.Api
                     if (!IsEnvironmentLocalOrDev)
                         options.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
                 })
-                .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); });
+                .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); })
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.Converters.Add(new StringEnumConverter());
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
 
             services.AddSwaggerGen(c =>
             {
