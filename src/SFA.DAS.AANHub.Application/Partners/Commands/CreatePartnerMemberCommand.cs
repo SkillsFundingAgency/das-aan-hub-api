@@ -4,8 +4,7 @@ using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
-
-namespace SFA.DAS.AANHub.Application.Partners
+namespace SFA.DAS.AANHub.Application.Partners.Commands
 {
     public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreatePartnerMemberCommandResponse>>, IRequestedByMemberId
     {

@@ -4,7 +4,7 @@ using SFA.DAS.AANHub.Application.Admins.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries
 {
     [TestFixture]
     public class GetAdminMemberQueryHandlerTests
