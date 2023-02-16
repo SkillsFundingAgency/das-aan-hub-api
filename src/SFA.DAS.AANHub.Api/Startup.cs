@@ -9,7 +9,9 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Data.Extensions;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Configuration;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
@@ -104,6 +106,7 @@ namespace SFA.DAS.AANHub.Api
 
             services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"], _environmentName);
             services.AddApplicationRegistrations();
+            services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

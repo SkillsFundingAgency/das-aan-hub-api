@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AANHub.Application.Partners;
+﻿using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 
 namespace SFA.DAS.AANHub.Api.Models
 {

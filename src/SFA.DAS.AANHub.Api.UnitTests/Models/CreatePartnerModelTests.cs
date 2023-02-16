@@ -1,7 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Application.UnitTests;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Models
