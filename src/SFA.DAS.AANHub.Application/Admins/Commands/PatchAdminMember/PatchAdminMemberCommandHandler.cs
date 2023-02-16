@@ -42,6 +42,8 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember
                 Resource = MembershipUserType.Admin
             };
 
+            admin.LastUpdated = DateTime.UtcNow;
+
             command.PatchDoc.ApplyTo(admin);
 
             audit.After = JsonSerializer.Serialize(admin);

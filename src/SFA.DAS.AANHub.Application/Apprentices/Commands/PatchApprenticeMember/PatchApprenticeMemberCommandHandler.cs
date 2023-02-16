@@ -42,6 +42,8 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
                 Resource = MembershipUserType.Apprentice
             };
 
+            apprentice.LastUpdated = DateTime.UtcNow;
+
             command.PatchDoc.ApplyTo(apprentice);
 
             audit.After = JsonSerializer.Serialize(apprentice);
