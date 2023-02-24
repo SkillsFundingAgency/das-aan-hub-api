@@ -14,14 +14,17 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember
         private readonly IAanDataContext _aanDataContext;
         private readonly IAdminsWriteRepository _adminsWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
         public PatchAdminMemberCommandHandler(IAdminsWriteRepository adminsWriteRepository,
             IAuditWriteRepository auditWriteRepository,
-            IAanDataContext aanDataContext)
+            IAanDataContext aanDataContext,
+            IDateTimeProvider dateTimeProvider)
         {
             _adminsWriteRepository = adminsWriteRepository;
             _auditWriteRepository = auditWriteRepository;
             _aanDataContext = aanDataContext;
+            _dateTimeProvider = dateTimeProvider;
         }
 
         public async Task<ValidatedResponse<PatchMemberCommandResponse>> Handle(PatchAdminMemberCommand command,
@@ -37,12 +40,12 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember
             {
                 Action = "Patch",
                 ActionedBy = command.RequestedByMemberId,
-                AuditTime = DateTime.UtcNow,
+                AuditTime = _dateTimeProvider.Now,
                 Before = JsonSerializer.Serialize(admin),
                 Resource = MembershipUserType.Admin
             };
 
-            admin.LastUpdated = DateTime.UtcNow;
+            admin.LastUpdated = _dateTimeProvider.Now;
 
             command.PatchDoc.ApplyTo(admin);
 
