@@ -3,16 +3,21 @@ using FluentAssertions;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
+using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 using SFA.DAS.AANHub.Application.UnitTests;
+using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
@@ -211,6 +216,94 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchPartner_InvokesRequest(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] PartnersController sut,
+            Guid userId, string userName)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Partner>();
+            patchDoc.Operations.Add(new Operation<Partner>
+            {
+                op = nameof(OperationType.Replace),
+                path = Email,
+                value = testValue
+            });
+
+            var success = true;
+            var response = new ValidatedResponse<PatchMemberCommandResponse>
+                (new PatchMemberCommandResponse(success));
+
+            mediatorMock.Setup(m => m.Send(It.Is<PatchPartnerMemberCommand>(c => c.RequestedByMemberId == userId && c.UserName == userName),
+                It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchPartner(userId, userName, patchDoc);
+
+            (result as NoContentResult).Should().NotBeNull();
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchPartner_InvokesRequest_NotFound(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] PartnersController sut,
+            Guid userId, string userName)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Partner>();
+            patchDoc.Operations.Add(new Operation<Partner>
+            {
+                op = nameof(OperationType.Replace),
+                path = Email,
+                value = testValue
+            });
+
+            var response = new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchPartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchPartner(userId, userName, patchDoc);
+
+            result.Should().NotBeNull();
+            result.As<NotFoundResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchPartner_InvokesRequest_WithErrors(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] PartnersController sut,
+            Guid userId, string userName)
+        {
+            var Email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Partner>();
+            patchDoc.Operations.Add(new Operation<Partner>
+            {
+                op = nameof(OperationType.Replace),
+                path = Email,
+                value = testValue
+            });
+
+            var response = new ValidatedResponse<PatchMemberCommandResponse>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchPartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchPartner(userId, userName, patchDoc);
+
+            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
     }
 }

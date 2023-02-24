@@ -2,11 +2,11 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands
+namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember
 {
     public class CreatePartnersMemberCommandHandlerTests
     {

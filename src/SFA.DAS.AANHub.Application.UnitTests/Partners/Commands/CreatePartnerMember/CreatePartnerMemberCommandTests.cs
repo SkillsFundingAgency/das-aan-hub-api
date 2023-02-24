@@ -1,10 +1,10 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Partners;
+using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands
+namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember
 {
     public class CreatePartnerMemberCommandTests
     {
