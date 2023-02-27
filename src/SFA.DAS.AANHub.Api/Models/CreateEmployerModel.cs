@@ -1,4 +1,4 @@
-﻿using SFA.DAS.AANHub.Application.Employers.Commands;
+﻿using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 
 namespace SFA.DAS.AANHub.Api.Models
 {

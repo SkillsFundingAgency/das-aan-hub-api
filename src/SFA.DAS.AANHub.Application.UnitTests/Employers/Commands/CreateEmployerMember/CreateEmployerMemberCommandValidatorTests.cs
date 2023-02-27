@@ -2,11 +2,11 @@
 using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Employers.Commands;
+using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands
+namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommandValidatorTests
     {

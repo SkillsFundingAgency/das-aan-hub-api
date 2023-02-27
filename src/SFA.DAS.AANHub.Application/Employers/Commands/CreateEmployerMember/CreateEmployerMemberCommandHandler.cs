@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommandHandler :
         IRequestHandler<CreateEmployerMemberCommand, ValidatedResponse<CreateEmployerMemberCommandResponse>>

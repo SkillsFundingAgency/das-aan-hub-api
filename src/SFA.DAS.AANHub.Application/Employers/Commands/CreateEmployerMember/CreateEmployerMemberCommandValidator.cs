@@ -3,7 +3,7 @@ using SFA.DAS.AANHub.Application.Common.Validators;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
     {

@@ -223,7 +223,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchPartner_InvokesRequest(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] PartnersController sut,
-            Guid userId, string userName)
+            Guid requestedByMemberId, string userName)
         {
             var Email = "Email";
             var testValue = "value";
@@ -240,10 +240,10 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var response = new ValidatedResponse<PatchMemberCommandResponse>
                 (new PatchMemberCommandResponse(success));
 
-            mediatorMock.Setup(m => m.Send(It.Is<PatchPartnerMemberCommand>(c => c.RequestedByMemberId == userId && c.UserName == userName),
+            mediatorMock.Setup(m => m.Send(It.Is<PatchPartnerMemberCommand>(c => c.RequestedByMemberId == requestedByMemberId && c.UserName == userName),
                 It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await sut.PatchPartner(userId, userName, patchDoc);
+            var result = await sut.PatchPartner(requestedByMemberId, userName, patchDoc);
 
             (result as NoContentResult).Should().NotBeNull();
         }
@@ -253,7 +253,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchPartner_InvokesRequest_NotFound(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] PartnersController sut,
-            Guid userId, string userName)
+            Guid requestedByMemberId, string userName)
         {
             var Email = "Email";
             var testValue = "value";
@@ -268,8 +268,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var response = new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
             mediatorMock.Setup(m => m.Send(It.IsAny<PatchPartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-
-            var result = await sut.PatchPartner(userId, userName, patchDoc);
+                
+            var result = await sut.PatchPartner(requestedByMemberId, userName, patchDoc);
 
             result.Should().NotBeNull();
             result.As<NotFoundResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
@@ -280,7 +280,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchPartner_InvokesRequest_WithErrors(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] PartnersController sut,
-            Guid userId, string userName)
+            Guid requestedByMemberId, string userName)
         {
             var Email = "Email";
             var testValue = "value";
@@ -301,7 +301,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             mediatorMock.Setup(m => m.Send(It.IsAny<PatchPartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await sut.PatchPartner(userId, userName, patchDoc);
+            var result = await sut.PatchPartner(requestedByMemberId, userName, patchDoc);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
