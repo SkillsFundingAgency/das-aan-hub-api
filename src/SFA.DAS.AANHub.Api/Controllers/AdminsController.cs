@@ -29,19 +29,20 @@ namespace SFA.DAS.AANHub.Api.Controllers
         ///     Creates an admin member
         /// </summary>
         /// <param name="request"></param>
-        /// <param name="userId"></param>
+        /// <param name="requestedByMemberId"></param>
         /// <returns></returns>
         [HttpPost]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateAdmin([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid userId,
+        public async Task<IActionResult> CreateAdmin(
+            [FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid requestedByMemberId,
             CreateAdminModel request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to add admin by UserId: {userId}", userId);
+            _logger.LogInformation("AAN Hub API: Received command to add admin by UserId: {requestedByMemberId}", requestedByMemberId);
 
             var command = (CreateAdminMemberCommand)request;
-            command.RequestedByMemberId = userId;
+            command.RequestedByMemberId = requestedByMemberId;
 
             var response = await _mediator.Send(command);
 
@@ -80,7 +81,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <summary>
         ///     Patch an admin member
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="requestedByMemberId"></param>
         /// <param name="userName"></param>
         /// <param name="request"></param>
         /// ///
@@ -90,16 +91,18 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PatchAdmin([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid userId,
+        public async Task<IActionResult> PatchAdmin(
+            [FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required]
+            Guid requestedByMemberId,
             [FromRoute] string userName, [FromBody] JsonPatchDocument<Admin> request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to patch admin by user name: {userName}. RequestedByUser: {userId}",
+            _logger.LogInformation("AAN Hub API: Received command to patch admin by user name: {userName}. RequestedByUser: {requestedByMemberId}",
                 userName,
-                userId);
+                requestedByMemberId);
 
             PatchAdminMemberCommand command = new()
             {
-                RequestedByMemberId = userId,
+                RequestedByMemberId = requestedByMemberId,
                 UserName = userName,
                 PatchDoc = request
             };

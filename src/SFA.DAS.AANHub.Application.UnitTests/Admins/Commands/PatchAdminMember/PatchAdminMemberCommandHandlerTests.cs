@@ -17,7 +17,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
     {
         private const string Email = "Email";
         private const string Name = "Name";
-        private const string Organisation = "Organisation";
 
         [Test]
         [AutoMoqData]
@@ -32,12 +31,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
             Admin admin,
             CancellationToken cancellationToken)
         {
-            var memberId = Guid.NewGuid();
+            var requestedByMemberId = Guid.NewGuid();
             var userName = "username";
             var emailValue = "email@w3c.com";
             var nameValue = "w3c";
 
-            membersReadRepository.Setup(a => a.GetMember(memberId)).ReturnsAsync(member);
+            membersReadRepository.Setup(a => a.GetMember(requestedByMemberId)).ReturnsAsync(member);
             adminsWriteRepoMock.Setup(r => r.GetPatchAdmin(It.Is<string>(i => i == userName))).ReturnsAsync(admin);
 
             Func<string, Admin> getAudit = auditBeforeOrAfter => JsonSerializer.Deserialize<Admin>(auditBeforeOrAfter)!;
@@ -64,7 +63,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
 
             var command = new PatchAdminMemberCommand
             {
-                RequestedByMemberId = memberId,
+                RequestedByMemberId = requestedByMemberId,
                 UserName = userName,
                 PatchDoc = patchDoc
             };
@@ -84,8 +83,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
 
             auditWriteRepository.Verify(a => a.Create(It.Is<Audit>(x =>
                 getAudit(x!.After!).LastUpdated.GetValueOrDefault().Day == admin.LastUpdated.GetValueOrDefault().Day)));
-
-            ;
         }
 
         [Test]
@@ -126,12 +123,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
             Member member,
             CancellationToken cancellationToken)
         {
-            var memberId = Guid.NewGuid();
+            var requestedByMemberId = Guid.NewGuid();
             var userName = "username";
             var emailValue = "email@w3c.com";
             Admin admin = new();
 
-            membersReadRepository.Setup(a => a.GetMember(memberId)).ReturnsAsync(member);
+            membersReadRepository.Setup(a => a.GetMember(requestedByMemberId)).ReturnsAsync(member);
             editRepoMock.Setup(r => r.GetPatchAdmin(It.Is<string>(i => i == userName))).ReturnsAsync(admin);
 
             var lastUpdatedBefore = admin.LastUpdated;
@@ -151,7 +148,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.PatchAdminMember
 
             var command = new PatchAdminMemberCommand
             {
-                RequestedByMemberId = memberId,
+                RequestedByMemberId = requestedByMemberId,
                 UserName = userName,
                 PatchDoc = patchDoc
             };
