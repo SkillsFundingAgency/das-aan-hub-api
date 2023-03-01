@@ -6,5 +6,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
     {
         void Create(Employer employer);
 
+        Task<Employer?> GetPatchEmployer(Guid userRef);
     }
 }

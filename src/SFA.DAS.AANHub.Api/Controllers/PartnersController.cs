@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;

@@ -5,7 +5,7 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateEmployerMemberCommandResponse>>, IRequestedByMemberId
     {

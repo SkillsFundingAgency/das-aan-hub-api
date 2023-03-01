@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands
+namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommandResponse
     {
