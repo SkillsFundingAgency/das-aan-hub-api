@@ -5,7 +5,7 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Admins.Commands
+namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
 {
     public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateAdminMemberCommandResponse>>, IRequestedByMemberId
     {

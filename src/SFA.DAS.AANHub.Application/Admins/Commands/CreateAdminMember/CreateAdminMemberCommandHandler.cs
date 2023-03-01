@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Admins.Commands
+namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
 {
     public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMemberCommand, ValidatedResponse<CreateAdminMemberCommandResponse>>
     {

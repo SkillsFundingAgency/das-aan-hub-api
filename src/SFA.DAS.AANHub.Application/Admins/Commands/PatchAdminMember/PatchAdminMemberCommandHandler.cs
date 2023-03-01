@@ -7,46 +7,49 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
+namespace SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember
 {
-    public class PatchApprenticeMemberCommandHandler : IRequestHandler<PatchApprenticeMemberCommand, ValidatedResponse<PatchMemberCommandResponse>>
+    public class PatchAdminMemberCommandHandler : IRequestHandler<PatchAdminMemberCommand, ValidatedResponse<PatchMemberCommandResponse>>
     {
         private readonly IAanDataContext _aanDataContext;
-        private readonly IApprenticesWriteRepository _apprenticesWriteRepository;
+        private readonly IAdminsWriteRepository _adminsWriteRepository;
         private readonly IAuditWriteRepository _auditWriteRepository;
+        private readonly IDateTimeProvider _dateTimeProvider;
 
-        public PatchApprenticeMemberCommandHandler(IApprenticesWriteRepository apprenticesWriteRepository,
+        public PatchAdminMemberCommandHandler(IAdminsWriteRepository adminsWriteRepository,
             IAuditWriteRepository auditWriteRepository,
-            IAanDataContext aanDataContext)
+            IAanDataContext aanDataContext,
+            IDateTimeProvider dateTimeProvider)
         {
-            _apprenticesWriteRepository = apprenticesWriteRepository;
+            _adminsWriteRepository = adminsWriteRepository;
             _auditWriteRepository = auditWriteRepository;
             _aanDataContext = aanDataContext;
+            _dateTimeProvider = dateTimeProvider;
         }
 
-        public async Task<ValidatedResponse<PatchMemberCommandResponse>> Handle(PatchApprenticeMemberCommand command,
+        public async Task<ValidatedResponse<PatchMemberCommandResponse>> Handle(PatchAdminMemberCommand command,
             CancellationToken cancellationToken)
         {
-            var apprentice = await
-                _apprenticesWriteRepository.GetPatchApprentice(command.ApprenticeId);
+            var admin = await
+                _adminsWriteRepository.GetPatchAdmin(command.UserName);
 
-            if (apprentice == null)
+            if (admin == null)
                 return new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
 
             var audit = new Audit
             {
                 Action = "Patch",
                 ActionedBy = command.RequestedByMemberId,
-                AuditTime = DateTime.UtcNow,
-                Before = JsonSerializer.Serialize(apprentice),
-                Resource = MembershipUserType.Apprentice
+                AuditTime = _dateTimeProvider.Now,
+                Before = JsonSerializer.Serialize(admin),
+                Resource = MembershipUserType.Admin
             };
 
-            apprentice.LastUpdated = DateTime.UtcNow;
+            admin.LastUpdated = _dateTimeProvider.Now;
 
-            command.PatchDoc.ApplyTo(apprentice);
+            command.PatchDoc.ApplyTo(admin);
 
-            audit.After = JsonSerializer.Serialize(apprentice);
+            audit.After = JsonSerializer.Serialize(admin);
 
             _auditWriteRepository.Create(audit);
 

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Admins.Queries;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries
 {
     public class GetAdminMemberQueryValidatorTests
     {

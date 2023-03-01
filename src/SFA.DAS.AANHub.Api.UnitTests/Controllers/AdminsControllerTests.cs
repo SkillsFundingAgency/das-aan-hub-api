@@ -3,26 +3,31 @@ using FluentAssertions;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.JsonPatch;
+using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Admins.Commands;
+using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
+using SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember;
 using SFA.DAS.AANHub.Application.Admins.Queries;
+using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
+using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
-    public class AdminControllerTests
+    public class AdminsControllerTests
     {
         private readonly AdminsController _controller;
         private readonly Mock<IMediator> _mediator;
 
-        public AdminControllerTests()
+        public AdminsControllerTests()
         {
             _mediator = new Mock<IMediator>();
             _controller = new AdminsController(Mock.Of<ILogger<AdminsController>>(), _mediator.Object);
@@ -172,6 +177,94 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchAdmin_InvokesRequest(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            Guid requestedByMemberId, string userName)
+        {
+            var email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Admin>();
+            patchDoc.Operations.Add(new Operation<Admin>
+            {
+                op = nameof(OperationType.Replace),
+                path = email,
+                value = testValue
+            });
+
+            var success = true;
+            var response = new ValidatedResponse<PatchMemberCommandResponse>
+                (new PatchMemberCommandResponse(success));
+
+            mediatorMock.Setup(m => m.Send(It.Is<PatchAdminMemberCommand>(c => c.RequestedByMemberId == requestedByMemberId && c.UserName == userName),
+                It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchAdmin(requestedByMemberId, userName, patchDoc);
+
+            (result as NoContentResult).Should().NotBeNull();
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchAdmin_InvokesRequest_NotFound(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            Guid requestedByMemberId, string userName)
+        {
+            var email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Admin>();
+            patchDoc.Operations.Add(new Operation<Admin>
+            {
+                op = nameof(OperationType.Replace),
+                path = email,
+                value = testValue
+            });
+
+            var response = new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchAdmin(requestedByMemberId, userName, patchDoc);
+
+            result.Should().NotBeNull();
+            result.As<NotFoundResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        }
+
+        [Test]
+        [AutoMoqData]
+        public async Task PatchAdmin_InvokesRequest_WithErrors(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] AdminsController sut,
+            Guid requestedByMemberId, string userName)
+        {
+            var email = "Email";
+            var testValue = "value";
+
+            var patchDoc = new JsonPatchDocument<Admin>();
+            patchDoc.Operations.Add(new Operation<Admin>
+            {
+                op = nameof(OperationType.Replace),
+                path = email,
+                value = testValue
+            });
+
+            var response = new ValidatedResponse<PatchMemberCommandResponse>
+            (new List<ValidationFailure>
+            {
+                new("Name", "error")
+            });
+
+            mediatorMock.Setup(m => m.Send(It.IsAny<PatchAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+            var result = await sut.PatchAdmin(requestedByMemberId, userName, patchDoc);
+
+            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
     }
 }
