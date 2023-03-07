@@ -17,14 +17,17 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Queries
             string email = "email@email.com";
             string name = "lorem epsum";
             string organisation = "w3c";
+            string status = "live";
             Guid memberid = new();
 
             var partnersReadRepositoryMock = new Mock<IPartnersReadRepository>();
-            var partner = new Partner() {
+            var partner = new Partner()
+            {
                 MemberId = memberid,
                 Organisation = organisation,
                 Name = name,
-                Email = email
+                Email = email,
+                Member = new Member() { Status = status }
             };
 
             partnersReadRepositoryMock.Setup(a => a.GetPartnerByUserName(userName)).ReturnsAsync(partner);
@@ -36,6 +39,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Queries
             Assert.AreEqual(email, result!.Result.Email);
             Assert.AreEqual(name, result!.Result.Name);
             Assert.AreEqual(organisation, result!.Result.Organisation);
+            Assert.AreEqual(status, result!.Result.Status);
         }
     }
 }

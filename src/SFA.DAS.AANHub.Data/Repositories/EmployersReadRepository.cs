@@ -15,7 +15,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
         public async Task<Employer?> GetEmployerByUserRef(Guid userRef) => await _aanDataContext
             .Employers
             .AsNoTracking()
-            .Where(m => m.UserRef == userRef)
+            .Where(m => m.UserRef == userRef).Include(x => x.Member)
             .SingleOrDefaultAsync();
     }
 }
