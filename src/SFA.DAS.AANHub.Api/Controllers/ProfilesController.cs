@@ -23,9 +23,10 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <param name="userType"></param>
         /// <returns></returns>
         [HttpGet]
+        [Route("{userType}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(List<ProfileModel>), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetProfilesByUserType([FromQuery] string userType)
+        public async Task<IActionResult> GetProfilesByUserType([FromRoute] string userType)
         {
             _logger.LogInformation("AAN Hub API: Received command to get profiles");
 
