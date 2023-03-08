@@ -19,7 +19,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries
             {
                 Name = "ThisIsAName",
                 MemberId = Guid.NewGuid(),
-                Email = "email@email.com"
+                Email = "email@email.com",
+                Member = new Member() { Status = "live" }
             };
 
             adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(adminUserName)).ReturnsAsync(admin);
@@ -30,6 +31,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries
             Assert.AreEqual(admin.MemberId, result.Result.MemberId);
             Assert.AreEqual(admin.Name, result.Result.Name);
             Assert.AreEqual(admin.Email, result.Result.Email);
+            Assert.AreEqual(admin.Member.Status, result.Result.Status);
         }
     }
 }

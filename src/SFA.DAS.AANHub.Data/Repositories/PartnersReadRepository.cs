@@ -14,7 +14,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public async Task<Partner?> GetPartnerByUserName(string userName) => await _aanDataContext
             .Partners
-            .AsNoTracking().Where(a => a.UserName == userName)
+            .AsNoTracking().Where(a => a.UserName == userName).Include(x => x.Member)
             .SingleOrDefaultAsync();
     }
 }

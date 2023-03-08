@@ -17,7 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
             Assert.AreEqual(apprentice.MemberId, response!.MemberId);
             Assert.AreEqual(apprentice.Name, response.Name);
             Assert.AreEqual(apprentice.Email, response.Email);
-
+            Assert.AreEqual(apprentice.Member.Status, response.Status);
         }
 
         [Test, AutoMoqData]
