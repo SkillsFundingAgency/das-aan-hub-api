@@ -16,7 +16,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public void Command_PatchContainsEmail_EmailIsSet()
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var testValue = "value";
             var patchDoc = new JsonPatchDocument<Apprentice>();
@@ -45,7 +45,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public void Command_PatchContainsName_NameIsSet()
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var testValue = "value";
             var patchDoc = new JsonPatchDocument<Apprentice>();
@@ -74,7 +74,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public void Command_PatchContainsNoDetails_FieldsAreNotSet()
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
             var patchDoc = new JsonPatchDocument<Apprentice>();
 
             var command = new PatchApprenticeMemberCommand

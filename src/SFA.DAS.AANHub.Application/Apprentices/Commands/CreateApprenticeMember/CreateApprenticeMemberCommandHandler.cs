@@ -35,7 +35,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
                 Action = "Create",
                 ActionedBy = command.RequestedByMemberId,
                 AuditTime = DateTime.UtcNow,
-                After = JsonSerializer.Serialize(member),
+                After = JsonSerializer.Serialize(member.Apprentice),
                 Resource = MembershipUserType.Apprentice
             });
 

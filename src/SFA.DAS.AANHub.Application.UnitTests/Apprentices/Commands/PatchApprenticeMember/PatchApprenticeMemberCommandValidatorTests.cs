@@ -24,7 +24,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task ValidatePatchDoc_InvalidOperation_InvalidResponse(string operation, bool isValid)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
             var nameValue = "test";
 
             var command = new PatchApprenticeMemberCommand
@@ -68,7 +68,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task ValidatePatchDoc_NoOperations_InvalidResponse()
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var command = new PatchApprenticeMemberCommand
             {
@@ -99,7 +99,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task ValidatePatchDoc_DuplicateReplaceOperation_InvalidResponse(string patchField, string value1, string value2)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var command = new PatchApprenticeMemberCommand
             {

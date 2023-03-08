@@ -34,7 +34,7 @@ namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
                 Action = "Create",
                 ActionedBy = command.RequestedByMemberId,
                 AuditTime = DateTime.UtcNow,
-                After = JsonSerializer.Serialize(member),
+                After = JsonSerializer.Serialize(member.Partner),
                 Resource = MembershipUserType.Partner
             });
 

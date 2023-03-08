@@ -23,7 +23,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task Validate_Patch_Name_Empty(string nameValue, bool isValid)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var command = new PatchApprenticeMemberCommand
             {
@@ -60,7 +60,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task Validate_Patch_Name_Length(int stringLength, bool isValid)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
             string nameValue = new('a', stringLength);
 
             var command = new PatchApprenticeMemberCommand

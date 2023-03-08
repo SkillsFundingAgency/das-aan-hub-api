@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace SFA.DAS.AANHub.Domain.Entities
 {
     public class Member
     {
@@ -8,9 +10,13 @@
         public string? ReviewStatus { get; set; }
         public string? Information { get; set; }
         public DateTime Joined { get; set; }
+        [JsonIgnore]
         public virtual Admin? Admin { get; set; }
+        [JsonIgnore]
         public virtual Apprentice? Apprentice { get; set; }
+        [JsonIgnore]
         public virtual Employer? Employer { get; set; }
+        [JsonIgnore]
         public virtual Partner? Partner { get; set; }
         public virtual List<MemberRegion>? MemberRegions { get; set; }
 

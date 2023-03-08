@@ -85,7 +85,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task GetApprentice_InvokesQueryHandler(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] ApprenticesController sut,
-            long apprenticeId,
+            Guid apprenticeId,
             ValidatedResponse<GetApprenticeMemberResult> handlerResult)
         {
             mediatorMock.Setup(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
@@ -106,9 +106,9 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         [AutoMoqData]
         public async Task GetApprentice_InvokesQueryHandler_NoResultGivesNotFound(
             [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut)
+            [Greedy] ApprenticesController sut,
+            Guid apprenticeId)
         {
-            long apprenticeId = 0;
             var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
                 (new List<ValidationFailure>());
 
@@ -128,16 +128,11 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         [AutoMoqData]
         public async Task GetApprentice_InvokesQueryHandler_ResultGivesSuccessfulResult(
             [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut)
+            [Greedy] ApprenticesController sut,
+            Guid apprenticeId,
+            GetApprenticeMemberResult getApprenticeMemberResult)
         {
-            long apprenticeId = 0;
-            var response = new ValidatedResponse<GetApprenticeMemberResult>
-            (new GetApprenticeMemberResult
-            {
-                Email = "email@email.com",
-                MemberId = new Guid(),
-                Name = "name"
-            });
+            var response = new ValidatedResponse<GetApprenticeMemberResult>(getApprenticeMemberResult);
 
             mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(response);
@@ -153,9 +148,9 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         [AutoMoqData]
         public async Task GetApprentice_InvokesQueryHandler_BadResultGivesBadRequest(
             [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut)
+            [Greedy] ApprenticesController sut,
+            Guid apprenticeId)
         {
-            long apprenticeId = 0;
             var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
             (new List<ValidationFailure>
             {
@@ -186,7 +181,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchApprentice_InvokesRequest(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] ApprenticesController sut,
-            Guid userId, long apprenticeId)
+            Guid userId,
+            Guid apprenticeId)
         {
             var Email = "Email";
             var testValue = "value";
@@ -216,7 +212,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchApprentice_InvokesRequest_NotFound(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] ApprenticesController sut,
-            Guid userId, long apprenticeId)
+            Guid userId,
+            Guid apprenticeId)
         {
             var Email = "Email";
             var testValue = "value";
@@ -243,7 +240,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         public async Task PatchApprentice_InvokesRequest_WithErrors(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] ApprenticesController sut,
-            Guid userId, long apprenticeId)
+            Guid userId,
+            Guid apprenticeId)
         {
             var Email = "Email";
             var testValue = "value";

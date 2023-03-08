@@ -34,7 +34,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
                 Action = "Create",
                 ActionedBy = command.RequestedByMemberId,
                 AuditTime = DateTime.UtcNow,
-                After = JsonSerializer.Serialize(member),
+                After = JsonSerializer.Serialize(member.Admin),
                 Resource = MembershipUserType.Admin
             });
 

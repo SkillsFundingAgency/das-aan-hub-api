@@ -25,46 +25,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task Validate_Patch_Email_Format(string emailValue, bool isValid)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
-
-            var command = new PatchApprenticeMemberCommand
-            {
-                RequestedByMemberId = memberId,
-                ApprenticeId = apprenticeId,
-                PatchDoc = new JsonPatchDocument<Apprentice>()
-            };
-
-            command.PatchDoc = new JsonPatchDocument<Apprentice>
-            {
-                Operations =
-                {
-                    new Operation<Apprentice>
-                    {
-                        op = nameof(OperationType.Replace),
-                        path = Email,
-                        value = emailValue
-                    }
-                }
-            };
-
-            var sut = new PatchApprenticeMemberCommandValidator(_memberReadRepository.Object);
-
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(p => p.Email);
-            else
-                result.ShouldHaveValidationErrorFor(p => p.Email);
-        }
-
-        [TestCase("john.doe@example.com", true)]
-        [TestCase("@example.com", false)]
-        [TestCase("", false)]
-        [TestCase(" ", false)]
-        public async Task Validate_Patch_Email_Empty_Not_Validated_Format(string emailValue, bool isValid)
-        {
-            var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
 
             var command = new PatchApprenticeMemberCommand
             {
@@ -102,7 +63,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
         public async Task Validate_Patch_Email_Length(int stringLength, string emailSuffix, bool isValid)
         {
             var memberId = Guid.NewGuid();
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
             var emailValue = new string('a', stringLength) + emailSuffix;
 
             var command = new PatchApprenticeMemberCommand

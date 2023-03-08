@@ -14,7 +14,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public void Create(Apprentice apprentice) => _aanDataContext.Apprentices.Add(apprentice);
 
-        public async Task<Apprentice?> GetPatchApprentice(long apprenticeId) => await _aanDataContext
+        public async Task<Apprentice?> GetPatchApprentice(Guid apprenticeId) => await _aanDataContext
             .Apprentices
             .Where(a => a.ApprenticeId == apprenticeId)
             .SingleOrDefaultAsync();

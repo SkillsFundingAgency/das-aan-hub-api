@@ -35,7 +35,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid userId,
+        public async Task<IActionResult> CreateApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)][Required] Guid userId,
             CreateApprenticeModel request)
         {
             _logger.LogInformation("AAN Hub API: Received command to add apprentice by ApprenticeId: {apprenticeId} and UserId: {userId}",
@@ -69,7 +69,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetApprentice(long apprenticeId)
+        public async Task<IActionResult> GetApprentice(Guid apprenticeId)
         {
             _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeId}", apprenticeId);
 
@@ -80,7 +80,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <summary>
         ///     Patch an apprentice member
         /// </summary>
-        /// <param name="userId"></param>
+        /// <param name="requestedByMemberId"></param>
         /// <param name="apprenticeId"></param>
         /// <param name="request"></param>
         /// ///
@@ -90,16 +90,16 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PatchApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid userId,
-            [FromRoute] long apprenticeId, [FromBody] JsonPatchDocument<Apprentice> request)
+        public async Task<IActionResult> PatchApprentice([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)][Required] Guid requestedByMemberId,
+            [FromRoute] Guid apprenticeId, [FromBody] JsonPatchDocument<Apprentice> request)
         {
             _logger.LogInformation("AAN Hub API: Received command to patch apprentice by ApprenticeId: {apprenticeId} and UserId: {userId}",
                 apprenticeId,
-                userId);
+                requestedByMemberId);
 
             PatchApprenticeMemberCommand command = new()
             {
-                RequestedByMemberId = userId,
+                RequestedByMemberId = requestedByMemberId,
                 ApprenticeId = apprenticeId,
                 PatchDoc = request
             };

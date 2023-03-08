@@ -19,11 +19,11 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             PatchApprenticeMemberCommandHandler sut,
             Apprentice apprentice,
+            Guid apprenticeId,
             CancellationToken cancellationToken)
         {
-            var apprenticeId = 123;
             var requestedByMemberId = Guid.NewGuid();
-            editRepoMock.Setup(r => r.GetPatchApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync(apprentice);
+            editRepoMock.Setup(r => r.GetPatchApprentice(apprenticeId)).ReturnsAsync(apprentice);
 
             var patchDoc = new JsonPatchDocument<Apprentice>();
             patchDoc.Replace(path => path.Email, apprentice.Email);
@@ -53,9 +53,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands.PatchApprent
             Apprentice apprentice,
             CancellationToken cancellationToken)
         {
-            var apprenticeId = 123;
+            var apprenticeId = Guid.NewGuid();
             var requestedByMemberId = Guid.NewGuid();
-            editRepoMock.Setup(r => r.GetPatchApprentice(It.Is<long>(i => i == apprenticeId))).ReturnsAsync((Apprentice?)null);
+            editRepoMock.Setup(r => r.GetPatchApprentice(apprenticeId)).ReturnsAsync((Apprentice?)null);
 
             var patchDoc = new JsonPatchDocument<Apprentice>();
             patchDoc.Replace(path => path.Email, apprentice.Email);
