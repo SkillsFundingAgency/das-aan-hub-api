@@ -35,7 +35,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
                 Action = "Create",
                 ActionedBy = command.RequestedByMemberId,
                 AuditTime = DateTime.UtcNow,
-                After = JsonSerializer.Serialize(member),
+                After = JsonSerializer.Serialize(member.Employer),
                 Resource = MembershipUserType.Employer
             });
 

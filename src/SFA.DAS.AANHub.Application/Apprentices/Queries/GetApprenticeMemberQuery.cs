@@ -5,8 +5,8 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 {
     public class GetApprenticeMemberQuery : IRequest<ValidatedResponse<GetApprenticeMemberResult>>
     {
-        public GetApprenticeMemberQuery(long apprenticeId) => ApprenticeId = apprenticeId;
+        public GetApprenticeMemberQuery(Guid apprenticeId) => ApprenticeId = apprenticeId;
 
-        public long ApprenticeId { get; }
+        public Guid ApprenticeId { get; }
     }
 }

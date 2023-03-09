@@ -12,7 +12,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public ApprenticesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task<Apprentice?> GetApprentice(long apprenticeId) => await _aanDataContext
+        public async Task<Apprentice?> GetApprentice(Guid apprenticeId) => await _aanDataContext
                 .Apprentices
                 .AsNoTracking().Where(a => a.ApprenticeId == apprenticeId).Include(x => x.Member)
                 .SingleOrDefaultAsync();

@@ -4,7 +4,7 @@ namespace SFA.DAS.AANHub.Api.Models
 {
     public class CreateApprenticeModel
     {
-        public long ApprenticeId { get; set; }
+        public Guid ApprenticeId { get; set; }
         public DateTime Joined { get; set; }
         public List<int>? Regions { get; set; }
         public string? Information { get; set; }

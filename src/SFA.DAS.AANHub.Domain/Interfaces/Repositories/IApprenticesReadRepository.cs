@@ -4,6 +4,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface IApprenticesReadRepository
     {
-        Task<Apprentice?> GetApprentice(long apprenticeId);
+        Task<Apprentice?> GetApprentice(Guid apprenticeId);
     }
 }

@@ -6,6 +6,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
     {
         void Create(Apprentice apprentice);
 
-        Task<Apprentice?> GetPatchApprentice(long apprenticeId);
+        Task<Apprentice?> GetPatchApprentice(Guid apprenticeId);
     }
 }

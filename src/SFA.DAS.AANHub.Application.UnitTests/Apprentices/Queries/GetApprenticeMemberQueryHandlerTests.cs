@@ -12,7 +12,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
         [Test]
         public async Task Handle_GetApprenticeMember()
         {
-            long apprenticeId = 0;
+            var apprenticeId = Guid.NewGuid();
 
             var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
             var apprentice = new Apprentice

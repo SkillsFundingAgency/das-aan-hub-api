@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember
     {
         private const string EmailIdentifier = "Email";
         private const string NameIdentifier = "Name";
-        public long ApprenticeId { get; set; }
+        public Guid ApprenticeId { get; set; }
 
         public string? Email =>
             GetReplacementValue(PatchDoc, EmailIdentifier);

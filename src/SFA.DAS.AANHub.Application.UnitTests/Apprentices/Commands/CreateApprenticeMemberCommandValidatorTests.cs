@@ -20,10 +20,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
             _apprenticesReadRepository = new Mock<IApprenticesReadRepository>();
         }
 
-        [TestCase(123, true)]
+        [TestCase("684b9829-d882-4733-938e-bcee6d6bfe81", true)]
         [TestCase(null, false)]
-        [TestCase(0, false)]
-        public async Task Validates_ApprenticeId_NotNull(long apprenticeId, bool isValid)
+        [TestCase("00000000-0000-0000-0000-000000000000", false)]
+        public async Task Validates_ApprenticeId_NotNull(Guid apprenticeId, bool isValid)
         {
             var command = new CreateApprenticeMemberCommand
             {

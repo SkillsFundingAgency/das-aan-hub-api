@@ -83,7 +83,10 @@ namespace SFA.DAS.AANHub.Api
                     if (!IsEnvironmentLocalOrDev)
                         options.Conventions.Add(new AuthorizeControllerModelConvention(new List<string>()));
                 })
-                .AddJsonOptions(options => { options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter()); })
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                })
                 .AddNewtonsoftJson(options =>
                 {
                     options.SerializerSettings.Converters.Add(new StringEnumConverter());
