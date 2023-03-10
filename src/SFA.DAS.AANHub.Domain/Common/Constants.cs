@@ -16,10 +16,10 @@ namespace SFA.DAS.AANHub.Domain.Common
 
         public static class MembershipUserType
         {
-            public const string Apprentice = nameof(Apprentice);
-            public const string Employer = nameof(Employer);
-            public const string Partner = nameof(Partner);
-            public const string Admin = nameof(Admin);
+            public static readonly string Apprentice = UserType.Apprentice.ToString();
+            public static readonly string Employer = UserType.Employer.ToString();
+            public static readonly string Partner = UserType.Partner.ToString();
+            public static readonly string Admin = UserType.Admin.ToString();
         }
 
         public static class MembershipReviewStatus
