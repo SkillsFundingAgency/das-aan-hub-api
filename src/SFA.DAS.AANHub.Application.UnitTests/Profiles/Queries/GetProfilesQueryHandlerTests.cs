@@ -25,8 +25,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Profiles.Queries
 
             var result = await sut.Handle(new GetProfilesByUserTypeQuery(userType), new CancellationToken());
 
-            result.Result.ProfileModels.As<List<ProfileModel>>().Should().NotBeNullOrEmpty();
-            Assert.That(result.Result.ProfileModels.Any(x => x.Id == profileId));
+            result.Result.Profiles.As<List<ProfileModel>>().Should().NotBeNullOrEmpty();
+            Assert.That(result.Result.Profiles.Any(x => x.Id == profileId));
         }
     }
 }
