@@ -16,7 +16,8 @@
     [ContactName] NVARCHAR(200) NOT NULL, 
     [ContactEmail] NVARCHAR(256) NOT NULL, 
     [IsActive] BIT NOT NULL DEFAULT 1,
-    [CancelReason] NVARCHAR(max) NULL
+    [CancelReason] NVARCHAR(max) NULL,
+    CONSTRAINT [FK_CalendarEvent_Calendar] FOREIGN KEY ([CalendarId]) REFERENCES [Calendar]([Id])        
 );
 GO
 

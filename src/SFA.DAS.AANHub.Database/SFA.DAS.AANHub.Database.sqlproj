@@ -79,7 +79,7 @@
     <None Include="Scripts\AddProfileData.sql" />
     <Build Include="Tables\EventGuest.sql" />
     <Build Include="Tables\Feedback.sql" />
-    <Build Include="Tables\Attribute.sql" />
+    <Build Include="Tables\FeedbackAttribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
