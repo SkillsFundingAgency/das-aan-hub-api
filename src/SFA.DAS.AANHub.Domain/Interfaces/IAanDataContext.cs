@@ -13,8 +13,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces
         DbSet<Partner> Partners { get; }
         DbSet<Admin> Admins { get; }
         DbSet<Calendar> Calendars { get; }
-        DbSet<CalendarPermission> CalendarPermissions { get; }
-        DbSet<MemberPermission> MemberPermissions { get; }
         DbSet<Profile> Profiles { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }

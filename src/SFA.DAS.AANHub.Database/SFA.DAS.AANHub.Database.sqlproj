@@ -68,24 +68,23 @@
     <Build Include="Tables\Partner.sql" />
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
-    <Build Include="Tables\MemberPermission.sql" />
-    <Build Include="Tables\Permission.sql" />
     <Build Include="Tables\Calendar.sql" />
     <Build Include="Tables\CalendarEvent.sql" />
-    <Build Include="Tables\CalendarPermission.sql" />
     <Build Include="Tables\Attendance.sql" />
-    <Build Include="Tables\AttendanceProfile.sql" />
     <Build Include="Tables\Notifications.sql" />
     <Build Include="Tables\NotificationTemplate.sql" />
     <Build Include="Tables\Documents.sql" />
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\MemberRegion.sql" />
-    <None Include="Scripts\AddPermissionsData.sql" />
     <None Include="Scripts\AddProfileData.sql" />
+    <Build Include="Tables\EventGuest.sql" />
+    <Build Include="Tables\Feedback.sql" />
+    <Build Include="Tables\Attribute.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
     <None Include="Scripts\AddMemberData.sql" />
+    <None Include="Scripts\AddCalendarData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
