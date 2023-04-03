@@ -12,7 +12,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces
         DbSet<Employer> Employers { get; }
         DbSet<Partner> Partners { get; }
         DbSet<Admin> Admins { get; }
-        DbSet<StagedApprentice> StagedApprentices { get; }
+        DbSet<StagedApprentice> StagedApprentice { get; }
         DbSet<Calendar> Calendars { get; }
         DbSet<Profile> Profiles { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

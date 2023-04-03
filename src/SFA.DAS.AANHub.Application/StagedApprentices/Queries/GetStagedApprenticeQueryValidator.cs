@@ -1,6 +1,4 @@
 ﻿using FluentValidation;
-using SFA.DAS.AANHub.Domain.Common;
-using SFA.DAS.AANHub.Domain.Interfaces;
 
 namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
 {

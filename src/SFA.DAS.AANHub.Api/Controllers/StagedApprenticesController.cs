@@ -26,11 +26,11 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/StagedApprentice")]
+        [Route("/StagedApprentice/lastname={lastname}&dateofbirth={dateofbirth}&email={email}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(GetStagedApprenticeResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastname, [FromQuery] DateTime dateofbirth, [FromQuery] string email)
+        public async Task<IActionResult> GetStagedApprentice(string lastname, DateTime dateofbirth, string email)
         {
             _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastname, dateofbirth, email);
 
