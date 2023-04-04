@@ -9,5 +9,4 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
--- temp to resolve AT deployment
-DELETE FROM [dbo].[Calendar];
+
