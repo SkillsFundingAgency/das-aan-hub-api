@@ -82,6 +82,7 @@
     <Build Include="Tables\MemberRegion.sql" />
     <None Include="Scripts\AddPermissionsData.sql" />
     <None Include="Scripts\AddProfileData.sql" />
+    <Build Include="Tables\StagedApprentice.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
