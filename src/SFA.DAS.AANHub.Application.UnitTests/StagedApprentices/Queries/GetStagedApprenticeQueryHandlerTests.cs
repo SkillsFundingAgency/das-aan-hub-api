@@ -1,4 +1,5 @@
-﻿using Moq;
+﻿using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.StagedApprentices.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -35,15 +36,15 @@ namespace SFA.DAS.AANHub.Application.UnitTests.StagedApprentices.Queries
 
             var result = await sut.Handle(new GetStagedApprenticeQuery(lastname, dateofbirth, email), new CancellationToken());
 
-            Assert.AreEqual(stagedApprentice.Uln, result.Result.Uln);
-            Assert.AreEqual(stagedApprentice.ApprenticeshipId, result.Result.ApprenticeshipId);
-            Assert.AreEqual(stagedApprentice.EmployerName, result.Result.EmployerName);
-            Assert.AreEqual(stagedApprentice.StartDate, result.Result.StartDate);
-            Assert.AreEqual(stagedApprentice.EndDate, result.Result.EndDate);
-            Assert.AreEqual(stagedApprentice.TrainingProviderId, result.Result.TrainingProviderId);
-            Assert.AreEqual(stagedApprentice.TrainingProviderName, result.Result.TrainingProviderName);
-            Assert.AreEqual(stagedApprentice.TrainingCode, result.Result.TrainingCode);
-            Assert.AreEqual(stagedApprentice.StandardUId, result.Result.StandardUId);
+            result.Result.Uln.Should().Be(stagedApprentice.Uln);
+            result.Result.ApprenticeshipId.Should().Be(stagedApprentice.ApprenticeshipId);
+            result.Result.EmployerName.Should().BeEquivalentTo(stagedApprentice.EmployerName);
+            result.Result.StartDate.Should().Be(stagedApprentice.StartDate);
+            result.Result.EndDate.Should().Be(stagedApprentice.EndDate);
+            result.Result.TrainingProviderId.Should().Be(stagedApprentice.TrainingProviderId);
+            result.Result.TrainingProviderName.Should().BeEquivalentTo(stagedApprentice.TrainingProviderName);
+            result.Result.TrainingCode.Should().BeEquivalentTo(stagedApprentice.TrainingCode);
+            result.Result.StandardUId.Should().BeEquivalentTo(stagedApprentice.StandardUId);
         }
     }
 }

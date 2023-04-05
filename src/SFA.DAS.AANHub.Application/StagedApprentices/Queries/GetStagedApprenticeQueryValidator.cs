@@ -10,7 +10,7 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
                 .NotEmpty();
 
             RuleFor(a => a.DateOfBirth)
-            .NotEmpty();
+                .NotEmpty();
 
             RuleFor(a => a.Email)
                 .NotEmpty()

@@ -15,7 +15,7 @@ namespace SFA.DAS.AANHub.Data
         public DbSet<Employer> Employers => Set<Employer>();
         public DbSet<Partner> Partners => Set<Partner>();
         public DbSet<Admin> Admins => Set<Admin>();
-        public DbSet<StagedApprentice> StagedApprentice => Set<StagedApprentice>();
+        public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();
         public DbSet<Calendar> Calendars => Set<Calendar>();
         public DbSet<Profile> Profiles => Set<Profile>();
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }

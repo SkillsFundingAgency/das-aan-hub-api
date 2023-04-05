@@ -21,20 +21,20 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// <summary>
         ///     Gets an StagedApprentice member
         /// </summary>
-        /// <param name="lastname"></param>
-        /// <param name="dateofbirth"></param>
+        /// <param name="lastName"></param>
+        /// <param name="dateOfBirth"></param>
         /// <param name="email"></param>
         /// <returns></returns>
         [HttpGet]
-        [Route("/StagedApprentice/lastname={lastname}&dateofbirth={dateofbirth}&email={email}")]
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(GetStagedApprenticeResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetStagedApprentice(string lastname, DateTime dateofbirth, string email)
+        public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastName, [FromQuery] DateTime dateOfBirth, [FromQuery] string email)
         {
-            _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastname, dateofbirth, email);
+            _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastName, dateOfBirth, email);
 
-            var response = await _mediator.Send(new GetStagedApprenticeQuery(lastname, dateofbirth, email));
+            var response = await _mediator.Send(new GetStagedApprenticeQuery(lastName, dateOfBirth, email));
             return GetResponse(response);
         }
     }

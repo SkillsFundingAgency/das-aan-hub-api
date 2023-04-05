@@ -13,7 +13,7 @@ namespace SFA.DAS.AANHub.Data.Repositories
         public StagedApprenticesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
         public async Task<StagedApprentice?> GetStagedApprentice(string lastname, DateTime dateofbirth, string email) => await _aanDataContext
-                .StagedApprentice
+                .StagedApprentices
                 .Where(a => a.LastName == lastname && a.DateOfBirth == dateofbirth && a.Email == email)
                 .AsNoTracking()
                 .SingleOrDefaultAsync();

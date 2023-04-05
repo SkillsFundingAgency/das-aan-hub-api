@@ -9,7 +9,7 @@
         public DateTime? DateOfBirth { get; set; }
         public long Uln { get; set; }
         public long ApprenticeshipId { get; set; }
-        public string EmployerName { get; set; } = string.Empty;
+        public string?EmployerName { get; set; } = string.Empty;
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
         public long TrainingProviderId { get; set; }
