@@ -15,6 +15,6 @@
 	[TrainingCourseOption] [nvarchar](126) NULL,
 	[StandardUId] [nvarchar](20) NULL,
 	[CreatedOn] [datetime2](7) NOT NULL DEFAULT (getutcdate()),
-	CONSTRAINT PK_AANApprenticeship_Id PRIMARY KEY (Id),
-	CONSTRAINT UK_AANApprenticeship_Email_LastName_DateOfBirth UNIQUE ([Email], [LastName], [DateOfBirth])
+	CONSTRAINT PK_StagedApprentice_Id PRIMARY KEY (Id),
+	CONSTRAINT UK_StagedApprentice_Email_LastName_DateOfBirth UNIQUE ([Email], [LastName], [DateOfBirth])
 )
