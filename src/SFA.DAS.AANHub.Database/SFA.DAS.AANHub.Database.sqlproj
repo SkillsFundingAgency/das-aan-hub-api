@@ -80,6 +80,7 @@
     <Build Include="Tables\Feedback.sql" />
     <Build Include="Tables\FeedbackAttribute.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
+    <None Include="Scripts\PreDeploymentClearDown.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
