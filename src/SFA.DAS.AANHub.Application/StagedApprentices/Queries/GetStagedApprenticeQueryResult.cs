@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
 {
-    public class GetStagedApprenticeResult
+    public class GetStagedApprenticeQueryResult
     {
         public long Uln { get; set; }
         public long ApprenticeshipId { get; set; }
@@ -14,12 +14,12 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
         public string? TrainingCode { get; set; }
         public string? StandardUId { get; set; }
 
-        public static implicit operator GetStagedApprenticeResult?(StagedApprentice stagedApprentice)
+        public static implicit operator GetStagedApprenticeQueryResult?(StagedApprentice stagedApprentice)
         {
             if (stagedApprentice == null)
                 return null;
 
-            return new GetStagedApprenticeResult
+            return new GetStagedApprenticeQueryResult
             {
                 Uln = stagedApprentice.Uln,
                 ApprenticeshipId = stagedApprentice.ApprenticeshipId,

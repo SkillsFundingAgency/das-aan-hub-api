@@ -29,7 +29,7 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(GetStagedApprenticeResult), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GetStagedApprenticeQueryResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastName, [FromQuery] DateTime dateOfBirth, [FromQuery] string email)
         {
             _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastName, dateOfBirth, email);

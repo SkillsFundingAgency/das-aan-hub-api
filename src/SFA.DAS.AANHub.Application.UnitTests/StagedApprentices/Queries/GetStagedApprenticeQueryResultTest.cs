@@ -8,12 +8,12 @@ using SFA.DAS.AANHub.Domain.Entities;
 namespace SFA.DAS.AANHub.Application.UnitTests.StagedApprentices.Queries
 {
     [TestFixture]
-    public class GetStagedApprenticeResultTest
+    public class GetStagedApprenticeQueryResultTest
     {
         [Test, AutoMoqData]
         public void StagedApprentice_ReturnsExpectedFields(StagedApprentice stagedApprentice)
         {
-            var response = (GetStagedApprenticeResult?)stagedApprentice;
+            var response = (GetStagedApprenticeQueryResult?)stagedApprentice;
 
             Assert.Multiple(() =>
             {
@@ -35,19 +35,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.StagedApprentices.Queries
         public void StagedApprentice_GetStagedApprentice_StagedApprenticeIsNull()
         {
             StagedApprentice? stagedApprentice = null;
-            var response = (GetStagedApprenticeResult?)stagedApprentice!;
+            var response = (GetStagedApprenticeQueryResult?)stagedApprentice!;
             Assert.That(response, Is.Null);
         }
-
-        //[Test]
-        //[AutoData]
-        //public void StagedApprentice_StagedApprenticeNotFound_ThrowsInvalidOperationException(OnboardingSessionModel sut, ProfileModel profileModel)
-        //{
-        //    StagedApprentice? stagedApprentice = null;
-
-        //    Action action = () => sut.GetStagedApprenticeResult(profileModel.Id);
-
-        //    action.Should().Throw<InvalidOperationException>();
-        //}
     }
 }

@@ -6,17 +6,17 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
 {
-    public class GetStagedApprenticeMemberQueryHandler : IRequestHandler<GetStagedApprenticeQuery, ValidatedResponse<GetStagedApprenticeResult>>
+    public class GetStagedApprenticeMemberQueryHandler : IRequestHandler<GetStagedApprenticeQuery, ValidatedResponse<GetStagedApprenticeQueryResult>>
     {
         private readonly IStagedApprenticesReadRepository _stagedApprenticesReadRepository;
 
         public GetStagedApprenticeMemberQueryHandler(IStagedApprenticesReadRepository stagedApprenticesReadRepository)
             => _stagedApprenticesReadRepository = stagedApprenticesReadRepository;
 
-        public async Task<ValidatedResponse<GetStagedApprenticeResult>> Handle(GetStagedApprenticeQuery request, CancellationToken cancellationToken)
+        public async Task<ValidatedResponse<GetStagedApprenticeQueryResult>> Handle(GetStagedApprenticeQuery request, CancellationToken cancellationToken)
         {
             var stagedApprentice = await _stagedApprenticesReadRepository.GetStagedApprentice(request.LastName, request.DateOfBirth, request.Email);
-            return new ValidatedResponse<GetStagedApprenticeResult>(stagedApprentice!);
+            return new ValidatedResponse<GetStagedApprenticeQueryResult>(stagedApprentice!);
         }
     }
 }

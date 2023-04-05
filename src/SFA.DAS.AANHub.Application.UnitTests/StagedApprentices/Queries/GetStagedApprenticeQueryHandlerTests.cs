@@ -46,5 +46,21 @@ namespace SFA.DAS.AANHub.Application.UnitTests.StagedApprentices.Queries
             result.Result.TrainingCode.Should().BeEquivalentTo(stagedApprentice.TrainingCode);
             result.Result.StandardUId.Should().BeEquivalentTo(stagedApprentice.StandardUId);
         }
+
+        [Test]
+        public async Task Handle_NoDataFound()
+        {
+            var lastname = "Smith";
+            var dateofbirth = Convert.ToDateTime("01/01/2000");
+            var email = "email@email.com";
+
+            var stagedApprenticesReadRepositoryMock = new Mock<IStagedApprenticesReadRepository>();
+            stagedApprenticesReadRepositoryMock.Setup(a => a.GetStagedApprentice(lastname, dateofbirth, email)).ReturnsAsync((StagedApprentice?)null);
+            var sut = new GetStagedApprenticeMemberQueryHandler(stagedApprenticesReadRepositoryMock.Object);
+
+            var result = await sut.Handle(new GetStagedApprenticeQuery(lastname, dateofbirth, email), new CancellationToken());
+
+            Assert.IsNull(result.Result);
+        }
     }
 }

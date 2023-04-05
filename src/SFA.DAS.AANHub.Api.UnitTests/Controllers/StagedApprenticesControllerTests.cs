@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] StagedApprenticesController sut,
             string lastname, DateTime dateofbirth, string email,
-            ValidatedResponse<GetStagedApprenticeResult> handlerResult)
+            ValidatedResponse<GetStagedApprenticeQueryResult> handlerResult)
         {
             mediatorMock.Setup(m => m.Send(It.IsAny<GetStagedApprenticeQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
 
@@ -31,7 +31,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var result = response as OkObjectResult;
             Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
 
-            var queryResult = result.Value as GetStagedApprenticeResult;
+            var queryResult = result.Value as GetStagedApprenticeQueryResult;
             queryResult.Should().BeEquivalentTo(handlerResult.Result);
 
             mediatorMock.Verify(m => m.Send(It.IsAny<GetStagedApprenticeQuery>(), It.IsAny<CancellationToken>()));
@@ -44,7 +44,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Greedy] StagedApprenticesController sut,
             string lastname, DateTime dateofbirth, string email)
         {
-            var errorResponse = new ValidatedResponse<GetStagedApprenticeResult>
+            var errorResponse = new ValidatedResponse<GetStagedApprenticeQueryResult>
                 (new List<ValidationFailure>());
 
             mediatorMock.Setup(m => m.Send(It.Is<GetStagedApprenticeQuery>(q => q.LastName == lastname
@@ -67,9 +67,9 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] StagedApprenticesController sut,
             string lastname, DateTime dateofbirth, string email,
-            GetStagedApprenticeResult getStagedApprenticeResult)
+            GetStagedApprenticeQueryResult getStagedApprenticeResult)
         {
-            var response = new ValidatedResponse<GetStagedApprenticeResult>(getStagedApprenticeResult);
+            var response = new ValidatedResponse<GetStagedApprenticeQueryResult>(getStagedApprenticeResult);
 
             mediatorMock.Setup(m => m.Send(It.Is<GetStagedApprenticeQuery>(q => q.LastName == lastname
                                                                                     && q.DateOfBirth == dateofbirth
@@ -90,7 +90,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Greedy] StagedApprenticesController sut,
             string lastname, DateTime dateofbirth, string email)
         {
-            var errorResponse = new ValidatedResponse<GetStagedApprenticeResult>
+            var errorResponse = new ValidatedResponse<GetStagedApprenticeQueryResult>
             (new List<ValidationFailure>
             {
                 new("Name", "error")

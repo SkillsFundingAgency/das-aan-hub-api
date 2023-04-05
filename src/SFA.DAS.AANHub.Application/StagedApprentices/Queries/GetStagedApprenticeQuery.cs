@@ -3,7 +3,7 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
 namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
 {
-    public class GetStagedApprenticeQuery : IRequest<ValidatedResponse<GetStagedApprenticeResult>>
+    public class GetStagedApprenticeQuery : IRequest<ValidatedResponse<GetStagedApprenticeQueryResult>>
     {
         public string LastName { get; }
         public DateTime DateOfBirth { get; }
