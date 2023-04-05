@@ -7,8 +7,8 @@
         public string LastName { get; set; } = null!;
         public string Email { get; set; } = null!;
         public DateTime DateOfBirth { get; set; }
-        public long Uln { get; set; }
-        public long ApprenticeshipId { get; set; }
+        public long? Uln { get; set; }
+        public long? ApprenticeshipId { get; set; }
         public string? EmployerName { get; set; }
         public DateTime StartDate { get; set; }
         public DateTime? EndDate { get; set; }

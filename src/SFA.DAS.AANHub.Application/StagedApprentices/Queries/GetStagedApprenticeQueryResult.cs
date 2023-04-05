@@ -4,8 +4,8 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
 {
     public class GetStagedApprenticeQueryResult
     {
-        public long Uln { get; set; }
-        public long ApprenticeshipId { get; set; }
+        public long? Uln { get; set; }
+        public long? ApprenticeshipId { get; set; }
         public string? EmployerName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
@@ -22,7 +22,7 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
             return new GetStagedApprenticeQueryResult
             {
                 Uln = stagedApprentice.Uln,
-                ApprenticeshipId = stagedApprentice.ApprenticeshipId,
+                ApprenticeshipId = stagedApprentice.ApprenticeshipId!,
                 EmployerName = stagedApprentice.EmployerName,
                 StartDate = stagedApprentice.StartDate,
                 EndDate = stagedApprentice.EndDate,
