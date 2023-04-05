@@ -1,6 +1,0 @@
-﻿CREATE TABLE [dbo].[Permission]
-(
-	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
-    [Name] NVARCHAR(200) NOT NULL, 
-    [Description] NVARCHAR(200) NOT NULL 
-)

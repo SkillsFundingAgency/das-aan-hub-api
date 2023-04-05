@@ -16,8 +16,6 @@ namespace SFA.DAS.AANHub.Data
         public DbSet<Partner> Partners => Set<Partner>();
         public DbSet<Admin> Admins => Set<Admin>();
         public DbSet<Calendar> Calendars => Set<Calendar>();
-        public DbSet<CalendarPermission> CalendarPermissions => Set<CalendarPermission>();
-        public DbSet<MemberPermission> MemberPermissions => Set<MemberPermission>();
         public DbSet<Profile> Profiles => Set<Profile>();
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
