@@ -9,7 +9,7 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
         public string? EmployerName { get; set; }
         public DateTime? StartDate { get; set; }
         public DateTime? EndDate { get; set; }
-        public long TrainingProviderId { get; set; }
+        public long? TrainingProviderId { get; set; }
         public string? TrainingProviderName { get; set; }
         public string? TrainingCode { get; set; }
         public string? StandardUId { get; set; }
