@@ -12,7 +12,7 @@ INSERT INTO #TempProfile VALUES
 (1,'Networking at events in person','Events',1, 'Apprentice'),
 (2,'Presenting at events in person','Events',2, 'Apprentice'),
 (3,'Presenting at hybrid events (online and in person)','Events',3, 'Apprentice'),
-(4,'Presenting at online in person','Events',4, 'Apprentice'),
+(4,'Presenting at online events','Events',4, 'Apprentice'),
 (5,'Project management and delivery of regional events or playing a role in organising national events','Events',5, 'Apprentice'),
 (10,'Carrying out and writing up case studies','Promotions',1, 'Apprentice'),
 (11,'Designing and creating marketing materials to champion the network','Promotions',2, 'Apprentice'),
