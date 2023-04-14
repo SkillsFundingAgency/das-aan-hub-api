@@ -40,7 +40,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
                 It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-            var result = await sut.CreateApprentice(Guid.NewGuid(), model) as CreatedAtActionResult;
+            var result = await sut.CreateApprentice(model) as CreatedAtActionResult;
 
             result?.ControllerName.Should().Be("Apprentices");
             result?.ActionName.Should().Be("GetApprentice");
@@ -64,7 +64,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
                 It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-            var requestResult = await sut.CreateApprentice(Guid.NewGuid(), model);
+            var requestResult = await sut.CreateApprentice(model);
 
             var result = requestResult as BadRequestObjectResult;
             result.Should().NotBeNull();

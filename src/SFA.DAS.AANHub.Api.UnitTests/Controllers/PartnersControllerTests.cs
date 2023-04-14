@@ -11,10 +11,10 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
 using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
+using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -41,7 +41,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         {
             var response = new ValidatedResponse<CreatePartnerMemberCommandResponse>
             (new CreatePartnerMemberCommandResponse
-            { 
+            {
                 MemberId = command.Id,
                 Status = MembershipStatus.Live
             });
@@ -52,7 +52,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreatePartner(Guid.NewGuid(), model) as CreatedAtActionResult;
+            var result = await _controller.CreatePartner(model) as CreatedAtActionResult;
 
             result?.ControllerName.Should().Be("Partners");
             result?.ActionName.Should().Be("CreatePartner");
@@ -73,7 +73,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var model = new CreatePartnerModel();
             _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
-            var result = await _controller.CreatePartner(Guid.NewGuid(), model);
+            var result = await _controller.CreatePartner(model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }
@@ -268,7 +268,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var response = new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
             mediatorMock.Setup(m => m.Send(It.IsAny<PatchPartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-                
+
             var result = await sut.PatchPartner(requestedByMemberId, userName, patchDoc);
 
             result.Should().NotBeNull();

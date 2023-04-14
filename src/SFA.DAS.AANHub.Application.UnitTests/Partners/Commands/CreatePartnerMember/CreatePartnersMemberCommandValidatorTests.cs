@@ -8,14 +8,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
 {
     public class CreatePartnerMemberCommandValidatorTests
     {
-        private readonly Mock<IMembersReadRepository> _membersReadRepository;
         private readonly Mock<IPartnersReadRepository> _partnersReadRepository;
         private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
 
         public CreatePartnerMemberCommandValidatorTests()
         {
             _regionsReadRepository = new Mock<IRegionsReadRepository>();
-            _membersReadRepository = new Mock<IMembersReadRepository>();
             _partnersReadRepository = new Mock<IPartnersReadRepository>();
         }
 
@@ -30,7 +28,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
                 UserName = userName!
             };
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _partnersReadRepository.Object);
+            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -49,7 +47,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
                 UserName = new string('a', length)
             };
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _partnersReadRepository.Object);
+            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
             var result = await sut.TestValidateAsync(command);
 
             if (isValid)
@@ -69,7 +67,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
                 Organisation = organisation!
             };
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _partnersReadRepository.Object);
+            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -88,7 +86,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
                 Organisation = new string('a', stringLength)
             };
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _partnersReadRepository.Object);
+            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 

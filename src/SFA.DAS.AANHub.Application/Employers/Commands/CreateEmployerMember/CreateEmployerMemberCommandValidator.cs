@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Application.Common.Validators;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
@@ -11,13 +10,11 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 
         private readonly IEmployersReadRepository _employersReadRepository;
 
-        public CreateEmployerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository,
-            IEmployersReadRepository employersReadRepository)
+        public CreateEmployerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IEmployersReadRepository employersReadRepository)
         {
             _employersReadRepository = employersReadRepository;
 
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
-            Include(new RequestedByMemberIdValidator(membersReadRepository));
             RuleFor(c => c.UserRef)
                 .NotEmpty()
                 .MustAsync(async (command, _, _) => await IsNewUser(command.UserRef))

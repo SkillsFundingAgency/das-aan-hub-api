@@ -1,17 +1,14 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common.Commands;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
 {
-    public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateApprenticeMemberCommandResponse>>,
-        IRequestedByMemberId
+    public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateApprenticeMemberCommandResponse>>
     {
         public Guid ApprenticeId { get; set; }
-        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
         {

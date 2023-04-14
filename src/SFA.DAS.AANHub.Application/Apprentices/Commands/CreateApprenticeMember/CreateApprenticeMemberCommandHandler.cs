@@ -33,7 +33,7 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
             _auditWriteRepository.Create(new Audit
             {
                 Action = "Create",
-                ActionedBy = command.RequestedByMemberId,
+                ActionedBy = command.Id,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member.Apprentice),
                 Resource = MembershipUserType.Apprentice

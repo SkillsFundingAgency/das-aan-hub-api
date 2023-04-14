@@ -24,7 +24,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
             response.Result.Status.Should().Be(MembershipStatus.Live);
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
         }
     }
 }

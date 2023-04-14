@@ -1,17 +1,15 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common.Commands;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
 {
-    public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreatePartnerMemberCommandResponse>>, IRequestedByMemberId
+    public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreatePartnerMemberCommandResponse>>
     {
         public string UserName { get; set; } = null!;
         public string Organisation { get; set; } = null!;
-        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreatePartnerMemberCommand command) => new()
         {

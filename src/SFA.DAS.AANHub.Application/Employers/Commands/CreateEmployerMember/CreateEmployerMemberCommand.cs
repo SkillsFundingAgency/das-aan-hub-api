@@ -1,18 +1,16 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common.Commands;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateEmployerMemberCommandResponse>>, IRequestedByMemberId
+    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateEmployerMemberCommandResponse>>
     {
         public long AccountId { get; init; }
         public Guid UserRef { get; init; }
         public string Organisation { get; set; } = null!;
-        public Guid RequestedByMemberId { get; set; }
 
         public static implicit operator Member(CreateEmployerMemberCommand command) => new()
         {

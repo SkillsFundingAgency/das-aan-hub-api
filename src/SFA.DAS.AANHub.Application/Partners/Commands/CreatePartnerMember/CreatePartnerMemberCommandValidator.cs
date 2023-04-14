@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Application.Common.Validators;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
@@ -9,11 +8,9 @@ namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
     {
         public const string PartnerAlreadyExistsErrorMessage = "Username already exists";
 
-        public CreatePartnerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository,
-            IPartnersReadRepository partnersReadRepository)
+        public CreatePartnerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IPartnersReadRepository partnersReadRepository)
         {
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
-            Include(new RequestedByMemberIdValidator(membersReadRepository));
             RuleFor(c => c.UserName)
                 .NotEmpty()
                 .NotNull()
