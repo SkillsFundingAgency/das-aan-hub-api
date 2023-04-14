@@ -4,6 +4,7 @@ using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -40,6 +41,7 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<IRegionsReadRepository, RegionsReadRepository>();
             services.AddTransient<IAdminsWriteRepository, AdminsWriteRepository>();
             services.AddTransient<IAdminsReadRepository, AdminsReadRepository>();
+            services.AddTransient<IStagedApprenticesReadRepository, StagedApprenticesReadRepository>();
             services.AddTransient<IEmployersWriteRepository, EmployersWriteRepository>();
             services.AddTransient<IEmployersReadRepository, EmployersReadRepository>();
             services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
