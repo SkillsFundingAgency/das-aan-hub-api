@@ -33,7 +33,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             _auditWriteRepository.Create(new Audit
             {
                 Action = "Create",
-                ActionedBy = command.RequestedByMemberId,
+                ActionedBy = command.Id,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member.Employer),
                 Resource = MembershipUserType.Employer

@@ -1,5 +1,4 @@
-﻿using FluentAssertions;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
@@ -43,7 +42,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
                 UserRef = guid
             };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -62,7 +61,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
                 Organisation = organisation
             };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -81,7 +80,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
                 Organisation = new string('a', stringLength)
             };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -101,7 +100,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
                 AccountId = id
             };
 
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -109,24 +108,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
                 result.ShouldNotHaveValidationErrorFor(c => c.AccountId);
             else
                 result.ShouldHaveValidationErrorFor(c => c.AccountId);
-        }
-
-        [TestCaseSource(nameof(FailGuidTestCases))]
-        public async Task Validates_RequestedByUserId_NotEmptyGuid(Guid id, bool isValid)
-        {
-            var command = new CreateEmployerMemberCommand
-            {
-                RequestedByMemberId = id
-            };
-
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
-
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.RequestedByMemberId);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
         }
 
         [TestCase(true)]
@@ -142,17 +123,18 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
             };
 
             _employersReadRepository.Setup(x => x.GetEmployerByUserRef(It.IsAny<Guid>())).ReturnsAsync(employer);
-            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _employersReadRepository.Object);
+            var sut = new CreateEmployerMemberCommandValidator(_regionsReadRepository.Object, _employersReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
             if (userRefAlreadyExist)
             {
-                result.ShouldHaveValidationErrorFor(c => c.UserRef);
-                result.Errors[6].PropertyName.Should().Be("UserRef");
-                result.Errors[6].ErrorMessage.Should().Be("UserRef already exists");
+                result.ShouldHaveValidationErrorFor(c => c.UserRef).WithErrorMessage("UserRef already exists");
             }
-            else { result.ShouldNotHaveValidationErrorFor(c => c.UserRef); }
+            else
+            {
+                result.ShouldNotHaveValidationErrorFor(c => c.UserRef);
+            }
         }
     }
 }

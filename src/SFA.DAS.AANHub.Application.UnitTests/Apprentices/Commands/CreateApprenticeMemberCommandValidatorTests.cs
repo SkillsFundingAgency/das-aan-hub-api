@@ -9,13 +9,11 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
     [TestFixture]
     public class CreateApprenticeMemberCommandValidatorTests
     {
-        private readonly Mock<IMembersReadRepository> _memberReadRepository;
         private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
         private readonly Mock<IApprenticesReadRepository> _apprenticesReadRepository;
 
         public CreateApprenticeMemberCommandValidatorTests()
         {
-            _memberReadRepository = new Mock<IMembersReadRepository>();
             _regionsReadRepository = new Mock<IRegionsReadRepository>();
             _apprenticesReadRepository = new Mock<IApprenticesReadRepository>();
         }
@@ -30,7 +28,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands
                 ApprenticeId = apprenticeId
             };
 
-            var sut = new CreateApprenticeMemberCommandValidator(_memberReadRepository.Object,
+            var sut = new CreateApprenticeMemberCommandValidator(
                 _regionsReadRepository.Object,
                 _apprenticesReadRepository.Object);
 

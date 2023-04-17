@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Application.Common.Validators;
-using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
@@ -9,11 +8,9 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
     {
         public const string AdminAlreadyExistsErrorMessage = "Username already exists";
 
-        public CreateAdminMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IMembersReadRepository membersReadRepository,
-            IAdminsReadRepository adminsReadRepository)
+        public CreateAdminMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IAdminsReadRepository adminsReadRepository)
         {
             Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
-            Include(new RequestedByMemberIdValidator(membersReadRepository));
             RuleFor(c => c.UserName)
                 .NotEmpty()
                 .NotNull()

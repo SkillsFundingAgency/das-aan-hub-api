@@ -9,13 +9,11 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember
     public class CreateAdminMemberCommandValidatorTests
     {
         private readonly Mock<IAdminsReadRepository> _adminsReadRepository;
-        private readonly Mock<IMembersReadRepository> _membersReadRepository;
         private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
 
         public CreateAdminMemberCommandValidatorTests()
         {
             _regionsReadRepository = new Mock<IRegionsReadRepository>();
-            _membersReadRepository = new Mock<IMembersReadRepository>();
             _adminsReadRepository = new Mock<IAdminsReadRepository>();
         }
 
@@ -29,7 +27,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember
                 UserName = userName!
             };
 
-            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _adminsReadRepository.Object);
+            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _adminsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 
@@ -48,7 +46,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember
                 UserName = new string('a', length)
             };
 
-            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _membersReadRepository.Object, _adminsReadRepository.Object);
+            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _adminsReadRepository.Object);
 
             var result = await sut.TestValidateAsync(command);
 

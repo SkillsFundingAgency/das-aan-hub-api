@@ -35,13 +35,9 @@ namespace SFA.DAS.AANHub.Api.Controllers
         [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreatePartner([FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required] Guid requestedByMemberId,
-            CreatePartnerModel request)
+        public async Task<IActionResult> CreatePartner(CreatePartnerModel request)
         {
-            _logger.LogInformation("AAN Hub API: Received command to add partner by member {requestedByMemberId}", requestedByMemberId);
-
             var command = (CreatePartnerMemberCommand)request;
-            command.RequestedByMemberId = requestedByMemberId;
 
             var response = await _mediator.Send(command);
 

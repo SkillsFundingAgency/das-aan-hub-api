@@ -13,9 +13,9 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
+using SFA.DAS.AANHub.Application.Employers.Commands.PatchEmployerMember;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
-using SFA.DAS.AANHub.Application.Employers.Commands.PatchEmployerMember;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
@@ -52,7 +52,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateEmployer(Guid.NewGuid(), model) as CreatedAtActionResult;
+            var result = await _controller.CreateEmployer(model) as CreatedAtActionResult;
 
             result?.ControllerName.Should().Be("Employers");
             result?.ActionName.Should().Be("CreateEmployer");
@@ -72,7 +72,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var model = new CreateEmployerModel();
             _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
-            var result = await _controller.CreateEmployer(Guid.NewGuid(), model);
+            var result = await _controller.CreateEmployer(model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }

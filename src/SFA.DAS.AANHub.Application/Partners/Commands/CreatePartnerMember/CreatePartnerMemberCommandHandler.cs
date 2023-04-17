@@ -32,7 +32,7 @@ namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
             _auditWriteRepository.Create(new Audit
             {
                 Action = "Create",
-                ActionedBy = command.RequestedByMemberId,
+                ActionedBy = command.Id,
                 AuditTime = DateTime.UtcNow,
                 After = JsonSerializer.Serialize(member.Partner),
                 Resource = MembershipUserType.Partner

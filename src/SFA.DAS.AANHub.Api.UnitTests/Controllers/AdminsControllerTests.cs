@@ -52,7 +52,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             });
 
             _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-            var result = await _controller.CreateAdmin(Guid.NewGuid(), model) as CreatedAtActionResult;
+            var result = await _controller.CreateAdmin(model) as CreatedAtActionResult;
 
             result?.ControllerName.Should().Be("Admins");
             result?.ActionName.Should().Be("CreateAdmin");
@@ -74,7 +74,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
             var model = new CreateAdminModel();
             _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
-            var result = await _controller.CreateAdmin(Guid.NewGuid(), model);
+            var result = await _controller.CreateAdmin(model);
 
             result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
         }

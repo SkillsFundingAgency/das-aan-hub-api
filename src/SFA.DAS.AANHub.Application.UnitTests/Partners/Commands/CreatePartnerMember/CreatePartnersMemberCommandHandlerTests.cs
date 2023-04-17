@@ -29,7 +29,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
         }
 
         [Test]
@@ -48,7 +48,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
             response.Result.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live);
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.RequestedByMemberId)));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
         }
     }
 }
