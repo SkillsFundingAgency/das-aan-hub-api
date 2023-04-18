@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using MediatR;
+using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
@@ -9,7 +10,7 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
     public class CreateEmployerMemberCommandHandler :
-        IRequestHandler<CreateEmployerMemberCommand, ValidatedResponse<CreateEmployerMemberCommandResponse>>
+        IRequestHandler<CreateEmployerMemberCommand, ValidatedResponse<CreateMemberCommandResponse>>
     {
         private readonly IAanDataContext _aanDataContext;
         private readonly IAuditWriteRepository _auditWriteRepository;
@@ -23,7 +24,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             _auditWriteRepository = auditWriteRepository;
         }
 
-        public async Task<ValidatedResponse<CreateEmployerMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
+        public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
@@ -41,7 +42,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            return new ValidatedResponse<CreateEmployerMemberCommandResponse>(member);
+            return new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(member.Id));
         }
     }
 }

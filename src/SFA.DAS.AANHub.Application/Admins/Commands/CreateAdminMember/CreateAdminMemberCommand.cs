@@ -6,7 +6,7 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
 {
-    public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateAdminMemberCommandResponse>>
+    public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
     {
         public string UserName { get; set; } = null!;
 

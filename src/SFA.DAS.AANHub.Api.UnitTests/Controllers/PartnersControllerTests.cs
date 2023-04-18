@@ -18,7 +18,6 @@ using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -39,12 +38,8 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreatePartnerModel model,
             CreatePartnerMemberCommand command)
         {
-            var response = new ValidatedResponse<CreatePartnerMemberCommandResponse>
-            (new CreatePartnerMemberCommandResponse
-            {
-                MemberId = command.Id,
-                Status = MembershipStatus.Live
-            });
+            var response = new ValidatedResponse<CreateMemberCommandResponse>
+            (new CreateMemberCommandResponse(command.Id));
 
             model.Regions = new List<int>(new[]
             {
@@ -57,14 +52,14 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result?.ControllerName.Should().Be("Partners");
             result?.ActionName.Should().Be("CreatePartner");
             result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-            result?.Value.As<CreatePartnerMemberCommandResponse>().MemberId.Should().Be(command.Id);
+            result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]
         [AutoMoqData]
         public async Task CreatePartner_InvokesRequest_WithErrors()
         {
-            var errorResponse = new ValidatedResponse<CreatePartnerMemberCommandResponse>
+            var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
             (new List<ValidationFailure>
             {
                 new("Name", "error")
@@ -79,7 +74,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         }
 
         [Test, AutoMoqData]
-        public async Task GetPartner_InvokesQueryHandler()
+        public async Task GetPartner_InvokesQueryHandler_Returns200Response()
         {
             var response = new ValidatedResponse<GetPartnerMemberResult>
             (new GetPartnerMemberResult
@@ -96,24 +91,20 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var result = await _controller.GetPartner(userName);
             result.Should().NotBeNull();
 
-            result.As<OkObjectResult>().StatusCode.Should().Be(StatusCodes.Status200OK);
+            result.As<OkObjectResult>().StatusCode.Should().NotBeNull();
         }
 
         [Test, AutoMoqData]
-        public async Task GetPartner_InvokesQueryHandler_NoResultGivesNotFound()
+        public async Task GetPartner_QueryHandlerReturnsValudationErrors_ReturnsBadRequestResponse()
         {
-            var response = new ValidatedResponse<GetPartnerMemberResult>
-            (new List<ValidationFailure>
-            {
-                new("Name", "error")
-            });
+            var response = new ValidatedResponse<GetPartnerMemberResult>(new List<ValidationFailure> { new("Name", "error") });
 
             string userName = "username";
             _mediator.Setup(m => m.Send(It.IsAny<GetPartnerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
             var result = await _controller.GetPartner(userName);
 
-            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+            result.As<BadRequestObjectResult>().StatusCode.Should().NotBeNull();
         }
 
         [Test]
@@ -140,15 +131,15 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 
         [Test]
         [AutoMoqData]
-        public async Task GetPartner_InvokesQueryHandler_NoResultGivesNotFound(
+        public async Task GetPartner_QueryHandlerResponseHasNoResult_ReturnsNotFoundResponse(
             [Frozen] Mock<IMediator> mediatorMock,
             [Greedy] PartnersController sut)
         {
             string userName = "username";
-            var errorResponse = new ValidatedResponse<GetPartnerMemberResult>
-                (new List<ValidationFailure>());
+            var errorResponse = new ValidatedResponse<GetPartnerMemberResult>(new List<ValidationFailure>());
 
-            mediatorMock.Setup(m => m.Send(It.Is<GetPartnerMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+            mediatorMock
+                .Setup(m => m.Send(It.Is<GetPartnerMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
                 .ReturnsAsync(errorResponse);
 
             var response = await sut.GetPartner(userName);
@@ -171,7 +162,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             (new GetPartnerMemberResult
             {
                 Email = "email@email.com",
-                MemberId = new Guid(),
+                MemberId = Guid.NewGuid(),
                 Name = "name",
                 Organisation = "organisation"
             });

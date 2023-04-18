@@ -6,7 +6,7 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 {
-    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateEmployerMemberCommandResponse>>
+    public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
     {
         public long AccountId { get; init; }
         public Guid UserRef { get; init; }

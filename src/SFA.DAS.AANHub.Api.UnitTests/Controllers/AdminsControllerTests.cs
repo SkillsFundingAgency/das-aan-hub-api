@@ -18,7 +18,6 @@ using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -39,12 +38,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreateAdminModel model,
             CreateAdminMemberCommand command)
         {
-            var response = new ValidatedResponse<CreateAdminMemberCommandResponse>
-            (new CreateAdminMemberCommandResponse
-            {
-                MemberId = command.Id,
-                Status = MembershipStatus.Live
-            });
+            var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
 
             model.Regions = new List<int>(new[]
             {
@@ -57,15 +51,13 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result?.ControllerName.Should().Be("Admins");
             result?.ActionName.Should().Be("CreateAdmin");
             result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-            result?.Value.As<CreateAdminMemberCommandResponse>().MemberId.Should().Be(command.Id);
+            result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]
-        [AutoMoqData]
-        public async Task CreateAdmin_InvokesRequest_WithErrors(
-            CreateAdminMemberCommand command)
+        public async Task CreateAdmin_InvokesRequest_WithErrors()
         {
-            var errorResponse = new ValidatedResponse<CreateAdminMemberCommandResponse>
+            var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
             (new List<ValidationFailure>
             {
                 new("Name", "error")
@@ -134,7 +126,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             (new GetAdminMemberResult
             {
                 Email = "email@email.com",
-                MemberId = new Guid(),
+                MemberId = Guid.NewGuid(),
                 Name = "name"
             });
 

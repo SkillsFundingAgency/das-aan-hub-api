@@ -18,7 +18,6 @@ using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -39,12 +38,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CreateEmployerModel model,
             CreateEmployerMemberCommand command)
         {
-            var response = new ValidatedResponse<CreateEmployerMemberCommandResponse>
-            (new CreateEmployerMemberCommandResponse
-            {
-                MemberId = command.Id,
-                Status = MembershipStatus.Live
-            });
+            var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
 
             model.Regions = new List<int>(new[]
             {
@@ -57,14 +51,14 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result?.ControllerName.Should().Be("Employers");
             result?.ActionName.Should().Be("CreateEmployer");
             result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-            result?.Value.As<CreateEmployerMemberCommandResponse>().MemberId.Should().Be(command.Id);
+            result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]
         [AutoMoqData]
         public async Task CreateEmployer_InvokesRequest_WithErrors()
         {
-            var errorResponse = new ValidatedResponse<CreateEmployerMemberCommandResponse>
+            var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
             (new List<ValidationFailure>
             {
                 new("Name", "error")
@@ -84,7 +78,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         {
             _mediator.Setup(m => m.Send(It.IsAny<GetEmployerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
 
-            var userRef = new Guid();
+            var userRef = Guid.NewGuid();
             var response = await _controller.GetEmployer(userRef);
             response.Should().NotBeNull();
 

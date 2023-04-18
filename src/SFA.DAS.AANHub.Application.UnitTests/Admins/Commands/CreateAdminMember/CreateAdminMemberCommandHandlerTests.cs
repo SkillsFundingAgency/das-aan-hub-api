@@ -21,7 +21,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember
         {
             var response = await sut.Handle(command, new CancellationToken());
             response.Result.MemberId.Should().Be(command.Id);
-            response.Result.Status.Should().Be(MembershipStatus.Live);
 
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.UserType == MembershipUserType.Admin)));

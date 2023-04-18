@@ -6,7 +6,7 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
 {
-    public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreatePartnerMemberCommandResponse>>
+    public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
     {
         public string UserName { get; set; } = null!;
         public string Organisation { get; set; } = null!;

@@ -17,7 +17,6 @@ using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
@@ -30,11 +29,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Greedy] ApprenticesController sut,
             CreateApprenticeModel model, CreateApprenticeMemberCommand command)
         {
-            var response = new ValidatedResponse<CreateApprenticeMemberCommandResponse>(new CreateApprenticeMemberCommandResponse
-            {
-                MemberId = command.Id,
-                Status = MembershipStatus.Live
-            });
+            var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
 
 
             mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
@@ -45,7 +40,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             result?.ControllerName.Should().Be("Apprentices");
             result?.ActionName.Should().Be("GetApprentice");
             result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-            result?.Value.As<CreateApprenticeMemberCommandResponse>().MemberId.Should().Be(command.Id);
+            result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
         }
 
         [Test]
@@ -55,7 +50,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             [Greedy] ApprenticesController sut,
             CreateApprenticeModel model)
         {
-            var errorResponse = new ValidatedResponse<CreateApprenticeMemberCommandResponse>
+            var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
             (new List<ValidationFailure>
             {
                 new("Name", "error")
