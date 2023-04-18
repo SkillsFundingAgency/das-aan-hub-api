@@ -10,6 +10,7 @@ namespace SFA.DAS.AANHub.Data.Configuration
         {
             builder.ToTable("Member");
             builder.HasKey(x => x.Id);
+            builder.HasOne(m => m.Region).WithMany(r => r.Members);
         }
     }
 }

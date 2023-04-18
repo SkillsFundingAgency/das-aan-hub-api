@@ -9,7 +9,7 @@ namespace SFA.DAS.AANHub.Api.Models
         public string Name { get; set; } = null!;
         public string Information { get; set; } = null!;
         public DateTime Joined { get; set; }
-        public List<int>? Regions { get; set; }
+        public int? RegionId { get; set; }
 
         public static implicit operator CreateAdminMemberCommand(CreateAdminModel model) => new()
         {
@@ -18,7 +18,7 @@ namespace SFA.DAS.AANHub.Api.Models
             Joined = model.Joined,
             UserName = model.UserName,
             Information = model.Information,
-            Regions = model.Regions
+            RegionId = model.RegionId
         };
     }
 }

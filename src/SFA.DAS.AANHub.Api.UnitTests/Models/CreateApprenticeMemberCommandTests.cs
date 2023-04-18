@@ -20,7 +20,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Models
             Assert.AreEqual(createApprenticeModel.Joined, model.Joined);
             Assert.AreEqual(createApprenticeModel.Information, model.Information);
             Assert.AreEqual(createApprenticeModel.Email, model.Email);
-            Assert.AreEqual(createApprenticeModel.Regions, model.Regions);
+            Assert.AreEqual(createApprenticeModel.RegionId, model.RegionId);
             Assert.AreEqual(createApprenticeModel.Name, model.Name);
         }
     }

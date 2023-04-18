@@ -18,7 +18,7 @@ namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
             Joined = command.Joined,
             Information = command.Information,
             Status = MembershipStatus.Live,
-            MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
+            RegionId = command.RegionId,
             Partner = new Partner
             {
                 MemberId = command.Id,

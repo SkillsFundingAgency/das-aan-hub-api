@@ -8,7 +8,7 @@ namespace SFA.DAS.AANHub.Api.Models
         public Guid UserRef { get; set; }
         public string Organisation { get; set; } = null!;
         public DateTime Joined { get; set; }
-        public List<int>? Regions { get; set; }
+        public int? RegionId { get; set; }
         public string? Information { get; set; }
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
@@ -22,7 +22,7 @@ namespace SFA.DAS.AANHub.Api.Models
             Name = model.Name,
             Information = model.Information,
             Joined = model.Joined,
-            Regions = model.Regions
+            RegionId = model.RegionId
         };
     }
 }

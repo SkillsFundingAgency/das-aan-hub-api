@@ -17,12 +17,13 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
             CreateEmployerMemberCommandHandler sut,
             CreateEmployerMemberCommand command)
         {
-            command.Regions = new List<int>(new[] { 1 });
             var response = await sut.Handle(command, new CancellationToken());
             response.Result.MemberId.Should().Be(command.Id);
 
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x =>
+                x.Id == command.Id
+                && x.RegionId == command.RegionId
+            )));
             auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
         }
 
@@ -33,13 +34,13 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployer
             CreateEmployerMemberCommandHandler sut,
             CreateEmployerMemberCommand command)
         {
-            command.Regions = null;
+            command.RegionId = null;
 
             var response = await sut.Handle(command, new CancellationToken());
 
             response.Result.MemberId.Should().Be(command.Id);
 
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id && x.RegionId == null)));
             auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
         }
     }

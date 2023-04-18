@@ -40,11 +40,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         {
             var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
 
-            model.Regions = new List<int>(new[]
-            {
-                1, 2
-            });
-
             _mediator.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
             var result = await _controller.CreateAdmin(model) as CreatedAtActionResult;
 

@@ -17,7 +17,7 @@ namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
             Joined = command.Joined,
             Information = command.Information,
             Status = MembershipStatus.Live,
-            MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
+            RegionId = command.RegionId,
             Admin = new Admin
             {
                 MemberId = command.Id,

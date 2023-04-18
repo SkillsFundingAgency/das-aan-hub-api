@@ -20,14 +20,13 @@ namespace SFA.DAS.AANHub.Application.Common.Validators
                 .Matches(Constants.RegularExpressions.EmailRegex);
             RuleFor(x => x.Joined)
                 .NotEmpty();
-            RuleFor(x => x.Regions).MustAsync(async (regions, cancellationToken) =>
+            RuleFor(x => x.RegionId).MustAsync(async (regionId, cancellationToken) =>
             {
-                if (regions == null) return true;
+                if (regionId == null) return true;
 
                 var dbRegions = await regionsReadRepository.GetAllRegions();
-                var regionList = dbRegions.Select(item => item.Id).ToList();
 
-                return regions.All(region => regionList.Contains(region));
+                return dbRegions.Select(r => r.Id).Any(id => id == regionId);
 
             }).WithMessage("Region value must be in range");
         }

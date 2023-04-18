@@ -9,6 +9,9 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public string? Status { get; set; }
         public string? Information { get; set; }
         public DateTime Joined { get; set; }
+        public int? RegionId { get; set; }
+
+        public virtual Region? Region { get; set; }
         [JsonIgnore]
         public virtual Admin? Admin { get; set; }
         [JsonIgnore]
@@ -17,20 +20,5 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public virtual Employer? Employer { get; set; }
         [JsonIgnore]
         public virtual Partner? Partner { get; set; }
-        public virtual List<MemberRegion>? MemberRegions { get; set; }
-
-        public static List<MemberRegion> GenerateMemberRegions(List<int>? regions, Guid id)
-        {
-            var memberRegions = new List<MemberRegion>();
-            if (regions == null) return memberRegions;
-
-            memberRegions.AddRange(regions.Select(region => new MemberRegion
-            {
-                MemberId = id,
-                RegionId = region
-            }));
-
-            return memberRegions;
-        }
     }
 }

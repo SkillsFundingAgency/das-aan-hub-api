@@ -19,10 +19,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
             const string name = "ThisIsAName";
             const string userName = "ThisIsAUserName";
             const string organisation = "ThisIsAnOrganisation";
-            var regions = new List<int>(new[]
-            {
-                1, 2
-            });
+            var regionId = 1;
 
             var model = new CreatePartnerModel
             {
@@ -30,7 +27,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
                 Information = info,
                 Joined = date,
                 Name = name,
-                Regions = regions,
+                RegionId = regionId,
                 UserName = userName,
                 Organisation = organisation
             };

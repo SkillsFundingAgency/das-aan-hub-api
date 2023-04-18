@@ -19,10 +19,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Models
             const string name = "ThisIsAName";
             const string userName = "ThisIsAUserName";
             const string organisation = "ThisIsAnOrganisation";
-            var regions = new List<int>(new[]
-            {
-                1, 2
-            });
+            var regionId = 1;
 
             var model = new CreatePartnerModel
             {
@@ -30,7 +27,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Models
                 Information = info,
                 Joined = date,
                 Name = name,
-                Regions = regions,
+                RegionId = regionId,
                 UserName = userName,
                 Organisation = organisation
             };
@@ -43,7 +40,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Models
             command.Name.Should().Be(name);
             command.Information.Should().Be(info);
             command.Joined.Should().Be(date);
-            command.Regions.Should().Equal(regions);
+            command.RegionId.Should().Be(regionId);
         }
     }
 }
