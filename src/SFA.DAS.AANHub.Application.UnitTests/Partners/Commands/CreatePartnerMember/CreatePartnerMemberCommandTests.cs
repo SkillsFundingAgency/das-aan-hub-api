@@ -41,7 +41,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMe
             member.UserType.Should().Be(Domain.Common.Constants.MembershipUserType.Partner);
             member.Joined.Should().Be(date);
             member.Information.Should().Be(info);
-            member.ReviewStatus.Should().Be(Domain.Common.Constants.MembershipReviewStatus.New);
             member.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live);
             member?.Partner?.MemberId.Should().Be(member.Id);
             member?.Partner?.Email.Should().Be(email);

@@ -17,7 +17,6 @@ namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
             UserType = MembershipUserType.Partner,
             Joined = command.Joined,
             Information = command.Information,
-            ReviewStatus = MembershipReviewStatus.New,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Partner = new Partner

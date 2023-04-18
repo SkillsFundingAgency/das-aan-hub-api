@@ -16,7 +16,6 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
             UserType = MembershipUserType.Apprentice,
             Joined = command.Joined,
             Information = command.Information,
-            ReviewStatus = MembershipReviewStatus.New,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Apprentice = new Apprentice

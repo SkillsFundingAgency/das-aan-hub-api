@@ -7,7 +7,6 @@ namespace SFA.DAS.AANHub.Domain.Entities
         public Guid Id { get; set; }
         public string? UserType { get; set; }
         public string? Status { get; set; }
-        public string? ReviewStatus { get; set; }
         public string? Information { get; set; }
         public DateTime Joined { get; set; }
         [JsonIgnore]

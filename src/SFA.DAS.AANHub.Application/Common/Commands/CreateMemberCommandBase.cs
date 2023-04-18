@@ -4,7 +4,6 @@
     {
         protected CreateMemberCommandBase() => Id = Guid.NewGuid();
         public Guid Id { get; }
-        public string? ReviewStatus { get; set; }
         public string Email { get; set; } = null!;
         public string Name { get; set; } = null!;
         public DateTime Joined { get; set; }

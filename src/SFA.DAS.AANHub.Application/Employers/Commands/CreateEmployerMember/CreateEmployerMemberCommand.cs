@@ -18,7 +18,6 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             UserType = MembershipUserType.Employer,
             Joined = command.Joined,
             Information = command.Information,
-            ReviewStatus = MembershipReviewStatus.New,
             Status = MembershipStatus.Live,
             MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
             Employer = new Employer
