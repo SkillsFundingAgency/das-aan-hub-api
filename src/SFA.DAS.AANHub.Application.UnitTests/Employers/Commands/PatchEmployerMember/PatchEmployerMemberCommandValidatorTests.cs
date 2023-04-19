@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.JsonPatch.Operations;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.PatchEmployerMember;
-using SFA.DAS.AANHub.Application.Partners.Commands.PatchPartnerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -95,22 +94,20 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.PatchEmployerM
         public async Task ValidatePatchDoc_DuplicateReplaceOperation_InvalidResponse(string patchfield, string value1, string value2)
         {
             var memberId = Guid.NewGuid();
-            var userName = "username";
 
-            var command = new PatchPartnerMemberCommand
+            var command = new PatchEmployerMemberCommand
             {
                 RequestedByMemberId = memberId,
-                UserName = userName,
-                PatchDoc = new JsonPatchDocument<Partner>()
+                PatchDoc = new JsonPatchDocument<Employer>()
             };
 
-            command.PatchDoc = new JsonPatchDocument<Partner>
+            command.PatchDoc = new JsonPatchDocument<Employer>
             {
                 Operations =
                 {
-                    new Operation<Partner>
+                    new Operation<Employer>
                         { op = nameof(OperationType.Replace), path = patchfield, value = value1 },
-                    new Operation<Partner>
+                    new Operation<Employer>
                         { op = nameof(OperationType.Replace), path = patchfield, value = value2 }
                 }
             };
@@ -122,7 +119,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.PatchEmployerM
 
             _memberReadRepository.Setup(a => a.GetMember(memberId)).ReturnsAsync(member);
 
-            var sut = new PatchPartnerMemberCommandValidator(_memberReadRepository.Object);
+            var sut = new PatchEmployerMemberCommandValidator(_memberReadRepository.Object);
             var result = await sut.TestValidateAsync(command);
 
             result.ShouldHaveValidationErrorFor(c => c.PatchDoc.Operations.Count(operation => operation.path == Name && operation.op.Equals(nameof(OperationType.Replace), StringComparison.CurrentCultureIgnoreCase)));

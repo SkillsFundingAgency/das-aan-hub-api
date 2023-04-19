@@ -1,11 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
-{
-    public interface IPartnersWriteRepository
-    {
-        void Create(Partner partner);
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-        Task<Partner?> GetPatchPartner(string userName);
-    }
+public interface IPartnersWriteRepository
+{
+    void Create(Partner partner);
 }
