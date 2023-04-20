@@ -15,8 +15,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
             Assert.That(response, Is.Not.Null);
 
             Assert.AreEqual(apprentice.MemberId, response!.MemberId);
-            Assert.AreEqual(apprentice.Name, response.Name);
-            Assert.AreEqual(apprentice.Email, response.Email);
+            Assert.AreEqual(apprentice.Member.FirstName, response.FirstName);
+            Assert.AreEqual(apprentice.Member.LastName, response.LastName);
+            Assert.AreEqual(apprentice.Member.Email, response.Email);
             Assert.AreEqual(apprentice.Member.Status, response.Status);
         }
 

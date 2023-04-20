@@ -5,8 +5,9 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Queries
     public class GetApprenticeMemberResult
     {
         public Guid MemberId { get; set; }
-        public string Email { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string Email { get; set; } = null!;
+        public string FirstName { get; set; } = null!;
+        public string LastName { get; set; } = null!;
         public string Status { get; set; } = null!;
 
         public static implicit operator GetApprenticeMemberResult?(Apprentice apprentice)
@@ -16,8 +17,9 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Queries
 
             return new GetApprenticeMemberResult
             {
-                Email = apprentice.Email,
-                Name = apprentice.Name,
+                Email = apprentice.Member.Email,
+                FirstName = apprentice.Member.FirstName,
+                LastName = apprentice.Member.LastName,
                 MemberId = apprentice.MemberId,
                 Status = apprentice.Member.Status!
             };

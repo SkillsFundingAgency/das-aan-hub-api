@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Data.Extensions;
 using SFA.DAS.AANHub.Domain.Common;
@@ -16,6 +17,7 @@ using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace SFA.DAS.AANHub.Api
 {
@@ -93,16 +95,19 @@ namespace SFA.DAS.AANHub.Api
                     options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
                 });
 
-            services.AddSwaggerGen(c =>
-            {
-                c.SwaggerDoc("v1",
-                    new OpenApiInfo
-                    {
-                        Title = "AAN Hub API"
-                    });
+            services
+                .AddSwaggerGen(options =>
+                {
+                    options.SwaggerDoc("v1",
+                        new OpenApiInfo
+                        {
+                            Title = "AAN Hub API"
+                        });
 
-                c.OperationFilter<SwaggerVersionHeaderFilter>();
-            });
+                    options.OperationFilter<SwaggerVersionHeaderFilter>();
+                    options.ExampleFilters();
+                })
+                .AddSwaggerExamplesFromAssemblyOf<PatchMemberExample>();
 
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);

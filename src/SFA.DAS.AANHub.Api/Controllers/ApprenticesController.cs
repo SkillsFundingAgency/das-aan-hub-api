@@ -28,7 +28,6 @@ public class ApprenticesController : ActionResponseControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateApprentice(CreateApprenticeModel request)
@@ -56,7 +55,6 @@ public class ApprenticesController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{apprenticeId}")]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetApprentice(Guid apprenticeId)

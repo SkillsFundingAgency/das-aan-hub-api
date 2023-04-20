@@ -13,7 +13,7 @@ public class Member
     public string? Information { get; set; }
     public DateTime Joined { get; set; }
     public int? RegionId { get; set; }
-    public string? OrganistaionName { get; set; }
+    public string? OrganisationName { get; set; }
     public DateTime LastUpdated { get; set; }
 
     public virtual Region? Region { get; set; }

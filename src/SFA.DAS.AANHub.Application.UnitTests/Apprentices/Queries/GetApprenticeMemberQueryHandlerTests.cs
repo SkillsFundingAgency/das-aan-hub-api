@@ -28,8 +28,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
             var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
 
             Assert.AreEqual(apprentice.MemberId, result.Result.MemberId);
-            Assert.AreEqual(apprentice.Name, result.Result.Name);
-            Assert.AreEqual(apprentice.Email, result.Result.Email);
+            Assert.AreEqual(apprentice.Member.FirstName, result.Result.FirstName);
+            Assert.AreEqual(apprentice.Member.LastName, result.Result.LastName);
+            Assert.AreEqual(apprentice.Member.Email, result.Result.Email);
             Assert.AreEqual(apprentice.Member.Status, result.Result.Status);
         }
     }
