@@ -3,263 +3,167 @@ using FluentAssertions;
 using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.JsonPatch;
-using Microsoft.AspNetCore.JsonPatch.Operations;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
-using SFA.DAS.AANHub.Application.Apprentices.Commands.PatchApprenticeMember;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.UnitTests;
-using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
+
+public class ApprenticesControllerTests
 {
-    public class ApprenticesControllerTests
+    [Test]
+    [AutoMoqData]
+    public async Task CreateApprentice_InvokesRequest(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        CreateApprenticeModel model, CreateApprenticeMemberCommand command)
     {
-        [Test]
-        [AutoMoqData]
-        public async Task CreateApprentice_InvokesRequest(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            CreateApprenticeModel model, CreateApprenticeMemberCommand command)
+        var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
+
+
+        mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
+            It.IsAny<CancellationToken>())).ReturnsAsync(response);
+
+        var result = await sut.CreateApprentice(model) as CreatedAtActionResult;
+
+        result?.ControllerName.Should().Be("Apprentices");
+        result?.ActionName.Should().Be("GetApprentice");
+        result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
+    }
+
+    [Test]
+    [AutoMoqData]
+    public async Task CreateApprentice_InvokesRequest_BadResultGivesBadRequest(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        CreateApprenticeModel model)
+    {
+        var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
+        (new List<ValidationFailure>
         {
-            var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
+            new("Name", "error")
+        });
 
+        mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
+            It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-            mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
-                It.IsAny<CancellationToken>())).ReturnsAsync(response);
+        var requestResult = await sut.CreateApprentice(model);
 
-            var result = await sut.CreateApprentice(model) as CreatedAtActionResult;
+        var result = requestResult as BadRequestObjectResult;
+        result.Should().NotBeNull();
 
-            result?.ControllerName.Should().Be("Apprentices");
-            result?.ActionName.Should().Be("GetApprentice");
-            result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-            result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task CreateApprentice_InvokesRequest_BadResultGivesBadRequest(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            CreateApprenticeModel model)
+        var errorList = result?.Value as List<ValidationFailure>;
+        errorList?.Count.Should().Be(1);
+        errorList?[0].Should().Be(new ValidationFailure
         {
-            var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>
-            (new List<ValidationFailure>
-            {
-                new("Name", "error")
-            });
+            PropertyName = "name",
+            ErrorMessage = "error"
+        });
 
-            mediatorMock.Setup(m => m.Send(It.IsAny<CreateApprenticeMemberCommand>(),
-                It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
+        Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
+    }
 
-            var requestResult = await sut.CreateApprentice(model);
+    [Test]
+    [AutoMoqData]
+    public async Task GetApprentice_InvokesQueryHandler(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        Guid apprenticeId,
+        ValidatedResponse<GetApprenticeMemberResult> handlerResult)
+    {
+        mediatorMock.Setup(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
 
-            var result = requestResult as BadRequestObjectResult;
-            result.Should().NotBeNull();
+        var response = await sut.GetApprentice(apprenticeId);
+        response.Should().NotBeNull();
 
-            var errorList = result?.Value as List<ValidationFailure>;
-            errorList?.Count.Should().Be(1);
-            errorList?[0].Should().Be(new ValidationFailure
-            {
-                PropertyName = "name",
-                ErrorMessage = "error"
-            });
+        var result = response as OkObjectResult;
+        Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
 
-            Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
-        }
+        var queryResult = result.Value as GetApprenticeMemberResult;
+        queryResult.Should().BeEquivalentTo(handlerResult.Result);
 
-        [Test]
-        [AutoMoqData]
-        public async Task GetApprentice_InvokesQueryHandler(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid apprenticeId,
-            ValidatedResponse<GetApprenticeMemberResult> handlerResult)
+        mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
+    }
+
+    [Test]
+    [AutoMoqData]
+    public async Task GetApprentice_InvokesQueryHandler_NoResultGivesNotFound(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        Guid apprenticeId)
+    {
+        var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
+            (new List<ValidationFailure>());
+
+        mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(errorResponse);
+
+        var response = await sut.GetApprentice(apprenticeId);
+
+        var result = response as NotFoundResult;
+        result.Should().NotBeNull();
+        Assert.AreEqual(StatusCodes.Status404NotFound, result!.StatusCode);
+
+        mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
+    }
+
+    [Test]
+    [AutoMoqData]
+    public async Task GetApprentice_InvokesQueryHandler_ResultGivesSuccessfulResult(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        Guid apprenticeId,
+        GetApprenticeMemberResult getApprenticeMemberResult)
+    {
+        var response = new ValidatedResponse<GetApprenticeMemberResult>(getApprenticeMemberResult);
+
+        mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+
+        var getResult = await sut.GetApprentice(apprenticeId);
+
+        var result = getResult as OkObjectResult;
+        result.Should().NotBeNull();
+        Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+    }
+
+    [Test]
+    [AutoMoqData]
+    public async Task GetApprentice_InvokesQueryHandler_BadResultGivesBadRequest(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] ApprenticesController sut,
+        Guid apprenticeId)
+    {
+        var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
+        (new List<ValidationFailure>
         {
-            mediatorMock.Setup(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(handlerResult);
+            new("Name", "error")
+        });
 
-            var response = await sut.GetApprentice(apprenticeId);
-            response.Should().NotBeNull();
+        mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(errorResponse);
 
-            var result = response as OkObjectResult;
-            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
+        var response = await sut.GetApprentice(apprenticeId);
 
-            var queryResult = result.Value as GetApprenticeMemberResult;
-            queryResult.Should().BeEquivalentTo(handlerResult.Result);
+        var result = response as BadRequestObjectResult;
+        result.Should().NotBeNull();
 
-            mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task GetApprentice_InvokesQueryHandler_NoResultGivesNotFound(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid apprenticeId)
+        var errorList = result?.Value as List<ValidationFailure>;
+        errorList?.Count.Should().Be(1);
+        errorList?[0].Should().Be(new ValidationFailure
         {
-            var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
-                (new List<ValidationFailure>());
+            PropertyName = "name",
+            ErrorMessage = "error"
+        });
 
-            mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(errorResponse);
-
-            var response = await sut.GetApprentice(apprenticeId);
-
-            var result = response as NotFoundResult;
-            result.Should().NotBeNull();
-            Assert.AreEqual(StatusCodes.Status404NotFound, result!.StatusCode);
-
-            mediatorMock.Verify(m => m.Send(It.IsAny<GetApprenticeMemberQuery>(), It.IsAny<CancellationToken>()));
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task GetApprentice_InvokesQueryHandler_ResultGivesSuccessfulResult(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid apprenticeId,
-            GetApprenticeMemberResult getApprenticeMemberResult)
-        {
-            var response = new ValidatedResponse<GetApprenticeMemberResult>(getApprenticeMemberResult);
-
-            mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(response);
-
-            var getResult = await sut.GetApprentice(apprenticeId);
-
-            var result = getResult as OkObjectResult;
-            result.Should().NotBeNull();
-            Assert.AreEqual(StatusCodes.Status200OK, result!.StatusCode);
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task GetApprentice_InvokesQueryHandler_BadResultGivesBadRequest(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid apprenticeId)
-        {
-            var errorResponse = new ValidatedResponse<GetApprenticeMemberResult>
-            (new List<ValidationFailure>
-            {
-                new("Name", "error")
-            });
-
-            mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(errorResponse);
-
-            var response = await sut.GetApprentice(apprenticeId);
-
-            var result = response as BadRequestObjectResult;
-            result.Should().NotBeNull();
-
-            var errorList = result?.Value as List<ValidationFailure>;
-            errorList?.Count.Should().Be(1);
-            errorList?[0].Should().Be(new ValidationFailure
-            {
-                PropertyName = "name",
-                ErrorMessage = "error"
-            });
-
-            Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task PatchApprentice_InvokesRequest(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid userId,
-            Guid apprenticeId)
-        {
-            var Email = "Email";
-            var testValue = "value";
-
-            var patchDoc = new JsonPatchDocument<Apprentice>();
-            patchDoc.Operations.Add(new Operation<Apprentice>
-            {
-                op = nameof(OperationType.Replace),
-                path = Email,
-                value = testValue
-            });
-
-            var success = true;
-            var response = new ValidatedResponse<PatchMemberCommandResponse>
-                (new PatchMemberCommandResponse(success));
-
-            mediatorMock.Setup(m => m.Send(It.Is<PatchApprenticeMemberCommand>(c => c.RequestedByMemberId == userId && c.ApprenticeId == apprenticeId),
-                It.IsAny<CancellationToken>())).ReturnsAsync(response);
-
-            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
-
-            (result as NoContentResult).Should().NotBeNull();
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task PatchApprentice_InvokesRequest_NotFound(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid userId,
-            Guid apprenticeId)
-        {
-            var Email = "Email";
-            var testValue = "value";
-
-            var patchDoc = new JsonPatchDocument<Apprentice>();
-            patchDoc.Operations.Add(new Operation<Apprentice>
-            {
-                op = nameof(OperationType.Replace),
-                path = Email,
-                value = testValue
-            });
-
-            var response = new ValidatedResponse<PatchMemberCommandResponse>(new PatchMemberCommandResponse(false));
-            mediatorMock.Setup(m => m.Send(It.IsAny<PatchApprenticeMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-
-            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
-
-            result.Should().NotBeNull();
-            result.As<NotFoundResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
-        }
-
-        [Test]
-        [AutoMoqData]
-        public async Task PatchApprentice_InvokesRequest_WithErrors(
-            [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] ApprenticesController sut,
-            Guid userId,
-            Guid apprenticeId)
-        {
-            var Email = "Email";
-            var testValue = "value";
-
-            var patchDoc = new JsonPatchDocument<Apprentice>();
-            patchDoc.Operations.Add(new Operation<Apprentice>
-            {
-                op = nameof(OperationType.Replace),
-                path = Email,
-                value = testValue
-            });
-
-            var response = new ValidatedResponse<PatchMemberCommandResponse>
-            (new List<ValidationFailure>
-            {
-                new("Name", "error")
-            });
-
-            mediatorMock.Setup(m => m.Send(It.IsAny<PatchApprenticeMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-
-            var result = await sut.PatchApprentice(userId, apprenticeId, patchDoc);
-
-            result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
-        }
+        Assert.AreEqual(StatusCodes.Status400BadRequest, result!.StatusCode);
     }
 }

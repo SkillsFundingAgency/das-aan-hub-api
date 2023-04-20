@@ -1,6 +1,5 @@
 ﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
-using SFA.DAS.AANHub.Application.Common.Commands;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
@@ -24,15 +23,6 @@ namespace SFA.DAS.AANHub.Api.Common
                     requestDetails.ControllerName,
                     requestDetails.RouteParameters,
                     response.Result);
-
-            return new BadRequestObjectResult(FormatErrors(response.Errors));
-        }
-
-        protected IActionResult GetPatchResponse(ValidatedResponse<PatchMemberCommandResponse> response)
-        {
-            if (response.Result is { IsSuccess: false }) return NotFound();
-
-            if (response.IsValidResponse) return NoContent();
 
             return new BadRequestObjectResult(FormatErrors(response.Errors));
         }

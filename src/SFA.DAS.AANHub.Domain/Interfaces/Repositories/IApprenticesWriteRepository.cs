@@ -1,11 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
-{
-    public interface IApprenticesWriteRepository
-    {
-        void Create(Apprentice apprentice);
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-        Task<Apprentice?> GetPatchApprentice(Guid apprenticeId);
-    }
+public interface IApprenticesWriteRepository
+{
+    void Create(Apprentice apprentice);
 }
