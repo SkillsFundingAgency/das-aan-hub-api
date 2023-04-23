@@ -1,11 +1,7 @@
 ﻿using MediatR;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
-namespace SFA.DAS.AANHub.Application.Admins.Queries
-{
-    public class GetAdminMemberQuery : IRequest<ValidatedResponse<GetAdminMemberResult>>
-    {
-        public GetAdminMemberQuery(string userName) => UserName = userName;
-        public string UserName { get; }
-    }
-}
+namespace SFA.DAS.AANHub.Application.Admins.Queries;
+
+public record GetAdminMemberQuery(string UserName) : IRequest<ValidatedResponse<GetMemberResult>>;

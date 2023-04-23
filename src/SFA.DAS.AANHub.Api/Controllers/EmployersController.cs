@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 
@@ -27,7 +28,6 @@ public class EmployersController : ActionResponseControllerBase
     /// <param name="request"></param>
     /// <returns></returns>
     [HttpPost]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateEmployer(CreateEmployerModel request)
@@ -59,10 +59,9 @@ public class EmployersController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("/employers/{userRef}")]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(GetEmployerMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetEmployer(Guid userRef)
     {
         _logger.LogInformation("AAN Hub API: Received command to get employer by UserRef: {userRef}", userRef);

@@ -7,13 +7,14 @@ using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Members.Commands.PatchMember;
 
 public class PatchMemberCommandHandlerTests
 {
     [Test]
-    [AutoMoqData]
+    [RecursiveMoqAutoData]
     public async Task Handle_DataFound_Patch(
         [Frozen] Mock<IMembersWriteRepository> memberWriteRepoMock,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
@@ -41,7 +42,7 @@ public class PatchMemberCommandHandlerTests
     }
 
     [Test]
-    [AutoMoqData]
+    [MoqAutoData]
     public async Task Handle_NoDataFound(
         [Frozen] Mock<IMembersWriteRepository> memberWriteRepoMock,
         PatchMemberCommandHandler sut,

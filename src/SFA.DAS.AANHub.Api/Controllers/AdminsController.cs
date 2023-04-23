@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 using SFA.DAS.AANHub.Application.Admins.Queries;
+using SFA.DAS.AANHub.Application.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -28,7 +29,6 @@ public class AdminsController : ActionResponseControllerBase
     /// <param name="requestedByMemberId"></param>
     /// <returns></returns>
     [HttpPost]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreateAdmin(CreateAdminModel request)
@@ -56,10 +56,9 @@ public class AdminsController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{userName}")]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetAdmin(string userName)
     {
         _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);

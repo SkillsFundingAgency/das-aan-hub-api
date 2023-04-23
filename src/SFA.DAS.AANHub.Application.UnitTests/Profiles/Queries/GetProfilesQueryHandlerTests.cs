@@ -5,28 +5,26 @@ using SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Profiles.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Profiles.Queries;
+
+public class GetProfilesQueryHandlerTests
 {
-    [TestFixture]
-    public class GetProfilesQueryHandlerTests
+    [Test]
+    public async Task Handle_GetProfilesQuery()
     {
-        [Test]
-        public async Task Handle_GetProfilesQuery()
-        {
-            string userType = "Apprentice";
-            int profileId = 1;
+        string userType = "Apprentice";
+        int profileId = 1;
 
-            var profileReadReposotoryMock = new Mock<IProfilesReadRepository>();
-            var profiles = new List<Profile>() { new Profile { Id = profileId } };
+        var profileReadReposotoryMock = new Mock<IProfilesReadRepository>();
+        var profiles = new List<Profile>() { new Profile { Id = profileId } };
 
-            profileReadReposotoryMock.Setup(x => x.GetProfilesByUserType(userType)).ReturnsAsync(profiles);
+        profileReadReposotoryMock.Setup(x => x.GetProfilesByUserType(userType)).ReturnsAsync(profiles);
 
-            var sut = new GetProfilesByUserTypeQueryHandler(profileReadReposotoryMock.Object);
+        var sut = new GetProfilesByUserTypeQueryHandler(profileReadReposotoryMock.Object);
 
-            var result = await sut.Handle(new GetProfilesByUserTypeQuery(userType), new CancellationToken());
+        var result = await sut.Handle(new GetProfilesByUserTypeQuery(userType), new CancellationToken());
 
-            result.Result.Profiles.As<List<ProfileModel>>().Should().NotBeNullOrEmpty();
-            Assert.That(result.Result.Profiles.Any(x => x.Id == profileId));
-        }
+        result.Result.Profiles.As<List<ProfileModel>>().Should().NotBeNullOrEmpty();
+        Assert.That(result.Result.Profiles.Any(x => x.Id == profileId));
     }
 }

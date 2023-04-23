@@ -10,15 +10,15 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
-using SFA.DAS.AANHub.Application.UnitTests;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.MembersControllerTests;
 
-public class MembersControllerTests
+public class MembersControllerPatchTests
 {
     [Test]
-    [AutoMoqData]
+    [MoqAutoData]
     public async Task PatchMember_InvokesRequest_ReturnsNoContentResult(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,
@@ -37,7 +37,7 @@ public class MembersControllerTests
     }
 
     [Test]
-    [AutoMoqData]
+    [MoqAutoData]
     public async Task PatchMember_ResponseUnsuccessfull_ReturnsNotFoundResult(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,
@@ -56,7 +56,7 @@ public class MembersControllerTests
     }
 
     [Test]
-    [AutoMoqData]
+    [MoqAutoData]
     public async Task PatchMember_HasValidationErrors_ReturnsBadRequestResult(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,

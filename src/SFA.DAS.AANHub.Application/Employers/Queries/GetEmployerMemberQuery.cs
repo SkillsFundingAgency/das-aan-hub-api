@@ -1,12 +1,7 @@
 ﻿using MediatR;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
-namespace SFA.DAS.AANHub.Application.Employers.Queries
-{
-    public class GetEmployerMemberQuery : IRequest<ValidatedResponse<GetEmployerMemberResult>>
-    {
-        public GetEmployerMemberQuery(Guid userRef) => UserRef = userRef;
+namespace SFA.DAS.AANHub.Application.Employers.Queries;
 
-        public Guid UserRef { get; }
-    }
-}
+public record GetEmployerMemberQuery(Guid UserRef) : IRequest<ValidatedResponse<GetMemberResult>>;

@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -55,13 +56,15 @@ public class ApprenticesController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{apprenticeId}")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(GetApprenticeMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetApprentice(Guid apprenticeId)
     {
         _logger.LogInformation("AAN Hub API: Received command to get apprentice by ApprenticeId: {apprenticeId}", apprenticeId);
 
         var response = await _mediator.Send(new GetApprenticeMemberQuery(apprenticeId));
+
         return GetResponse(response);
     }
 }

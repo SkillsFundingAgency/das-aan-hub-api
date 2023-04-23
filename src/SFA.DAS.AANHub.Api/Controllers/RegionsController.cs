@@ -23,7 +23,6 @@ namespace SFA.DAS.AANHub.Api.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Produces("application/json")]
         [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(GetRegionsQueryResult), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetRegions()

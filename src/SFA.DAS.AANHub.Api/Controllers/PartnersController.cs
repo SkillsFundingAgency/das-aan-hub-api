@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 
@@ -28,7 +29,6 @@ public class PartnersController : ActionResponseControllerBase
     /// <param name="requestedByMemberId"></param>
     /// <returns></returns>
     [HttpPost]
-    [Produces("application/json")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
     public async Task<IActionResult> CreatePartner(CreatePartnerModel request)
@@ -56,10 +56,9 @@ public class PartnersController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{userName}")]
-    [Produces("application/json")]
-    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(GetPartnerMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetPartner(string userName)
     {
         _logger.LogInformation("AAN Hub API: Received command to get partner by userName: {userName}", userName);

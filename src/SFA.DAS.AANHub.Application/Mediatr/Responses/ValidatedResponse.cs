@@ -2,23 +2,23 @@
 using System.Diagnostics.CodeAnalysis;
 using FluentValidation.Results;
 
-namespace SFA.DAS.AANHub.Application.Mediatr.Responses
+namespace SFA.DAS.AANHub.Application.Mediatr.Responses;
+
+[ExcludeFromCodeCoverage]
+public class ValidatedResponse
 {
-    [ExcludeFromCodeCoverage]
-    public class ValidatedResponse
-    {
-    }
+}
 
-    [ExcludeFromCodeCoverage]
-    public class ValidatedResponse<TModel> : ValidatedResponse where TModel : class
-    {
-        private readonly IList<ValidationFailure> _errorMessages = new List<ValidationFailure>();
+[ExcludeFromCodeCoverage]
+public class ValidatedResponse<TModel> : ValidatedResponse where TModel : class
+{
+    public static ValidatedResponse<TModel> EmptySuccessResponse() => new();
+    private readonly IList<ValidationFailure> _errorMessages = new List<ValidationFailure>();
+    public ValidatedResponse() { }
+    public ValidatedResponse(TModel model) => Result = model;
+    public ValidatedResponse(IList<ValidationFailure> validationErrors) => _errorMessages = validationErrors;
+    public TModel Result { get; } = null!;
 
-        public ValidatedResponse(TModel model) => Result = model;
-        public ValidatedResponse(IList<ValidationFailure> validationErrors) => _errorMessages = validationErrors;
-        public TModel Result { get; } = null!;
-
-        public IReadOnlyCollection<ValidationFailure> Errors => new ReadOnlyCollection<ValidationFailure>(_errorMessages);
-        public bool IsValidResponse => !_errorMessages.Any();
-    }
+    public IReadOnlyCollection<ValidationFailure> Errors => new ReadOnlyCollection<ValidationFailure>(_errorMessages);
+    public bool IsValidResponse => !_errorMessages.Any();
 }

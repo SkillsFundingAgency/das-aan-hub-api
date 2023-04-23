@@ -1,37 +1,43 @@
-﻿using Moq;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Admins.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Queries;
+
+[TestFixture]
+public class GetAdminMemberQueryHandlerTests
 {
-    [TestFixture]
-    public class GetAdminMemberQueryHandlerTests
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_AdminFound_ReturnsMemder(
+        [Frozen] Mock<IAdminsReadRepository> adminReadRepositoryMock,
+        GetAdminMemberQueryHandler sut,
+        GetAdminMemberQuery query,
+        Admin admin)
     {
-        [Test]
-        public async Task Handle_GetAdmin()
-        {
-            var adminUserName = "UserName";
+        adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(query.UserName)).ReturnsAsync(admin);
 
-            var adminReadRepositoryMock = new Mock<IAdminsReadRepository>();
-            var admin = new Admin
-            {
-                Name = "ThisIsAName",
-                MemberId = Guid.NewGuid(),
-                Email = "email@email.com",
-                Member = new Member() { Status = "live" }
-            };
+        var result = await sut.Handle(new GetAdminMemberQuery(query.UserName), new CancellationToken());
 
-            adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(adminUserName)).ReturnsAsync(admin);
-            var sut = new GetAdminMemberQueryHandler(adminReadRepositoryMock.Object);
+        result.Result.Should().BeEquivalentTo(admin.Member, c => c.ExcludingMissingMembers());
+    }
 
-            var result = await sut.Handle(new GetAdminMemberQuery(adminUserName), new CancellationToken());
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_ApprenticeNotFound_ReturnsNull(
+        [Frozen] Mock<IAdminsReadRepository> adminReadRepositoryMock,
+        GetAdminMemberQueryHandler sut,
+        GetAdminMemberQuery query)
+    {
+        adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(query.UserName)).ReturnsAsync(() => null);
 
-            Assert.AreEqual(admin.MemberId, result.Result.MemberId);
-            Assert.AreEqual(admin.Name, result.Result.Name);
-            Assert.AreEqual(admin.Email, result.Result.Email);
-            Assert.AreEqual(admin.Member.Status, result.Result.Status);
-        }
+        var result = await sut.Handle(new GetAdminMemberQuery(query.UserName), new CancellationToken());
+
+        result.Result.Should().BeNull();
     }
 }

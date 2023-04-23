@@ -1,37 +1,41 @@
-﻿using Moq;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries;
+
+public class GetApprenticeMemberQueryHandlerTests
 {
-    [TestFixture]
-    public class GetApprenticeMemberQueryHandlerTests
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_ApprenticeFound_ReturnsMember(
+        [Frozen] Mock<IApprenticesReadRepository> apprenticesReadRepositoryMock,
+        GetApprenticeMemberQueryHandler sut,
+        Apprentice apprentice)
     {
-        [Test]
-        public async Task Handle_GetApprenticeMember()
-        {
-            var apprenticeId = Guid.NewGuid();
+        apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprentice.ApprenticeId)).ReturnsAsync(apprentice);
 
-            var apprenticesReadRepositoryMock = new Mock<IApprenticesReadRepository>();
-            var apprentice = new Apprentice
-            {
-                Name = "ThisIsAName",
-                MemberId = Guid.NewGuid(),
-                Email = "email@email.com",
-                Member = new Member() { Status = "live" }
-            };
-            apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(apprentice);
-            var sut = new GetApprenticeMemberQueryHandler(apprenticesReadRepositoryMock.Object);
+        var result = await sut.Handle(new GetApprenticeMemberQuery(apprentice.ApprenticeId), new CancellationToken());
 
-            var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
+        result.Result.Should().BeEquivalentTo(apprentice.Member, c => c.ExcludingMissingMembers());
+    }
 
-            Assert.AreEqual(apprentice.MemberId, result.Result.MemberId);
-            Assert.AreEqual(apprentice.Member.FirstName, result.Result.FirstName);
-            Assert.AreEqual(apprentice.Member.LastName, result.Result.LastName);
-            Assert.AreEqual(apprentice.Member.Email, result.Result.Email);
-            Assert.AreEqual(apprentice.Member.Status, result.Result.Status);
-        }
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_ApprenticeNotFound_ReturnsNull(
+        [Frozen] Mock<IApprenticesReadRepository> apprenticesReadRepositoryMock,
+        GetApprenticeMemberQueryHandler sut,
+        Guid apprenticeId)
+    {
+        apprenticesReadRepositoryMock.Setup(a => a.GetApprentice(apprenticeId)).ReturnsAsync(() => null);
+
+        var result = await sut.Handle(new GetApprenticeMemberQuery(apprenticeId), new CancellationToken());
+
+        result.Result.Should().BeNull();
     }
 }
