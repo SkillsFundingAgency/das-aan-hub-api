@@ -7,7 +7,7 @@ public abstract class CreateMemberCommandBase
     public string? Email { get; set; }
     public string? FirstName { get; set; }
     public string? LastName { get; set; }
-    public DateTime? Joined { get; set; }
+    public DateTime? JoinedDate { get; set; }
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }
 }

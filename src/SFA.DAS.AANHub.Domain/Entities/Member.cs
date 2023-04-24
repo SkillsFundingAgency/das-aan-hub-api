@@ -10,10 +10,10 @@ public class Member
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string? Status { get; set; }
-    public DateTime Joined { get; set; }
+    public DateTime JoinedDate { get; set; }
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }
-    public DateTime LastUpdated { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
 
     public virtual Region? Region { get; set; }
     [JsonIgnore]

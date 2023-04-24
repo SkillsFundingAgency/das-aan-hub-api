@@ -22,7 +22,7 @@ public class CreatePartnerMemberCommandTests
         member.Email.Should().Be(sut.Email);
         member.FirstName.Should().Be(sut.FirstName);
         member.LastName.Should().Be(sut.LastName);
-        member.Joined.Should().Be(sut.Joined);
+        member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
         member.Partner!.MemberId.Should().Be(sut.Id);
         member.Partner!.UserName.Should().Be(sut.UserName);

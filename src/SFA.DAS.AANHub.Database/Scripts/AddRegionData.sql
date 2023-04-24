@@ -1,9 +1,9 @@
 ﻿
 CREATE TABLE #TempRegion
 (
-	[Id] INT,
+    [Id] INT,
     [Area] NVARCHAR(100),
-	[Ordering] NVARCHAR(100)
+    [Ordering] NVARCHAR(100)
 )
 
 INSERT INTO #TempRegion VALUES 
@@ -23,12 +23,12 @@ SET IDENTITY_INSERT [dbo].[Region] ON;
 MERGE Region TARGET
 USING #TempRegion SOURCE ON TARGET.Id=SOURCE.Id
 WHEN MATCHED THEN
-	UPDATE SET 
-		TARGET.Area = SOURCE.Area,
-		TARGET.Ordering = SOURCE.Ordering
+  UPDATE SET 
+    TARGET.Area = SOURCE.Area,
+    TARGET.Ordering = SOURCE.Ordering
 WHEN NOT MATCHED BY TARGET THEN 
-	INSERT (Id, Area, Ordering)
-	VALUES (SOURCE.Id, SOURCE.Area, SOURCE.Ordering);
+  INSERT (Id, Area, Ordering)
+  VALUES (SOURCE.Id, SOURCE.Area, SOURCE.Ordering);
 
 SET IDENTITY_INSERT [dbo].[Region] OFF;
 

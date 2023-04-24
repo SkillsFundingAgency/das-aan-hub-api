@@ -22,7 +22,7 @@ public class CreateApprenticeMemberCommandTests
         member.Email.Should().Be(sut.Email);
         member.FirstName.Should().Be(sut.FirstName);
         member.LastName.Should().Be(sut.LastName);
-        member.Joined.Should().Be(sut.Joined);
+        member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
         member.Apprentice!.MemberId.Should().Be(sut.Id);
         member.Apprentice!.ApprenticeId.Should().Be(sut.ApprenticeId);

@@ -39,7 +39,7 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
             Resource = nameof(Member),
         };
 
-        member.LastUpdated = _dateTimeProvider.Now;
+        member.LastUpdatedDate = _dateTimeProvider.Now;
 
         command.PatchDoc.ApplyTo(member);
 

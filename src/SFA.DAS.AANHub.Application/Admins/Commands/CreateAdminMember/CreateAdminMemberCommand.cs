@@ -18,7 +18,7 @@ public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<Valida
         Email = command.Email!,
         FirstName = command.FirstName!,
         LastName = command.LastName!,
-        Joined = command.Joined!.Value,
+        JoinedDate = command.JoinedDate!.Value,
         RegionId = command.RegionId,
         OrganisationName = command.OrganisationName,
         Admin = new Admin

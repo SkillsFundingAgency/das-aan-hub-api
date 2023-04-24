@@ -12,12 +12,12 @@ public class WhenValidatingJoinedJoinedDate
         CreateMemberCommandBaseValidator sut = new();
         TestTarget target = new()
         {
-            Joined = DateTime.Today.AddDays(1)
+            JoinedDate = DateTime.Today.AddDays(1)
         };
 
         var result = await sut.TestValidateAsync(target);
 
-        result.ShouldHaveValidationErrorFor(c => c.Joined);
+        result.ShouldHaveValidationErrorFor(c => c.JoinedDate);
     }
 
     [Test]
@@ -26,12 +26,12 @@ public class WhenValidatingJoinedJoinedDate
         CreateMemberCommandBaseValidator sut = new();
         TestTarget target = new()
         {
-            Joined = DateTime.Today
+            JoinedDate = DateTime.Today
         };
 
         var result = await sut.TestValidateAsync(target);
 
-        result.ShouldNotHaveValidationErrorFor(c => c.Joined);
+        result.ShouldNotHaveValidationErrorFor(c => c.JoinedDate);
     }
 
     [Test]
@@ -40,11 +40,11 @@ public class WhenValidatingJoinedJoinedDate
         CreateMemberCommandBaseValidator sut = new();
         TestTarget target = new()
         {
-            Joined = DateTime.Today.AddDays(-1)
+            JoinedDate = DateTime.Today.AddDays(-1)
         };
 
         var result = await sut.TestValidateAsync(target);
 
-        result.ShouldNotHaveValidationErrorFor(c => c.Joined);
+        result.ShouldNotHaveValidationErrorFor(c => c.JoinedDate);
     }
 }

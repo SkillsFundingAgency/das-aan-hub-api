@@ -83,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
-    <None Include="Scripts\AddMemberData.sql" />
     <None Include="Scripts\AddProfileData.sql" />
     <None Include="Scripts\AddCalendarData.sql" />
   </ItemGroup>

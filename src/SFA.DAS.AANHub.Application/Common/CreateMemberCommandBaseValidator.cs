@@ -28,9 +28,9 @@ public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCo
             .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(CreateMemberCommandBase.LastName)))
             .MaximumLength(200)
             .WithMessage(string.Format(ExceededAllowableLengthErrorMessage, nameof(CreateMemberCommandBase.LastName), 200));
-        RuleFor(x => x.Joined)
+        RuleFor(x => x.JoinedDate)
             .NotEmpty()
-            .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(CreateMemberCommandBase.Joined)))
+            .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(CreateMemberCommandBase.JoinedDate)))
             .LessThan(DateTime.Today.AddDays(1).Date);
         RuleFor(x => x.RegionId)
             .Cascade(CascadeMode.Stop)

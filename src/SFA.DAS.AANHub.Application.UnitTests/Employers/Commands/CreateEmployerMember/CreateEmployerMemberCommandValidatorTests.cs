@@ -88,7 +88,7 @@ public class CreateEmployerMemberCommandValidatorTests
             Email = "bad email",
             FirstName = string.Empty,
             LastName = string.Empty,
-            Joined = DateTime.Today.AddDays(1),
+            JoinedDate = DateTime.Today.AddDays(1),
             RegionId = 999,
             OrganisationName = new string('a', 251)
         };
@@ -99,7 +99,7 @@ public class CreateEmployerMemberCommandValidatorTests
         result.ShouldHaveValidationErrorFor(c => c.Email);
         result.ShouldHaveValidationErrorFor(c => c.FirstName);
         result.ShouldHaveValidationErrorFor(c => c.LastName);
-        result.ShouldHaveValidationErrorFor(c => c.Joined);
+        result.ShouldHaveValidationErrorFor(c => c.JoinedDate);
         result.ShouldHaveValidationErrorFor(c => c.RegionId);
         result.ShouldHaveValidationErrorFor(c => c.OrganisationName);
     }
