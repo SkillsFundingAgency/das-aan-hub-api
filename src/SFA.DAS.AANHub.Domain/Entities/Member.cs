@@ -10,7 +10,6 @@ public class Member
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string? Status { get; set; }
-    public string? Information { get; set; }
     public DateTime Joined { get; set; }
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }

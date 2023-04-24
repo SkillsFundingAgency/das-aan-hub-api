@@ -8,7 +8,7 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 
-public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, ValidatedResponse<CommandResult>>
+public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, ValidatedResponse<PatchCommandResult>>
 {
     private readonly IMembersWriteRepository _membersWriteRepository;
     private readonly IDateTimeProvider _dateTimeProvider;
@@ -23,12 +23,12 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
         _aanDataContext = aanDataContext;
     }
 
-    public async Task<ValidatedResponse<CommandResult>> Handle(PatchMemberCommand command, CancellationToken cancellationToken)
+    public async Task<ValidatedResponse<PatchCommandResult>> Handle(PatchMemberCommand command, CancellationToken cancellationToken)
     {
         var member = await _membersWriteRepository.Get(command.MemberId);
 
         if (member == null)
-            return new ValidatedResponse<CommandResult>(new CommandResult(false));
+            return new ValidatedResponse<PatchCommandResult>(new PatchCommandResult(false));
 
         var audit = new Audit()
         {
@@ -49,6 +49,6 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-        return new ValidatedResponse<CommandResult>(new CommandResult(true));
+        return new ValidatedResponse<PatchCommandResult>(new PatchCommandResult(true));
     }
 }

@@ -7,7 +7,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 
-public class PatchMemberCommand : IRequest<ValidatedResponse<CommandResult>>
+public class PatchMemberCommand : IRequest<ValidatedResponse<PatchCommandResult>>
 {
     public Guid MemberId { get; set; }
     public JsonPatchDocument<Member> PatchDoc { get; set; } = new();
@@ -27,3 +27,4 @@ public class PatchMemberCommand : IRequest<ValidatedResponse<CommandResult>>
     public bool HasRegionId => PatchDoc.HasValue(MemberPatchFields.RegionId);
     public bool HasStatus => PatchDoc.HasValue(MemberPatchFields.Status);
 }
+

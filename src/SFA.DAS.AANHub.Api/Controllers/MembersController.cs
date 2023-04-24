@@ -9,11 +9,13 @@ using Swashbuckle.AspNetCore.Filters;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class MembersController : ActionResponseControllerBase
 {
     private readonly IMediator _mediator;
+
+    public override string ControllerName => "Members";
 
     public MembersController(IMediator mediator)
     {

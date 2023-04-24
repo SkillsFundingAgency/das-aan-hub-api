@@ -3,4 +3,4 @@
 namespace SFA.DAS.AANHub.Application.Common;
 
 [ExcludeFromCodeCoverage]
-public record CommandResult(bool IsSuccess);
+public record PatchCommandResult(bool IsSuccess);

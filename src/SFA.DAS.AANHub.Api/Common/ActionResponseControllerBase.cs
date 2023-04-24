@@ -8,8 +8,12 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 namespace SFA.DAS.AANHub.Api.Common;
 
 [ExcludeFromCodeCoverage]
-public class ActionResponseControllerBase : ControllerBase
+public abstract class ActionResponseControllerBase : ControllerBase
 {
+    public const string GetMethodName = "Get";
+
+    public abstract string ControllerName { get; }
+
     protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
     {
         if (response.Result == null && response.IsValidResponse) return NotFound();
@@ -19,18 +23,17 @@ public class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, ReferrerRouteDetails requestDetails) where T : class
+    protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, object? routeParameters) where T : class
     {
         if (response.IsValidResponse)
-            return new CreatedAtActionResult(requestDetails.ActionName,
-                requestDetails.ControllerName,
-                requestDetails.RouteParameters,
-                response.Result);
+        {
+            return new CreatedAtActionResult(GetMethodName, ControllerName, routeParameters, response.Result);
+        }
 
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPatchResponse(ValidatedResponse<CommandResult> response)
+    protected IActionResult GetPatchResponse(ValidatedResponse<PatchCommandResult> response)
     {
         if (response.Result is { IsSuccess: false }) return NotFound();
 

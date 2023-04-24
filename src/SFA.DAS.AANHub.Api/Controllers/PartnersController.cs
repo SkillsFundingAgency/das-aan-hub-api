@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class PartnersController : ActionResponseControllerBase
 {
-    private const string ControllerName = "Partners";
     private readonly ILogger<PartnersController> _logger;
     private readonly IMediator _mediator;
+
+    public override string ControllerName => "Partners";
 
     public PartnersController(ILogger<PartnersController> logger, IMediator mediator)
     {
@@ -22,44 +22,22 @@ public class PartnersController : ActionResponseControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
-    ///     Creates a partner member
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="requestedByMemberId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreatePartner(CreatePartnerModel request)
+    public async Task<IActionResult> CreatePartner(CreatePartnerMemberCommand command)
     {
-        var command = (CreatePartnerMemberCommand)request;
-
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response,
-            new ReferrerRouteDetails(
-                nameof(CreatePartner),
-                ControllerName,
-                new RouteValueDictionary
-                {
-                    {
-                        "id", response.Result?.MemberId.ToString()
-                    }
-                }));
+        return GetPostResponse(response, new { userName = command.UserName });
     }
 
-    /// <summary>
-    /// Gets an employer member
-    /// </summary>
-    /// <param name="userName"></param>
-    /// <returns></returns>
     [HttpGet]
     [Route("{userName}")]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetPartner(string userName)
+    public async Task<IActionResult> Get(string userName)
     {
         _logger.LogInformation("AAN Hub API: Received command to get partner by userName: {userName}", userName);
 

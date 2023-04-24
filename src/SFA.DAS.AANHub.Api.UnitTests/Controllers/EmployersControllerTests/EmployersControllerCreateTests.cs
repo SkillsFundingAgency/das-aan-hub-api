@@ -7,8 +7,7 @@ using Microsoft.Extensions.Logging;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
-using SFA.DAS.AANHub.Api.Models;
-using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.Testing.AutoFixture;
@@ -29,16 +28,15 @@ public class EmployersControllerCreateTests
     [Test]
     [MoqAutoData]
     public async Task CreateEmployer_InvokesRequest(
-        CreateEmployerModel model,
         CreateEmployerMemberCommand command)
     {
         var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
 
         _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
-        var result = await _controller.CreateEmployer(model) as CreatedAtActionResult;
+        var result = await _controller.CreateEmployer(command) as CreatedAtActionResult;
 
         result?.ControllerName.Should().Be("Employers");
-        result?.ActionName.Should().Be("CreateEmployer");
+        result?.ActionName.Should().Be("Get");
         result?.StatusCode.Should().Be(StatusCodes.Status201Created);
         result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
     }
@@ -53,9 +51,9 @@ public class EmployersControllerCreateTests
             new("Name", "error")
         });
 
-        var model = new CreateEmployerModel();
+        var command = new CreateEmployerMemberCommand();
         _mediator.Setup(m => m.Send(It.IsAny<CreateEmployerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
-        var result = await _controller.CreateEmployer(model);
+        var result = await _controller.CreateEmployer(command);
 
         result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
     }

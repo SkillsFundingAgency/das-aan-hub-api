@@ -23,7 +23,7 @@ public class AdminsControllerGetTests
         [Greedy] AdminsController sut,
         string userName)
     {
-        await sut.GetAdmin(userName);
+        await sut.Get(userName);
 
         mediatorMock.Verify(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()));
     }
@@ -39,7 +39,7 @@ public class AdminsControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
             .ReturnsAsync(notFoundResponse);
 
-        var result = await sut.GetAdmin(userName);
+        var result = await sut.Get(userName);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -56,7 +56,7 @@ public class AdminsControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetAdmin(userName);
+        var result = await sut.Get(userName);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
@@ -73,7 +73,7 @@ public class AdminsControllerGetTests
         var errorResponse = new ValidatedResponse<GetMemberResult>(errors);
         mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-        var result = await sut.GetAdmin(userName);
+        var result = await sut.Get(userName);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);

@@ -23,7 +23,7 @@ public class ApprenticesControllerGetTests
        [Greedy] ApprenticesController sut,
        Guid apprenticeId)
     {
-        await sut.GetApprentice(apprenticeId);
+        await sut.Get(apprenticeId);
 
         mediatorMock.Verify(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()));
     }
@@ -38,7 +38,7 @@ public class ApprenticesControllerGetTests
         var notFoundResponse = ValidatedResponse<GetMemberResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
-        var result = await sut.GetApprentice(apprenticeId);
+        var result = await sut.Get(apprenticeId);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -55,7 +55,7 @@ public class ApprenticesControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetApprentice(apprenticeId);
+        var result = await sut.Get(apprenticeId);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
@@ -72,7 +72,7 @@ public class ApprenticesControllerGetTests
         var errorResponse = new ValidatedResponse<GetMemberResult>(errors);
         mediatorMock.Setup(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-        var result = await sut.GetApprentice(apprenticeId);
+        var result = await sut.Get(apprenticeId);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
 

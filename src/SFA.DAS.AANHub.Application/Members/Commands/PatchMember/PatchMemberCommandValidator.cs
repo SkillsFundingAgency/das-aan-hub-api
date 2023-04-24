@@ -16,7 +16,7 @@ public class PatchMemberCommandValidator : AbstractValidator<PatchMemberCommand>
     public const string InvalidEmailFormatErrorMessage = "Email value is not in correct format";
     public const string ValueIsRequiredErrorMessage = "A valid value for {0} is required";
     public const string ExceededAllowableLengthErrorMessage = "Value for {0} cannot exceed character length of {1}";
-
+    private const string InvalidRegionErrorMessage = "Region value must be in between 1 and 9";
     public static readonly string[] ValidStatuses = new[] { "Deleted", "Withdrawn" };
 
     public PatchMemberCommandValidator(IMembersReadRepository membersReadRepository)
@@ -97,7 +97,10 @@ public class PatchMemberCommandValidator : AbstractValidator<PatchMemberCommand>
             () =>
             {
                 RuleFor(c => c.RegionId)
-                    .InclusiveBetween(1, 9);
+                    .NotEmpty()
+                    .WithMessage(string.Format(ValueIsRequiredErrorMessage, MemberPatchFields.RegionId))
+                    .InclusiveBetween(1, 9)
+                    .WithMessage(InvalidRegionErrorMessage);
             });
 
         When(x => x.HasStatus,

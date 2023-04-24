@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class EmployersController : ActionResponseControllerBase
 {
-    private const string ControllerName = "Employers";
     private readonly ILogger<EmployersController> _logger;
     private readonly IMediator _mediator;
+
+    public override string ControllerName => "Employers";
 
     public EmployersController(ILogger<EmployersController> logger, IMediator mediator)
     {
@@ -22,47 +22,24 @@ public class EmployersController : ActionResponseControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
-    ///     Creates an employer member
-    /// </summary>
-    /// <param name="request"></param>
-    /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateEmployer(CreateEmployerModel request)
+    public async Task<IActionResult> CreateEmployer(CreateEmployerMemberCommand command)
     {
-        _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserRef: {UserRef}.",
-            request.AccountId,
-            request.UserRef);
-
-        CreateEmployerMemberCommand command = request;
+        _logger.LogInformation("AAN Hub API: Received command to add employer by accountId: {accountId} and UserRef: {UserRef}.", command.AccountId, command.UserRef);
 
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response,
-            new ReferrerRouteDetails(
-                nameof(CreateEmployer),
-                ControllerName,
-                new RouteValueDictionary
-                {
-                    {
-                        "id", response.Result?.MemberId.ToString()
-                    }
-                }));
+        return GetPostResponse(response, new { userRef = command.UserRef });
     }
 
-    /// <summary>
-    ///     Gets an employer member
-    /// </summary>
-    /// <param name="userRef"></param>
-    /// <returns></returns>
     [HttpGet]
-    [Route("/employers/{userRef}")]
+    [Route("{userRef}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetEmployer(Guid userRef)
+    public async Task<IActionResult> Get(Guid userRef)
     {
         _logger.LogInformation("AAN Hub API: Received command to get employer by UserRef: {userRef}", userRef);
 

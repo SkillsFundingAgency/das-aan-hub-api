@@ -23,7 +23,7 @@ public class EmployersControllerGetTests
         [Greedy] EmployersController sut,
         Guid userRef)
     {
-        await sut.GetEmployer(userRef);
+        await sut.Get(userRef);
 
         mediatorMock.Verify(m => m.Send(It.Is<GetEmployerMemberQuery>(q => q.UserRef == userRef), It.IsAny<CancellationToken>()));
     }
@@ -38,7 +38,7 @@ public class EmployersControllerGetTests
         var notFoundResponse = ValidatedResponse<GetMemberResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetEmployerMemberQuery>(q => q.UserRef == userRef), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
-        var result = await sut.GetEmployer(userRef);
+        var result = await sut.Get(userRef);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -55,7 +55,7 @@ public class EmployersControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetEmployerMemberQuery>(q => q.UserRef == userRef), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetEmployer(userRef);
+        var result = await sut.Get(userRef);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
@@ -73,7 +73,7 @@ public class EmployersControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetEmployerMemberQuery>(q => q.UserRef == userRef), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetEmployer(userRef);
+        var result = await sut.Get(userRef);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);

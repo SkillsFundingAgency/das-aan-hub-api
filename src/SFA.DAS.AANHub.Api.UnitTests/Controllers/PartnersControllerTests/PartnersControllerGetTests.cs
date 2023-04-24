@@ -23,7 +23,7 @@ public class PartnersControllerGetTests
         [Greedy] PartnersController sut,
         string userName)
     {
-        await sut.GetPartner(userName);
+        await sut.Get(userName);
 
         mediatorMock.Verify(m => m.Send(new GetPartnerMemberQuery(userName), It.IsAny<CancellationToken>()));
     }
@@ -38,7 +38,7 @@ public class PartnersControllerGetTests
         var notFoundResponse = ValidatedResponse<GetMemberResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.IsAny<GetPartnerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
-        var result = await sut.GetPartner(userName);
+        var result = await sut.Get(userName);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -55,7 +55,7 @@ public class PartnersControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetPartnerMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetPartner(userName);
+        var result = await sut.Get(userName);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
@@ -73,7 +73,7 @@ public class PartnersControllerGetTests
         var response = new ValidatedResponse<GetMemberResult>(errors);
         mediatorMock.Setup(m => m.Send(It.IsAny<GetPartnerMemberQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.GetPartner(userName);
+        var result = await sut.Get(userName);
 
         result.As<BadRequestObjectResult>().StatusCode.Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);

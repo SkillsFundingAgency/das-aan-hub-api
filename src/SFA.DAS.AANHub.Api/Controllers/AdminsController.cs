@@ -1,20 +1,20 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 using SFA.DAS.AANHub.Application.Admins.Queries;
 using SFA.DAS.AANHub.Application.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
-[Route("api/[controller]")]
+[Route("[controller]")]
 [ApiController]
 public class AdminsController : ActionResponseControllerBase
 {
-    private const string ControllerName = "Admins";
     private readonly ILogger<AdminsController> _logger;
     private readonly IMediator _mediator;
+
+    public override string ControllerName => "Admins";
 
     public AdminsController(ILogger<AdminsController> logger, IMediator mediator)
     {
@@ -22,44 +22,22 @@ public class AdminsController : ActionResponseControllerBase
         _mediator = mediator;
     }
 
-    /// <summary>
-    ///     Creates an admin member
-    /// </summary>
-    /// <param name="request"></param>
-    /// <param name="requestedByMemberId"></param>
-    /// <returns></returns>
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateAdmin(CreateAdminModel request)
+    public async Task<IActionResult> CreateAdmin(CreateAdminMemberCommand command)
     {
-        var command = (CreateAdminMemberCommand)request;
-
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response,
-            new ReferrerRouteDetails(
-                nameof(CreateAdmin),
-                ControllerName,
-                new RouteValueDictionary
-                {
-                    {
-                        "id", response.Result?.MemberId.ToString()
-                    }
-                }));
+        return GetPostResponse(response, new { userName = command.UserName });
     }
 
-    /// <summary>
-    ///     Gets an Admin member
-    /// </summary>
-    /// <param name="userName"></param>
-    /// <returns></returns>
     [HttpGet]
     [Route("{userName}")]
     [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> GetAdmin(string userName)
+    public async Task<IActionResult> Get(string userName)
     {
         _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);
 

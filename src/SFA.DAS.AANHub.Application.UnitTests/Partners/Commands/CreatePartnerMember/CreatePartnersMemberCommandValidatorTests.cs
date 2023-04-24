@@ -4,96 +4,73 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember
+namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember;
+
+public class CreatePartnerMemberCommandValidatorTests
 {
-    public class CreatePartnerMemberCommandValidatorTests
+    [TestCase("userName", true)]
+    [TestCase("", false)]
+    [TestCase(null, false)]
+    [TestCase(" ", false)]
+    public async Task Validates_UserName_NotNullOrEmpty(string? userName, bool isValid)
     {
-        private readonly Mock<IPartnersReadRepository> _partnersReadRepository;
-        private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
-
-        public CreatePartnerMemberCommandValidatorTests()
+        Mock<IPartnersReadRepository> partnersReadRepository = new();
+        var command = new CreatePartnerMemberCommand
         {
-            _regionsReadRepository = new Mock<IRegionsReadRepository>();
-            _partnersReadRepository = new Mock<IPartnersReadRepository>();
-        }
+            UserName = userName!
+        };
 
-        [TestCase("userName", true)]
-        [TestCase("", false)]
-        [TestCase(null, false)]
-        [TestCase(" ", false)]
-        public async Task Validates_UserName_NotNullOrEmpty(string? userName, bool isValid)
+        var sut = new CreatePartnerMemberCommandValidator(partnersReadRepository.Object);
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+            result.ShouldNotHaveValidationErrorFor(c => c.UserName);
+        else
+            result.ShouldHaveValidationErrorFor(c => c.UserName);
+    }
+
+    [TestCase(5, true)]
+    [TestCase(251, false)]
+    public async Task Validates_UserName_Length(int length, bool isValid)
+    {
+        Mock<IPartnersReadRepository> partnersReadRepository = new();
+        var command = new CreatePartnerMemberCommand
         {
-            var command = new CreatePartnerMemberCommand
-            {
-                UserName = userName!
-            };
+            UserName = new string('a', length)
+        };
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
+        var sut = new CreatePartnerMemberCommandValidator(partnersReadRepository.Object);
+        var result = await sut.TestValidateAsync(command);
 
-            var result = await sut.TestValidateAsync(command);
+        if (isValid)
+            result.ShouldNotHaveValidationErrorFor(c => c.UserName);
+        else
+            result.ShouldHaveValidationErrorFor(c => c.UserName);
+    }
 
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.UserName);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.UserName);
-        }
-
-        [TestCase(5, true)]
-        [TestCase(251, false)]
-        public async Task Validates_UserName_Length(int length, bool isValid)
+    [Test]
+    public async Task Validate_BaseClassFields()
+    {
+        Mock<IPartnersReadRepository> partnersReadRepository = new();
+        CreatePartnerMemberCommand command = new()
         {
-            var command = new CreatePartnerMemberCommand
-            {
-                UserName = new string('a', length)
-            };
+            Email = "bad email",
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Joined = DateTime.Today.AddDays(1),
+            RegionId = 999,
+            OrganisationName = new string('a', 251)
+        };
+        CreatePartnerMemberCommandValidator sut = new(partnersReadRepository.Object);
 
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
-            var result = await sut.TestValidateAsync(command);
+        var result = await sut.TestValidateAsync(command);
 
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.UserName);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.UserName);
-        }
-
-        [TestCase("Organisation name", true)]
-        [TestCase(null, false)]
-        [TestCase("", false)]
-        [TestCase(" ", false)]
-        public async Task Validates_Organisation_NotNull(string? organisation, bool isValid)
-        {
-            var command = new CreatePartnerMemberCommand
-            {
-                Organisation = organisation!
-            };
-
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
-
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.Organisation);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.Organisation);
-        }
-
-        [TestCase(123, true)]
-        [TestCase(251, false)]
-        public async Task Validates_Organisation_Length(int stringLength, bool isValid)
-        {
-            var command = new CreatePartnerMemberCommand
-            {
-                Organisation = new string('a', stringLength)
-            };
-
-            var sut = new CreatePartnerMemberCommandValidator(_regionsReadRepository.Object, _partnersReadRepository.Object);
-
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.Organisation);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.Organisation);
-        }
+        result.ShouldHaveValidationErrorFor(c => c.Email);
+        result.ShouldHaveValidationErrorFor(c => c.FirstName);
+        result.ShouldHaveValidationErrorFor(c => c.LastName);
+        result.ShouldHaveValidationErrorFor(c => c.Joined);
+        result.ShouldHaveValidationErrorFor(c => c.RegionId);
+        result.ShouldHaveValidationErrorFor(c => c.OrganisationName);
     }
 }

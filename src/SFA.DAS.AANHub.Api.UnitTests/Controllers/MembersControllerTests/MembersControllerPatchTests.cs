@@ -26,7 +26,7 @@ public class MembersControllerPatchTests
         JsonPatchDocument<Member> patchDoc,
         CancellationToken cancellationToken)
     {
-        var response = new ValidatedResponse<CommandResult>(new CommandResult(true));
+        var response = new ValidatedResponse<PatchCommandResult>(new PatchCommandResult(true));
 
         mediatorMock.Setup(m => m.Send(It.Is<PatchMemberCommand>(c => c.MemberId == memberId),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
@@ -45,7 +45,7 @@ public class MembersControllerPatchTests
         JsonPatchDocument<Member> patchDoc,
         CancellationToken cancellationToken)
     {
-        var response = new ValidatedResponse<CommandResult>(new CommandResult(false));
+        var response = new ValidatedResponse<PatchCommandResult>(new PatchCommandResult(false));
         mediatorMock.Setup(m => m.Send(It.Is<PatchMemberCommand>(c => c.MemberId == memberId),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
@@ -64,7 +64,7 @@ public class MembersControllerPatchTests
         JsonPatchDocument<Member> patchDoc,
         CancellationToken cancellationToken)
     {
-        var response = new ValidatedResponse<CommandResult>(new List<ValidationFailure> { new("Name", "error") });
+        var response = new ValidatedResponse<PatchCommandResult>(new List<ValidationFailure> { new("Name", "error") });
         mediatorMock.Setup(m => m.Send(It.IsAny<PatchMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
         var result = await sut.PatchMember(memberId, patchDoc, cancellationToken);

@@ -7,7 +7,6 @@
     [Email] NVARCHAR(256) NOT NULL,
     [Status] NVARCHAR(10) NOT NULL,
     [Joined] DATETIME2 NOT NULL,
-    [Information] NVARCHAR(MAX) NULL,
     [RegionId] INT NULL,
     [OrganisationName] NVARCHAR(250) NULL,
     [LastUpdated] DATETIME2 NOT NULL DEFAULT GETUTCDATE()

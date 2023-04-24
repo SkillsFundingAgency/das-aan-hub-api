@@ -1,31 +1,30 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
-{
-    public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
-    {
-        public string UserName { get; set; } = null!;
+namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 
-        public static implicit operator Member(CreateAdminMemberCommand command) => new()
+public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
+{
+    public string UserName { get; set; } = null!;
+
+    public static implicit operator Member(CreateAdminMemberCommand command) => new()
+    {
+        Id = command.Id,
+        UserType = MembershipUserType.Admin,
+        Status = MembershipStatus.Live,
+        Email = command.Email!,
+        FirstName = command.FirstName!,
+        LastName = command.LastName!,
+        Joined = command.Joined!.Value,
+        RegionId = command.RegionId,
+        OrganisationName = command.OrganisationName,
+        Admin = new Admin
         {
-            Id = command.Id,
-            UserType = MembershipUserType.Admin,
-            Joined = command.Joined,
-            Information = command.Information,
-            Status = MembershipStatus.Live,
-            RegionId = command.RegionId,
-            Admin = new Admin
-            {
-                MemberId = command.Id,
-                Email = command.Email,
-                Name = command.Name,
-                UserName = command.UserName,
-                LastUpdated = DateTime.Now
-            }
-        };
-    }
+            MemberId = command.Id,
+            UserName = command.UserName,
+        }
+    };
 }

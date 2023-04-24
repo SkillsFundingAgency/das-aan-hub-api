@@ -1,31 +1,30 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
-{
-    public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
-    {
-        public Guid ApprenticeId { get; set; }
+namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 
-        public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
+public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
+{
+    public Guid ApprenticeId { get; set; }
+
+    public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
+    {
+        Id = command.Id,
+        UserType = MembershipUserType.Apprentice,
+        Status = MembershipStatus.Live,
+        Email = command.Email!,
+        FirstName = command.FirstName!,
+        LastName = command.LastName!,
+        Joined = command.Joined!.Value,
+        RegionId = command.RegionId,
+        OrganisationName = command.OrganisationName,
+        Apprentice = new Apprentice
         {
-            Id = command.Id,
-            UserType = MembershipUserType.Apprentice,
-            Joined = command.Joined,
-            Information = command.Information,
-            Status = MembershipStatus.Live,
-            RegionId = command.RegionId,
-            Apprentice = new Apprentice
-            {
-                ApprenticeId = command.ApprenticeId,
-                MemberId = command.Id,
-                Email = command.Email,
-                Name = command.Name,
-                LastUpdated = DateTime.Now
-            }
-        };
-    }
+            MemberId = command.Id,
+            ApprenticeId = command.ApprenticeId
+        }
+    };
 }

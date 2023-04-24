@@ -4,56 +4,74 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember
+namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember;
+
+public class CreateAdminMemberCommandValidatorTests
 {
-    public class CreateAdminMemberCommandValidatorTests
+
+    [TestCase("userName", true)]
+    [TestCase("", false)]
+    [TestCase(null, false)]
+    public async Task Validates_UserName_NotNullOrEmpty(string? userName, bool isValid)
     {
-        private readonly Mock<IAdminsReadRepository> _adminsReadRepository;
-        private readonly Mock<IRegionsReadRepository> _regionsReadRepository;
-
-        public CreateAdminMemberCommandValidatorTests()
+        Mock<IAdminsReadRepository> adminsReadRepository = new();
+        var command = new CreateAdminMemberCommand
         {
-            _regionsReadRepository = new Mock<IRegionsReadRepository>();
-            _adminsReadRepository = new Mock<IAdminsReadRepository>();
-        }
+            UserName = userName!
+        };
 
-        [TestCase("userName", true)]
-        [TestCase("", false)]
-        [TestCase(null, false)]
-        public async Task Validates_UserName_NotNullOrEmpty(string? userName, bool isValid)
+        var sut = new CreateAdminMemberCommandValidator(adminsReadRepository.Object);
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+            result.ShouldNotHaveValidationErrorFor(c => c.UserName);
+        else
+            result.ShouldHaveValidationErrorFor(c => c.UserName);
+    }
+
+    [TestCase(5, true)]
+    [TestCase(251, false)]
+    public async Task Validates_UserName_Length(int length, bool isValid)
+    {
+        Mock<IAdminsReadRepository> adminsReadRepository = new();
+        var command = new CreateAdminMemberCommand
         {
-            var command = new CreateAdminMemberCommand
-            {
-                UserName = userName!
-            };
+            UserName = new string('a', length)
+        };
 
-            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _adminsReadRepository.Object);
+        var sut = new CreateAdminMemberCommandValidator(adminsReadRepository.Object);
 
-            var result = await sut.TestValidateAsync(command);
+        var result = await sut.TestValidateAsync(command);
 
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.UserName);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.UserName);
-        }
+        if (isValid)
+            result.ShouldNotHaveValidationErrorFor(c => c.UserName);
+        else
+            result.ShouldHaveValidationErrorFor(c => c.UserName);
+    }
 
-        [TestCase(5, true)]
-        [TestCase(251, false)]
-        public async Task Validates_UserName_Length(int length, bool isValid)
+    [Test]
+    public async Task Validate_BaseClassFields()
+    {
+        Mock<IAdminsReadRepository> adminsReadRepository = new();
+        CreateAdminMemberCommand command = new()
         {
-            var command = new CreateAdminMemberCommand
-            {
-                UserName = new string('a', length)
-            };
+            Email = "bad email",
+            FirstName = string.Empty,
+            LastName = string.Empty,
+            Joined = DateTime.Today.AddDays(1),
+            RegionId = 999,
+            OrganisationName = new string('a', 251)
+        };
+        CreateAdminMemberCommandValidator sut = new(adminsReadRepository.Object);
 
-            var sut = new CreateAdminMemberCommandValidator(_regionsReadRepository.Object, _adminsReadRepository.Object);
+        var result = await sut.TestValidateAsync(command);
 
-            var result = await sut.TestValidateAsync(command);
-
-            if (isValid)
-                result.ShouldNotHaveValidationErrorFor(c => c.UserName);
-            else
-                result.ShouldHaveValidationErrorFor(c => c.UserName);
-        }
+        result.ShouldHaveValidationErrorFor(c => c.Email);
+        result.ShouldHaveValidationErrorFor(c => c.FirstName);
+        result.ShouldHaveValidationErrorFor(c => c.LastName);
+        result.ShouldHaveValidationErrorFor(c => c.Joined);
+        result.ShouldHaveValidationErrorFor(c => c.RegionId);
+        result.ShouldHaveValidationErrorFor(c => c.OrganisationName);
     }
 }
