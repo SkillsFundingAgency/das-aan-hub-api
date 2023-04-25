@@ -23,7 +23,7 @@ public class AdminsControllerCreateTests
         [Greedy] AdminsController sut,
         CreateAdminMemberCommand command)
     {
-        var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.Id));
+        var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.MemberId));
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
         var result = await sut.CreateAdmin(command) as CreatedAtActionResult;
@@ -31,7 +31,7 @@ public class AdminsControllerCreateTests
         result?.ControllerName.Should().Be("Admins");
         result?.ActionName.Should().Be("Get");
         result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
+        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.MemberId);
     }
 
     [Test]

@@ -2,14 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Data.Configuration
+namespace SFA.DAS.AANHub.Data.Configuration;
+
+public class CalendarConfiguration : IEntityTypeConfiguration<Calendar>
 {
-    public class CalendarConfiguration : IEntityTypeConfiguration<Calendar>
+    public void Configure(EntityTypeBuilder<Calendar> builder)
     {
-        public void Configure(EntityTypeBuilder<Calendar> builder)
-        {
-            builder.ToTable("Calendar");
-            builder.HasKey(x => x.Id);
-        }
+        builder.ToTable("Calendar");
+        builder.HasKey(x => x.Id);
     }
 }

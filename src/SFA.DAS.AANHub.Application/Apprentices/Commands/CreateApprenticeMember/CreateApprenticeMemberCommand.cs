@@ -12,7 +12,7 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
 
     public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
     {
-        Id = command.Id,
+        Id = command.MemberId,
         UserType = MembershipUserType.Apprentice,
         Status = MembershipStatus.Live,
         Email = command.Email!,
@@ -23,8 +23,11 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
         OrganisationName = command.OrganisationName,
         Apprentice = new Apprentice
         {
-            MemberId = command.Id,
+            MemberId = command.MemberId,
             ApprenticeId = command.ApprenticeId
-        }
+        },
+        MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList()
     };
+
+    private static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
 }

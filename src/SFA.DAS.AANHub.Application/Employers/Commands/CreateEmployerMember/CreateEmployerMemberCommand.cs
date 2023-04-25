@@ -14,7 +14,7 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
 
     public static implicit operator Member(CreateEmployerMemberCommand command) => new()
     {
-        Id = command.Id,
+        Id = command.MemberId,
         UserType = MembershipUserType.Employer,
         Status = MembershipStatus.Live,
         Email = command.Email!,
@@ -25,7 +25,7 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
         OrganisationName = command.OrganisationName,
         Employer = new Employer
         {
-            MemberId = command.Id,
+            MemberId = command.MemberId,
             AccountId = command.AccountId,
             UserRef = command.UserRef
         }

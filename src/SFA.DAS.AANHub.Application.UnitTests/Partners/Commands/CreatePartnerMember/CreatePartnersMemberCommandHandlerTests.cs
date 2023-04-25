@@ -20,10 +20,10 @@ public class CreatePartnersMemberCommandHandlerTests
         CreatePartnerMemberCommand command)
     {
         var response = await sut.Handle(command, new CancellationToken());
-        response.Result.MemberId.Should().Be(command.Id);
+        response.Result.MemberId.Should().Be(command.MemberId);
 
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id && x.RegionId == command.RegionId)));
-        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.RegionId == command.RegionId)));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
     }
 
     [Test]
@@ -38,9 +38,9 @@ public class CreatePartnersMemberCommandHandlerTests
 
         var response = await sut.Handle(command, new CancellationToken());
 
-        response.Result.MemberId.Should().Be(command.Id);
+        response.Result.MemberId.Should().Be(command.MemberId);
 
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id && x.RegionId == command.RegionId)));
-        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.RegionId == command.RegionId)));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
     }
 }

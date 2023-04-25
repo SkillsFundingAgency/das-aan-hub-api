@@ -16,7 +16,7 @@ public class CreateApprenticeMemberCommandTests
         Member member = sut;
 
         member.Apprentice.Should().NotBeNull();
-        member.Id.Should().Be(sut.Id);
+        member.Id.Should().Be(sut.MemberId);
         member.UserType.Should().Be(MembershipUserType.Apprentice);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
@@ -24,7 +24,10 @@ public class CreateApprenticeMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
-        member.Apprentice!.MemberId.Should().Be(sut.Id);
+        member.Apprentice!.MemberId.Should().Be(sut.MemberId);
         member.Apprentice!.ApprenticeId.Should().Be(sut.ApprenticeId);
+        member.MemberProfiles.Should().NotBeEmpty().And.HaveCount(sut.ProfileValues.Count);
+        member.MemberProfiles.All(p => p.MemberId == sut.MemberId).Should().BeTrue();
+        member.MemberProfiles.Select(p => p.ProfileId).Should().BeSubsetOf(sut.ProfileValues.Select(v => v.Id));
     }
 }

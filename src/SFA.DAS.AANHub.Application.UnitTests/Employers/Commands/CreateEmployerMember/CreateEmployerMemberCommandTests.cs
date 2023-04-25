@@ -15,7 +15,7 @@ public class CreateEmployerMemberCommandTests
         Member member = sut;
 
         member.Employer.Should().NotBeNull();
-        member.Id.Should().Be(sut.Id);
+        member.Id.Should().Be(sut.MemberId);
         member.UserType.Should().Be(MembershipUserType.Employer);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
@@ -23,7 +23,7 @@ public class CreateEmployerMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
-        member.Employer!.MemberId.Should().Be(sut.Id);
+        member.Employer!.MemberId.Should().Be(sut.MemberId);
         member.Employer!.AccountId.Should().Be(sut.AccountId);
         member.Employer!.UserRef.Should().Be(sut.UserRef);
     }

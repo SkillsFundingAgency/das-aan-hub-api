@@ -2,7 +2,7 @@
 
 public class Profile
 {
-    public long Id { get; set; }
+    public int Id { get; set; }
     public string UserType { get; set; } = null!;
     public string Description { get; set; } = null!;
     public string Category { get; set; } = null!;

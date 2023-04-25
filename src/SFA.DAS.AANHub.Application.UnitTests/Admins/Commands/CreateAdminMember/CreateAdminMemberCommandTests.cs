@@ -16,7 +16,7 @@ public class CreateAdminMemberCommandTests
         Member member = sut;
 
         member.Admin.Should().NotBeNull();
-        member.Id.Should().Be(sut.Id);
+        member.Id.Should().Be(sut.MemberId);
         member.UserType.Should().Be(MembershipUserType.Admin);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
@@ -24,7 +24,7 @@ public class CreateAdminMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
-        member.Admin!.MemberId.Should().Be(sut.Id);
+        member.Admin!.MemberId.Should().Be(sut.MemberId);
         member.Admin!.UserName.Should().Be(sut.UserName);
     }
 }

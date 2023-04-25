@@ -31,7 +31,7 @@ public class PartnersControllerCreateTests
         CreatePartnerMemberCommand command)
     {
         var response = new ValidatedResponse<CreateMemberCommandResponse>
-        (new CreateMemberCommandResponse(command.Id));
+        (new CreateMemberCommandResponse(command.MemberId));
 
         _mediator.Setup(m => m.Send(It.IsAny<CreatePartnerMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
         var result = await _controller.CreatePartner(command) as CreatedAtActionResult;
@@ -39,7 +39,7 @@ public class PartnersControllerCreateTests
         result?.ControllerName.Should().Be("Partners");
         result?.ActionName.Should().Be("Get");
         result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.Id);
+        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.MemberId);
     }
 
     [Test]

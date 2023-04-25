@@ -16,7 +16,7 @@ public class CreatePartnerMemberCommandTests
         Member member = sut;
 
         member.Partner.Should().NotBeNull();
-        member.Id.Should().Be(sut.Id);
+        member.Id.Should().Be(sut.MemberId);
         member.UserType.Should().Be(MembershipUserType.Partner);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
@@ -24,7 +24,7 @@ public class CreatePartnerMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
-        member.Partner!.MemberId.Should().Be(sut.Id);
+        member.Partner!.MemberId.Should().Be(sut.MemberId);
         member.Partner!.UserName.Should().Be(sut.UserName);
     }
 }

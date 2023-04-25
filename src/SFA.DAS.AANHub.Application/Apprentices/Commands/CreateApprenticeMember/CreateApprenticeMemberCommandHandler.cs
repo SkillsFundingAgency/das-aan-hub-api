@@ -34,7 +34,7 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         _auditWriteRepository.Create(new Audit
         {
             Action = "Create",
-            ActionedBy = command.Id,
+            ActionedBy = command.MemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(member.Apprentice),
             Resource = MembershipUserType.Apprentice

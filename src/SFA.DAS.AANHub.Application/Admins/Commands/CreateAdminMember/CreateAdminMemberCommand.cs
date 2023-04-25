@@ -12,7 +12,7 @@ public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<Valida
 
     public static implicit operator Member(CreateAdminMemberCommand command) => new()
     {
-        Id = command.Id,
+        Id = command.MemberId,
         UserType = MembershipUserType.Admin,
         Status = MembershipStatus.Live,
         Email = command.Email!,
@@ -23,7 +23,7 @@ public class CreateAdminMemberCommand : CreateMemberCommandBase, IRequest<Valida
         OrganisationName = command.OrganisationName,
         Admin = new Admin
         {
-            MemberId = command.Id,
+            MemberId = command.MemberId,
             UserName = command.UserName,
         }
     };

@@ -20,9 +20,9 @@ public class CreateApprenticeMemberCommandHandlerTests
         CreateApprenticeMemberCommand command)
     {
         var response = await sut.Handle(command, new CancellationToken());
-        response.Result.MemberId.Should().Be(command.Id);
+        response.Result.MemberId.Should().Be(command.MemberId);
 
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId)));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
     }
 }

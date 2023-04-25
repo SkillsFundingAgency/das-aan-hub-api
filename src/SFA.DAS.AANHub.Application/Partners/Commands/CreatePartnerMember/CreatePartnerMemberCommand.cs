@@ -13,7 +13,7 @@ public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<Vali
 
     public static implicit operator Member(CreatePartnerMemberCommand command) => new()
     {
-        Id = command.Id,
+        Id = command.MemberId,
         UserType = MembershipUserType.Partner,
         Status = MembershipStatus.Live,
         Email = command.Email!,
@@ -24,7 +24,7 @@ public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<Vali
         OrganisationName = command.OrganisationName,
         Partner = new Partner
         {
-            MemberId = command.Id,
+            MemberId = command.MemberId,
             UserName = command.UserName
         }
     };
