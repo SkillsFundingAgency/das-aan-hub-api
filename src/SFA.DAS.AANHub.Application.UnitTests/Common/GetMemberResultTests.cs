@@ -21,4 +21,14 @@ public class GetMemberResultTests
         result.OrganisationName.Should().Be(member.OrganisationName);
         result.RegionId.Should().Be(member.RegionId);
     }
+
+    [Test]
+    public void Operator_NullArgument_ReturnsNull()
+    {
+        Member? member = null;
+
+        GetMemberResult actual = member!;
+
+        actual.Should().BeNull();
+    }
 }

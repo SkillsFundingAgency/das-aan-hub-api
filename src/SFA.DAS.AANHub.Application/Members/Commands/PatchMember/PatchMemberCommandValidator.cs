@@ -43,11 +43,11 @@ public class PatchMemberCommandValidator : AbstractValidator<PatchMemberCommand>
             .WithMessage(PatchOperationContainsUnavailableOperationErrorMessage);
 
         RuleFor(c => c.PatchDoc)
-            .Must(c => c.PatchOperationsFieldListInLowerCase().GroupBy(s => s).Any(g => g.Count() < 2))
+            .Must(c => c.PatchOperationsFieldList().GroupBy(s => s).Any(g => g.Count() < 2))
             .WithMessage(FoundDuplicatePatchOperationsErrorMessage);
 
         RuleFor(c => c.PatchDoc)
-            .Must(p => p.PatchOperationsFieldListInLowerCase().All(f => MemberPatchFields.PatchFields.Contains(f)))
+            .Must(p => p.PatchOperationsFieldList().All(f => MemberPatchFields.PatchFields.Contains(f)))
             .WithMessage(PatchOperationContainsUnavailableFieldErrorMessage);
 
         When(x => x.HasEmail,
