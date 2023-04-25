@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Regions.Queries.GetRegions;
@@ -14,7 +15,7 @@ public class WhenRequestingGetAllRegions
     [RecursiveMoqAutoData]
     public async Task Handle_ReturnAllRegions(
         GetRegionsQuery query,
-        Mock<IRegionsReadRepository> regionsReadRepositoryMock,
+        [Frozen] Mock<IRegionsReadRepository> regionsReadRepositoryMock,
         GetRegionsQueryHandler handler,
         List<Region> regions)
     {
@@ -22,6 +23,6 @@ public class WhenRequestingGetAllRegions
 
         var result = await handler.Handle(query, CancellationToken.None);
 
-        result?.Result.Regions?.Count.Should().Be(regions.Count);
+        result?.Result.Regions.Should().BeEquivalentTo(regions, c => c.ExcludingMissingMembers());
     }
 }
