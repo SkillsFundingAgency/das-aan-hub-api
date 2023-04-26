@@ -1,10 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+
+public interface IAdminsWriteRepository
 {
-    public interface IAdminsWriteRepository
-    {
-        void Create(Admin admin);
-        Task<Admin?> GetPatchAdmin(string userName);
-    }
+    void Create(Admin admin);
 }

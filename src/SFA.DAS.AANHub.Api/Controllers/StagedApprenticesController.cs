@@ -3,39 +3,32 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Application.StagedApprentices.Queries;
 
-namespace SFA.DAS.AANHub.Api.Controllers
+namespace SFA.DAS.AANHub.Api.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class StagedApprenticesController : ActionResponseControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class StagedApprenticesController : ActionResponseControllerBase
+    private readonly ILogger<StagedApprenticesController> _logger;
+    private readonly IMediator _mediator;
+
+    public override string ControllerName => "StagedApprentices";
+
+    public StagedApprenticesController(ILogger<StagedApprenticesController> logger, IMediator mediator)
     {
-        private readonly ILogger<StagedApprenticesController> _logger;
-        private readonly IMediator _mediator;
+        _logger = logger;
+        _mediator = mediator;
+    }
 
-        public StagedApprenticesController(ILogger<StagedApprenticesController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
+    [HttpGet]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(GetStagedApprenticeQueryResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastName, [FromQuery] DateTime dateOfBirth, [FromQuery] string email)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastName, dateOfBirth, email);
 
-        /// <summary>
-        ///     Gets an StagedApprentice member
-        /// </summary>
-        /// <param name="lastName"></param>
-        /// <param name="dateOfBirth"></param>
-        /// <param name="email"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-        [ProducesResponseType(typeof(GetStagedApprenticeQueryResult), StatusCodes.Status200OK)]
-        public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastName, [FromQuery] DateTime dateOfBirth, [FromQuery] string email)
-        {
-            _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastName, dateOfBirth, email);
-
-            var response = await _mediator.Send(new GetStagedApprenticeQuery(lastName, dateOfBirth, email));
-            return GetResponse(response);
-        }
+        var response = await _mediator.Send(new GetStagedApprenticeQuery(lastName, dateOfBirth, email));
+        return GetResponse(response);
     }
 }

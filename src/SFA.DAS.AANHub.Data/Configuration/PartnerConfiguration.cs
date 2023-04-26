@@ -2,14 +2,13 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Data.Configuration
+namespace SFA.DAS.AANHub.Data.Configuration;
+
+public class PartnerConfiguration : IEntityTypeConfiguration<Partner>
 {
-    public class PartnerConfiguration : IEntityTypeConfiguration<Partner>
+    public void Configure(EntityTypeBuilder<Partner> builder)
     {
-        public void Configure(EntityTypeBuilder<Partner> builder)
-        {
-            builder.ToTable("Partner");
-            builder.HasKey(x => x.MemberId);
-        }
+        builder.ToTable("Partner");
+        builder.HasKey(x => x.MemberId);
     }
 }

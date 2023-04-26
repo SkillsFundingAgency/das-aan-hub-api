@@ -1,12 +1,7 @@
 ﻿using MediatR;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Queries
-{
-    public class GetApprenticeMemberQuery : IRequest<ValidatedResponse<GetApprenticeMemberResult>>
-    {
-        public GetApprenticeMemberQuery(Guid apprenticeId) => ApprenticeId = apprenticeId;
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries;
 
-        public Guid ApprenticeId { get; }
-    }
-}
+public record GetApprenticeMemberQuery(Guid ApprenticeId) : IRequest<ValidatedResponse<GetMemberResult>>;

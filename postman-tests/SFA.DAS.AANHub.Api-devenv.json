@@ -1,1 +1,30 @@
-{"id":"d10f28e4-d5d1-4f46-9b89-f57ef700d9c6","name":"SFA.DAS.AANHub.Api - Local dev","values":[{"key":"api-base-url","value":"https://localhost:7299","enabled":true,"type":"default"}]}
+{
+	"id": "397a6951-85fd-471c-a082-44490c7f5ec1",
+	"name": "AAN Hub Inner API",
+	"values": [
+		{
+			"key": "BaseUrl",
+			"value": "https://localhost:7299",
+			"enabled": true
+		},
+		{
+			"key": "RandomGuid",
+			"value": "3d5bf494-103c-4f68-9b81-70c9035f007b\n",
+			"type": "default",
+			"enabled": true
+		},
+		{
+			"key": "AuthToken",
+			"value": "test",
+			"enabled": true
+		},
+		{
+			"key": "MemberId",
+			"value": "MemberId",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2023-04-25T08:53:47.777Z",
+	"_postman_exported_using": "Postman/10.13.4"
+}

@@ -1,37 +1,36 @@
 ﻿using FluentValidation;
-using SFA.DAS.AANHub.Application.Common.Validators;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
+namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
+
+public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
 {
-    public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
+    private const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
+
+    private readonly IEmployersReadRepository _employersReadRepository;
+
+    public CreateEmployerMemberCommandValidator(IEmployersReadRepository employersReadRepository)
     {
-        private const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
+        _employersReadRepository = employersReadRepository;
 
-        private readonly IEmployersReadRepository _employersReadRepository;
+        Include(new CreateMemberCommandBaseValidator());
+        RuleFor(c => c.UserRef)
+            .NotEmpty()
+            .MustAsync(async (command, _, _) => await IsNewUser(command.UserRef))
+            .WithMessage(UserRefAlreadyCreatedErrorMessage);
 
-        public CreateEmployerMemberCommandValidator(IRegionsReadRepository regionsReadRepository, IEmployersReadRepository employersReadRepository)
-        {
-            _employersReadRepository = employersReadRepository;
+        RuleFor(c => c.Organisation)
+            .NotEmpty()
+            .MaximumLength(250);
 
-            Include(new CreateMemberCommandBaseValidator(regionsReadRepository));
-            RuleFor(c => c.UserRef)
-                .NotEmpty()
-                .MustAsync(async (command, _, _) => await IsNewUser(command.UserRef))
-                .WithMessage(UserRefAlreadyCreatedErrorMessage);
+        RuleFor(c => c.AccountId)
+            .NotEmpty();
+    }
 
-            RuleFor(c => c.Organisation)
-                .NotEmpty()
-                .MaximumLength(250);
-
-            RuleFor(c => c.AccountId)
-                .NotEmpty();
-        }
-
-        private async Task<bool> IsNewUser(Guid userRef)
-        {
-            var result = await _employersReadRepository.GetEmployerByUserRef(userRef);
-            return result == null;
-        }
+    private async Task<bool> IsNewUser(Guid userRef)
+    {
+        var result = await _employersReadRepository.GetEmployerByUserRef(userRef);
+        return result == null;
     }
 }

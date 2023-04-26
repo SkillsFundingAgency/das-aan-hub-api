@@ -1,58 +1,41 @@
-﻿using Moq;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Queries;
+
+public class GetEmployerMemberQueryHandlerTests
 {
-    [TestFixture]
-    public class GetEmployerMemberQueryHandlerTests
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_EmployerFound_ReturnsMember(
+        [Frozen] Mock<IEmployersReadRepository> employersReadRepositoryMock,
+        GetEmployerMemberQueryHandler sut,
+        Employer employer)
     {
-        [Test]
-        public async Task Handle_GetEmployerMember()
-        {
-            var name = "name";
-            var email = "email@email.com";
-            var organisation = "w3c";
-            var status = "live";
+        employersReadRepositoryMock.Setup(a => a.GetEmployerByUserRef(employer.UserRef)).ReturnsAsync(employer);
 
-            var userRef = new Guid();
-            Guid memberId = new();
+        var result = await sut.Handle(new GetEmployerMemberQuery(employer.UserRef), new CancellationToken());
 
-            var employersReadRepositoryMock = new Mock<IEmployersReadRepository>();
-            var employer = new Employer
-            {
-                Name = name,
-                Email = email,
-                Organisation = organisation,
-                Member = new Member() { Status = status }
-            };
+        result.Result.Should().BeEquivalentTo(employer.Member, c => c.ExcludingMissingMembers());
+    }
 
-            employersReadRepositoryMock.Setup(a => a.GetEmployerByUserRef(userRef)).ReturnsAsync(employer);
-            var sut = new GetEmployerMemberQueryHandler(employersReadRepositoryMock.Object);
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_EmployerNotFound_ReturnsNull(
+        [Frozen] Mock<IEmployersReadRepository> employersReadRepositoryMock,
+        GetEmployerMemberQueryHandler sut,
+        Guid userRef)
+    {
+        employersReadRepositoryMock.Setup(a => a.GetEmployerByUserRef(userRef)).ReturnsAsync(() => null);
 
-            var result = await sut.Handle(new GetEmployerMemberQuery(userRef), new CancellationToken());
+        var result = await sut.Handle(new GetEmployerMemberQuery(userRef), new CancellationToken());
 
-            Assert.AreEqual(memberId, result!.Result.MemberId);
-            Assert.AreEqual(name, result!.Result.Name);
-            Assert.AreEqual(email, result!.Result.Email);
-            Assert.AreEqual(organisation, result!.Result.Organisation);
-            Assert.AreEqual(status, result!.Result.Status);
-        }
-
-        [Test]
-        public async Task Handle_NoDataFound()
-        {
-            var userRef = Guid.NewGuid();
-
-            var employersReadRepositoryMock = new Mock<IEmployersReadRepository>();
-            employersReadRepositoryMock.Setup(a => a.GetEmployerByUserRef(userRef)).ReturnsAsync((Employer?)null);
-            var sut = new GetEmployerMemberQueryHandler(employersReadRepositoryMock.Object);
-
-            var result = await sut.Handle(new GetEmployerMemberQuery(userRef), new CancellationToken());
-
-            Assert.IsNull(result.Result);
-        }
+        result.Result.Should().BeNull();
     }
 }

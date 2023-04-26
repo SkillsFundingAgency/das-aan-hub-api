@@ -1,11 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
-{
-    public interface IEmployersWriteRepository
-    {
-        void Create(Employer employer);
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-        Task<Employer?> GetPatchEmployer(Guid userRef);
-    }
+public interface IEmployersWriteRepository
+{
+    void Create(Employer employer);
 }

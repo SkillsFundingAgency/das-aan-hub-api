@@ -30,8 +30,6 @@ INSERT INTO #TempProfile VALUES
 (35,'Employer Postcode','Employer',6, 'Apprentice')
 
 
-SET IDENTITY_INSERT [dbo].[Profile] ON;
-
 MERGE [Profile] TARGET
 USING #TempProfile SOURCE ON TARGET.Id=SOURCE.Id
 WHEN MATCHED THEN
@@ -43,7 +41,5 @@ WHEN MATCHED THEN
 WHEN NOT MATCHED BY TARGET THEN 
 	INSERT (Id, Description, Category, Ordering, UserType)
 	VALUES (SOURCE.Id, SOURCE.Description, SOURCE.Category, SOURCE.Ordering, SOURCE.UserType);
-
-SET IDENTITY_INSERT [dbo].[Profile] OFF;
 
 DROP TABLE #TempProfile

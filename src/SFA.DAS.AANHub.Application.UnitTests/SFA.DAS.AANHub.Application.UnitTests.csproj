@@ -31,6 +31,7 @@
     </PackageReference>
     <PackageReference Include="NUnit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageReference Include="SFA.DAS.Testing.AutoFixture" Version="3.0.169" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,10 +39,6 @@
     <ProjectReference Include="..\SFA.DAS.AANHub.Data\SFA.DAS.AANHub.Data.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Domain\SFA.DAS.AANHub.Domain.csproj" />
     <ProjectReference Include="..\SFA.DAS.AANHub.Api\SFA.DAS.AANHub.Api.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Apprentices\Commands\" />
   </ItemGroup>
 
 </Project>

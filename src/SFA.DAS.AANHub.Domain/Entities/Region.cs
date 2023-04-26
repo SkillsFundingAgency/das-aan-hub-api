@@ -1,9 +1,13 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities
+﻿using System.Text.Json.Serialization;
+
+namespace SFA.DAS.AANHub.Domain.Entities;
+
+public class Region
 {
-    public class Region
-    {
-        public int Id { get; set; }
-        public string? Area { get; set; }
-        public int Ordering { get; set; }
-    }
+    public int Id { get; set; }
+    public string Area { get; set; } = null!;
+    public int Ordering { get; set; }
+
+    [JsonIgnore]
+    public virtual List<Member> Members { get; set; } = new();
 }

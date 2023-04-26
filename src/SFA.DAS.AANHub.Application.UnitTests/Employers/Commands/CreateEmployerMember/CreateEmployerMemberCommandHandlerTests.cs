@@ -5,44 +5,43 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployerMember
+namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployerMember;
+
+public class CreateEmployerMemberCommandHandlerTests
 {
-    public class CreateEmployerMemberCommandHandlerTests
+    [Test, MoqAutoData]
+    public async Task Handle_AddsNewEmployer(
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
+        CreateEmployerMemberCommandHandler sut,
+        CreateEmployerMemberCommand command)
     {
-        [Test, AutoMoqData]
-        public async Task Handle_AddsNewEmployer(
-            [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
-            [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            CreateEmployerMemberCommandHandler sut,
-            CreateEmployerMemberCommand command)
-        {
-            command.Regions = new List<int>(new[] { 1 });
-            var response = await sut.Handle(command, new CancellationToken());
-            response.Result.MemberId.Should().Be(command.Id);
-            response.Result.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live.ToString());
+        var response = await sut.Handle(command, new CancellationToken());
+        response.Result.MemberId.Should().Be(command.MemberId);
 
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.MemberRegions != null && x.MemberRegions[0].RegionId == 1)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
-        }
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x =>
+            x.Id == command.MemberId
+            && x.RegionId == command.RegionId
+        )));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
+    }
 
-        [Test, AutoMoqData]
-        public async Task Handle_AddsNewEmployer_WithNullRegions(
-            [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
-            [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            CreateEmployerMemberCommandHandler sut,
-            CreateEmployerMemberCommand command)
-        {
-            command.Regions = null;
+    [Test, MoqAutoData]
+    public async Task Handle_AddsNewEmployer_WithNullRegions(
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
+        CreateEmployerMemberCommandHandler sut,
+        CreateEmployerMemberCommand command)
+    {
+        command.RegionId = null;
 
-            var response = await sut.Handle(command, new CancellationToken());
+        var response = await sut.Handle(command, new CancellationToken());
 
-            response.Result.MemberId.Should().Be(command.Id);
-            response.Result.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live.ToString());
+        response.Result.MemberId.Should().Be(command.MemberId);
 
-            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.Id)));
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.Id)));
-        }
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.RegionId == null)));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
     }
 }

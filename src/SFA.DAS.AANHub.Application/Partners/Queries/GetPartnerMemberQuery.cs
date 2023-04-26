@@ -1,15 +1,7 @@
 ﻿using MediatR;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
-namespace SFA.DAS.AANHub.Application.Partners.Queries
-{
-    public class GetPartnerMemberQuery : IRequest<ValidatedResponse<GetPartnerMemberResult>>
-    {
-        public string UserName { get; }
+namespace SFA.DAS.AANHub.Application.Partners.Queries;
 
-        public GetPartnerMemberQuery(string userName)
-        {
-            UserName = userName;
-        }
-    }
-}
+public record GetPartnerMemberQuery(string UserName) : IRequest<ValidatedResponse<GetMemberResult>>;

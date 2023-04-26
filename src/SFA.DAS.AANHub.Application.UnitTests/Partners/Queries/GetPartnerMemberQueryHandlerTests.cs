@@ -1,45 +1,41 @@
-﻿using Moq;
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Partners.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Queries
+namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Queries;
+
+public class GetPartnerMemberQueryHandlerTests
 {
-    [TestFixture]
-    public class GetPartnerMemberQueryHandlerTests
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_PartnerFound_ReturnsMember(
+        [Frozen] Mock<IPartnersReadRepository> partnersReadRepositoryMock,
+        GetPartnerMemberQueryHandler sut,
+        Partner partner)
     {
+        partnersReadRepositoryMock.Setup(a => a.GetPartnerByUserName(partner.UserName)).ReturnsAsync(partner);
 
-        [Test]
-        public async Task Handle_GetPartnerMember()
-        {
-            string userName = "";
-            string email = "email@email.com";
-            string name = "lorem epsum";
-            string organisation = "w3c";
-            string status = "live";
-            Guid memberid = new();
+        var result = await sut.Handle(new GetPartnerMemberQuery(partner.UserName), new CancellationToken());
 
-            var partnersReadRepositoryMock = new Mock<IPartnersReadRepository>();
-            var partner = new Partner()
-            {
-                MemberId = memberid,
-                Organisation = organisation,
-                Name = name,
-                Email = email,
-                Member = new Member() { Status = status }
-            };
+        result.Result.Should().BeEquivalentTo(partner.Member, c => c.ExcludingMissingMembers());
+    }
 
-            partnersReadRepositoryMock.Setup(a => a.GetPartnerByUserName(userName)).ReturnsAsync(partner);
-            var sut = new GetPartnerMemberQueryHandler(partnersReadRepositoryMock.Object);
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_PartnerNotFound_ReturnNull(
+        [Frozen] Mock<IPartnersReadRepository> partnersReadRepositoryMock,
+        GetPartnerMemberQueryHandler sut,
+        string userName)
+    {
+        partnersReadRepositoryMock.Setup(p => p.GetPartnerByUserName(userName)).ReturnsAsync(() => null);
 
-            var result = await sut.Handle(new GetPartnerMemberQuery(userName), new CancellationToken());
+        var result = await sut.Handle(new GetPartnerMemberQuery(userName), new CancellationToken());
 
-            Assert.AreEqual(memberid, result!.Result.MemberId);
-            Assert.AreEqual(email, result!.Result.Email);
-            Assert.AreEqual(name, result!.Result.Name);
-            Assert.AreEqual(organisation, result!.Result.Organisation);
-            Assert.AreEqual(status, result!.Result.Status);
-        }
+        result.Result.Should().BeNull();
     }
 }

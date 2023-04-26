@@ -1,12 +1,8 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities
+﻿namespace SFA.DAS.AANHub.Domain.Entities;
+
+public class Admin
 {
-    public class Admin
-    {
-        public Guid MemberId { get; set; }
-        public string Email { get; set; } = null!;
-        public string Name { get; set; } = null!;
-        public string UserName { get; set; } = null!;
-        public DateTime? LastUpdated { get; set; }
-        public Member Member { get; set; } = null!;
-    }
+    public Guid MemberId { get; set; }
+    public string UserName { get; set; } = null!;
+    public Member Member { get; set; } = null!;
 }

@@ -1,34 +1,31 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Application.Common.Commands;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember
-{
-    public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreatePartnerMemberCommandResponse>>
-    {
-        public string UserName { get; set; } = null!;
-        public string Organisation { get; set; } = null!;
+namespace SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 
-        public static implicit operator Member(CreatePartnerMemberCommand command) => new()
+public class CreatePartnerMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
+{
+    public string UserName { get; set; } = null!;
+    public string Organisation { get; set; } = null!;
+
+    public static implicit operator Member(CreatePartnerMemberCommand command) => new()
+    {
+        Id = command.MemberId,
+        UserType = MembershipUserType.Partner,
+        Status = MembershipStatus.Live,
+        Email = command.Email!,
+        FirstName = command.FirstName!,
+        LastName = command.LastName!,
+        JoinedDate = command.JoinedDate!.Value,
+        RegionId = command.RegionId,
+        OrganisationName = command.OrganisationName,
+        Partner = new Partner
         {
-            Id = command.Id,
-            UserType = MembershipUserType.Partner,
-            Joined = command.Joined,
-            Information = command.Information,
-            ReviewStatus = MembershipReviewStatus.New,
-            Status = MembershipStatus.Live,
-            MemberRegions = Member.GenerateMemberRegions(command.Regions, command.Id),
-            Partner = new Partner
-            {
-                MemberId = command.Id,
-                Email = command.Email,
-                UserName = command.UserName,
-                Name = command.Name,
-                Organisation = command.Organisation,
-                LastUpdated = DateTime.Now
-            }
-        };
-    }
+            MemberId = command.MemberId,
+            UserName = command.UserName
+        }
+    };
 }

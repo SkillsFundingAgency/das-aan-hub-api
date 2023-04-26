@@ -21,12 +21,5 @@ namespace SFA.DAS.AANHub.Domain.Common
             public static readonly string Partner = UserType.Partner.ToString();
             public static readonly string Admin = UserType.Admin.ToString();
         }
-
-        public static class MembershipReviewStatus
-        {
-            public const string New = nameof(New);
-            public const string InProgress = nameof(InProgress);
-            public const string Archived = nameof(Archived);
-        }
     }
 }

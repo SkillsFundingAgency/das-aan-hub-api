@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[NotificationTemplate]
 (
-	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
+    [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
     [Type] NVARCHAR(10) NOT NULL, 
     [Description] NVARCHAR(200) NOT NULL, 
     [MessageBody] NVARCHAR(256) NOT NULL, 

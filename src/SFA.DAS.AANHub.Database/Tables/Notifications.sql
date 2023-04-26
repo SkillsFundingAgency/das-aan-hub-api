@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Notifications]
 (
-	[Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
+    [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
     [MemberId] UNIQUEIDENTIFIER NOT NULL, 
     [NotificationTemplateId] BIGINT NOT NULL, 
     [MergeValues] NVARCHAR(MAX) NOT NULL, 

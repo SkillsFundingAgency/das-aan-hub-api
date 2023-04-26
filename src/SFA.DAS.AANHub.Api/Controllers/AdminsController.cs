@@ -1,110 +1,48 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
-using Microsoft.AspNetCore.JsonPatch;
+﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
-using SFA.DAS.AANHub.Application.Admins.Commands.PatchAdminMember;
 using SFA.DAS.AANHub.Application.Admins.Queries;
-using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Application.Common;
 
-namespace SFA.DAS.AANHub.Api.Controllers
+namespace SFA.DAS.AANHub.Api.Controllers;
+
+[Route("[controller]")]
+[ApiController]
+public class AdminsController : ActionResponseControllerBase
 {
-    [Route("api/[controller]")]
-    [ApiController]
-    public class AdminsController : ActionResponseControllerBase
+    private readonly ILogger<AdminsController> _logger;
+    private readonly IMediator _mediator;
+
+    public override string ControllerName => "Admins";
+
+    public AdminsController(ILogger<AdminsController> logger, IMediator mediator)
     {
-        private const string ControllerName = "Admins";
-        private readonly ILogger<AdminsController> _logger;
-        private readonly IMediator _mediator;
+        _logger = logger;
+        _mediator = mediator;
+    }
 
-        public AdminsController(ILogger<AdminsController> logger, IMediator mediator)
-        {
-            _logger = logger;
-            _mediator = mediator;
-        }
+    [HttpPost]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateAdmin(CreateAdminMemberCommand command)
+    {
+        var response = await _mediator.Send(command);
 
-        /// <summary>
-        ///     Creates an admin member
-        /// </summary>
-        /// <param name="request"></param>
-        /// <param name="requestedByMemberId"></param>
-        /// <returns></returns>
-        [HttpPost]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-        public async Task<IActionResult> CreateAdmin(CreateAdminModel request)
-        {
-            var command = (CreateAdminMemberCommand)request;
+        return GetPostResponse(response, new { userName = command.UserName });
+    }
 
-            var response = await _mediator.Send(command);
+    [HttpGet]
+    [Route("{userName}")]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Get(string userName)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);
 
-            return GetPostResponse(response,
-                new ReferrerRouteDetails(
-                    nameof(CreateAdmin),
-                    ControllerName,
-                    new RouteValueDictionary
-                    {
-                        {
-                            "id", response.Result?.MemberId.ToString()
-                        }
-                    }));
-        }
+        var response = await _mediator.Send(new GetAdminMemberQuery(userName));
 
-        /// <summary>
-        ///     Gets an Admin member
-        /// </summary>
-        /// <param name="userName"></param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("{userName}")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(GetAdminMemberResult), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> GetAdmin(string userName)
-        {
-            _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);
-
-            var response = await _mediator.Send(new GetAdminMemberQuery(userName));
-
-            return GetResponse(response);
-        }
-
-        /// <summary>
-        ///     Patch an admin member
-        /// </summary>
-        /// <param name="requestedByMemberId"></param>
-        /// <param name="userName"></param>
-        /// <param name="request"></param>
-        /// ///
-        [HttpPatch]
-        [Route("{userName}")]
-        [Produces("application/json")]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
-        public async Task<IActionResult> PatchAdmin(
-            [FromHeader(Name = Constants.PostRequestHeaders.RequestedByUserHeader)] [Required]
-            Guid requestedByMemberId,
-            [FromRoute] string userName, [FromBody] JsonPatchDocument<Admin> request)
-        {
-            _logger.LogInformation("AAN Hub API: Received command to patch admin by user name: {userName}. RequestedByUser: {requestedByMemberId}",
-                userName,
-                requestedByMemberId);
-
-            PatchAdminMemberCommand command = new()
-            {
-                RequestedByMemberId = requestedByMemberId,
-                UserName = userName,
-                PatchDoc = request
-            };
-
-            var response = await _mediator.Send(command);
-
-            return GetPatchResponse(response);
-        }
+        return GetResponse(response);
     }
 }

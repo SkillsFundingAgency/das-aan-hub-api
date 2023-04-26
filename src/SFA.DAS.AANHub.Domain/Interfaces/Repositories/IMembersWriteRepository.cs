@@ -6,5 +6,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
     {
         void Create(Member member);
 
+        Task<Member?> Get(Guid id);
+
     }
 }

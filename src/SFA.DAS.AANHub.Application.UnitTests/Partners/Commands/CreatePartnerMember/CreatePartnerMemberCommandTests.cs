@@ -1,53 +1,30 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Partners.Commands.CreatePartnerMember;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.Testing.AutoFixture;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember
+namespace SFA.DAS.AANHub.Application.UnitTests.Partners.Commands.CreatePartnerMember;
+
+public class CreatePartnerMemberCommandTests
 {
-    public class CreatePartnerMemberCommandTests
+    [Test]
+    [MoqAutoData]
+    public void Operator_ConvertsToMember(CreatePartnerMemberCommand sut)
     {
-        [Test]
-        [AutoMoqData]
-        public void CreatePartnerCommand_WithExpectedFields(
-        )
-        {
-            const string email = "email@email.com";
-            const string info = "ThisIsInformation";
-            var date = DateTime.Now;
-            const string name = "ThisIsAName";
-            const string userName = "ThisIsAUserName";
-            const string organisation = "ThisIsAnOrganisation";
-            var regions = new List<int>(new[]
-            {
-                1, 2
-            });
+        Member member = sut;
 
-            var model = new CreatePartnerModel
-            {
-                Email = email,
-                Information = info,
-                Joined = date,
-                Name = name,
-                Regions = regions,
-                UserName = userName,
-                Organisation = organisation
-            };
-
-            var command = (CreatePartnerMemberCommand)model;
-            var member = (Member)command;
-
-            member.UserType.Should().Be(Domain.Common.Constants.MembershipUserType.Partner);
-            member.Joined.Should().Be(date);
-            member.Information.Should().Be(info);
-            member.ReviewStatus.Should().Be(Domain.Common.Constants.MembershipReviewStatus.New);
-            member.Status.Should().Be(Domain.Common.Constants.MembershipStatus.Live);
-            member?.Partner?.MemberId.Should().Be(member.Id);
-            member?.Partner?.Email.Should().Be(email);
-            member?.Partner?.Name.Should().Be(name);
-            member?.Partner?.UserName.Should().Be(userName);
-            member?.Partner?.Organisation.Should().Be(organisation);
-        }
+        member.Partner.Should().NotBeNull();
+        member.Id.Should().Be(sut.MemberId);
+        member.UserType.Should().Be(MembershipUserType.Partner);
+        member.Status.Should().Be(MembershipStatus.Live);
+        member.Email.Should().Be(sut.Email);
+        member.FirstName.Should().Be(sut.FirstName);
+        member.LastName.Should().Be(sut.LastName);
+        member.JoinedDate.Should().Be(sut.JoinedDate);
+        member.OrganisationName.Should().Be(sut.OrganisationName);
+        member.Partner!.MemberId.Should().Be(sut.MemberId);
+        member.Partner!.UserName.Should().Be(sut.UserName);
     }
 }

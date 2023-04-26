@@ -14,4 +14,6 @@ IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Permission')
   DROP TABLE Permission;
 GO
 
-
+IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'MemberRegion')
+  DROP TABLE MemberRegion;
+GO

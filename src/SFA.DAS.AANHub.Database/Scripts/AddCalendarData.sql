@@ -24,7 +24,7 @@ WHEN MATCHED THEN
         TARGET.CalendarName = SOURCE.CalendarName,
         TARGET.Ordering = SOURCE.Ordering
 WHEN NOT MATCHED BY TARGET THEN 
-    INSERT (Id, CalendarName, Ordering, EffectiveFrom)
+    INSERT (Id, CalendarName, Ordering, EffectiveFromDate)
     VALUES (SOURCE.Id, SOURCE.CalendarName, SOURCE.Ordering, '2023-05-01')
 WHEN NOT MATCHED BY SOURCE THEN
     DELETE;

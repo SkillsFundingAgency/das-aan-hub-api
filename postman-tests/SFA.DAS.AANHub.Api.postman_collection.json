@@ -1,197 +1,498 @@
 {
 	"info": {
-		"_postman_id": "54742dbe-484c-42df-a51a-2d16bdfe4d17",
-		"name": "SFA.DAS.AANHub.Api",
+		"_postman_id": "e64640bb-1183-47c7-b569-2a6a4e67af17",
+		"name": "AAN Hub API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "5594608"
+		"_exporter_id": "1035360"
 	},
 	"item": [
 		{
-			"name": "Region",
-			"item": [
+			"name": "Admin - Create ",
+			"event": [
 				{
-					"name": "GetAllRegions",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-base-url}}/api/region",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"region"
-							]
-						}
-					},
-					"response": []
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
-			]
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"admin@aan.com\",\r\n  \"firstName\": \"admin\",\r\n  \"lastName\": \"second\",\r\n  \"joinedDate\": \"2023-04-24T10:57:05.876Z\",\r\n  \"regionId\": 2,\r\n  \"organisationName\": \"string\",\r\n  \"userName\": \"admin{{RandomGuid}}\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/admins",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"admins"
+					]
+				}
+			},
+			"response": []
 		},
 		{
-			"name": "Member",
-			"item": [
+			"name": "Admin - Get",
+			"event": [
 				{
-					"name": "CreateApprenticeMember",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api-base-url}}/api/member/apprentice",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"member",
-								"apprentice"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateEmployerMember",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api-base-url}}/api/member/employer",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"member",
-								"employer"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreatePartnerMember",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api-base-url}}/api/member/partner",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"member",
-								"partner"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "CreateAdminMember",
-					"request": {
-						"method": "POST",
-						"header": [],
-						"body": {
-							"mode": "raw",
-							"raw": "{\r\n  \"id\": \"123\",\r\n  \"joined\": \"2022-11-16T11:57:01.479Z\",\r\n  \"region\": 2,\r\n  \"information\": \"info\",\r\n  \"organisation\": \"org\"\r\n}",
-							"options": {
-								"raw": {
-									"language": "json"
-								}
-							}
-						},
-						"url": {
-							"raw": "{{api-base-url}}/api/member/partner",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"member",
-								"partner"
-							]
-						}
-					},
-					"response": []
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
 				}
-			]
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/Admins/admin{{RandomGuid}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Admins",
+						"admin{{RandomGuid}}"
+					]
+				}
+			},
+			"response": []
 		},
 		{
-			"name": "Calendar",
-			"item": [
+			"name": "Apprentices - Create",
+			"event": [
 				{
-					"name": "GetCalendars",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-base-url}}/api/calendar",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"calendar"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "GetCalendarsForUser",
-					"request": {
-						"method": "GET",
-						"header": [],
-						"url": {
-							"raw": "{{api-base-url}}/api/calendar?memberid=df9397a9-e2b5-4925-bdac-5506969bd201",
-							"host": [
-								"{{api-base-url}}"
-							],
-							"path": [
-								"api",
-								"calendar"
-							],
-							"query": [
-								{
-									"key": "memberid",
-									"value": "df9397a9-e2b5-4925-bdac-5506969bd201"
-								}
-							]
-						}
-					},
-					"response": []
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});\r",
+							"var jsonData = pm.response.json();\r",
+							"pm.environment.set(\"MemberId\", jsonData.memberId);\r",
+							""
+						],
+						"type": "text/javascript"
+					}
 				}
-			]
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"apprentice@aan.com\",\r\n  \"firstName\": \"first\",\r\n  \"lastName\": \"apprentice\",\r\n  \"joinedDate\": \"2023-04-23T11:10:51.768Z\",\r\n  \"regionId\": 2,\r\n  \"organisationName\": \"string\",\r\n  \"apprenticeId\": \"{{RandomGuid}}\",\r\n  \"profileValues\": [\r\n    {\r\n      \"id\": 1,\r\n      \"value\": \"string\"\r\n    }\r\n  ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/apprentices",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"apprentices"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Apprentices - Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/apprentices/{{RandomGuid}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"apprentices",
+						"{{RandomGuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employers - Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"employer.third@aan.com\",\r\n  \"firstName\": \"emp\",\r\n  \"lastName\": \"third\",\r\n  \"joinedDate\": \"2023-04-23T11:15:19.212Z\",\r\n  \"regionId\": 3,\r\n  \"organisationName\": \"string\",\r\n  \"accountId\": 1234,\r\n  \"userRef\": \"{{RandomGuid}}\",\r\n  \"organisation\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/employers",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"employers"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Employers - Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/employers/{{RandomGuid}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"employers",
+						"{{RandomGuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partners - Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 201\", function () {\r",
+							"    pm.response.to.have.status(201);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n  \"email\": \"partner.first@gmail.com\",\r\n  \"firstName\": \"first\",\r\n  \"lastName\": \"partner\",\r\n  \"joinedDate\": \"2023-04-23T11:21:50.389Z\",\r\n  \"regionId\": 4,\r\n  \"organisationName\": \"string\",\r\n  \"userName\": \"partner{{RandomGuid}}\",\r\n  \"organisation\": \"string\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/partners",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"partners"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Partners - Get",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/partners/partner{{RandomGuid}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"partners",
+						"partner{{RandomGuid}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member - Patch",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 204\", function () {\r",
+							"    pm.response.to.have.status(204);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "[\r\n  {\r\n    \"value\": \"abc@gmail.com\",\r\n    \"path\": \"email\",\r\n    \"op\": \"replace\"\r\n  },\r\n  {\r\n    \"value\": \"John\",\r\n    \"path\": \"firstname\",\r\n    \"op\": \"replace\"\r\n  },\r\n  {\r\n    \"value\": \"Smith\",\r\n    \"path\": \"lastname\",\r\n    \"op\": \"replace\"\r\n  },\r\n  {\r\n    \"value\": \"Apprenticeship Inc.\",\r\n    \"path\": \"organisationname\",\r\n    \"op\": \"replace\"\r\n  },\r\n  {\r\n    \"value\": 1,\r\n    \"path\": \"regionid\",\r\n    \"op\": \"replace\"\r\n  },\r\n  {\r\n      \"value\": \"withdrawn\",\r\n      \"path\": \"status\",\r\n      \"op\": \"replace\"\r\n  }\r\n]\r\n",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{BaseUrl}}/members/{{MemberId}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"members",
+						"{{MemberId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Profiles - Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/profiles/apprentice",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"profiles",
+						"apprentice"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Regions - Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/regions",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"regions"
+					]
+				}
+			},
+			"response": []
 		}
 	]
 }

@@ -2,7 +2,7 @@
 (
     [Id] INT NOT NULL PRIMARY KEY, 
     [CalendarName] NVARCHAR(200) NOT NULL, 
-    [EffectiveFrom] DATE NOT NULL, 
-    [EffectiveTo] DATE NULL, 
+    [EffectiveFromDate] DATE NOT NULL, 
+    [EffectiveToDate] DATE NULL, 
     [Ordering] INT NOT NULL
 )

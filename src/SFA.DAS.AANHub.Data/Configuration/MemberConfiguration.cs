@@ -2,14 +2,15 @@
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Data.Configuration
+namespace SFA.DAS.AANHub.Data.Configuration;
+
+public class MemberConfiguration : IEntityTypeConfiguration<Member>
 {
-    public class MemberConfiguration : IEntityTypeConfiguration<Member>
+    public void Configure(EntityTypeBuilder<Member> builder)
     {
-        public void Configure(EntityTypeBuilder<Member> builder)
-        {
-            builder.ToTable("Member");
-            builder.HasKey(x => x.Id);
-        }
+        builder.ToTable("Member");
+        builder.HasKey(x => x.Id);
+        builder.HasOne(m => m.Region).WithMany(r => r.Members);
+        builder.HasMany(m => m.MemberProfiles).WithOne(mp => mp.Member);
     }
 }

@@ -75,7 +75,6 @@
     <Build Include="Tables\NotificationTemplate.sql" />
     <Build Include="Tables\Documents.sql" />
     <Build Include="Tables\Audit.sql" />
-    <Build Include="Tables\MemberRegion.sql" />
     <Build Include="Tables\EventGuest.sql" />
     <Build Include="Tables\Feedback.sql" />
     <Build Include="Tables\FeedbackAttribute.sql" />
@@ -84,7 +83,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
-    <None Include="Scripts\AddMemberData.sql" />
     <None Include="Scripts\AddProfileData.sql" />
     <None Include="Scripts\AddCalendarData.sql" />
   </ItemGroup>
