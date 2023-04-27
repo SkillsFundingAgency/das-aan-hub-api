@@ -15,6 +15,9 @@ public class Member
     public string? OrganisationName { get; set; }
     public DateTime LastUpdatedDate { get; set; }
     public List<MemberProfile> MemberProfiles { get; set; } = new();
+    public List<Attendance> Attendances { get; set; } = new();
+
+    public string FullName => $"{FirstName} {LastName}";
 
     public virtual Region? Region { get; set; }
     [JsonIgnore]
