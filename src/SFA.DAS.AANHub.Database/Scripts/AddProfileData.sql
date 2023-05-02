@@ -27,8 +27,9 @@ INSERT INTO #TempProfile VALUES
 (32,'Employer Address line 2','Employer',3, 'Apprentice'),
 (33,'Employer Town or City','Employer',4, 'Apprentice'),
 (34,'Employer County','Employer',5, 'Apprentice'),
-(35,'Employer Postcode','Employer',6, 'Apprentice')
-
+(35,'Employer Postcode','Employer',6, 'Apprentice'),
+(36,'Employer address logitude','Employer',7, 'Apprentice'),
+(37,'Employer address latitude','Employer',8, 'Apprentice') 
 
 MERGE [Profile] TARGET
 USING #TempProfile SOURCE ON TARGET.Id=SOURCE.Id
