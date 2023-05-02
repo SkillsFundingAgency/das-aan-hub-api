@@ -1,5 +1,8 @@
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
+using SFA.DAS.AANHub.Application.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -8,11 +11,27 @@ namespace SFA.DAS.AANHub.Api.Controllers;
 public class CalendarEventsController : ActionResponseControllerBase
 {
     private readonly ILogger<CalendarEventsController> _logger;
+    private readonly IMediator _mediator;
 
     public override string ControllerName => "CalendarEvents";
 
-    public CalendarEventsController(ILogger<CalendarEventsController> logger)
+    public CalendarEventsController(ILogger<CalendarEventsController> logger, IMediator mediator)
     {
         _logger = logger;
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    [Route("{calendareventid}")]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> Get(Guid calendarEventId)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get calendar event by {calendarEventId}: ", calendarEventId);
+
+        var response = await _mediator.Send(new GetCalendarEventByIdQuery(calendarEventId));
+
+        return GetResponse(response);
     }
 }
