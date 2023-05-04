@@ -14,7 +14,6 @@ public class GetCalendarEventByIdQueryHandler : IRequestHandler<GetCalendarEvent
     {
         var calendarEvent = await _calendarEventsReadRepository.GetCalendarEvent(request.CalendarEventId);
 
-        // TODO: How to handle null?
         return new ValidatedResponse<GetCalendarEventByIdQueryResult>(calendarEvent);
     }
 }
