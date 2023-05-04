@@ -13,7 +13,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .CalendarEvents
             .AsNoTracking()
             .Where(m => m.Id == id)
-            .Include(x => x.Attendees).ThenInclude(x => x.Member)
+            .Include(x => x.Attendees.Where(a => a.IsActive))
+            .ThenInclude(x => x.Member)
             .Include(x => x.EventGuests)
             .SingleOrDefaultAsync();
     
