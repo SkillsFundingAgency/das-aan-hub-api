@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -26,11 +27,19 @@ public class CalendarEventsController : ActionResponseControllerBase
     [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(Guid calendarEventId)
+    public async Task<IActionResult> Get(Guid calendarEventId, [FromHeader(Name = "X-RequestedByUser")] Guid requestedByUserId)
     {
-        _logger.LogInformation("AAN Hub API: Received command to get calendar event by {calendarEventId}: ", calendarEventId);
+        _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByUserId} to get calendar event by event ID {calendarEventId}", requestedByUserId, calendarEventId);
 
-        var response = await _mediator.Send(new GetCalendarEventByIdQuery(calendarEventId));
+        var response = await _mediator.Send(new GetCalendarEventByIdQuery(calendarEventId, requestedByUserId));
+
+        if (!response.IsValidResponse)
+        {
+            foreach (var errorMessage in response.Errors.Select(e => e.ErrorMessage))
+            {
+                _logger.LogError("AAN Hub API: {errorMessage}. Request came from User ID {requestedByuserId}", errorMessage, requestedByUserId);
+            }
+        }
 
         return GetResponse(response);
     }
