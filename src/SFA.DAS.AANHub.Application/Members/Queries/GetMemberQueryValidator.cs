@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.AANHub.Application.Employers.Queries
 {
-    public class GetMemberQueryValidator : AbstractValidator<GetEmployerMemberQuery>
+    public class GetMemberQueryValidator : AbstractValidator<GetMemberQuery>
     {
         public GetMemberQueryValidator()
         {
