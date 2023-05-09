@@ -45,7 +45,7 @@ public class CalendarEventsControllerGetTests
     }
 
     [Test]
-    [MoqAutoData]
+    [RecursiveMoqAutoData]
     public async Task GetCalendarEventById_HandlerReturnsData_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
