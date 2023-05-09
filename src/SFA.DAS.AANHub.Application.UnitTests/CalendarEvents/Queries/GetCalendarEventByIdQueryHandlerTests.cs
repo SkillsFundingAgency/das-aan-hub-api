@@ -44,6 +44,6 @@ public class GetCalendarEventByIdQueryHandlerTests
 
         var result = await sut.Handle(new GetCalendarEventByIdQuery(calendarEvent.Id, member.Id), new CancellationToken());
 
-        result.Result.CalendarEventId.Should().Be(calendarEvent.Id);
+        result.Result.CalendarEvent.Id.Should().Be(calendarEvent.Id);
     }
 }
