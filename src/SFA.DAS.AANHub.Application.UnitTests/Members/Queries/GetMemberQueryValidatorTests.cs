@@ -24,6 +24,6 @@ public class GetMemberQueryValidatorTests
         var result = await sut.TestValidateAsync(query);
 
         result.ShouldHaveValidationErrorFor(c => c.UserRef)
-              .WithErrorCode("NotEmptyValidator");
+              .WithErrorMessage(GetMemberQueryValidator.UserRefMissingMessage);
     }
 }
