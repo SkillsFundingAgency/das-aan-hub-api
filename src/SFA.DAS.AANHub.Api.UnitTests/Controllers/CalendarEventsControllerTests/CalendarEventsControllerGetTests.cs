@@ -6,9 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
-using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.Testing.AutoFixture;
@@ -81,7 +79,6 @@ public class CalendarEventsControllerGetTests
         var result = await sut.Get(calendarEventId, requestedByUserId);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
-
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);
     }
 }
