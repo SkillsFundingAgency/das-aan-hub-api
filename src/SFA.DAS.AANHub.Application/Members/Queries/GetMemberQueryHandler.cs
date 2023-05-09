@@ -14,6 +14,6 @@ public class GetMemberQueryHandler : IRequestHandler<GetMemberQuery, ValidatedRe
     public async Task<ValidatedResponse<GetMemberResult>> Handle(GetMemberQuery request, CancellationToken cancellationToken)
     {
         var member = await _membersReadRepository.GetMember(request.UserRef);
-        return member == null ? ValidatedResponse<GetMemberResult>.EmptySuccessResponse() : new ValidatedResponse<GetMemberResult>(member);
+        return member == null ? ValidatedResponse<GetMemberResult>.EmptySuccessResponse() : new ValidatedResponse<GetMemberResult>(member!);
     }
 }
