@@ -26,7 +26,7 @@ public class GetCalendarEventByIdQueryValidatorTests
         var result = await sut.TestValidateAsync(query);
 
         result.ShouldHaveValidationErrorFor(c => c.CalendarEventId)
-              .WithErrorCode("NotEmptyValidator");
+              .WithErrorMessage(GetCalendarEventByIdQueryValidator.CalendarEventIdMissingMessage);
     }
 
     [Test]
