@@ -33,14 +33,6 @@ public class CalendarEventsController : ActionResponseControllerBase
 
         var response = await _mediator.Send(new GetCalendarEventByIdQuery(calendarEventId, requestedByUserId));
 
-        if (!response.IsValidResponse)
-        {
-            foreach (var errorMessage in response.Errors.Select(e => e.ErrorMessage))
-            {
-                _logger.LogError("AAN Hub API: {errorMessage}. Request came from User ID {requestedByuserId}", errorMessage, requestedByUserId);
-            }
-        }
-
         return GetResponse(response);
     }
 }
