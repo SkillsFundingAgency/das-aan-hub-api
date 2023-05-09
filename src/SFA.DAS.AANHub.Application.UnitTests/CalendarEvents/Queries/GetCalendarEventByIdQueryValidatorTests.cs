@@ -1,6 +1,4 @@
-﻿using AutoFixture.NUnit3;
-using FluentValidation.Results;
-using FluentValidation.TestHelper;
+﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
