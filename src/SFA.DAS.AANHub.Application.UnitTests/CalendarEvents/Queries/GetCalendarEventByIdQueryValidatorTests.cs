@@ -13,7 +13,7 @@ public class GetCalendarEventByIdQueryValidatorTests
 {
     [Test]
     [RecursiveMoqAutoData]
-    public async Task MissingCalendarId_Fails_Validation(Member member)
+    public async Task ValidateCalendarId_Missing_FailsValidation(Member member)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
@@ -29,15 +29,17 @@ public class GetCalendarEventByIdQueryValidatorTests
               .WithErrorMessage(GetCalendarEventByIdQueryValidator.CalendarEventIdMissingMessage);
     }
 
-    [Test]
-    [RecursiveMoqAutoData]
-    public async Task InactiveRequestedByUserId_Fails_Validation(Member member)
+    [TestCase(MembershipStatus.Pending)]
+    [TestCase(MembershipStatus.Deleted)]
+    [TestCase(MembershipStatus.Withdrawn)]
+    [TestCase(MembershipStatus.Cancelled)]
+    public async Task ValidateCalendarId_Inactive_FailsValidation(string inactiveMembershipStatus)
     {
         var inactiveGuid = Guid.NewGuid();
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(inactiveGuid))
-                                 .ReturnsAsync(new Member() { Status = MembershipStatus.Pending});
+                                 .ReturnsAsync(new Member() { Status = inactiveMembershipStatus });
 
         var query = new GetCalendarEventByIdQuery(Guid.NewGuid(), inactiveGuid);
 
