@@ -14,6 +14,6 @@ public class GetCalendarEventByIdQueryHandler : IRequestHandler<GetCalendarEvent
     {
         var calendarEvent = await _calendarEventsReadRepository.GetCalendarEvent(request.CalendarEventId);
 
-        return new ValidatedResponse<GetCalendarEventByIdQueryResult>(calendarEvent);
+        return new ValidatedResponse<GetCalendarEventByIdQueryResult>(calendarEvent!);
     }
 }
