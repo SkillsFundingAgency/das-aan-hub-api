@@ -21,9 +21,9 @@ public class CalendarEventsControllerGetTests
        [Frozen] Mock<IMediator> mediatorMock,
        [Greedy] CalendarEventsController sut,
        Guid calendarEventId,
-       Guid requestedByUserId)
+       Guid requestedByMemberId)
     {
-        await sut.Get(calendarEventId,requestedByUserId);
+        await sut.Get(calendarEventId, requestedByMemberId);
 
         mediatorMock.Verify(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventId), It.IsAny<CancellationToken>()));
     }
@@ -34,12 +34,12 @@ public class CalendarEventsControllerGetTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         Guid calendarEventsId,
-        Guid requestedByUserId)
+        Guid requestedByMemberId)
     {
         var notFoundResponse = ValidatedResponse<GetCalendarEventByIdQueryResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventsId), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
-        var result = await sut.Get(calendarEventsId, requestedByUserId);
+        var result = await sut.Get(calendarEventsId, requestedByMemberId);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -50,14 +50,14 @@ public class CalendarEventsControllerGetTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         Guid calendarEventId,
-        Guid requestedByUserId,
+        Guid requestedByMemberId,
         GetCalendarEventByIdQueryResult queryResult)
     {
         var response = new ValidatedResponse<GetCalendarEventByIdQueryResult>(queryResult);
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventId), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(response);
 
-        var result = await sut.Get(calendarEventId, requestedByUserId);
+        var result = await sut.Get(calendarEventId, requestedByMemberId);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(queryResult);
@@ -70,13 +70,13 @@ public class CalendarEventsControllerGetTests
         [Greedy] CalendarEventsController sut,
         List<ValidationFailure> errors,
         Guid calendarEventId,
-        Guid requestedByUserId)
+        Guid requestedByMemberId)
     {
         var errorResponse = new ValidatedResponse<GetCalendarEventByIdQueryResult>(errors);
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventId), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(errorResponse);
 
-        var result = await sut.Get(calendarEventId, requestedByUserId);
+        var result = await sut.Get(calendarEventId, requestedByMemberId);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);

@@ -2,9 +2,9 @@
 {
     public static class Constants
     {
-        public static class PostRequestHeaders
+        public static class RequestHeaders
         {
-            public const string RequestedByUserHeader = "x-requested-by-userid";
+            public const string RequestedByMemberIdHeader = "X-RequestedByMemberId";
         }
 
     }
