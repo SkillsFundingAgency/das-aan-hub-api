@@ -3,7 +3,7 @@
     [Id] UNIQUEIDENTIFIER NOT NULL PRIMARY KEY DEFAULT NEWID(), 
     [CalendarEventId] UNIQUEIDENTIFIER NOT NULL, 
     [MemberId] UNIQUEIDENTIFIER NOT NULL,
-    [Added] DATETIME2 DEFAULT GETUTCDATE(),
+    [AddedDate] DATETIME2 DEFAULT GETUTCDATE(),
     [IsActive] BIT NOT NULL DEFAULT 1, 
     [Attended] BIT NOT NULL DEFAULT 0, 
     [OverallRating] INT NULL, 
@@ -15,6 +15,6 @@ GO
 
 
 CREATE UNIQUE INDEX IXU_Attendance_CalendarEventId_MemberId ON [dbo].[Attendance] ([CalendarEventId], [MemberId])
-INCLUDE ([Id], [Added], [IsActive], [Attended], [OverallRating], [FeedbackCompletedDate]);
+INCLUDE ([Id], [AddedDate], [IsActive], [Attended], [OverallRating], [FeedbackCompletedDate]);
 GO
 
