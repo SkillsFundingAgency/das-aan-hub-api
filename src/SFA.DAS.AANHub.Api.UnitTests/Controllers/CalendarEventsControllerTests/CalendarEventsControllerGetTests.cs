@@ -17,7 +17,7 @@ public class CalendarEventsControllerGetTests
 {
     [Test]
     [MoqAutoData]
-    public async Task GetCalendarEventById_InvokesQueryHandler(
+    public async Task Get_InvokesQueryHandler(
        [Frozen] Mock<IMediator> mediatorMock,
        [Greedy] CalendarEventsController sut,
        Guid calendarEventId,
@@ -25,19 +25,22 @@ public class CalendarEventsControllerGetTests
     {
         await sut.Get(calendarEventId, requestedByMemberId);
 
-        mediatorMock.Verify(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventId), It.IsAny<CancellationToken>()));
+        mediatorMock.Verify(
+            m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventId && q.RequestedByMemberId == requestedByMemberId), 
+                It.IsAny<CancellationToken>()));
     }
 
     [Test]
     [MoqAutoData]
-    public async Task GetCalendarEventById_HandlerReturnsNullResult_ReturnsNotFoundResponse(
+    public async Task Get_HandlerReturnsNullResult_ReturnsNotFoundResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         Guid calendarEventsId,
         Guid requestedByMemberId)
     {
         var notFoundResponse = ValidatedResponse<GetCalendarEventByIdQueryResult>.EmptySuccessResponse();
-        mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventsId), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
+        mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventByIdQuery>(q => q.CalendarEventId == calendarEventsId), It.IsAny<CancellationToken>()))
+                    .ReturnsAsync(notFoundResponse);
 
         var result = await sut.Get(calendarEventsId, requestedByMemberId);
 
@@ -46,7 +49,7 @@ public class CalendarEventsControllerGetTests
 
     [Test]
     [RecursiveMoqAutoData]
-    public async Task GetCalendarEventById_HandlerReturnsData_ReturnsOkResponse(
+    public async Task Get_HandlerReturnsData_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         Guid calendarEventId,
@@ -65,7 +68,7 @@ public class CalendarEventsControllerGetTests
 
     [Test]
     [MoqAutoData]
-    public async Task GetCalendarEventById_InvalidRequest_ReturnsBadRequestResponse(
+    public async Task Get_InvalidRequest_ReturnsBadRequestResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         List<ValidationFailure> errors,
