@@ -16,7 +16,7 @@ public abstract class ActionResponseControllerBase : ControllerBase
 
     public abstract string ControllerName { get; }
 
-    private static readonly IReadOnlyCollection<string> notFoundErrorMessages = GetNotFoundErrorMessages();
+    private static readonly IReadOnlyCollection<string> notFoundErrorMessages = Get404WorthyErrorMessages();
 
     protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
     {
