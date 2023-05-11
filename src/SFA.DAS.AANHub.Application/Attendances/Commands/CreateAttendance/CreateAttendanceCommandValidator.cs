@@ -30,7 +30,7 @@ public class CreateAttendanceCommandValidator : AbstractValidator<CreateAttendan
             .WithMessage(EventNotFoundMessage)
             .Must((_) => calendarEvent!.StartDate > DateTime.UtcNow)
             .WithMessage(EventInPastMessage)
-            .Must((_) => !calendarEvent!.IsActive)
+            .Must((_) => calendarEvent!.IsActive)
             .WithMessage(EventCancelledMessage);
     }
 }
