@@ -1,7 +1,9 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
+using SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
@@ -13,6 +15,8 @@ public abstract class ActionResponseControllerBase : ControllerBase
     public const string GetMethodName = "Get";
 
     public abstract string ControllerName { get; }
+
+    private static readonly IReadOnlyCollection<string> notFoundErrorMessages = Get404WorthyErrorMessages();
 
     protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
     {
@@ -29,7 +33,10 @@ public abstract class ActionResponseControllerBase : ControllerBase
         {
             return new CreatedAtActionResult(GetMethodName, ControllerName, routeParameters, response.Result);
         }
-
+        if (response.Errors.All(e => notFoundErrorMessages.Contains(e.ErrorMessage)))
+        {
+            return new NotFoundObjectResult(FormatErrors(response.Errors));
+        }
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
@@ -49,5 +56,13 @@ public abstract class ActionResponseControllerBase : ControllerBase
             PropertyName = err.PropertyName,
             ErrorMessage = err.ErrorMessage
         }).ToList();
+    }
+
+    private static IReadOnlyCollection<string> Get404WorthyErrorMessages()
+    {
+        return new[]
+        {
+            CreateAttendanceCommandValidator.EventNotFoundMessage,
+        };
     }
 }
