@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 namespace SFA.DAS.AANHub.Data.Configuration;
 
 [ExcludeFromCodeCoverage]
-internal class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
+public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
 {
     public void Configure(EntityTypeBuilder<Attendance> builder)
     {
