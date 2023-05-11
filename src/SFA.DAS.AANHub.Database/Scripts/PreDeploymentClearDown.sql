@@ -19,9 +19,9 @@ IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'MemberRegion')
 GO
 
 IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Documents')
-  DROP TABLE Permission;
+  DROP TABLE Documents;
 GO
 
 IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Notifications')
-  DROP TABLE Permission;
+  DROP TABLE Notifications;
 GO
