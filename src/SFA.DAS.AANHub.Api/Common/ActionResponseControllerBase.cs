@@ -33,9 +33,9 @@ public abstract class ActionResponseControllerBase : ControllerBase
         {
             return new CreatedAtActionResult(GetMethodName, ControllerName, routeParameters, response.Result);
         }
-        if (ErrorsContainNotFoundMessages(response.Errors))
+        if (response.Errors.All(e => notFoundErrorMessages.Contains(e.ErrorMessage)))
         {
-            return new NotFoundObjectResult(FormatErrors(response.Errors.Where(e => notFoundErrorMessages.Contains(e.ErrorMessage))));
+            return new NotFoundObjectResult(FormatErrors(response.Errors));
         }
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
@@ -60,16 +60,9 @@ public abstract class ActionResponseControllerBase : ControllerBase
 
     private static IReadOnlyCollection<string> Get404WorthyErrorMessages()
     {
-        return new[] 
-        { 
+        return new[]
+        {
             CreateAttendanceCommandValidator.EventNotFoundMessage,
         };
-    }
-
-    private static bool ErrorsContainNotFoundMessages(IReadOnlyCollection<ValidationFailure> errors) 
-    {
-        return errors.Select(e => e.ErrorMessage)
-                     .Intersect(notFoundErrorMessages)
-                     .Any();
     }
 }
