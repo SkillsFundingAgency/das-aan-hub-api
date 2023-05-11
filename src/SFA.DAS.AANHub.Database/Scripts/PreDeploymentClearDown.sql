@@ -17,3 +17,11 @@ GO
 IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'MemberRegion')
   DROP TABLE MemberRegion;
 GO
+
+IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Documents')
+  DROP TABLE Permission;
+GO
+
+IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Notifications')
+  DROP TABLE Permission;
+GO
