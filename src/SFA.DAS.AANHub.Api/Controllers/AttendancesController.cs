@@ -1,11 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Application.Attendances.Commands;
 using SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
-using SFA.DAS.AANHub.Application.Common;
-using SFA.DAS.AANHub.Application.Employers.Queries;
-using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 

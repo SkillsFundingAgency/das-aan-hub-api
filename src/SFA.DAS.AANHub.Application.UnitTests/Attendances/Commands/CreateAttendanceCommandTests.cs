@@ -17,7 +17,7 @@ public class CreateAttendanceCommandTests
         attendance.Id.Should().Be(sut.Id);
         attendance.CalendarEventId.Should().Be(sut.CalendarEventId);
         attendance.MemberId.Should().Be(sut.MemberId);
-        attendance.Added.Should().Be(sut.Added);
+        attendance.AddedDate.Should().Be(sut.AddedDate);
         attendance.IsActive.Should().Be(sut.IsActive);
         attendance.Attended.Should().Be(sut.Attended);
         attendance.OverallRating.Should().Be(sut.OverallRating);

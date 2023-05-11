@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -54,7 +55,32 @@ public class AttendancesControllerCreateTests
         var errorResponse = new ValidatedResponse<CreateAttendanceCommandResponse>
         (new List<ValidationFailure>
         {
-            new("Name", "error")
+            new("CalendarEventId", CreateAttendanceCommandValidator.EventNotFoundMessage)
+        });
+
+        var command = new CreateAttendanceCommand(calendarEvent.Id, member.Id);
+        _mediator.Setup(m => m.Send(It.IsAny<CreateAttendanceCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
+        var result = await _controller.CreateAttendance(calendarEvent.Id, member.Id);
+
+        result.As<NotFoundObjectResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
+    }
+
+    [TestCase(CreateAttendanceCommandValidator.EventInPastMessage)]
+    [TestCase(CreateAttendanceCommandValidator.EventCancelledMessage)]
+    [TestCase(CreateAttendanceCommandValidator.EventIdNotSuppliedMessage)]
+    public async Task CreateAttendance_CalendarEventCancelledInThePastOrNotSupplied_ReturnsBadRequest400(string errorMessage)
+    {
+        var calendarEvent = new CalendarEvent() { Id = Guid.NewGuid() };
+        var member = new Member() { Id = Guid.NewGuid() };
+
+        var calendarEventsReadRepository = new Mock<ICalendarEventsReadRepository>();
+        calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(calendarEvent.Id))
+                                    .ReturnsAsync(calendarEvent);
+
+        var errorResponse = new ValidatedResponse<CreateAttendanceCommandResponse>
+        (new List<ValidationFailure>
+        {
+            new("CalendarEventId", errorMessage)
         });
 
         var command = new CreateAttendanceCommand(calendarEvent.Id, member.Id);
@@ -64,5 +90,27 @@ public class AttendancesControllerCreateTests
         result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
     }
 
-    // Add test for 404 error. Ensure all errors in ticket are covered
+    [TestCase(RequestedByMemberIdValidator.RequestedByMemberHeaderEmptyErrorMessage)]
+    [TestCase(RequestedByMemberIdValidator.RequestedByMemberIdNotFoundMessage)]
+    public async Task CreateAttendance_RequestedByMemberIdValidationFailed_ReturnsBadRequest400(string errorMessage)
+    {
+        var calendarEvent = new CalendarEvent() { Id = Guid.NewGuid() };
+        var member = new Member() { Id = Guid.NewGuid() };
+
+        var calendarEventsReadRepository = new Mock<ICalendarEventsReadRepository>();
+        calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(calendarEvent.Id))
+                                    .ReturnsAsync(calendarEvent);
+
+        var errorResponse = new ValidatedResponse<CreateAttendanceCommandResponse>(
+            new List<ValidationFailure>
+            {
+                new("RequestedByMemberId", errorMessage)
+            });
+
+        var command = new CreateAttendanceCommand(calendarEvent.Id, member.Id);
+        _mediator.Setup(m => m.Send(It.IsAny<CreateAttendanceCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
+        var result = await _controller.CreateAttendance(calendarEvent.Id, member.Id);
+
+        result.As<BadRequestObjectResult>().StatusCode.Should().Be(StatusCodes.Status400BadRequest);
+    }
 }
