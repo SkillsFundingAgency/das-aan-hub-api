@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Notifications]
+﻿CREATE TABLE [dbo].[Notification]
 (
     [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
     [MemberId] UNIQUEIDENTIFIER NOT NULL, 
