@@ -1,4 +1,4 @@
-﻿CREATE TABLE [dbo].[Documents]
+﻿CREATE TABLE [dbo].[Document]
 (
     [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY,
     [MemberId] UNIQUEIDENTIFIER NOT NULL, 
