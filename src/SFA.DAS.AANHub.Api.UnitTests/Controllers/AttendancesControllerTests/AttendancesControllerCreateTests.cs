@@ -11,6 +11,7 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.AttendancesControllerTests;
@@ -27,7 +28,7 @@ public class AttendancesControllerCreateTests
 
     [Test]
     [RecursiveMoqAutoData]
-    public async Task CreateAttendance_InvokesRequest(
+    public async Task CreateAttendance_ReturnsExpectedResult(
         CreateAttendanceCommand command,
         [Frozen] CalendarEvent calendarEvent,
         [Frozen] Member memberEvent)
@@ -45,8 +46,11 @@ public class AttendancesControllerCreateTests
 
     [Test]
     [RecursiveMoqAutoData]
-    public async Task CreateEmployer_InvokesRequest_WithErrors(CalendarEvent calendarEvent, Member member)
+    public async Task CreateAttendance_UnknownCalendarEventId_ReturnsNotFound404(CalendarEvent calendarEvent, Member member)
     {
+        var calendarEventsReadRepository = new Mock<ICalendarEventsReadRepository>();
+        calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(calendarEvent.Id))
+                                    .Returns<CalendarEvent>(null);
         var errorResponse = new ValidatedResponse<CreateAttendanceCommandResponse>
         (new List<ValidationFailure>
         {

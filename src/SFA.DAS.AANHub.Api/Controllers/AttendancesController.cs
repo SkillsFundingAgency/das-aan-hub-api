@@ -35,7 +35,6 @@ public class AttendancesController : ActionResponseControllerBase
         var command = new CreateAttendanceCommand(calendarEventId, requestedByMemberId);
         var response = await _mediator.Send(command);
 
-        var postResposne = GetPostResponse(response, new { attendanceId = command.Id });
-        return postResposne;
+        return GetPostResponse(response, new { attendanceId = command.Id });
     }
 }
