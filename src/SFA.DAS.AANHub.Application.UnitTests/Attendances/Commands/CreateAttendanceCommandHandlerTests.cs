@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
-using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -27,7 +22,7 @@ public class CreateAttendanceCommandHandlerTests
     }
 
     [Test, MoqAutoData]
-    public async Task Handle_CreatesNewAttendance(
+    public async Task Handle_CallsAttendanceRepositoryCreate(
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
         CreateAttendanceCommandHandler sut,
         CreateAttendanceCommand command)
@@ -38,7 +33,19 @@ public class CreateAttendanceCommandHandlerTests
             x.Id == command.Id
             && x.CalendarEventId == command.CalendarEventId
             && x.MemberId == command.RequestedByMemberId
-        )));
+        )), Times.Once());
+    }
+
+    [Test, MoqAutoData]
+    public async Task Handle_DataContextSavesChanges(
+        [Frozen] Mock<IAanDataContext> dataContext,
+        CreateAttendanceCommandHandler sut,
+        CreateAttendanceCommand command)
+    {
+        var cancellationToken = new CancellationToken();
+        var response = await sut.Handle(command, cancellationToken);
+
+        dataContext.Verify(p => p.SaveChangesAsync(cancellationToken), Times.Once());
     }
 
     [Test, MoqAutoData]
@@ -49,6 +56,6 @@ public class CreateAttendanceCommandHandlerTests
     {
         var response = await sut.Handle(command, new CancellationToken());
 
-        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
+        auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)), Times.Once());
     }
 }

@@ -66,7 +66,7 @@ public class AttendancesControllerCreateTests
     }
 
     [TestCase(CreateAttendanceCommandValidator.EventInPastMessage)]
-    [TestCase(CreateAttendanceCommandValidator.EventCancelledMessage)]
+    [TestCase(CreateAttendanceCommandValidator.EventNotActiveMessage)]
     [TestCase(CreateAttendanceCommandValidator.EventIdNotSuppliedMessage)]
     public async Task CreateAttendance_CalendarEventCancelledInThePastOrNotSupplied_ReturnsBadRequest400(string errorMessage)
     {

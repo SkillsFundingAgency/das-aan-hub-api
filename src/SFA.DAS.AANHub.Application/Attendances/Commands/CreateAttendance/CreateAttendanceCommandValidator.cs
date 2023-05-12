@@ -10,7 +10,7 @@ public class CreateAttendanceCommandValidator : AbstractValidator<CreateAttendan
     public const string EventIdNotSuppliedMessage = "A Calendar Event Id was not supplied";
     public const string EventNotFoundMessage = "A calendar event with this ID could not be found";
     public const string EventInPastMessage = "Cannot attend a calendar event that is in the past";
-    public const string EventCancelledMessage = "Cannot attend a calendar event that is cancelled";
+    public const string EventNotActiveMessage = "Cannot attend an inactive calendar event";
 
     public CreateAttendanceCommandValidator(ICalendarEventsReadRepository calendarEventsReadRepository, IMembersReadRepository membersReadRepository)
     {
@@ -31,6 +31,6 @@ public class CreateAttendanceCommandValidator : AbstractValidator<CreateAttendan
             .Must((_) => calendarEvent!.StartDate > DateTime.UtcNow)
             .WithMessage(EventInPastMessage)
             .Must((_) => calendarEvent!.IsActive)
-            .WithMessage(EventCancelledMessage);
+            .WithMessage(EventNotActiveMessage);
     }
 }

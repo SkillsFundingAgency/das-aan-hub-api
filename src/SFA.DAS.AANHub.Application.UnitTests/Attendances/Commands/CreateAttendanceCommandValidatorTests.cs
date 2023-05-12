@@ -78,6 +78,32 @@ public class CreateAttendanceCommandValidatorTests
         result.Errors.Should().Contain(e => e.ErrorMessage == CreateAttendanceCommandValidator.EventInPastMessage);
     }
 
+
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Validation_InActiveCalendarEvent_Fails(Member validMember, CalendarEvent inactiveCalendarEvent)
+    {
+        validMember.Status = Domain.Common.Constants.MembershipStatus.Live;
+        inactiveCalendarEvent.IsActive = false;
+        inactiveCalendarEvent.StartDate = DateTime.UtcNow.AddDays(2);
+
+        var membersReadRepository = new Mock<IMembersReadRepository>();
+        membersReadRepository.Setup(m => m.GetMember(validMember.Id))
+                             .ReturnsAsync(validMember);
+
+
+        var calendarEventsReadRepository = new Mock<ICalendarEventsReadRepository>();
+        calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(inactiveCalendarEvent.Id))
+                                    .ReturnsAsync(inactiveCalendarEvent);
+
+        var command = new CreateAttendanceCommand(inactiveCalendarEvent.Id, validMember.Id);
+        var sut = new CreateAttendanceCommandValidator(calendarEventsReadRepository.Object, membersReadRepository.Object);
+
+        var result = await sut.TestValidateAsync(command);
+
+        result.Errors.Should().Contain(e => e.ErrorMessage == CreateAttendanceCommandValidator.EventNotActiveMessage);
+    }
+
     [Test]
     [RecursiveMoqAutoData]
     public async Task Validation_ActiveCalendarEventWithStartDateInFuture_Succeeds(Member validMember, CalendarEvent futureCalendarEvent)
