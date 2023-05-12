@@ -9,8 +9,8 @@ public class CreateAttendanceCommand : IRequest<ValidatedResponse<CreateAttendan
     public Guid Id { get; set; }
     public Guid CalendarEventId { get; set; }
     public Guid MemberId { get; set; }
-    public DateTime? AddedDate { get; set; } = DateTime.UtcNow;
-    public bool IsActive { get; set; } = true;
+    public DateTime? AddedDate { get; set; }
+    public bool IsActive { get; set; }
     public bool Attended { get; set; }
     public int? OverallRating { get; set; }
     public DateTime? FeedbackCompletedDate { get; set; }

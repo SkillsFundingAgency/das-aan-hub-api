@@ -16,8 +16,6 @@ public abstract class ActionResponseControllerBase : ControllerBase
 
     public abstract string ControllerName { get; }
 
-    private static readonly IReadOnlyCollection<string> notFoundErrorMessages = Get404WorthyErrorMessages();
-
     protected IActionResult GetResponse<T>(ValidatedResponse<T> response) where T : class
     {
         if (response.Result == null && response.IsValidResponse) return NotFound();
@@ -33,10 +31,7 @@ public abstract class ActionResponseControllerBase : ControllerBase
         {
             return new CreatedAtActionResult(GetMethodName, ControllerName, routeParameters, response.Result);
         }
-        if (response.Errors.All(e => notFoundErrorMessages.Contains(e.ErrorMessage)))
-        {
-            return new NotFoundObjectResult(FormatErrors(response.Errors));
-        }
+
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
@@ -56,13 +51,5 @@ public abstract class ActionResponseControllerBase : ControllerBase
             PropertyName = err.PropertyName,
             ErrorMessage = err.ErrorMessage
         }).ToList();
-    }
-
-    private static IReadOnlyCollection<string> Get404WorthyErrorMessages()
-    {
-        return new[]
-        {
-            CreateAttendanceCommandValidator.EventNotFoundMessage,
-        };
     }
 }

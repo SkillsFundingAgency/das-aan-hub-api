@@ -25,6 +25,8 @@ public class CreateAttendanceCommandHandler : IRequestHandler<CreateAttendanceCo
     public async Task<ValidatedResponse<CreateAttendanceCommandResponse>> Handle(CreateAttendanceCommand command,
         CancellationToken cancellationToken)
     {
+        command.AddedDate = DateTime.UtcNow;
+        command.IsActive = true;
         Attendance attendance = command;
 
         _attendancesWriteRepository.Create(attendance);
@@ -34,8 +36,8 @@ public class CreateAttendanceCommandHandler : IRequestHandler<CreateAttendanceCo
             Action = "Create",
             ActionedBy = command.MemberId,
             AuditTime = DateTime.UtcNow,
-            After = JsonSerializer.Serialize(attendance), // TODO: Please check
-            Resource = nameof(attendance),
+            After = JsonSerializer.Serialize(attendance),
+            Resource = nameof(Attendance),
         });
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);

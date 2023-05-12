@@ -62,7 +62,7 @@ public class AttendancesControllerCreateTests
         _mediator.Setup(m => m.Send(It.IsAny<CreateAttendanceCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
         var result = await _controller.CreateAttendance(calendarEvent.Id, member.Id);
 
-        result.As<NotFoundObjectResult>().StatusCode.Should().Be(StatusCodes.Status404NotFound);
+        result.As<BadRequestObjectResult>().StatusCode.Should().NotBeNull();
     }
 
     [TestCase(CreateAttendanceCommandValidator.EventInPastMessage)]

@@ -3,8 +3,8 @@ using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.CreateAttendance;
+
 public class CreateAttendanceCommandValidator : AbstractValidator<CreateAttendanceCommand>
 {
     public const string EventIdNotSuppliedMessage = "A Calendar Event Id was not supplied";
@@ -12,10 +12,10 @@ public class CreateAttendanceCommandValidator : AbstractValidator<CreateAttendan
     public const string EventInPastMessage = "Cannot attend a calendar event that is in the past";
     public const string EventCancelledMessage = "Cannot attend a calendar event that is cancelled";
 
-    private CalendarEvent? calendarEvent;
-
     public CreateAttendanceCommandValidator(ICalendarEventsReadRepository calendarEventsReadRepository, IMembersReadRepository membersReadRepository)
     {
+        CalendarEvent? calendarEvent = null;
+
         Include(new RequestedByMemberIdValidator(membersReadRepository));
 
         RuleFor(c => c.CalendarEventId)
