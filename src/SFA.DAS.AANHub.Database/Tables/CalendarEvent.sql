@@ -12,7 +12,6 @@
     [Postcode] NVARCHAR(10) NULL, 
     [Latitude] FLOAT NULL,
     [Longitude] FLOAT NULL,
-    [URN] BIGINT NULL,
     [EventLink] NVARCHAR(2000) NULL, 
     [ContactName] NVARCHAR(200) NOT NULL, 
     [ContactEmail] NVARCHAR(256) NOT NULL, 
