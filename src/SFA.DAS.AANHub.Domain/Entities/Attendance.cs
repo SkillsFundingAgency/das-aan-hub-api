@@ -5,7 +5,7 @@ public class Attendance
     public Guid Id { get; set; }    
     public Guid CalendarEventId { get; set; }
     public Guid MemberId { get; set; }
-    public DateTime? Added { get; set; }
+    public DateTime? AddedDate { get; set; }
     public bool IsActive { get; set; }
     public bool Attended { get; set; }
     public int? OverallRating { get; set; }
