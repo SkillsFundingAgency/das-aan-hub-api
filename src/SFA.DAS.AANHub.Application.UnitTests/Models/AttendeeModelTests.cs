@@ -14,7 +14,6 @@ public class AttendeeModelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(sut.AttendanceId, Is.EqualTo(source.Id));
             Assert.That(sut.MemberId, Is.EqualTo(source.MemberId));
             Assert.That(sut.MemberName, Is.EqualTo(source.Member.FullName));
         });

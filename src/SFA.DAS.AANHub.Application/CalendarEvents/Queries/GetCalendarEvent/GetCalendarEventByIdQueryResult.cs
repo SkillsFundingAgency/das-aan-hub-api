@@ -6,13 +6,12 @@ namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 public class GetCalendarEventByIdQueryResult
 {
     public Guid CalendarEventId { get; set; }
-    public int CalendarId { get; set; }
+    public string? CalendarName { get; set; } = null!;
     public string EventFormat { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Description { get; set; } = string.Empty;
     public string? Summary { get; set; }
-    public int? RegionId { get; set; }
     public string? Location { get; set; }
     public string? Postcode { get; set; }
     public double? Latitude { get; set; }
@@ -30,13 +29,11 @@ public class GetCalendarEventByIdQueryResult
         if (source is not null) return new()
         {
             CalendarEventId = source.Id,
-            CalendarId = source.CalendarId,
             EventFormat = source.EventFormat,
             StartDate = source.StartDate,
             EndDate = source.EndDate,
             Description = source.Description,
             Summary = source.Summary,
-            RegionId = source.RegionId,
             Location = source.Location,
             Postcode = source.Postcode,
             Latitude = source.Latitude,

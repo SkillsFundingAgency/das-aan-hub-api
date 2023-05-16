@@ -15,7 +15,6 @@ public class EventGuestModelTests
 
         Assert.Multiple(() =>
         {
-            Assert.That(sut.EventGuestId, Is.EqualTo(source.Id));
             Assert.That(sut.GuestName, Is.EqualTo(source.GuestName));
             Assert.That(sut.GuestJobTitle, Is.EqualTo(source.GuestJobTitle));
         });

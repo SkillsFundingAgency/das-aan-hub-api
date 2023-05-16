@@ -4,6 +4,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
 {
     public interface ICalendarsReadRepository
     {
-        Task<List<Calendar>> GetAllCalendars();
+        Task<Calendar?> GetCalendar(int calendarId);
+        Task<string?> GetCalendarName(int calendarId);
     }
 }

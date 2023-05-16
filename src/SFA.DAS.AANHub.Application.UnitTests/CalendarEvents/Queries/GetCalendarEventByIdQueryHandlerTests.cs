@@ -29,11 +29,13 @@ public class GetCalendarEventByIdQueryHandlerTests
 
     [Test]
     [RecursiveMoqAutoData]
-    public async Task Handle_CalendarEventFound_ReturnsCalendarEvent(
+    public async Task Handle_CalendarEventFound_ReturnsCalendarEvent_WithCalendarName(
+        [Frozen] Mock<ICalendarsReadRepository> calendarsReadRepositoryMock,
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
         [Frozen] Mock<IMembersReadRepository> membersReadRepositoryMock,
         GetCalendarEventByIdQueryHandler sut,
         CalendarEvent calendarEvent,
+        Calendar calendar,
         Member member)
     {
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
@@ -42,8 +44,12 @@ public class GetCalendarEventByIdQueryHandlerTests
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvent(calendarEvent.Id))
                                         .ReturnsAsync(calendarEvent);
 
+        calendarsReadRepositoryMock.Setup(c => c.GetCalendarName(It.IsAny<int>()))
+                                   .ReturnsAsync(calendar.CalendarName);
+
         var result = await sut.Handle(new GetCalendarEventByIdQuery(calendarEvent.Id, member.Id), new CancellationToken());
 
         result.Result.CalendarEventId.Should().Be(calendarEvent.Id);
+        result.Result.CalendarName.Should().Be(calendar.CalendarName);
     }
 }
