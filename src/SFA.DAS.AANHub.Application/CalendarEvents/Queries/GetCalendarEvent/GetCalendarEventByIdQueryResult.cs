@@ -29,6 +29,7 @@ public class GetCalendarEventByIdQueryResult
         if (source is not null) return new()
         {
             CalendarEventId = source.Id,
+            CalendarName = source.Calendar.CalendarName,
             EventFormat = source.EventFormat,
             StartDate = source.StartDate,
             EndDate = source.EndDate,

@@ -22,5 +22,6 @@ public class CalendarEvent
 
 
     public List<Attendance> Attendees { get; set; } = new();
+    public Calendar Calendar { get; set; } = null!;
     public List<EventGuest> EventGuests { get; set; } = new();
 }

@@ -7,12 +7,10 @@ namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 public class GetCalendarEventByIdQueryHandler : IRequestHandler<GetCalendarEventByIdQuery, ValidatedResponse<GetCalendarEventByIdQueryResult>>
 {
     private readonly ICalendarEventsReadRepository _calendarEventsReadRepository;
-    private readonly ICalendarsReadRepository _calendarReadRepository;
 
-    public GetCalendarEventByIdQueryHandler(ICalendarEventsReadRepository calendarEventsReadRepository, ICalendarsReadRepository calendarsReadRepository)
+    public GetCalendarEventByIdQueryHandler(ICalendarEventsReadRepository calendarEventsReadRepository)
     {
         _calendarEventsReadRepository = calendarEventsReadRepository;
-        _calendarReadRepository = calendarsReadRepository;
     }
 
     public async Task<ValidatedResponse<GetCalendarEventByIdQueryResult>> Handle(GetCalendarEventByIdQuery request, CancellationToken cancellationToken)
@@ -20,11 +18,6 @@ public class GetCalendarEventByIdQueryHandler : IRequestHandler<GetCalendarEvent
         var calendarEvent = await _calendarEventsReadRepository.GetCalendarEvent(request.CalendarEventId);
 
         GetCalendarEventByIdQueryResult result = calendarEvent!;
-
-        if (calendarEvent != null)
-        {
-            result.CalendarName = await _calendarReadRepository.GetCalendarName(calendarEvent!.CalendarId);
-        }
 
         return new ValidatedResponse<GetCalendarEventByIdQueryResult>(result!);
     }

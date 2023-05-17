@@ -19,6 +19,6 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .Include(x => x.Attendees.Where(a => a.IsActive))
             .ThenInclude(x => x.Member)
             .Include(x => x.EventGuests)
+            .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
-    
 }
