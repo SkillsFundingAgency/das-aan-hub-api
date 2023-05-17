@@ -2,7 +2,7 @@
 
 public class EventGuest
 {
-    public Guid Id { get; set; }
+    public long Id { get; set; }
     public Guid CalendarEventId { get; set; }
     public string GuestName { get; set; } = string.Empty;
     public string GuestJobTitle { get; set; } = string.Empty;
