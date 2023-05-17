@@ -35,4 +35,17 @@ public class CalendarEventsController : ActionResponseControllerBase
 
         return GetResponse(response);
     }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(GetCalendarEventsQueryResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetCalendarEvents([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId)
+    {
+        _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", requestedByMemberId);
+        var page = 1;
+        var response = await _mediator.Send(new GetCalendarEventsQuery(requestedByMemberId, page));
+
+        return GetResponse(response);
+    }
 }
