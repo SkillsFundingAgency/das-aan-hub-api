@@ -29,7 +29,18 @@ INSERT INTO #TempProfile VALUES
 (34,'Employer County','Employer',5, 'Apprentice'),
 (35,'Employer Postcode','Employer',6, 'Apprentice'),
 (36,'Employer address longitude','Employer',7, 'Apprentice'),
-(37,'Employer address latitude','Employer',8, 'Apprentice') 
+(37,'Employer address latitude','Employer',8, 'Apprentice'),
+(41,'Meet other employer ambassadors and grow your network personally and professionally','ReasonToJoin',1, 'Employer'),
+(42,'Share your knowledge, experience and best practice','ReasonToJoin',2, 'Employer'),
+(43,'Project manage and deliver network events','ReasonToJoin',3, 'Employer'),
+(44,'Be a role model and act as an informal mentor to other ambassadors','ReasonToJoin',4, 'Employer'),
+(45,'Champion apprenticeship delivery within your networks','ReasonToJoin',5, 'Employer'),
+(51,'Building apprenticeship profile of my organisation','Support',1, 'Employer'),
+(52,'Increasing engagement with schools and colleges','Support',2, 'Employer'),
+(53,'Getting started with apprenticeships','Support',3, 'Employer'),
+(54,'Understanding training providers and resources others are using','Support',4, 'Employer'),
+(55,'Using the network to best benefit my organisation','Support',5, 'Employer'),
+(61,'Engaged with a previous ambassador in the network','Personal',1, 'Employer')
 
 MERGE [Profile] TARGET
 USING #TempProfile SOURCE ON TARGET.Id=SOURCE.Id
