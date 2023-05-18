@@ -6,12 +6,12 @@ namespace SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId
 {
     public class RequestedByMemberIdValidator : AbstractValidator<IRequestedByMemberId>
     {
-        private const string RequestedByMemberIdEmptyErrorMessage = "RequestedByMemberId is empty";
-        private const string RequestedByMemberIdNotFoundMessage = "RequestedByMemberId was not found";
+        private const string RequestedByMemberHeaderEmptyErrorMessage = "X-RequestedByMemberId header is empty";
+        private const string RequestedByMemberIdNotFoundMessage = "Could not find a valid active Member ID matching the X-RequestedByMemberId header";
         public RequestedByMemberIdValidator(IMembersReadRepository membersReadRepository) => RuleFor(x => x.RequestedByMemberId)
-                .NotNull()
+                .Cascade(CascadeMode.Stop)
                 .NotEmpty()
-                .WithMessage(RequestedByMemberIdEmptyErrorMessage)
+                .WithMessage(RequestedByMemberHeaderEmptyErrorMessage)
                 .MustAsync(async (requestedByMemberId, cancellation) =>
                 {
                     var member = await membersReadRepository.GetMember(requestedByMemberId);

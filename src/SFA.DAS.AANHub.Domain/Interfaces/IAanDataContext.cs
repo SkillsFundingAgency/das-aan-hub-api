@@ -15,6 +15,7 @@ namespace SFA.DAS.AANHub.Domain.Interfaces
         DbSet<StagedApprentice> StagedApprentices { get; }
         DbSet<Calendar> Calendars { get; }
         DbSet<Profile> Profiles { get; }
+        DbSet<CalendarEvent> CalendarEvents { get; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

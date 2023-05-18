@@ -1,9 +1,11 @@
-﻿using FluentValidation.TestHelper;
+﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators.RequestedByMemberId
@@ -39,6 +41,23 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators.RequestedByMemb
                 result.ShouldNotHaveValidationErrorFor(c => c.RequestedByMemberId);
             else
                 result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
+        }
+
+        [TestCase(MembershipStatus.Deleted)]
+        [TestCase(MembershipStatus.Withdrawn)]
+        [TestCase(MembershipStatus.Cancelled)]
+        [TestCase(MembershipStatus.Pending)]
+        public async Task Invalidate_RequestedByMemberId_ForInactiveId(string inactiveStatus)
+        {
+            var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+            membersReadRepositoryMock.Setup(m => m.GetMember(It.IsAny<Guid>()))
+                                     .ReturnsAsync(new Member() { Status = inactiveStatus });
+
+            var sut = new RequestedByMemberIdValidator(membersReadRepositoryMock.Object);
+
+            var result = await sut.TestValidateAsync(new RequestedByMemberIdCommandTest() { RequestedByMemberId = Guid.NewGuid() });
+
+            result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
         }
 
         private class RequestedByMemberIdCommandTest : IRequestedByMemberId

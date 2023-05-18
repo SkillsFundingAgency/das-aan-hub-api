@@ -51,6 +51,7 @@ namespace SFA.DAS.AANHub.Data.Extensions
             services.AddTransient<IMembersWriteRepository, MembersWriteRepository>();
             services.AddTransient<IMembersReadRepository, MembersReadRepository>();
             services.AddTransient<IProfilesReadRepository, ProfilesReadRepository>();
+            services.AddTransient<ICalendarEventsReadRepository, CalendarEventsReadRepository>();
         }
 
         public static async Task<string> GenerateTokenAsync()
