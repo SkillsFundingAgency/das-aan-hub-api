@@ -19,6 +19,7 @@ namespace SFA.DAS.AANHub.Data
         public DbSet<Calendar> Calendars => Set<Calendar>();
         public DbSet<Profile> Profiles => Set<Profile>();
         public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
+        public DbSet<Attendance> Attendances => Set<Attendance>();
         public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
