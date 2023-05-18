@@ -12,24 +12,20 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
 {
     private readonly IAanDataContext _aanDataContext;
     private readonly IAuditWriteRepository _auditWriteRepository;
-    private readonly IAttendancesReadRepository _attendancesReadRepository;
     private readonly IAttendancesWriteRepository _attendancesWriteRepository;
-
                                        
     public PutAttendanceCommandHandler(IAanDataContext aanDataContext,
                                        IAuditWriteRepository auditWriteRepository,
-                                       IAttendancesReadRepository attendancesReadRepository,
                                        IAttendancesWriteRepository attendancesWriteRepository)
     {
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
-        _attendancesReadRepository = attendancesReadRepository;
         _attendancesWriteRepository = attendancesWriteRepository;
     }
 
     public async Task<ValidatedResponse<PutCommandResult>> Handle(PutAttendanceCommand command, CancellationToken cancellationToken)
     {
-        var existingAttendance = await _attendancesReadRepository.GetAttendance(command.CalendarEventId, command.RequestedByMemberId);
+        var existingAttendance = await _attendancesWriteRepository.GetAttendance(command.CalendarEventId, command.RequestedByMemberId);
 
         if (existingAttendance != null)
         {
@@ -38,9 +34,11 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
                 return new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
             }
 
-            await ChangeActiveStatus(command, cancellationToken);
+            await _attendancesWriteRepository.SetActiveStatus(command.CalendarEventId, command.RequestedByMemberId, command.RequestedActiveStatus);
 
             CreateAudit(command);
+
+            await _aanDataContext.SaveChangesAsync(cancellationToken);
 
             return new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
         }
@@ -48,7 +46,11 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         {
             if (command.RequestedActiveStatus == true)
             {
-                await CreateNewAttendance(command, cancellationToken);
+                CreateNewAttendance(command);
+
+                CreateAudit(command);
+
+                await _aanDataContext.SaveChangesAsync(cancellationToken);
 
                 return new ValidatedResponse<PutCommandResult>(new PutCommandResult(true));
             }
@@ -57,20 +59,10 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         }
     }
 
-    private async Task CreateNewAttendance(PutAttendanceCommand command, CancellationToken cancellationToken)
+    private void CreateNewAttendance(PutAttendanceCommand command)
     {
         Attendance newAttendance = command;
-
         _attendancesWriteRepository.Create(newAttendance);
-
-        await _aanDataContext.SaveChangesAsync(cancellationToken);
-    }
-
-    private async Task ChangeActiveStatus(PutAttendanceCommand command, CancellationToken cancellationToken)
-    {
-        _attendancesWriteRepository.SetActiveStatus(command.CalendarEventId, command.RequestedByMemberId, command.RequestedActiveStatus);
-
-        await _aanDataContext.SaveChangesAsync(cancellationToken);
     }
 
     private void CreateAudit(PutAttendanceCommand command)
@@ -84,6 +76,4 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             Resource = nameof(Attendance),
         });
     }
-
-   
 }

@@ -44,9 +44,9 @@ public class CalendarEventsControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), true) as CreatedAtActionResult;
+        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), true) as NoContentResult;
 
-        result?.StatusCode.Should().Be(StatusCodes.Status201Created);
+        result?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
 
     [Test]

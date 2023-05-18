@@ -31,7 +31,7 @@ public class CalendarEventsController : ActionResponseControllerBase
     [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> Get(Guid calendarEventId, [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId)
     {
-        _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar event by event ID {calendareventid}", requestedByMemberId, calendarEventId);
+        _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar event by event ID {calendarEventId}", requestedByMemberId, calendarEventId);
 
         var response = await _mediator.Send(new GetCalendarEventByIdQuery(calendarEventId, requestedByMemberId));
 
@@ -56,6 +56,6 @@ public class CalendarEventsController : ActionResponseControllerBase
         var command = new PutAttendanceCommand(calendarEventId, requestedByMemberId, requestedActiveStatus);
         var response = await _mediator.Send(command);
 
-        return GetPutResponse(response, new {memberId = command.RequestedByMemberId, calendarEventId = command.CalendarEventId});
+        return GetPutResponse(response);
     }
 }

@@ -28,9 +28,9 @@ public class PutAttendanceCommandValidator : AbstractValidator<PutAttendanceComm
                 return calendarEvent != null;
             })
             .WithMessage(EventNotFoundMessage)
-            .Must((_) => calendarEvent!.StartDate > DateTime.UtcNow)
-            .WithMessage(EventInPastMessage)
             .Must((_) => calendarEvent!.IsActive)
-            .WithMessage(EventNotActiveMessage);
+            .WithMessage(EventNotActiveMessage)
+            .Must((_) => calendarEvent!.StartDate > DateTime.UtcNow)
+            .WithMessage(EventInPastMessage);
     }
 }

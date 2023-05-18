@@ -5,5 +5,6 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 public interface IAttendancesWriteRepository
 {
     void Create(Attendance attendance);
-    void SetActiveStatus(Guid calendarEventId, Guid requestedByMemberId, bool requestedStatus);
+    Task SetActiveStatus(Guid calendarEventId, Guid requestedByMemberId, bool requestedStatus);
+    Task<Attendance?> GetAttendance(Guid calendarEventId, Guid requestedByMemberId);
 }

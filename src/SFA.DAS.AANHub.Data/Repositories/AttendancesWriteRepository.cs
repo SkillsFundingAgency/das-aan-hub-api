@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -13,12 +14,17 @@ public class AttendancesWriteRepository : IAttendancesWriteRepository
 
     public void Create(Attendance attendance) => _aanDataContext.Attendances.Add(attendance);
 
-    public void SetActiveStatus(Guid calendarEventId, Guid requestedByMemberId, bool requestedStatus)
+    public async Task SetActiveStatus(Guid calendarEventId, Guid requestedByMemberId, bool requestedStatus)
     {
-        var existingAttendance = _aanDataContext.Attendances.Where(a => a.CalendarEventId == calendarEventId)
-                                                            .Where(a => a.MemberId == requestedByMemberId)
-                                                            .Single();
+        var existingAttendance = await GetAttendance(calendarEventId, requestedByMemberId);
 
-        existingAttendance.IsActive = requestedStatus;
+        if (existingAttendance != null) 
+        { 
+            existingAttendance.IsActive = requestedStatus;
+        }
     }
+    public async Task<Attendance?> GetAttendance(Guid calendarEventId, Guid memberId) =>
+        await _aanDataContext.Attendances.Where(a => a.CalendarEventId == calendarEventId)
+                                         .Where(a => a.MemberId == memberId)
+                                         .SingleOrDefaultAsync();
 }

@@ -34,16 +34,9 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPutResponse(ValidatedResponse<PutCommandResult> response, object? routeParameters)
+    protected IActionResult GetPutResponse(ValidatedResponse<PutCommandResult> response)
     {
-        if (response.IsValidResponse)
-        {
-            return response.Result.NewResourceCreated
-                ? new CreatedAtActionResult(PutMethodName, ControllerName, routeParameters, response.Result)
-                : NoContent();
-        }
-
-        return new BadRequestObjectResult(FormatErrors(response.Errors));
+        return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
     protected IActionResult GetPatchResponse(ValidatedResponse<PatchCommandResult> response)

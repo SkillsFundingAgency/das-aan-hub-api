@@ -16,13 +16,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
         public async Task Handle_AttendanceExists_RequestedActiveStatusIsSame_CreatesNothing(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAttendancesReadRepository> attendancesReadRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
             [Frozen] PutAttendanceCommandHandler sut,
             [Frozen] Attendance existingAttendance)
         {
-            attendancesReadRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
-                                     .ReturnsAsync(existingAttendance);
+            attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                      .ReturnsAsync(existingAttendance);
 
             var command = new PutAttendanceCommand(
                 existingAttendance.CalendarEventId, 
@@ -42,13 +41,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
         public async Task Handle_AttendanceExists_RequestedActiveStatusIsDifferent_UpdatesStatusAndAddsAudit(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAttendancesReadRepository> attendancesReadRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
             [Frozen] PutAttendanceCommandHandler sut,
             [Frozen] Attendance existingAttendance)
         {
-            attendancesReadRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
-                                     .ReturnsAsync(existingAttendance);
+            attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                      .ReturnsAsync(existingAttendance);
 
             bool differentStatus = !existingAttendance.IsActive;
 
@@ -83,13 +81,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
         public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsTrue_CreatesAttendance(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAttendancesReadRepository> attendancesReadRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
             [Frozen] PutAttendanceCommandHandler sut,
             [Frozen] Attendance existingAttendance)
         {
-            attendancesReadRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
-                                     .ReturnsAsync(() => null);
+            attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                      .ReturnsAsync(() => null);
 
             var command = new PutAttendanceCommand(
                 existingAttendance.CalendarEventId,
@@ -107,7 +104,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
-            auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Never);
+            auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Once);
 
         }
 
@@ -116,13 +113,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
         public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsFalse_CreatesNothing(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-            [Frozen] Mock<IAttendancesReadRepository> attendancesReadRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
             [Frozen] PutAttendanceCommandHandler sut,
             [Frozen] Attendance existingAttendance)
         {
-            attendancesReadRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
-                                     .ReturnsAsync(() => null);
+            attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                      .ReturnsAsync(() => null);
 
             var command = new PutAttendanceCommand(
                 existingAttendance.CalendarEventId,
