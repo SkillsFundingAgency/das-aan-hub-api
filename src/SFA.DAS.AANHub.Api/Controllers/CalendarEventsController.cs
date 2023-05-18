@@ -1,9 +1,9 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.Common;
-using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
