@@ -1,11 +1,13 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+
 public class GetCalendarEventsQueryValidator : AbstractValidator<GetCalendarEventsQuery>
 {
-    public GetCalendarEventsQueryValidator()
+    public GetCalendarEventsQueryValidator(IMembersReadRepository membersReadRepository)
     {
-        RuleFor(a => a.RequestedByMemberId)
-            .NotEmpty();
+        Include(new RequestedByMemberIdValidator(membersReadRepository));
     }
 }

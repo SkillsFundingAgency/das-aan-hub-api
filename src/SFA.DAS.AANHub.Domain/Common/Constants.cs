@@ -22,7 +22,7 @@ public static class Constants
         public static readonly string Admin = UserType.Admin.ToString();
     }
 
-    public static class Pagination
+    public static class CalendarEvents
     {
         public static readonly int PageSize = 5;
     }

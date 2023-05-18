@@ -15,7 +15,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
 
     public async Task<ValidatedResponse<GetCalendarEventsQueryResult>> Handle(GetCalendarEventsQuery request, CancellationToken cancellationToken)
     {
-        var pageSize = Domain.Common.Constants.Pagination.PageSize;
+        var pageSize = Domain.Common.Constants.CalendarEvents.PageSize;
         var page = 1;
         var response =
             await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId);

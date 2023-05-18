@@ -26,7 +26,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	public async Task<List<CalendarEventModel>> GetCalendarEvents(Guid memberId)
 	{
 		FormattableString sql = $@"select	
-                            CE.Id, 
+                            CE.Id as CalendarEventId, 
 	                        C.CalendarName,
 	                        CE.EventFormat, 
 	                        CE.StartDate as [Start], 
@@ -44,8 +44,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			                    geography::Point(CE.Latitude, CE.Longitude, 4326)
 					                .STDistance(geography::Point(convert(float,MPLat.ProfileValue), convert(float,MPLon.ProfileValue), 4326)) * 0.0006213712 END
 					        as Distance,
-	                        CASE WHEN (A.IsActive is null) then convert(bit, 0)
-		                        ELSE convert(bit,A.IsActive) END as Attending
+	                        ISNULL(A.IsActive, 0) AS IsAttending
                             from calendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
                             LEFT OUTER JOIN MemberProfile MPLat on MPLat.MemberId = {memberId} and MPLat.ProfileId = 36
                             LEFT OUTER JOIN MemberProfile MPLon on MPLon.MemberId = {memberId} and MPLon.ProfileId = 37
@@ -53,7 +52,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                             WHERE CE.StartDate>=convert(date,getutcdate()) AND  CE.IsActive = 1
 	                        Order By CE.StartDate ASC";
 
-		var calendarEvents = await _aanDataContext.CalendarEventModel!
+		var calendarEvents = await _aanDataContext.CalendarEventModels!
 			.FromSqlInterpolated(sql)
 			.ToListAsync();
 		return calendarEvents;

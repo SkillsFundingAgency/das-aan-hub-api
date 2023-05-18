@@ -2,18 +2,18 @@
 
 public class CalendarEventModel
 {
-    public Guid Id { get; set; }
-    public string? CalendarName { get; set; }
-    public string? EventFormat { get; set; }
+    public Guid CalendarEventId { get; set; }
+    public string CalendarName { get; set; } = string.Empty;
+    public string EventFormat { get; set; } = string.Empty;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
 
-    public string? Description { get; set; }
-    public string? Summary { get; set; }
-    public string? Location { get; set; }
-    public string? Postcode { get; set; }
+    public string Description { get; set; } = string.Empty;
+    public string Summary { get; set; } = string.Empty;
+    public string Location { get; set; } = string.Empty;
+    public string Postcode { get; set; } = string.Empty;
     public double? Longitude { get; set; }
     public double? Latitude { get; set; }
     public double? Distance { get; set; }
-    public bool Attending { get; set; }
+    public bool IsAttending { get; set; }
 }
