@@ -5,6 +5,7 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Reflection.Metadata.Ecma335;
 using System.Text.Json;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
@@ -29,14 +30,13 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     {
         var existingAttendance = await _attendancesWriteRepository.GetAttendance(command.CalendarEventId, command.RequestedByMemberId);
 
-        if ((existingAttendance == null && !command.IsAttending) || (existingAttendance != null && command.IsAttending == existingAttendance.IsActive))
+        return existingAttendance switch
         {
-            return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
-        }
-
-        var task = existingAttendance == null ? CreateAttendance(command, cancellationToken) : UpdateAttendance(existingAttendance, command, cancellationToken);
-
-        return await task;
+            null when !command.IsAttending => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
+            not null when command.IsAttending == existingAttendance!.IsActive => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
+            null => await CreateAttendance(command, cancellationToken),
+            not null => await UpdateAttendance(existingAttendance, command, cancellationToken),
+        };
     }
 
     private async Task<ValidatedResponse<SuccessCommandResult>> UpdateAttendance(
