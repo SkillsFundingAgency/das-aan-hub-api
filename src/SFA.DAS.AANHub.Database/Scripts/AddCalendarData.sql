@@ -7,14 +7,13 @@ CREATE TABLE #TempCalendar
 );
 
 INSERT INTO #TempCalendar VALUES 
-(1, 'School event', 1),
-(2, 'College event', 2),
-(3, 'Training', 3), 
-(4, 'Regional meetings', 4),
-(5, 'National meetings', 5),
-(6, 'Regionally hosted/sponsored events', 6),
-(7, 'Social and networking events', 7),
-(8, 'Other', 8);
+(1, 'Employer engagement event', 1),
+(2, 'National/Regional meeting', 2),
+(3, 'School and College event', 3), 
+(4, 'Careers event', 4),
+(5, 'Social/Networking activity', 5),
+(6, 'Training event', 6),
+(7, 'Other', 7);
 
 
 MERGE Calendar TARGET
