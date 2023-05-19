@@ -23,7 +23,7 @@ public class CalendarEventsControllerPutTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut)
     {
-        var response = new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
+        var response = new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult(false));
 
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
@@ -39,7 +39,7 @@ public class CalendarEventsControllerPutTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut)
     {
-        var response = new ValidatedResponse<PutCommandResult>(new PutCommandResult(true));
+        var response = new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult(true));
 
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
@@ -60,7 +60,7 @@ public class CalendarEventsControllerPutTests
         calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(It.IsAny<Guid>()))
                                     .ReturnsAsync(() => null);
 
-        var response = new ValidatedResponse<PutCommandResult>(errors);
+        var response = new ValidatedResponse<SuccessCommandResult>(errors);
 
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);

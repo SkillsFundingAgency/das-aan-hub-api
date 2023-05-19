@@ -14,15 +14,6 @@ public class AttendancesWriteRepository : IAttendancesWriteRepository
 
     public void Create(Attendance attendance) => _aanDataContext.Attendances.Add(attendance);
 
-    public async Task SetActiveStatus(Guid calendarEventId, Guid memberId, bool requestedStatus)
-    {
-        var existingAttendance = await GetAttendance(calendarEventId, memberId);
-
-        if (existingAttendance != null) 
-        { 
-            existingAttendance.IsActive = requestedStatus;
-        }
-    }
     public async Task<Attendance?> GetAttendance(Guid calendarEventId, Guid memberId) =>
         await _aanDataContext.Attendances.Where(a => a.CalendarEventId == calendarEventId)
                                          .Where(a => a.MemberId == memberId)

@@ -31,7 +31,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
             await sut.Handle(command, new CancellationToken());
 
             attendancesWriteRepository.Verify(a => a.Create(It.IsAny<Attendance>()), Times.Never);
-            attendancesWriteRepository.Verify(a => a.SetActiveStatus(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<bool>()), Times.Never);
             auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Never);
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
@@ -42,8 +41,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
-            [Frozen] PutAttendanceCommandHandler sut,
-            [Frozen] Attendance existingAttendance)
+            PutAttendanceCommandHandler sut,
+            Attendance existingAttendance)
         {
             attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
                                       .ReturnsAsync(existingAttendance);
@@ -59,26 +58,22 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
             attendancesWriteRepository.Verify(a => a.Create(It.IsAny<Attendance>()), Times.Never);
 
-            attendancesWriteRepository.Verify(a => a.SetActiveStatus(
-                existingAttendance.CalendarEventId, 
-                existingAttendance.MemberId,
-                differentStatus), Times.Once);
-
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
             auditWriteRepository.Verify(a => a.Create(
                 It.Is<Audit>(
                     a => a.Action == "Put"
+                    && !string.IsNullOrWhiteSpace(a.Before)
+                    && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
                     && a.Resource == nameof(Attendance))), 
                         Times.Once);
-
         }
 
         [Test]
         [RecursiveMoqAutoData]
-        public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsTrue_CreatesAttendance(
+        public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsTrue_CreatesAttendanceAndAudit(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -97,15 +92,17 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
             attendancesWriteRepository.Verify(a => a.Create(It.IsAny<Attendance>()), Times.Once);
 
-            attendancesWriteRepository.Verify(a => a.SetActiveStatus(
-                It.IsAny<Guid>(),
-                It.IsAny<Guid>(),
-                It.IsAny<bool>()), Times.Never);
-
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
 
-            auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Once);
-
+            auditWriteRepository.Verify(a => a.Create(
+                It.Is<Audit>(
+                    a => a.Action == "Create"
+                    && a.Before == null
+                    && !string.IsNullOrWhiteSpace(a.After)
+                    && a.ActionedBy == command.RequestedByMemberId
+                    && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
+                    && a.Resource == nameof(Attendance))),
+                        Times.Once);
         }
 
         [Test]
@@ -128,11 +125,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
             await sut.Handle(command, new CancellationToken());
 
             attendancesWriteRepository.Verify(a => a.Create(It.IsAny<Attendance>()), Times.Never);
-
-            attendancesWriteRepository.Verify(a => a.SetActiveStatus(
-                It.IsAny<Guid>(),
-                It.IsAny<Guid>(),
-                It.IsAny<bool>()), Times.Never);
 
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
 

@@ -34,12 +34,12 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPutResponse(ValidatedResponse<PutCommandResult> response)
+    protected IActionResult GetPutResponse(ValidatedResponse<SuccessCommandResult> response)
     {
         return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPatchResponse(ValidatedResponse<PatchCommandResult> response)
+    protected IActionResult GetPatchResponse(ValidatedResponse<SuccessCommandResult> response)
     {
         if (response.Result is { IsSuccess: false }) return NotFound();
 

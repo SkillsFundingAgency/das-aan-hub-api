@@ -1,14 +1,16 @@
 ﻿using MediatR;
+using Newtonsoft.Json.Linq;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using System.Text.Json;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 
-public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand, ValidatedResponse<PutCommandResult>>
+public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand, ValidatedResponse<SuccessCommandResult>>
 {
     private readonly IAanDataContext _aanDataContext;
     private readonly IAuditWriteRepository _auditWriteRepository;
@@ -23,57 +25,62 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         _attendancesWriteRepository = attendancesWriteRepository;
     }
 
-    public async Task<ValidatedResponse<PutCommandResult>> Handle(PutAttendanceCommand command, CancellationToken cancellationToken)
+    public async Task<ValidatedResponse<SuccessCommandResult>> Handle(PutAttendanceCommand command, CancellationToken cancellationToken)
     {
         var existingAttendance = await _attendancesWriteRepository.GetAttendance(command.CalendarEventId, command.RequestedByMemberId);
 
-        if (existingAttendance != null)
+        if ((existingAttendance == null && !command.IsAttending) || (existingAttendance != null && command.IsAttending == existingAttendance.IsActive))
         {
-            if (existingAttendance.IsActive == command.RequestedActiveStatus)
-            {
-                return new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
-            }
-
-            await _attendancesWriteRepository.SetActiveStatus(command.CalendarEventId, command.RequestedByMemberId, command.RequestedActiveStatus);
-
-            CreateAudit(command);
-
-            await _aanDataContext.SaveChangesAsync(cancellationToken);
-
-            return new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
+            return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
         }
-        else
-        {
-            if (command.RequestedActiveStatus)
-            {
-                CreateNewAttendance(command);
 
-                CreateAudit(command);
+        var task = existingAttendance == null ? CreateAttendance(command, cancellationToken) : UpdateAttendance(existingAttendance, command, cancellationToken);
 
-                await _aanDataContext.SaveChangesAsync(cancellationToken);
-
-                return new ValidatedResponse<PutCommandResult>(new PutCommandResult(true));
-            }
-
-            return new ValidatedResponse<PutCommandResult>(new PutCommandResult(false));
-        }
+        return await task;
     }
 
-    private void CreateNewAttendance(PutAttendanceCommand command)
+    private async Task<ValidatedResponse<SuccessCommandResult>> UpdateAttendance(
+        Attendance existingAttendance, 
+        PutAttendanceCommand command, 
+        CancellationToken token)
     {
-        Attendance newAttendance = command;
-        _attendancesWriteRepository.Create(newAttendance);
-    }
-
-    private void CreateAudit(PutAttendanceCommand command)
-    {
-        _auditWriteRepository.Create(new Audit
+        var audit = new Audit()
         {
             Action = "Put",
+            Before = JsonSerializer.Serialize(existingAttendance),
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,
-            After = JsonSerializer.Serialize((Attendance)command),
             Resource = nameof(Attendance),
-        });
+        };
+
+        existingAttendance.IsActive = command.IsAttending;
+
+        audit.After = JsonSerializer.Serialize(existingAttendance);
+        _auditWriteRepository.Create(audit);
+
+        await _aanDataContext.SaveChangesAsync(token);
+        
+        return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
+    }
+
+    private async Task<ValidatedResponse<SuccessCommandResult>> CreateAttendance(PutAttendanceCommand command, CancellationToken token)
+    {
+        Attendance newAttendance = command;
+
+        var audit = new Audit()
+        {
+            Action = "Create",
+            After = JsonSerializer.Serialize(newAttendance),
+            ActionedBy = command.RequestedByMemberId,
+            AuditTime = DateTime.UtcNow,
+            Resource = nameof(Attendance),
+        };
+        _auditWriteRepository.Create(audit);
+
+        _attendancesWriteRepository.Create(newAttendance);
+
+        await _aanDataContext.SaveChangesAsync(token);
+
+        return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
     }
 }

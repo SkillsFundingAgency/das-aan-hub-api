@@ -39,7 +39,7 @@ public class CalendarEventsController : ActionResponseControllerBase
     }
 
     [HttpPut("{calendarEventId}/attendance")]
-    [ProducesResponseType(typeof(PutCommandResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [SwaggerRequestExample(typeof(bool), typeof(bool))]

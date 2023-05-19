@@ -3,4 +3,4 @@
 namespace SFA.DAS.AANHub.Application.Common;
 
 [ExcludeFromCodeCoverage]
-public record PutCommandResult(bool NewResourceCreated);
+public record SuccessCommandResult(bool IsSuccess = true);
