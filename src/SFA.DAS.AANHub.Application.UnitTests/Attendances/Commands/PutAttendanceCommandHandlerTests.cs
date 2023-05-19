@@ -9,7 +9,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 {
-    public class SetAttendanceActiveStatusCommandHandlerTests
+    public class PutAttendanceCommandHandlerTests
     {
         [Test]
         [RecursiveMoqAutoData]

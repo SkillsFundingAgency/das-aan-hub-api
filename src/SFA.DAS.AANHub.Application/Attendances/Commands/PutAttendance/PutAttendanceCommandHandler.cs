@@ -44,7 +44,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         }
         else
         {
-            if (command.RequestedActiveStatus == true)
+            if (command.RequestedActiveStatus)
             {
                 CreateNewAttendance(command);
 

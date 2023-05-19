@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 {
-    public class SetAttendanceActiveStatusCommandTests
+    public class PutAttendanceCommandTests
     {
         [TestCase(true)]
         [TestCase(false)]

@@ -6,5 +6,5 @@ public interface IAttendancesWriteRepository
 {
     void Create(Attendance attendance);
     Task SetActiveStatus(Guid calendarEventId, Guid requestedByMemberId, bool requestedStatus);
-    Task<Attendance?> GetAttendance(Guid calendarEventId, Guid requestedByMemberId);
+    Task<Attendance?> GetAttendance(Guid calendarEventId, Guid memberId);
 }
