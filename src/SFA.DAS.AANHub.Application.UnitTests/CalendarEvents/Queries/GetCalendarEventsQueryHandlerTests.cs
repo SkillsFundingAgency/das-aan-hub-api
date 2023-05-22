@@ -16,10 +16,12 @@ public class GetCalendarEventsQueryHandlerTests
     public async Task Handle_CalendarEventsNotFound_ReturnsEmptyList(
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
         GetCalendarEventsQueryHandler sut,
-        Member member)
+        Member member,
+        CancellationToken cancellationToken
+        )
     {
-        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id))
-            .ReturnsAsync(() => new List<CalendarEventModel>());
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id, cancellationToken))
+            .ReturnsAsync(() => new List<CalendarEventSummary>());
 
         var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, 1), new CancellationToken());
 
@@ -33,11 +35,13 @@ public class GetCalendarEventsQueryHandlerTests
     public async Task Handle_CalendarEventsFound_ReturnsCalendarEvents(
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
         GetCalendarEventsQueryHandler sut,
-        CalendarEventModel calendarEvent,
-        Member member)
+        CalendarEventSummary calendarEvent,
+        Member member,
+        CancellationToken cancellationToken
+    )
     {
-        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id))
-            .ReturnsAsync(new List<CalendarEventModel> { calendarEvent });
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
         var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, 1), new CancellationToken());
 

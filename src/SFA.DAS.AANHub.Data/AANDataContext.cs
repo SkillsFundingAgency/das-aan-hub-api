@@ -20,7 +20,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Calendar> Calendars => Set<Calendar>();
     public DbSet<Profile> Profiles => Set<Profile>();
     public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
-    public DbSet<CalendarEventModel>? CalendarEventModels { get; set; }
+    public DbSet<CalendarEventSummary>? CalendarEventModels { get; set; }
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

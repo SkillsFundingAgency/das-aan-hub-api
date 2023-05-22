@@ -1,10 +1,10 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 

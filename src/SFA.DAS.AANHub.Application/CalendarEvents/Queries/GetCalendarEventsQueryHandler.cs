@@ -18,7 +18,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         var pageSize = Domain.Common.Constants.CalendarEvents.PageSize;
         var page = 1;
         var response =
-            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId);
+            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, cancellationToken);
 
 
         var orderedResponse = response.OrderBy(p => p.Start);

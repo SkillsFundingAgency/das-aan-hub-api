@@ -7,5 +7,5 @@ public class GetCalendarEventsQueryResult
     public int PageSize { get; set; }
     public int TotalPages { get; set; }
     public int TotalCount { get; set; }
-    public List<CalendarEventModel> CalendarEvents { get; set; } = new List<CalendarEventModel>();
+    public List<CalendarEventSummary> CalendarEvents { get; set; } = new List<CalendarEventSummary>();
 }

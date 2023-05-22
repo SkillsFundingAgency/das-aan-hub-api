@@ -23,7 +23,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			.Include(x => x.Calendar)
 			.SingleOrDefaultAsync();
 
-	public async Task<List<CalendarEventModel>> GetCalendarEvents(Guid memberId)
+	public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, CancellationToken cancellationToken)
 	{
 		FormattableString sql = $@"select	
                             CE.Id as CalendarEventId, 
@@ -54,7 +54,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
 		var calendarEvents = await _aanDataContext.CalendarEventModels!
 			.FromSqlInterpolated(sql)
-			.ToListAsync();
+			.ToListAsync(cancellationToken);
 		return calendarEvents;
 	}
 }

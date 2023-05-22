@@ -12,7 +12,7 @@ public class GetCalendarEventsQueryValidatorTests
 {
     [Test]
     [RecursiveMoqAutoData]
-    public async Task ValidateCalendarId_Missing_FailsValidation(Member member)
+    public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, CancellationToken cancellationToken)
     {
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
@@ -20,10 +20,10 @@ public class GetCalendarEventsQueryValidatorTests
             .ReturnsAsync(member);
 
         var query = new GetCalendarEventsQuery(member.Id, 1);
-        var calendarEvents = (List<CalendarEventModel>)null!;
+        var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id))!.ReturnsAsync(calendarEvents);
+        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(query);
 
@@ -34,7 +34,7 @@ public class GetCalendarEventsQueryValidatorTests
     [TestCase(Domain.Common.Constants.MembershipStatus.Deleted)]
     [TestCase(Domain.Common.Constants.MembershipStatus.Withdrawn)]
     [TestCase(Domain.Common.Constants.MembershipStatus.Cancelled)]
-    public async Task ValidateCalendarId_Inactive_FailsValidation(string inactiveMembershipStatus)
+    public async Task ValidateMemberId_MembershipStatusNotActive_FailsValidation(string inactiveMembershipStatus)
     {
         var inactiveGuid = Guid.NewGuid();
 
