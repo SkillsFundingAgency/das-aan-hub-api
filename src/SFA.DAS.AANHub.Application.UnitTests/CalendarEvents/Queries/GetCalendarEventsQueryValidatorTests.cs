@@ -25,7 +25,7 @@ public class GetCalendarEventsQueryValidatorTests
 
         calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
-        var result = await sut.TestValidateAsync(query);
+        var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
 
         result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
     }
