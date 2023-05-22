@@ -7,7 +7,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 
-public class PatchMemberCommand : IRequest<ValidatedResponse<PatchCommandResult>>
+public class PatchMemberCommand : IRequest<ValidatedResponse<SuccessCommandResult>>
 {
     public Guid MemberId { get; set; }
     public JsonPatchDocument<Member> PatchDoc { get; set; } = new();

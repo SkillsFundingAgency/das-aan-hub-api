@@ -21,6 +21,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Profile> Profiles => Set<Profile>();
     public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
     public DbSet<CalendarEventSummary>? CalendarEventSummaries { get; set; }
+    public DbSet<Attendance> Attendances => Set<Attendance>();
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

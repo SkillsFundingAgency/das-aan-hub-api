@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using FluentValidation.Results;
+﻿using FluentValidation.Results;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Api.Common;
 
@@ -11,6 +11,7 @@ namespace SFA.DAS.AANHub.Api.Common;
 public abstract class ActionResponseControllerBase : ControllerBase
 {
     public const string GetMethodName = "Get";
+    public const string PutMethodName = "Put";
 
     public abstract string ControllerName { get; }
 
@@ -33,7 +34,12 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPatchResponse(ValidatedResponse<PatchCommandResult> response)
+    protected IActionResult GetPutResponse(ValidatedResponse<SuccessCommandResult> response)
+    {
+        return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));
+    }
+
+    protected IActionResult GetPatchResponse(ValidatedResponse<SuccessCommandResult> response)
     {
         if (response.Result is { IsSuccess: false }) return NotFound();
 
