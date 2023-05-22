@@ -37,8 +37,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                        CE.Postcode,
 	                        CE.Latitude,
 	                        CE.Longitude,
-	                        CASE  WHEN (EmployerLatitude.ProfileValue is null OR ltrim(EmployerLatitude.ProfileValue) = '') THEN null
-			                    WHEN (EmployerLongitude.ProfileValue is null OR ltrim(EmployerLongitude.ProfileValue) = '') THEN null
+	                        CASE  WHEN (EmployerLatitude.ProfileValue is null) THEN null
+			                    WHEN (EmployerLongitude.ProfileValue is null) THEN null
 			                    WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
 		                    ELSE
 			                    geography::Point(CE.Latitude, CE.Longitude, 4326)
@@ -54,7 +54,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                 AND CE.EndDate <= convert(date,DATEADD(year,1,getutcdate()))
 	                        Order By CE.StartDate ASC";
 
-		var calendarEvents = await _aanDataContext.CalendarEventModels!
+		var calendarEvents = await _aanDataContext.CalendarEventSummaries!
 			.FromSqlInterpolated(sql)
 			.ToListAsync(cancellationToken);
 		return calendarEvents;
