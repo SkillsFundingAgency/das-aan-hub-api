@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace SFA.DAS.AANHub.Domain.Entities;
 
 public class Attendance
 {
@@ -11,6 +13,9 @@ public class Attendance
     public int? OverallRating { get; set; }
     public DateTime? FeedbackCompletedDate { get; set; }
 
+    [JsonIgnore]
     public CalendarEvent CalendarEvent { get; set; } = null!;
+
+    [JsonIgnore]
     public Member Member { get; set; } = null!;
 }
