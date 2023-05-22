@@ -49,7 +49,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                             LEFT OUTER JOIN MemberProfile MPLat on MPLat.MemberId = {memberId} and MPLat.ProfileId = 36
                             LEFT OUTER JOIN MemberProfile MPLon on MPLon.MemberId = {memberId} and MPLon.ProfileId = 37
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
-                            WHERE CE.StartDate>=convert(date,getutcdate()) AND  CE.IsActive = 1
+                            WHERE CE.IsActive = 1
+                                AND CE.StartDate>=convert(date,getutcdate()) 
+                                AND CE.EndDate <= convert(date,DATEADD(year,1,getutcdate()))
 	                        Order By CE.StartDate ASC";
 
 		var calendarEvents = await _aanDataContext.CalendarEventModels!

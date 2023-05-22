@@ -20,16 +20,13 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         var response =
             await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, cancellationToken);
 
-
-        var orderedResponse = response.OrderBy(p => p.Start);
-
         var result = new GetCalendarEventsQueryResult
         {
             Page = page,
             PageSize = pageSize,
             TotalCount = response.Count,
             TotalPages = (response.Count + pageSize - 1) / pageSize,
-            CalendarEvents = orderedResponse.ToList()
+            CalendarEvents = response.ToList()
         };
 
         return new ValidatedResponse<GetCalendarEventsQueryResult>(result);
