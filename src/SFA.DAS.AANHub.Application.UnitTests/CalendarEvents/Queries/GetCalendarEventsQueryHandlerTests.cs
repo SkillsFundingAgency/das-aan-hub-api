@@ -27,7 +27,6 @@ public class GetCalendarEventsQueryHandlerTests
 
         result.Result.CalendarEvents.Count.Should().Be(0);
         result.Result.TotalCount.Should().Be(0);
-        result.Result.PageSize.Should().Be(Domain.Common.Constants.CalendarEvents.PageSize);
     }
 
     [Test]
@@ -47,7 +46,6 @@ public class GetCalendarEventsQueryHandlerTests
 
         result.Result.CalendarEvents.Count.Should().Be(1);
         result.Result.TotalCount.Should().Be(1);
-        result.Result.PageSize.Should().Be(Domain.Common.Constants.CalendarEvents.PageSize);
 
         var calendarEvents = result.Result.CalendarEvents;
 

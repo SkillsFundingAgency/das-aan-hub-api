@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -37,20 +38,26 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                        CE.Postcode,
 	                        CE.Latitude,
 	                        CE.Longitude,
-	                        CASE  WHEN (EmployerLatitude.ProfileValue is null) THEN null
-			                    WHEN (EmployerLongitude.ProfileValue is null) THEN null
+	                        CASE  WHEN (EmployerDetails.Latitude is null) THEN null
+			                    WHEN (EmployerDetails.Longitude is null) THEN null
 			                    WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
 		                    ELSE
 			                    geography::Point(CE.Latitude, CE.Longitude, 4326)
-					                .STDistance(geography::Point(convert(float,EmployerLatitude.ProfileValue), convert(float,EmployerLongitude.ProfileValue), 4326)) * 0.0006213712 END
+					                .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712 END
 					        as Distance,
 	                        ISNULL(A.IsActive, 0) AS IsAttending
-                            from calendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
-                            LEFT OUTER JOIN MemberProfile EmployerLatitude on EmployerLatitude.MemberId = {memberId} and EmployerLatitude.ProfileId = 36
-                            LEFT OUTER JOIN MemberProfile EmployerLongitude on EmployerLongitude.MemberId = {memberId} and EmployerLongitude.ProfileId = 37
+                            from CalendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
+                            LEFT OUTER JOIN (
+	                            SELECT MemberId
+                                      ,MAX(CASE WHEN ProfileId = {Constants.ProfileDataId.Latitude} THEN ProfileValue ELSE null END) Latitude
+                                      ,MAX(CASE WHEN ProfileId = {Constants.ProfileDataId.Longitude} THEN ProfileValue ELSE null END) Longitude
+                                FROM MemberProfile mp1
+                                WHERE MemberId = {memberId}
+                                GROUP BY MemberId
+	                            ) EmployerDetails on EmployerDetails.MemberId = {memberId}
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
-                                AND CE.StartDate>=convert(date,getutcdate()) 
+                                AND CE.StartDate >= convert(date,getutcdate()) 
                                 AND CE.EndDate <= convert(date,DATEADD(year,1,getutcdate()))
 	                        Order By CE.StartDate ASC";
 

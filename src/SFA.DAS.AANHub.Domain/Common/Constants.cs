@@ -26,4 +26,10 @@ public static class Constants
     {
         public static readonly int PageSize = 5;
     }
+
+    public static class ProfileDataId
+    {
+        public const int Longitude = 36;
+        public const int Latitude = 37;
+    }
 }

@@ -23,9 +23,9 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         var result = new GetCalendarEventsQueryResult
         {
             Page = page,
-            PageSize = pageSize,
+            PageSize = 0,
             TotalCount = response.Count,
-            TotalPages = (response.Count + pageSize - 1) / pageSize,
+            TotalPages = 0,
             CalendarEvents = response.ToList()
         };
 
