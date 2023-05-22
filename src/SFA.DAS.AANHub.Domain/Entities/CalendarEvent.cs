@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities;
+﻿using System.Text.Json.Serialization;
+
+namespace SFA.DAS.AANHub.Domain.Entities;
 
 public class CalendarEvent
 {
@@ -20,8 +22,12 @@ public class CalendarEvent
     public bool IsActive { get; set; }
     public string? CancelReason { get; set; } = null!;
 
-
+    [JsonIgnore]
     public List<Attendance> Attendees { get; set; } = new();
+
+    [JsonIgnore]
     public Calendar Calendar { get; set; } = null!;
+
+    [JsonIgnore]
     public List<EventGuest> EventGuests { get; set; } = new();
 }
