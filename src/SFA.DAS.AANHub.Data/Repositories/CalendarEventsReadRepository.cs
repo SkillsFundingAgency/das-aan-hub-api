@@ -37,17 +37,17 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                        CE.Postcode,
 	                        CE.Latitude,
 	                        CE.Longitude,
-	                        CASE  WHEN (MPLat.ProfileValue is null OR ltrim(MPLat.ProfileValue) = '') THEN null
-			                    WHEN (MPLon.ProfileValue is null OR ltrim(MPLon.ProfileValue) = '') THEN null
+	                        CASE  WHEN (EmployerLatitude.ProfileValue is null OR ltrim(EmployerLatitude.ProfileValue) = '') THEN null
+			                    WHEN (EmployerLongitude.ProfileValue is null OR ltrim(EmployerLongitude.ProfileValue) = '') THEN null
 			                    WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
 		                    ELSE
 			                    geography::Point(CE.Latitude, CE.Longitude, 4326)
-					                .STDistance(geography::Point(convert(float,MPLat.ProfileValue), convert(float,MPLon.ProfileValue), 4326)) * 0.0006213712 END
+					                .STDistance(geography::Point(convert(float,EmployerLatitude.ProfileValue), convert(float,EmployerLongitude.ProfileValue), 4326)) * 0.0006213712 END
 					        as Distance,
 	                        ISNULL(A.IsActive, 0) AS IsAttending
                             from calendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
-                            LEFT OUTER JOIN MemberProfile MPLat on MPLat.MemberId = {memberId} and MPLat.ProfileId = 36
-                            LEFT OUTER JOIN MemberProfile MPLon on MPLon.MemberId = {memberId} and MPLon.ProfileId = 37
+                            LEFT OUTER JOIN MemberProfile EmployerLatitude on EmployerLatitude.MemberId = {memberId} and EmployerLatitude.ProfileId = 36
+                            LEFT OUTER JOIN MemberProfile EmployerLongitude on EmployerLongitude.MemberId = {memberId} and EmployerLongitude.ProfileId = 37
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
                                 AND CE.StartDate>=convert(date,getutcdate()) 
