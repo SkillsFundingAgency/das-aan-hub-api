@@ -28,7 +28,7 @@ public class CalendarEventsControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), true) as NoContentResult;
+        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), new PutAttendanceModel(true)) as NoContentResult;
 
         result?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
@@ -44,7 +44,7 @@ public class CalendarEventsControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), true) as NoContentResult;
+        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), new PutAttendanceModel(true)) as NoContentResult;
 
         result?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
@@ -65,7 +65,7 @@ public class CalendarEventsControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<PutAttendanceCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), true) as BadRequestObjectResult;
+        var result = await sut.PutAttendance(Guid.NewGuid(), Guid.NewGuid(), new PutAttendanceModel(true)) as BadRequestObjectResult;
 
         result!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
 
