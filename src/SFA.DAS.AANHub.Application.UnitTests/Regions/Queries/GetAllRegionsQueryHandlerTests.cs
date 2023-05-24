@@ -17,9 +17,10 @@ public class WhenRequestingGetAllRegions
         GetRegionsQuery query,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepositoryMock,
         GetRegionsQueryHandler handler,
-        List<Region> regions)
+        List<Region> regions,
+        CancellationToken cancellationToken)
     {
-        regionsReadRepositoryMock.Setup(r => r.GetAllRegions()).ReturnsAsync(regions);
+        regionsReadRepositoryMock.Setup(r => r.GetAllRegions(cancellationToken)).ReturnsAsync(regions);
 
         var result = await handler.Handle(query, CancellationToken.None);
 

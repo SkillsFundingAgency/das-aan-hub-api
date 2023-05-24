@@ -23,11 +23,11 @@ public class RegionsController : ActionResponseControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
     [ProducesResponseType(typeof(GetRegionsQueryResult), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetRegions()
+    public async Task<IActionResult> GetRegions(CancellationToken cancellationToken)
     {
         _logger.LogTrace("Requesting list of regions");
 
-        var result = await _mediator.Send(new GetRegionsQuery());
+        var result = await _mediator.Send(new GetRegionsQuery(), cancellationToken);
 
         return GetResponse(result);
     }
