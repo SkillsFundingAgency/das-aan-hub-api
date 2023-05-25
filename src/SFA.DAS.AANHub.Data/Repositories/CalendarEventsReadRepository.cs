@@ -24,11 +24,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			.Include(x => x.Calendar)
 			.SingleOrDefaultAsync();
 
-	public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken)
+	public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
 	{
-		startDate ??= DateTime.Today;
-
-		endDate ??= DateTime.Today.AddYears(1);
 
 		FormattableString sql = $@"select	
                             CE.Id as CalendarEventId, 

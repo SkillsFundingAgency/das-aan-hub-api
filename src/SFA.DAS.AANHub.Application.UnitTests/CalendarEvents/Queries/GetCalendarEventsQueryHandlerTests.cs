@@ -17,8 +17,8 @@ public class GetCalendarEventsQueryHandlerTests
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
         GetCalendarEventsQueryHandler sut,
         Member member,
-        DateTime? startDate,
-        DateTime? endDate,
+        DateTime startDate,
+        DateTime endDate,
         CancellationToken cancellationToken
         )
     {
@@ -38,15 +38,16 @@ public class GetCalendarEventsQueryHandlerTests
         GetCalendarEventsQueryHandler sut,
         CalendarEventSummary calendarEvent,
         Member member,
-        DateTime? startDate,
-        DateTime? endDate,
         CancellationToken cancellationToken
     )
     {
+        var startDate = DateTime.Today;
+        var endDate = DateTime.Today.AddDays(7);
+
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id, startDate, endDate, It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
-        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, startDate, endDate, 1), new CancellationToken());
+        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, startDate, endDate, 1), cancellationToken);
 
         result.Result.CalendarEvents.Count.Should().Be(1);
         result.Result.TotalCount.Should().Be(1);
@@ -54,5 +55,29 @@ public class GetCalendarEventsQueryHandlerTests
         var calendarEvents = result.Result.CalendarEvents;
 
         calendarEvents.First().Should().BeEquivalentTo(calendarEvent);
+    }
+
+
+    [Test]
+    [RecursiveMoqAutoData]
+    public async Task Handle_StartDateAfterEndDate_ReturnsNoCalendarEvents_DoesNotCallRepository(
+        [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
+        GetCalendarEventsQueryHandler sut,
+        CalendarEventSummary calendarEvent,
+        Member member,
+        CancellationToken cancellationToken
+    )
+    {
+        var startDate = DateTime.Today.AddDays(7);
+        var endDate = DateTime.Today;
+
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id, startDate, endDate, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
+
+        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, startDate, endDate, 1), cancellationToken);
+
+        result.Result.CalendarEvents.Count.Should().Be(0);
+        result.Result.TotalCount.Should().Be(0);
+        calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), cancellationToken), Times.Never);
     }
 }

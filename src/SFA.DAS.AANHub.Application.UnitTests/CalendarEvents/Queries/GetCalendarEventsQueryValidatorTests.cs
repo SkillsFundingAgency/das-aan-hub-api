@@ -10,10 +10,11 @@ using SFA.DAS.Testing.AutoFixture;
 namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Queries;
 public class GetCalendarEventsQueryValidatorTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
-    public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, DateTime? startDate, DateTime? endDate, CancellationToken cancellationToken)
+    [Test, RecursiveMoqAutoData]
+    public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, CancellationToken cancellationToken)
     {
+        var startDate = DateTime.UtcNow;
+        var endDate = DateTime.Today.AddYears(1);
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
