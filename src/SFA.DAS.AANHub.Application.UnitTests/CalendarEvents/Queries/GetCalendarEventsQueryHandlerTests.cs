@@ -17,13 +17,14 @@ public class GetCalendarEventsQueryHandlerTests
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepositoryMock,
         GetCalendarEventsQueryHandler sut,
         Member member,
-        DateTime startDate,
-        DateTime endDate,
         CancellationToken cancellationToken
-        )
+    )
     {
+        var startDate = DateTime.Today;
+        var endDate = DateTime.Today.AddDays(7);
+
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(member.Id, startDate, endDate, cancellationToken))
-            .ReturnsAsync(() => new List<CalendarEventSummary>());
+        .ReturnsAsync(() => new List<CalendarEventSummary>());
 
         var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, startDate, endDate, 1), new CancellationToken());
 
