@@ -11,5 +11,5 @@ public class GetRegionsQueryHandler : IRequestHandler<GetRegionsQuery, Validated
     public GetRegionsQueryHandler(IRegionsReadRepository regionsReadRepository) => _regionsReadRepository = regionsReadRepository;
 
     public async Task<ValidatedResponse<GetRegionsQueryResult>> Handle(GetRegionsQuery request, CancellationToken cancellationToken)
-            => new(await _regionsReadRepository.GetAllRegions());
+            => new(await _regionsReadRepository.GetAllRegions(cancellationToken));
 }

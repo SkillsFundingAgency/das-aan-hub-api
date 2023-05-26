@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories
 {
@@ -12,9 +12,9 @@ namespace SFA.DAS.AANHub.Data.Repositories
 
         public RegionsReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-        public async Task<List<Region>> GetAllRegions() => await _aanDataContext
+        public async Task<List<Region>> GetAllRegions(CancellationToken cancellationToken) => await _aanDataContext
                 .Regions
                 .AsNoTracking()
-                .ToListAsync();
+                .ToListAsync(cancellationToken);
     }
 }

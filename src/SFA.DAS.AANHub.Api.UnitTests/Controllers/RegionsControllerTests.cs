@@ -18,13 +18,14 @@ public class RegionsControllerTests
     public async Task GetRegions_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] RegionsController sut,
-        GetRegionsQueryResult regions)
+        GetRegionsQueryResult regions,
+        CancellationToken cancellationToken)
     {
         var response = new ValidatedResponse<GetRegionsQueryResult>(regions);
 
         mediatorMock.Setup(m => m.Send(It.IsAny<GetRegionsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.GetRegions();
+        var result = await sut.GetRegions(cancellationToken);
 
         result.As<OkObjectResult>().Should().NotBeNull();
 
