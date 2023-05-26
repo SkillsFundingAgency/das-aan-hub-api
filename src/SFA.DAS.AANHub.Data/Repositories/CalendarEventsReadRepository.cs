@@ -59,7 +59,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
                                 AND CE.StartDate >= convert(date,{startDate}) 
-                                AND CE.EndDate <= convert(date,{endDate})
+                                AND datediff(day, CE.EndDate,{endDate})>=0
 	                        Order By CE.StartDate ASC";
 
 		var calendarEvents = await _aanDataContext.CalendarEventSummaries!
