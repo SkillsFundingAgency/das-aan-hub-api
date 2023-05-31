@@ -1,4 +1,5 @@
 ﻿BEGIN
+-- !!! NOTE TEST DATA ONLY !!!
 -- Set the number of Events and Weeks required, and optionally to add attendances for existing members
 -- !!! THIS WILL REMOVE EXISTING RECORDS FROM [dbo].[Attendance], [dbo].[EventGuest], [dbo].[CalendarEvent] !!!
 
