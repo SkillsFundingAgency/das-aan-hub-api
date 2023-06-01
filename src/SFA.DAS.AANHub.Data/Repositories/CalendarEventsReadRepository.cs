@@ -10,24 +10,24 @@ namespace SFA.DAS.AANHub.Data.Repositories;
 [ExcludeFromCodeCoverage]
 internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 {
-	private readonly AanDataContext _aanDataContext;
-	public CalendarEventsReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
+    private readonly AanDataContext _aanDataContext;
+    public CalendarEventsReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-	public async Task<CalendarEvent?> GetCalendarEvent(Guid id) =>
-		await _aanDataContext
-			.CalendarEvents
-			.AsNoTracking()
-			.Where(m => m.Id == id)
-			.Include(x => x.Attendees.Where(a => a.IsActive))
-			.ThenInclude(x => x.Member)
-			.Include(x => x.EventGuests)
-			.Include(x => x.Calendar)
-			.SingleOrDefaultAsync();
+    public async Task<CalendarEvent?> GetCalendarEvent(Guid id) =>
+        await _aanDataContext
+            .CalendarEvents
+            .AsNoTracking()
+            .Where(m => m.Id == id)
+            .Include(x => x.Attendees.Where(a => a.IsActive))
+            .ThenInclude(x => x.Member)
+            .Include(x => x.EventGuests)
+            .Include(x => x.Calendar)
+            .SingleOrDefaultAsync();
 
-	public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime startDate, DateTime endDate, CancellationToken cancellationToken)
-	{
+    public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime startDate, DateTime endDate, List<EventFormat> eventFormats, CancellationToken cancellationToken)
+    {
 
-		FormattableString sql = $@"select	
+        FormattableString sql = $@"select	
                             CE.Id as CalendarEventId, 
 	                        C.CalendarName,
 	                        CE.EventFormat, 
@@ -59,12 +59,13 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
                                 AND CE.StartDate >= convert(date,{startDate}) 
-                                AND datediff(day, CE.EndDate,{endDate})>=0
-	                        Order By CE.StartDate ASC";
+                                AND datediff(day, CE.EndDate,{endDate})>=0";
 
-		var calendarEvents = await _aanDataContext.CalendarEventSummaries!
-			.FromSqlInterpolated(sql)
-			.ToListAsync(cancellationToken);
-		return calendarEvents;
-	}
+        var calendarEvents = await _aanDataContext.CalendarEventSummaries!
+            .FromSqlInterpolated(sql)
+            .Where(x => eventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || eventFormats.Count == 0)
+            .OrderBy(x => x.Start)
+            .ToListAsync(cancellationToken);
+        return calendarEvents;
+    }
 }
