@@ -7241,7 +7241,7 @@ Id    CalendarName
     @eventtype [EventFormat],
     @date [StartDate], 
     DATEADD(hour,2,@date) [EndDate], 
-    'An ' + @eventtype + ' event for ' +  @calendarname + ' in ' + [Area] + ' region' [Description], 
+    'A' + CASE @format WHEN 0 THEN 'n online' WHEN 1 THEN ' hybrid' ELSE 'n in person' END + ' event for ' +  @calendarname + ' in ' + [Area] + ' region' [Description], 
     'This event is for a'
     + CASE @des1 WHEN 0 THEN ' wonderful' WHEN 1 THEN 'n exciting' WHEN 2 THEN 'n interesting' WHEN 3 THEN ' stimulating' ELSE ' regular' END + ' ' 
     + CASE @des2 WHEN 0 THEN 'meeting' WHEN 1 THEN 'discussion' WHEN 2 THEN 'session' WHEN 3 THEN 'convention' ELSE 'assembly' END + ' in '
