@@ -26,6 +26,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
 	public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime startDate, DateTime endDate, List<EventFormat> eventFormats, CancellationToken cancellationToken)
 	{
+
 		FormattableString sql = $@"select	
                             CE.Id as CalendarEventId, 
 	                        C.CalendarName,
