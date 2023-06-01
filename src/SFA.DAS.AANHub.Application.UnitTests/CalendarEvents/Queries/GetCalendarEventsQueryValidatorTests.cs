@@ -10,20 +10,21 @@ using SFA.DAS.Testing.AutoFixture;
 namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Queries;
 public class GetCalendarEventsQueryValidatorTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, CancellationToken cancellationToken)
     {
+        var startDate = DateTime.UtcNow;
+        var endDate = DateTime.Today.AddYears(1);
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
             .ReturnsAsync(member);
 
-        var query = new GetCalendarEventsQuery(member.Id, 1);
+        var query = new GetCalendarEventsQuery(member.Id, startDate, endDate, 1);
         var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, cancellationToken))!.ReturnsAsync(calendarEvents);
+        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, startDate, endDate, cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
 
@@ -42,7 +43,7 @@ public class GetCalendarEventsQueryValidatorTests
         membersReadRepositoryMock.Setup(m => m.GetMember(inactiveGuid))
             .ReturnsAsync(new Member() { Status = inactiveMembershipStatus });
 
-        var query = new GetCalendarEventsQuery(inactiveGuid, 1);
+        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, 1);
 
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
 
