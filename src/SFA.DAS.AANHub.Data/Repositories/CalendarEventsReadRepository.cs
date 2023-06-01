@@ -58,12 +58,12 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
                                 AND CE.StartDate >= convert(date,{startDate}) 
-                                AND datediff(day, CE.EndDate,{endDate})>=0
-                                Order By CE.StartDate ASC";
+                                AND datediff(day, CE.EndDate,{endDate})>=0";
 
 		var calendarEvents = await _aanDataContext.CalendarEventSummaries!
 			.FromSqlInterpolated(sql)
 			.Where(x => eventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || eventFormats.Count == 0)
+			.OrderBy(x => x.Start)
 			.ToListAsync(cancellationToken);
 		return calendarEvents;
 	}
