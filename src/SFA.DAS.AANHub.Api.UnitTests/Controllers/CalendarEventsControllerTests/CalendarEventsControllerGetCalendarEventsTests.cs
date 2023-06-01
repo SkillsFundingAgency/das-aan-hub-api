@@ -35,7 +35,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
 
     [Test]
     [MoqAutoData]
-    public async Task Get_HandlerReturnsNullResult_ReturnsNotFoundResponse(
+    public async Task Get_HandlerReturnsNullResult_ReturnsEmptyResultResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarEventsController sut,
         Guid requestedByMemberId,
@@ -44,9 +44,9 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<EventFormat> eventFormats,
         CancellationToken cancellationToken)
     {
-        var notFoundResponse = ValidatedResponse<GetCalendarEventsQueryResult>.EmptySuccessResponse();
+        var emptyResponse = ValidatedResponse<GetCalendarEventsQueryResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(notFoundResponse);
+                    .ReturnsAsync(emptyResponse);
 
         var result = await sut.GetCalendarEvents(requestedByMemberId, startDate, endDate, eventFormats, cancellationToken);
         result.As<NotFoundResult>().Should().NotBeNull();
