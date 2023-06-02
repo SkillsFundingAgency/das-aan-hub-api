@@ -24,7 +24,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
 
-    public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime fromDate, DateTime toDate, List<EventFormat> eventFormats, CancellationToken cancellationToken)
+    public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime fromDate, DateTime toDate, List<EventFormat> eventFormat, CancellationToken cancellationToken)
     {
 
         FormattableString sql = $@"select	
@@ -63,7 +63,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlInterpolated(sql)
-            .Where(x => eventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || eventFormats.Count == 0)
+            .Where(x => eventFormat.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || eventFormat.Count == 0)
             .OrderBy(x => x.Start)
             .ToListAsync(cancellationToken);
         return calendarEvents;

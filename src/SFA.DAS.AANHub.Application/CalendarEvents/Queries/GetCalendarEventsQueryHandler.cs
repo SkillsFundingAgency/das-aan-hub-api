@@ -35,7 +35,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         }
 
         var response =
-            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormats, cancellationToken);
+            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormat, cancellationToken);
 
         var result = new GetCalendarEventsQueryResult
         {

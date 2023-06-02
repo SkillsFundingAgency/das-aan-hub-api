@@ -10,15 +10,15 @@ public class GetCalendarEventsQuery : IRequest<ValidatedResponse<GetCalendarEven
     public Guid RequestedByMemberId { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
-    public List<EventFormat> EventFormats { get; set; }
+    public List<EventFormat> EventFormat { get; set; }
     public int? Page { get; }
 
-    public GetCalendarEventsQuery(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, int? page)
+    public GetCalendarEventsQuery(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormat, int? page)
     {
         RequestedByMemberId = requestedByMemberId;
         FromDate = fromDate;
         ToDate = toDate;
         Page = page;
-        EventFormats = eventFormats;
+        EventFormat = eventFormat;
     }
 }
