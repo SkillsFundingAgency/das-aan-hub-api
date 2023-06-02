@@ -18,11 +18,11 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
     {
         var pageSize = 0;
         var page = 1;
-        var startDate = request.StartDate == null || request.StartDate.GetValueOrDefault() < DateTime.Today ? DateTime.Today : request.StartDate.GetValueOrDefault();
+        var fromDate = request.FromDate == null || request.FromDate.GetValueOrDefault() < DateTime.Today ? DateTime.Today : request.FromDate.GetValueOrDefault();
 
-        var endDate = request.EndDate ?? DateTime.Today.AddYears(1);
+        var toDate = request.ToDate ?? DateTime.Today.AddYears(1);
 
-        if (startDate > endDate)
+        if (fromDate > toDate)
         {
             return new ValidatedResponse<GetCalendarEventsQueryResult>(
                 new GetCalendarEventsQueryResult
@@ -35,7 +35,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         }
 
         var response =
-            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, startDate, endDate, request.EventFormats, cancellationToken);
+            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormats, cancellationToken);
 
         var result = new GetCalendarEventsQueryResult
         {
