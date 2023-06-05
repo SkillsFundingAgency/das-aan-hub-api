@@ -4,6 +4,7 @@ public class CalendarEventSummary
 {
     public Guid CalendarEventId { get; set; }
     public string? CalendarName { get; set; } = null!;
+    public int CalendarId { get; set; }
     public string EventFormat { get; set; } = null!;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }

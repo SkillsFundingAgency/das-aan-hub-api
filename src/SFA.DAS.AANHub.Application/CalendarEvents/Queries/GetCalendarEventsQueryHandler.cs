@@ -30,12 +30,14 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
                     Page = page,
                     PageSize = pageSize,
                     TotalCount = 0,
-                    CalendarEvents = new List<CalendarEventSummary>()
+                    CalendarEvents = new System.Collections.Generic.List<CalendarEventSummaryProcessed>()
                 });
         }
 
         var response =
-            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormat, cancellationToken);
+            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormat, request.CalendarId, cancellationToken);
+
+        var responseProcessed = response.Select(summary => (CalendarEventSummaryProcessed)summary).ToList();
 
         var result = new GetCalendarEventsQueryResult
         {
@@ -43,7 +45,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             PageSize = pageSize,
             TotalCount = response.Count,
             TotalPages = 0,
-            CalendarEvents = response.ToList()
+            CalendarEvents = responseProcessed
         };
 
         return new ValidatedResponse<GetCalendarEventsQueryResult>(result);

@@ -13,12 +13,15 @@ public class GetCalendarEventsQuery : IRequest<ValidatedResponse<GetCalendarEven
     public List<EventFormat> EventFormat { get; set; }
     public int? Page { get; }
 
-    public GetCalendarEventsQuery(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormat, int? page)
+    public List<int> CalendarId { get; set; }
+
+    public GetCalendarEventsQuery(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormat, List<int> calendarId, int? page)
     {
         RequestedByMemberId = requestedByMemberId;
         FromDate = fromDate;
         ToDate = toDate;
         Page = page;
         EventFormat = eventFormat;
+        CalendarId = calendarId;
     }
 }
