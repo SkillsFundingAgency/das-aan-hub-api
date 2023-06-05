@@ -63,7 +63,6 @@ public class GetCalendarEventsQueryHandlerTests
         calendarEvents.First().Should().BeEquivalentTo(calendarEvent, options => options.Excluding(c => c.CalendarId));
     }
 
-
     [Test]
     [RecursiveMoqAutoData]
     public async Task Handle_FromDateAfterToDate_ReturnsNoCalendarEvents_DoesNotCallRepository(

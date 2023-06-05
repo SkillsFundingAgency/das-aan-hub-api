@@ -44,8 +44,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			                    WHEN (EmployerDetails.Longitude is null) THEN null
 			                    WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
 		                    ELSE
-			                    geography::Point(CE.Latitude, CE.Longitude, 4326)
-					                .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712 END
+			                    ROUND( geography::Point(CE.Latitude, CE.Longitude, 4326)
+					                .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
 					        as Distance,
 	                        ISNULL(A.IsActive, 0) AS IsAttending
                             from CalendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
@@ -59,8 +59,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                            ) EmployerDetails on EmployerDetails.MemberId = {memberId}
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
                             WHERE CE.IsActive = 1
-                                AND CE.StartDate >= convert(date,{fromDate}) 
-                                AND datediff(day, CE.EndDate,{toDate})>=0";
+                            AND CE.StartDate >= convert(date,{fromDate}) 
+                            AND CE.EndDate < convert(date,dateadd(day,1,{toDate}))";
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlInterpolated(sql)
