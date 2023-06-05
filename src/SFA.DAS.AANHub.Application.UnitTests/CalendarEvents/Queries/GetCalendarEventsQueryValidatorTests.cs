@@ -1,7 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -21,11 +21,12 @@ public class GetCalendarEventsQueryValidatorTests
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
             .ReturnsAsync(member);
 
-        var query = new GetCalendarEventsQuery(member.Id, startDate, toDate, new List<EventFormat>(), 1);
+        var query = new GetCalendarEventsQuery(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), new List<int>(), 1);
         var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, startDate, toDate, new List<EventFormat>(), cancellationToken))!.ReturnsAsync(calendarEvents);
+
+        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), new List<int>(), 1), cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
 
@@ -44,7 +45,7 @@ public class GetCalendarEventsQueryValidatorTests
         membersReadRepositoryMock.Setup(m => m.GetMember(inactiveGuid))
             .ReturnsAsync(new Member() { Status = inactiveMembershipStatus });
 
-        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, new List<EventFormat>(), 1);
+        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, new List<EventFormat>(), new List<int>(), new List<int>(), 1);
 
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
 
