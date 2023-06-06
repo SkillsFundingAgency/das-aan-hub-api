@@ -2,6 +2,6 @@
 {
     public interface IRequestedByMemberId
     {
-        Guid RequestedByMemberId { get; set; }
+        Guid RequestedByMemberId { get; }
     }
 }

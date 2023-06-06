@@ -26,7 +26,7 @@ public class AttendancesControllerGetTests
     {
         await sut.Get(memberId, fromDate, toDate, cancellationToken);
 
-        mediatorMock.Verify(m => m.Send(It.Is<GetMemberAttendancesQuery>(q => q.MemberId == memberId && q.FromDate == fromDate && q.ToDate == toDate), cancellationToken));
+        mediatorMock.Verify(m => m.Send(It.Is<GetMemberAttendancesQuery>(q => q.RequestedByMemberId == memberId && q.FromDate == fromDate && q.ToDate == toDate), cancellationToken));
     }
 
     [Test]
