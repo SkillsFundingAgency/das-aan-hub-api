@@ -7241,14 +7241,13 @@ Id    CalendarName
     @eventtype [EventFormat],
     @date [StartDate], 
     DATEADD(hour,2,@date) [EndDate], 
-    'A' + CASE @format WHEN 0 THEN 'n online' WHEN 1 THEN ' hybrid' ELSE 'n in person' END + ' session for ' +  @calendarname + ' in ' + [Area] + ' region' [Description], 
     'This event is for a'
     + CASE @des1 WHEN 0 THEN ' wonderful' WHEN 1 THEN 'n exciting' WHEN 2 THEN 'n interesting' WHEN 3 THEN ' stimulating' ELSE ' regular' END + ' ' 
     + CASE @des2 WHEN 0 THEN 'meeting' WHEN 1 THEN 'discussion' WHEN 2 THEN 'session' WHEN 3 THEN 'convention' ELSE 'assembly' END + ' in '
     + [Area]
     + ' to meet with Apprenticeship Ambassador members '
-    + CASE @format WHEN 0 THEN 'online' WHEN 1 THEN 'in person or online' ELSE 'in person' END
-    [Summary], 
+    + CASE @format WHEN 0 THEN 'online' WHEN 1 THEN 'in person or online' ELSE 'in person' END [Description],
+    'A' + CASE @format WHEN 0 THEN 'n online' WHEN 1 THEN ' hybrid' ELSE 'n in person' END + ' session for ' +  @calendarname + ' in ' + [Area] + ' region' [Summary], 
     [RegionId],
     CASE @format WHEN 0 THEN null ELSE [EstablishmentName] + ', ' + [Location] END [Location], 
     CASE @format WHEN 0 THEN null ELSE [Postcode] END [Postcode], 
