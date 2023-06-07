@@ -3,7 +3,8 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 
-namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+
+namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 
 public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQuery, ValidatedResponse<GetCalendarEventsQueryResult>>
 {
@@ -30,14 +31,15 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
                     Page = page,
                     PageSize = pageSize,
                     TotalCount = 0,
-                    CalendarEvents = new System.Collections.Generic.List<CalendarEventSummaryProcessed>()
+                    CalendarEvents = new List<CalendarEventSummaryModel>()
                 });
         }
 
+        var options = new GetCalendarEventsOptions(request.RequestedByMemberId, fromDate, toDate, request.EventFormats, request.CalendarIds, page);
         var response =
-            await _calendarEventsReadRepository.GetCalendarEvents(request.RequestedByMemberId, fromDate, toDate, request.EventFormat, request.CalendarId, cancellationToken);
+                await _calendarEventsReadRepository.GetCalendarEvents(options, cancellationToken);
 
-        var responseProcessed = response.Select(summary => (CalendarEventSummaryProcessed)summary).ToList();
+        var responseProcessed = response.Select(summary => (CalendarEventSummaryModel)summary).ToList();
 
         var result = new GetCalendarEventsQueryResult
         {

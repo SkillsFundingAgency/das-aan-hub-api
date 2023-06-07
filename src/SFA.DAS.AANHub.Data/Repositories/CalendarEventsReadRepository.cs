@@ -24,7 +24,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
 
-    public async Task<List<CalendarEventSummary>> GetCalendarEvents(Guid memberId, DateTime fromDate, DateTime toDate, List<EventFormat> eventFormat, List<int> calendarId, CancellationToken cancellationToken)
+    public async Task<List<CalendarEventSummary>> GetCalendarEvents(GetCalendarEventsOptions options, CancellationToken cancellationToken)
     {
 
         FormattableString sql = $@"select	
@@ -44,7 +44,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			                    WHEN (EmployerDetails.Longitude is null) THEN null
 			                    WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
 		                    ELSE
-			                    ROUND( geography::Point(CE.Latitude, CE.Longitude, 4326)
+			                    ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
 					                .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
 					        as Distance,
 	                        ISNULL(A.IsActive, 0) AS IsAttending
@@ -54,18 +54,18 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                       ,MAX(CASE WHEN ProfileId = {Constants.ProfileDataId.Latitude} THEN ProfileValue ELSE null END) Latitude
                                       ,MAX(CASE WHEN ProfileId = {Constants.ProfileDataId.Longitude} THEN ProfileValue ELSE null END) Longitude
                                 FROM MemberProfile mp1
-                                WHERE MemberId = {memberId}
+                                WHERE MemberId = {options.MemberId}
                                 GROUP BY MemberId
-	                            ) EmployerDetails on EmployerDetails.MemberId = {memberId}
-                            LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {memberId}
+	                            ) EmployerDetails on EmployerDetails.MemberId = {options.MemberId}
+                            LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {options.MemberId}
                             WHERE CE.IsActive = 1
-                            AND CE.StartDate >= convert(date,{fromDate}) 
-                            AND CE.EndDate < convert(date,dateadd(day,1,{toDate}))";
+                            AND CE.StartDate >= convert(date,{options.FromDate}) 
+                            AND CE.EndDate < convert(date,dateadd(day,1,{options.ToDate}))";
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlInterpolated(sql)
-            .Where(x => eventFormat.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || eventFormat.Count == 0)
-            .Where(x => calendarId.Select(c => c).ToList().Contains(x.CalendarId) || calendarId.Count == 0)
+            .Where(x => options.EventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || options.EventFormats.Count == 0)
+            .Where(x => options.CalendarIds.Contains(x.CalendarId) || options.CalendarIds.Count == 0)
             .OrderBy(x => x.Start)
             .ToListAsync(cancellationToken);
         return calendarEvents;

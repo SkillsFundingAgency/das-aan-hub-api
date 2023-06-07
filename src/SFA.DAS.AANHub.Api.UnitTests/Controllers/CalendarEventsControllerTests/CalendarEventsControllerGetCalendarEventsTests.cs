@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;

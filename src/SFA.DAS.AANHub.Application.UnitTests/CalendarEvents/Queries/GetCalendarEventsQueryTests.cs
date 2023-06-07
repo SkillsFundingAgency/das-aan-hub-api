@@ -1,6 +1,6 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -14,6 +14,6 @@ public class GetCalendarEventsQueryTests
 
         model.RequestedByMemberId.Should().Be(memberId);
         model.Page.Should().Be(page);
-        model.EventFormat.Should().BeEquivalentTo(eventFormat);
+        model.EventFormats.Should().BeEquivalentTo(eventFormat);
     }
 }

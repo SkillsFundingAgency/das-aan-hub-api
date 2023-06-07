@@ -1,7 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -26,7 +26,7 @@ public class GetCalendarEventsQueryValidatorTests
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
 
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), cancellationToken))!.ReturnsAsync(calendarEvents);
+        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), 1), cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
 

@@ -1,6 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Domain.Models;
+﻿namespace SFA.DAS.AANHub.Domain.Entities;
 
-public class CalendarEventSummaryBase
+public class CalendarEventSummary
 {
     public Guid CalendarEventId { get; set; }
     public string? CalendarName { get; set; } = null!;
@@ -15,4 +15,5 @@ public class CalendarEventSummaryBase
     public double? Latitude { get; set; }
     public double? Distance { get; set; }
     public bool IsAttending { get; set; }
+    public int CalendarId { get; set; }
 }
