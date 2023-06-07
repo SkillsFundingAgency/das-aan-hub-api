@@ -65,7 +65,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlInterpolated(sql)
-            .Where(x => options.EventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || options.EventFormats.Count == 0)
+            .Where(x => options.EventFormats.Select(format => format.ToString()).ToList().Contains(x.EventFormat) || !options.EventFormats.Any())
             .Where(x => options.CalendarIds.Contains(x.CalendarId) || !options.CalendarIds.Any())
             .Where(x => options.RegionIds.Contains(x.RegionId) || !options.RegionIds.Any())
             .OrderBy(x => x.Start)
