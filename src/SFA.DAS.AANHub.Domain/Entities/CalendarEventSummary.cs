@@ -1,4 +1,4 @@
-﻿namespace SFA.DAS.AANHub.Domain.Models;
+﻿namespace SFA.DAS.AANHub.Domain.Entities;
 
 public class CalendarEventSummary
 {
@@ -15,4 +15,6 @@ public class CalendarEventSummary
     public double? Latitude { get; set; }
     public double? Distance { get; set; }
     public bool IsAttending { get; set; }
+    public int CalendarId { get; set; }
+    public int RegionId { get; set; }
 }

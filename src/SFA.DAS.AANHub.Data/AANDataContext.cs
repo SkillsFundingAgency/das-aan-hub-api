@@ -1,7 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
-using SFA.DAS.AANHub.Domain.Models;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data;
