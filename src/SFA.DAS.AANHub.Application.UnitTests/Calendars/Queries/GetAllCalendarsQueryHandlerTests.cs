@@ -9,20 +9,20 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Calendars.Queries;
 
-public class WhenRequestingGetAllCalendars
+public class GetAllCalendarsQueryHandlerTests
 {
     [Test, RecursiveMoqAutoData]
 
     public async Task Handle_ReturnAllCalendars(
         GetCalendarsQuery query,
         [Frozen] Mock<ICalendarsReadRepository> calendarsReadRepositoryMock,
-        GetCalendarsQueryHandler handler,
+        GetCalendarsQueryHandler sut,
         List<Calendar> calendars,
         CancellationToken cancellationToken)
     {
         calendarsReadRepositoryMock.Setup(r => r.GetAllCalendars(cancellationToken)).ReturnsAsync(calendars);
 
-        var result = await handler.Handle(query, CancellationToken.None);
+        var result = await sut.Handle(query, CancellationToken.None);
 
         result.Calendars.Count().Should().Be(calendars.Count);
     }
