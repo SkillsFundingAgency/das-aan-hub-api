@@ -28,7 +28,7 @@ public class CalendarsControllerTests
 
         var calendarModels = responseCalendars.ToList();
         calendarModels.Should().NotBeNull();
-        calendarModels.Count().Should().Be(result.Calendars.Count());
+        calendarModels.Count.Should().Be(result.Calendars.Count());
         calendarModels.Should().BeEquivalentTo(result.Calendars);
     }
 
