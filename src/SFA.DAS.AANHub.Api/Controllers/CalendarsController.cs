@@ -13,7 +13,7 @@ public class CalendarsController : ActionResponseControllerBase
     private readonly ILogger<CalendarsController> _logger;
     private readonly IMediator _mediator;
 
-    public override string ControllerName => "CalendarEvents";
+    public override string ControllerName => "Calendars";
 
     public CalendarsController(ILogger<CalendarsController> logger, IMediator mediator)
     {

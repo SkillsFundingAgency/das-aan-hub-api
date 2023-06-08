@@ -27,8 +27,9 @@ public class CalendarsControllerTests
 
         var result = await sut.GetCalendars(cancellationToken);
 
+        sut.ControllerName.Should().Be("Calendars");
         result.As<OkObjectResult>().Should().NotBeNull();
-
         result.As<OkObjectResult>()?.Value.Should().Be(calendars);
     }
+
 }
