@@ -1,0 +1,29 @@
+﻿using AutoFixture.NUnit3;
+using FluentAssertions;
+using Moq;
+using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Calendars.Queries.GetCalendars;
+using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
+
+namespace SFA.DAS.AANHub.Application.UnitTests.Calendars.Queries;
+
+public class WhenRequestingGetAllCalendars
+{
+    [Test, MoqAutoData]
+
+    public async Task Handle_ReturnAllCalendars(
+        GetCalendarsQuery query,
+        [Frozen] Mock<ICalendarsReadRepository> calendarsReadRepositoryMock,
+        GetCalendarsQueryHandler handler,
+        List<Calendar> calendars,
+        CancellationToken cancellationToken)
+    {
+        calendarsReadRepositoryMock.Setup(r => r.GetAllCalendars(cancellationToken)).ReturnsAsync(calendars);
+
+        var result = await handler.Handle(query, CancellationToken.None);
+
+        result?.Result.Calendars.Should().BeEquivalentTo(calendars, c => c.ExcludingMissingMembers());
+    }
+}

@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+
+public interface IRegionsReadRepository
 {
-    public interface IRegionsReadRepository
-    {
-        Task<List<Region>> GetAllRegions(CancellationToken cancellationToken);
-    }
+    Task<List<Region>> GetAllRegions(CancellationToken cancellationToken);
 }

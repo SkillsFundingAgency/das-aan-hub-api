@@ -7,4 +7,5 @@ public class Calendar
     public string CalendarName { get; set; } = string.Empty;
     public DateTime EffectiveFromDate { get; set; }
     public DateTime? EffectiveToDate { get; set; }
+    public int Ordering { get; set; }
 }
