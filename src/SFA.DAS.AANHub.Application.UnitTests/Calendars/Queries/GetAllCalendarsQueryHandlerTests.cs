@@ -24,6 +24,6 @@ public class WhenRequestingGetAllCalendars
 
         var result = await handler.Handle(query, CancellationToken.None);
 
-        result?.Result.Calendars.Count().Should().Be(calendars.Count);
+        result.Calendars.Count().Should().Be(calendars.Count);
     }
 }
