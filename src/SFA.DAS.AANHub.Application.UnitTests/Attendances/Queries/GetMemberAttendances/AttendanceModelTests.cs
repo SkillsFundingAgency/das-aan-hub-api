@@ -17,6 +17,6 @@ public class AttendanceModelTests
         sut.CalendarEventId.Should().Be(attendance.CalendarEventId);
         sut.EventFormat.Should().Be(EventFormat.InPerson);
         sut.EventStartDate.Should().Be(attendance.CalendarEvent.StartDate);
-        sut.EventDescription.Should().Be(attendance.CalendarEvent.Description);
+        sut.EventTitle.Should().Be(attendance.CalendarEvent.Title);
     }
 }
