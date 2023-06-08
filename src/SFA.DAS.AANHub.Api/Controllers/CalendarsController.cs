@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Calendars.Queries.GetCalendars;
-using SFA.DAS.AANHub.Application.Regions.Queries.GetRegions;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -21,13 +20,13 @@ public class CalendarsController
 
     [HttpGet]
     [ProducesResponseType(typeof(string), StatusCodes.Status204NoContent)]
-    [ProducesResponseType(typeof(GetRegionsQueryResult), StatusCodes.Status200OK)]
-    public async Task<IEnumerable<CalendarModel>> GetCalendars(CancellationToken cancellationToken)
+    [ProducesResponseType(typeof(GetCalendarsQueryResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetCalendars(CancellationToken cancellationToken)
     {
         _logger.LogTrace("Requesting list of calendars");
 
         var result = await _mediator.Send(new GetCalendarsQuery(), cancellationToken);
 
-        return result.Calendars;
+        return new OkObjectResult(result.Calendars);
     }
 }

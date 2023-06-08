@@ -1,6 +1,7 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using MediatR;
+using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
@@ -11,8 +12,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
 
 public class CalendarsControllerTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task GetCalendars_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] CalendarsController sut,
@@ -21,11 +21,15 @@ public class CalendarsControllerTests
     {
         mediatorMock.Setup(m => m.Send(It.IsAny<GetCalendarsQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(result);
 
-        var response = await sut.GetCalendars(cancellationToken);
+        var getResult = await sut.GetCalendars(cancellationToken);
 
-        response.Should().NotBeNull();
-        response.Count().Should().Be(result.Calendars.Count());
-        response.Should().BeEquivalentTo(result.Calendars);
+        var response = getResult as OkObjectResult;
+        var responseCalendars = (IEnumerable<CalendarModel>)response!.Value!;
+
+        var calendarModels = responseCalendars.ToList();
+        calendarModels.Should().NotBeNull();
+        calendarModels.Count().Should().Be(result.Calendars.Count());
+        calendarModels.Should().BeEquivalentTo(result.Calendars);
     }
 
 }
