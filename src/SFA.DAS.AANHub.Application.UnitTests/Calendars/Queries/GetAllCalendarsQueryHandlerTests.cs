@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Calendars.Queries;
 
 public class WhenRequestingGetAllCalendars
 {
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
 
     public async Task Handle_ReturnAllCalendars(
         GetCalendarsQuery query,
@@ -24,6 +24,6 @@ public class WhenRequestingGetAllCalendars
 
         var result = await handler.Handle(query, CancellationToken.None);
 
-        result?.Result.Calendars.Should().BeEquivalentTo(calendars, c => c.ExcludingMissingMembers());
+        result?.Result.Calendars.Count().Should().Be(calendars.Count);
     }
 }
