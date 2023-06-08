@@ -11,8 +11,8 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Queries.GetMemberAtte
 public class GetMemberAttendancesQueryHandlerTests
 {
     private Mock<IAttendancesReadRepository> _repositoryMock = null!;
-    private ValidatedResponse<GetMemberAttendancesQueryResult> _response;
-    private GetMemberAttendancesQuery _request;
+    private ValidatedResponse<GetMemberAttendancesQueryResult> _response = null!;
+    private GetMemberAttendancesQuery _request = null!;
 
     [SetUp]
     public async Task SetUp()
