@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -14,17 +15,17 @@ public class GetCalendarEventsQueryValidatorTests
     public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, CancellationToken cancellationToken)
     {
         var startDate = DateTime.UtcNow;
-        var endDate = DateTime.Today.AddYears(1);
+        var toDate = DateTime.Today.AddYears(1);
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
             .ReturnsAsync(member);
 
-        var query = new GetCalendarEventsQuery(member.Id, startDate, endDate, 1);
+        var query = new GetCalendarEventsQuery(member.Id, startDate, toDate, new List<EventFormat>(), 1);
         var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, startDate, endDate, cancellationToken))!.ReturnsAsync(calendarEvents);
+        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(member.Id, startDate, toDate, new List<EventFormat>(), cancellationToken))!.ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
 
@@ -43,7 +44,7 @@ public class GetCalendarEventsQueryValidatorTests
         membersReadRepositoryMock.Setup(m => m.GetMember(inactiveGuid))
             .ReturnsAsync(new Member() { Status = inactiveMembershipStatus });
 
-        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, 1);
+        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, new List<EventFormat>(), 1);
 
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
 
