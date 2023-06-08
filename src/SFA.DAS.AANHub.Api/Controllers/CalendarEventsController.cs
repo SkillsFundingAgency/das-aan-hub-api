@@ -2,8 +2,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Domain.Common;
 using Constants = SFA.DAS.AANHub.Api.Common.Constants;
@@ -42,11 +42,11 @@ public class CalendarEventsController : ActionResponseControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(GetCalendarEventsQueryResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetCalendarEvents([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, [FromQuery] List<EventFormat> eventFormat, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCalendarEvents([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, [FromQuery] List<EventFormat> eventFormat, [FromQuery] List<int> calendarId, [FromQuery] List<int> regionId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", requestedByMemberId);
         var page = 1;
-        var response = await _mediator.Send(new GetCalendarEventsQuery(requestedByMemberId, fromDate, toDate, eventFormat, page), cancellationToken);
+        var response = await _mediator.Send(new GetCalendarEventsQuery(requestedByMemberId, fromDate, toDate, eventFormat, calendarId, regionId, page), cancellationToken);
 
         return GetResponse(response);
     }

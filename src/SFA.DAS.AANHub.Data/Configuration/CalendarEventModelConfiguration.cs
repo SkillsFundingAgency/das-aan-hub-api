@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using SFA.DAS.AANHub.Domain.Models;
+using SFA.DAS.AANHub.Domain.Entities;
 using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Configuration;
