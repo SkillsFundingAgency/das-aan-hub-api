@@ -1,9 +1,8 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+
+public interface ICalendarsReadRepository
 {
-    public interface ICalendarsReadRepository
-    {
-        Task<List<Calendar>> GetAllCalendars();
-    }
+    Task<List<Calendar>> GetAllCalendars(CancellationToken cancellationToken);
 }
