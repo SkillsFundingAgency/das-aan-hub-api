@@ -7235,13 +7235,28 @@ Id    CalendarName
     SET @des2 = @line % 4;
 
     INSERT INTO [dbo].[CalendarEvent] 
-    ([CalendarId],[EventFormat],[StartDate],[EndDate],[Description],[Summary],[RegionId],[Location],[Postcode],[Latitude],[Longitude],[URN],[EventLink],[ContactName],[ContactEmail] )
+    ([CalendarId],[EventFormat],[StartDate],[EndDate],[Title],[Description],[Summary],[RegionId],[Location],[Postcode],[Latitude],[Longitude],[URN],[EventLink],[ContactName],[ContactEmail] )
     SELECT  
     @calendarid [CalendarId], 
     @eventtype [EventFormat],
     @date [StartDate], 
     DATEADD(hour,2,@date) [EndDate], 
-    'A' + CASE @format WHEN 0 THEN 'n online' WHEN 1 THEN ' hybrid' ELSE 'n in person' END + ' session for ' +  @calendarname + ' in ' + [Area] + ' region' [Description],
+    'A' + CASE @format WHEN 0 THEN 'n online' WHEN 1 THEN ' hybrid' ELSE 'n in person' END + ' session for ' +  @calendarname + ' in ' + [Area] + ' region' [Title],
+    'A very long description for this event, which is for a'
+    + CASE @des1 WHEN 0 THEN ' wonderful' WHEN 1 THEN 'n exciting' WHEN 2 THEN 'n interesting' WHEN 3 THEN ' stimulating' ELSE ' regular' END + ' ' 
+    + CASE @des2 WHEN 0 THEN 'meeting' WHEN 1 THEN 'discussion' WHEN 2 THEN 'session' WHEN 3 THEN 'convention' ELSE 'assembly' END + ' in '
+    + [Area]
+    + ' to meet with Apprenticeship Ambassador members '
+    + CASE @format WHEN 0 THEN 'online' WHEN 1 THEN 'in person or online' ELSE 'in person' END
+    + '\r\n'
+    + ' A few bullet points: \r\n'
+    + ' * point 1 \r\n'
+    + ' * point 2 \r\n'
+    + ' * point 3 \r\n'
+    + ' * point 4 \r\n'
+    + '\r\n'
+    + ' This is a **bold message** \r\n'
+    [Description],
     'This event is for a'
     + CASE @des1 WHEN 0 THEN ' wonderful' WHEN 1 THEN 'n exciting' WHEN 2 THEN 'n interesting' WHEN 3 THEN ' stimulating' ELSE ' regular' END + ' ' 
     + CASE @des2 WHEN 0 THEN 'meeting' WHEN 1 THEN 'discussion' WHEN 2 THEN 'session' WHEN 3 THEN 'convention' ELSE 'assembly' END + ' in '
