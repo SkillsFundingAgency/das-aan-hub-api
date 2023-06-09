@@ -21,7 +21,12 @@ internal class AttendancesReadRepository : IAttendancesReadRepository
             .Attendances
             .AsNoTracking()
             .Include(a => a.CalendarEvent)
-            .Where(a => a.MemberId == memberId && a.CalendarEvent.StartDate >= fromDate && a.CalendarEvent.StartDate < toDate)
+            .Where(a =>
+                a.IsActive &&
+                a.MemberId == memberId &&
+                a.CalendarEvent.IsActive &&
+                a.CalendarEvent.StartDate >= fromDate &&
+                a.CalendarEvent.StartDate < toDate)
             .OrderBy(a => a.CalendarEvent.StartDate);
         return await query.ToListAsync(cancellationToken);
     }
