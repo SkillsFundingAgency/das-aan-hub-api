@@ -15,7 +15,7 @@ public class GetMemberAttendancesQueryHandler : IRequestHandler<GetMemberAttenda
 
     public async Task<ValidatedResponse<GetMemberAttendancesQueryResult>> Handle(GetMemberAttendancesQuery request, CancellationToken cancellationToken)
     {
-        var attendances = await _attendancesReadRepository.GetAttendances(request.RequestedByMemberId, request.FromDate.GetValueOrDefault(), request.ToDate.GetValueOrDefault().AddDays(1), cancellationToken);
+        var attendances = await _attendancesReadRepository.GetAttendances(request.RequestedByMemberId, request.FromDate.GetValueOrDefault().Date, request.ToDate.GetValueOrDefault().Date.AddDays(1), cancellationToken);
 
         var result = new GetMemberAttendancesQueryResult(attendances.Select(a => (AttendanceModel)a).ToList());
 

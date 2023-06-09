@@ -23,7 +23,7 @@ public class GetMemberAttendancesQueryHandlerTests
 
         _repositoryMock = new();
         _repositoryMock
-            .Setup(r => r.GetAttendances(_request.RequestedByMemberId, _request.FromDate.GetValueOrDefault(), _request.ToDate.GetValueOrDefault().AddDays(1), It.IsAny<CancellationToken>()))
+            .Setup(r => r.GetAttendances(_request.RequestedByMemberId, _request.FromDate.GetValueOrDefault().Date, _request.ToDate.GetValueOrDefault().Date.AddDays(1), It.IsAny<CancellationToken>()))
             .ReturnsAsync(attendances);
 
         GetMemberAttendancesQueryHandler sut = new(_repositoryMock.Object);
@@ -34,7 +34,7 @@ public class GetMemberAttendancesQueryHandlerTests
     public void ThenInvokesRepositoryWithAdvancedToDate()
     {
         _repositoryMock
-            .Verify(r => r.GetAttendances(_request.RequestedByMemberId, _request.FromDate.GetValueOrDefault(), _request.ToDate.GetValueOrDefault().AddDays(1), It.IsAny<CancellationToken>()));
+            .Verify(r => r.GetAttendances(_request.RequestedByMemberId, _request.FromDate.GetValueOrDefault().Date, _request.ToDate.GetValueOrDefault().Date.AddDays(1), It.IsAny<CancellationToken>()));
     }
 
     [Test]
