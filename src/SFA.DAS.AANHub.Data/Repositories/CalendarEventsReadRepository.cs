@@ -18,7 +18,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .CalendarEvents
             .AsNoTracking()
             .Where(m => m.Id == id)
-            .Include(x => x.Attendees.Where(a => a.IsActive))
+            .Include(x => x.Attendees.Where(a => a.IsAttending))
             .ThenInclude(x => x.Member)
             .Include(x => x.EventGuests)
             .Include(x => x.Calendar)
@@ -49,7 +49,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 			                    ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
 					                .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
 					        as Distance,
-	                        ISNULL(A.IsActive, 0) AS IsAttending
+	                        ISNULL(A.IsAttending, 0) AS IsAttending
                             from CalendarEvent CE inner join Calendar C on CE.CalendarId = C.Id
                             LEFT OUTER JOIN (
 	                            SELECT MemberId
@@ -60,7 +60,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                 GROUP BY MemberId
 	                            ) EmployerDetails on EmployerDetails.MemberId = {options.MemberId}
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {options.MemberId}
-                            WHERE CE.IsActive = 1
+                            WHERE CE.IsAttending = 1
                             AND CE.StartDate >= convert(date,{options.FromDate}) 
                             AND CE.EndDate < convert(date,dateadd(day,1,{options.ToDate}))";
 

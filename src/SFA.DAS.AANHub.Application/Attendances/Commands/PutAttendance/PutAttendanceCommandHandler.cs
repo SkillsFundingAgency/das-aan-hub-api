@@ -33,7 +33,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         return existingAttendance switch
         {
             null when !command.IsAttending => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
-            not null when command.IsAttending == existingAttendance!.IsActive => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
+            not null when command.IsAttending == existingAttendance!.IsAttending => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
             null => await CreateAttendance(command, cancellationToken),
             not null => await UpdateAttendance(existingAttendance, command, cancellationToken),
         };
@@ -53,7 +53,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             Resource = nameof(Attendance),
         };
 
-        existingAttendance.IsActive = command.IsAttending;
+        existingAttendance.IsAttending = command.IsAttending;
 
         audit.After = JsonSerializer.Serialize(existingAttendance);
         _auditWriteRepository.Create(audit);

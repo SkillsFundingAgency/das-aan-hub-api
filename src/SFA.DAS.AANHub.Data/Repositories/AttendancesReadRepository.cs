@@ -22,7 +22,7 @@ internal class AttendancesReadRepository : IAttendancesReadRepository
             .AsNoTracking()
             .Include(a => a.CalendarEvent)
             .Where(a =>
-                a.IsActive &&
+                a.IsAttending &&
                 a.MemberId == memberId &&
                 a.CalendarEvent.IsActive &&
                 a.CalendarEvent.StartDate >= fromDate &&

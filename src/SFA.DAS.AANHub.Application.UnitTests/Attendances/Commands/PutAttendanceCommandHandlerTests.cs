@@ -13,7 +13,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
     {
         [Test]
         [RecursiveMoqAutoData]
-        public async Task Handle_AttendanceExists_RequestedActiveStatusIsSame_CreatesNothing(
+        public async Task Handle_AttendanceExists_RequestedAttendingStatusIsSame_CreatesNothing(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -24,9 +24,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
                                       .ReturnsAsync(existingAttendance);
 
             var command = new PutAttendanceCommand(
-                existingAttendance.CalendarEventId, 
-                existingAttendance.MemberId, 
-                existingAttendance.IsActive); 
+                existingAttendance.CalendarEventId,
+                existingAttendance.MemberId,
+                existingAttendance.IsAttending);
 
             await sut.Handle(command, new CancellationToken());
 
@@ -37,7 +37,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
         [Test]
         [RecursiveMoqAutoData]
-        public async Task Handle_AttendanceExists_RequestedActiveStatusIsDifferent_UpdatesStatusAndAddsAudit(
+        public async Task Handle_AttendanceExists_RequestedAttendingStatusIsDifferent_UpdatesStatusAndAddsAudit(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -47,7 +47,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
             attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
                                       .ReturnsAsync(existingAttendance);
 
-            bool differentStatus = !existingAttendance.IsActive;
+            bool differentStatus = !existingAttendance.IsAttending;
 
             var command = new PutAttendanceCommand(
                 existingAttendance.CalendarEventId,
@@ -67,13 +67,13 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
                     && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
-                    && a.Resource == nameof(Attendance))), 
+                    && a.Resource == nameof(Attendance))),
                         Times.Once);
         }
 
         [Test]
         [RecursiveMoqAutoData]
-        public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsTrue_CreatesAttendanceAndAudit(
+        public async Task Handle_NoMatchingAttendance_RequestedAttendingStatusIsTrue_CreatesAttendanceAndAudit(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -107,7 +107,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
         [Test]
         [RecursiveMoqAutoData]
-        public async Task Handle_NoMatchingAttendance_RequestedActiveStatusIsFalse_CreatesNothing(
+        public async Task Handle_NoMatchingAttendance_RequestedAttendingStatusIsFalse_CreatesNothing(
             [Frozen] Mock<IAanDataContext> aanDataContext,
             [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
             [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,

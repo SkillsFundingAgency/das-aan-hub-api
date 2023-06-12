@@ -10,9 +10,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
     {
         [TestCase(true)]
         [TestCase(false)]
-        public void Operator_CreatesAttendance(bool requestedActiveStatus)
+        public void Operator_CreatesAttendance(bool requestedAttendingStatus)
         {
-            var sut = new PutAttendanceCommand(Guid.NewGuid(), Guid.NewGuid(), requestedActiveStatus);
+            var sut = new PutAttendanceCommand(Guid.NewGuid(), Guid.NewGuid(), requestedAttendingStatus);
             Attendance attendance = sut;
 
             attendance.CalendarEventId.Should().Be(sut.CalendarEventId);
@@ -21,7 +21,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
 
             attendance.AddedDate.Should().BeWithin(2.Minutes()).Before(DateTime.UtcNow);
 
-            attendance.IsActive.Should().Be(requestedActiveStatus);
+            attendance.IsAttending.Should().Be(requestedAttendingStatus);
         }
     }
 }

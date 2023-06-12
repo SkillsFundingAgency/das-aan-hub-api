@@ -28,7 +28,7 @@ public class PutAttendanceCommand : IRequest<ValidatedResponse<SuccessCommandRes
             CalendarEventId = command.CalendarEventId,
             MemberId = command.RequestedByMemberId,
             AddedDate = DateTime.UtcNow,
-            IsActive = command.IsAttending,
+            IsAttending = command.IsAttending,
         };
     }
 }
