@@ -1,11 +1,11 @@
-﻿using Microsoft.Azure.Services.AppAuthentication;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.Azure.Services.AppAuthentication;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Extensions;
 
@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ICalendarEventsReadRepository, CalendarEventsReadRepository>();
         services.AddTransient<ICalendarsReadRepository, CalendarsReadRepository>();
         services.AddTransient<IAttendancesWriteRepository, AttendancesWriteRepository>();
+        services.AddTransient<IAttendancesReadRepository, AttendancesReadRepository>();
     }
 
     public static async Task<string> GenerateTokenAsync()

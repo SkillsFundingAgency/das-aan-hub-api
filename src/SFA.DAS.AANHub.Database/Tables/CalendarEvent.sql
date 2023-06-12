@@ -5,8 +5,9 @@
     [EventFormat] NVARCHAR(10) NOT NULL,
     [StartDate] DATETIME NOT NULL, 
     [EndDate] DATETIME NOT NULL, 
-    [Description] NVARCHAR(200) NOT NULL, 
-    [Summary] NVARCHAR(max) NULL, 
+    [Title] NVARCHAR(200) NOT NULL,
+    [Description] NVARCHAR(MAX) NULL, 
+    [Summary] NVARCHAR(2000) NULL, 
     [RegionId] INT NULL,
     [Location] NVARCHAR(200) NULL, 
     [Postcode] NVARCHAR(10) NULL, 
@@ -23,5 +24,5 @@
 GO
 
 CREATE INDEX IX_CalendarEventSearch ON [CalendarEvent] ([IsActive], [StartDate], [EndDate], [EventFormat], [RegionId])
-INCLUDE ([Description], [Location], [Postcode], [Latitude], [Longitude], [EventLink], [ContactName], [ContactEmail]);
+INCLUDE ([Title], [Summary], [Description], [Location], [Postcode], [Latitude], [Longitude], [EventLink], [ContactName], [ContactEmail]);
 GO
