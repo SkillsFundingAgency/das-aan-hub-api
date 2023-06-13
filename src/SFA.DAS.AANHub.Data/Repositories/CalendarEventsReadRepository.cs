@@ -1,9 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -35,6 +35,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                        CE.EventFormat, 
 	                        CE.StartDate as [Start], 
 	                        CE.EndDate as [End],
+                            CE.[Title]
 	                        CE.[Description], 
 	                        CE.Summary,
 	                        CE.[Location],   

@@ -9,6 +9,7 @@ public class CalendarEventSummaryModel
     public string EventFormat { get; set; } = null!;
     public DateTime Start { get; set; }
     public DateTime End { get; set; }
+    public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = null!;
     public string? Summary { get; set; }
     public string? Location { get; set; }
@@ -25,6 +26,7 @@ public class CalendarEventSummaryModel
         EventFormat = summary.EventFormat,
         Start = summary.Start,
         End = summary.End,
+        Title = summary.Title,
         Description = summary.Description,
         Summary = summary.Summary,
         Location = summary.Location,
