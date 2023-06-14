@@ -26,7 +26,6 @@ public class CalendarEventSummaryModel
         EventFormat = summary.EventFormat,
         Start = summary.Start,
         End = summary.End,
-        Title = summary.Title,
         Description = summary.Description,
         Summary = summary.Summary,
         Location = summary.Location,
