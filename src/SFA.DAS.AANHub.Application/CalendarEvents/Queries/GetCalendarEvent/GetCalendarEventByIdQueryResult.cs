@@ -10,6 +10,7 @@ public class GetCalendarEventByIdQueryResult
     public string EventFormat { get; set; } = string.Empty;
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
+    public string Title { get; set; } = string.Empty;
     public string Description { get; set; } = string.Empty;
     public string? Summary { get; set; }
     public string? Location { get; set; }
@@ -33,6 +34,7 @@ public class GetCalendarEventByIdQueryResult
             EventFormat = source.EventFormat,
             StartDate = source.StartDate,
             EndDate = source.EndDate,
+            Title = source.Title,
             Description = source.Description,
             Summary = source.Summary,
             Location = source.Location,
