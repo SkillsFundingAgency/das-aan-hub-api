@@ -7264,7 +7264,7 @@ Id    CalendarName
     + ' to meet with Apprenticeship Ambassador members '
     + CASE @format WHEN 0 THEN 'online' WHEN 1 THEN 'in person or online' ELSE 'in person' END [Summary], 
     [RegionId],
-    CASE @format WHEN 0 THEN null ELSE [EstablishmentName] + ', ' + [Location] END [Location], 
+    CASE @format WHEN 0 THEN null ELSE [EstablishmentName] + ', ' + REPLACE ([Location],', '+[Postcode],'') END [Location], 
     CASE @format WHEN 0 THEN null ELSE [Postcode] END [Postcode], 
     CASE @format WHEN 0 THEN null ELSE [Latitude] END [Latitude],
     CASE @format WHEN 0 THEN null ELSE [Longitude] END [Longitude],
