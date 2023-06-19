@@ -16,6 +16,7 @@ public class AttendeeModelTests
         {
             Assert.That(sut.MemberId, Is.EqualTo(source.MemberId));
             Assert.That(sut.MemberName, Is.EqualTo(source.Member.FullName));
+            Assert.That(sut.AddedDate, Is.EqualTo(source.AddedDate));
         });
     }
 }
