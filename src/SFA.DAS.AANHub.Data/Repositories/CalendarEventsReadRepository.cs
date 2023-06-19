@@ -35,6 +35,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                        CE.EventFormat, 
 	                        CE.StartDate as [Start], 
 	                        CE.EndDate as [End],
+	                        CE.Title,
 	                        CE.[Description], 
 	                        CE.Summary,
 	                        CE.[Location],   
