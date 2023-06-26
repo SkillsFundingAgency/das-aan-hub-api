@@ -9,9 +9,9 @@ public class GetCalendarEventsOptions
     public List<EventFormat> EventFormats { get; set; }
     public List<int> CalendarIds { get; set; }
     public List<int> RegionIds { get; set; }
-    public int? Page { get; }
-
-    public GetCalendarEventsOptions(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int? page)
+    public int Page { get; }
+    public int PageSize { get; }
+    public GetCalendarEventsOptions(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int page, int pageSize)
     {
         MemberId = requestedByMemberId;
         FromDate = fromDate;
@@ -20,5 +20,6 @@ public class GetCalendarEventsOptions
         CalendarIds = calendarIds;
         RegionIds = regionIds;
         Page = page;
+        PageSize = pageSize;
     }
 }

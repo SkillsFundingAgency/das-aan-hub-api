@@ -42,11 +42,19 @@ public class CalendarEventsController : ActionResponseControllerBase
     [HttpGet]
     [ProducesResponseType(typeof(GetCalendarEventsQueryResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
-    public async Task<IActionResult> GetCalendarEvents([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, [FromQuery] List<EventFormat> eventFormat, [FromQuery] List<int> calendarId, [FromQuery] List<int> regionId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetCalendarEvents([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, [FromQuery] List<EventFormat> eventFormat, [FromQuery] List<int> calendarId, [FromQuery] List<int> regionId, CancellationToken cancellationToken, [FromQuery] int page = 1, [FromQuery] int pageSize = 5)
     {
         _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", requestedByMemberId);
-        var page = 1;
-        var response = await _mediator.Send(new GetCalendarEventsQuery(requestedByMemberId, fromDate, toDate, eventFormat, calendarId, regionId, page), cancellationToken);
+        if (page < 1)
+        {
+            page = 1;
+        }
+
+        if (pageSize < 1)
+        {
+            pageSize = 5;
+        }
+        var response = await _mediator.Send(new GetCalendarEventsQuery(requestedByMemberId, fromDate, toDate, eventFormat, calendarId, regionId, page, pageSize), cancellationToken);
 
         return GetResponse(response);
     }

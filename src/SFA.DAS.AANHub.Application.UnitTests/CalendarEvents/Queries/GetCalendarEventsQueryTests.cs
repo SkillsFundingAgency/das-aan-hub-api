@@ -8,12 +8,13 @@ namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Queries;
 public class GetCalendarEventsQueryTests
 {
     [Test, RecursiveMoqAutoData]
-    public void Operator_PopulatesModelFromEntity(Guid memberId, DateTime? startDate, DateTime? toDate, List<EventFormat> eventFormat, List<int> calendarIds, List<int> regionIds, int page)
+    public void Operator_PopulatesModelFromEntity(Guid memberId, DateTime? startDate, DateTime? toDate, List<EventFormat> eventFormat, List<int> calendarIds, List<int> regionIds, int page, int pageSize)
     {
-        var model = new GetCalendarEventsQuery(memberId, startDate, toDate, eventFormat, calendarIds, regionIds, page);
+        var model = new GetCalendarEventsQuery(memberId, startDate, toDate, eventFormat, calendarIds, regionIds, page, pageSize);
 
         model.RequestedByMemberId.Should().Be(memberId);
         model.Page.Should().Be(page);
+        model.PageSize.Should().Be(pageSize);
         model.EventFormats.Should().BeEquivalentTo(eventFormat);
     }
 }

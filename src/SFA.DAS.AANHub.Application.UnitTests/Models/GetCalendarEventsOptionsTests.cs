@@ -7,9 +7,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Models;
 public class GetCalendarEventsOptionsTests
 {
     [Test, MoqAutoData]
-    public void GetCalendarEventsOptions_ConstructorMapsAsExpected(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int? page)
+    public void GetCalendarEventsOptions_ConstructorMapsAsExpected(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int page, int pageSize)
     {
-        var sut = new GetCalendarEventsOptions(requestedByMemberId, fromDate, toDate, eventFormats, calendarIds, regionIds, page);
+        var sut = new GetCalendarEventsOptions(requestedByMemberId, fromDate, toDate, eventFormats, calendarIds, regionIds, page, pageSize);
 
         Assert.Multiple(() =>
         {
@@ -20,6 +20,7 @@ public class GetCalendarEventsOptionsTests
             Assert.That(sut.CalendarIds, Is.EqualTo(calendarIds));
             Assert.That(sut.RegionIds, Is.EqualTo(regionIds));
             Assert.That(sut.Page, Is.EqualTo(page));
+            Assert.That(sut.PageSize, Is.EqualTo(pageSize));
         });
     }
 }

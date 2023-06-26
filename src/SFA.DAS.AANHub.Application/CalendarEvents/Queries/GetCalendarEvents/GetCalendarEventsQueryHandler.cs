@@ -15,15 +15,18 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         _calendarEventsReadRepository = calendarEventsReadRepository;
     }
 
-    public async Task<ValidatedResponse<GetCalendarEventsQueryResult>> Handle(GetCalendarEventsQuery request, CancellationToken cancellationToken)
+    public async Task<ValidatedResponse<GetCalendarEventsQueryResult>> Handle(GetCalendarEventsQuery request,
+        CancellationToken cancellationToken)
     {
-        var pageSize = 0;
-        var page = 1;
-        var fromDate = request.FromDate == null || request.FromDate.GetValueOrDefault() <= DateTime.Today ? DateTime.UtcNow : request.FromDate.GetValueOrDefault();
+        var pageSize = request.PageSize;
+        var page = request.Page;
+        var fromDate = request.FromDate == null || request.FromDate.GetValueOrDefault() < DateTime.Today
+            ? DateTime.Today
+            : request.FromDate.GetValueOrDefault();
 
         var toDate = request.ToDate ?? DateTime.Today.AddYears(1);
 
-        if (fromDate.Date > toDate)
+        if (fromDate > toDate)
         {
             return new ValidatedResponse<GetCalendarEventsQueryResult>(
                 new GetCalendarEventsQueryResult
@@ -35,9 +38,20 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
                 });
         }
 
-        var options = new GetCalendarEventsOptions(request.RequestedByMemberId, fromDate, toDate, request.EventFormats, request.CalendarIds, request.RegionIds, page);
+        var options = new GetCalendarEventsOptions(request.RequestedByMemberId, fromDate, toDate, request.EventFormats,
+            request.CalendarIds, request.RegionIds, page, pageSize);
+
         var response =
-                await _calendarEventsReadRepository.GetCalendarEvents(options, cancellationToken);
+            await _calendarEventsReadRepository.GetCalendarEvents(options, cancellationToken);
+
+        var totalCount = 0;
+
+        if (response.Any())
+        {
+            totalCount = response.First().TotalCount;
+        }
+
+        var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
         var responseProcessed = response.Select(summary => (CalendarEventSummaryModel)summary).ToList();
 
@@ -45,8 +59,8 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         {
             Page = page,
             PageSize = pageSize,
-            TotalCount = response.Count,
-            TotalPages = 0,
+            TotalCount = totalCount,
+            TotalPages = totalPages,
             CalendarEvents = responseProcessed
         };
 

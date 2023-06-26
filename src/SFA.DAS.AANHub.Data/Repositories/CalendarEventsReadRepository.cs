@@ -28,6 +28,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
     {
 
         FormattableString sql = $@"select	
+                            COUNT(*) OVER () TotalCount,
                             CE.Id as CalendarEventId, 
 	                        C.CalendarName,
 	                        C.Id as CalendarId,
@@ -70,6 +71,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .Where(x => options.CalendarIds.Contains(x.CalendarId) || !options.CalendarIds.Any())
             .Where(x => options.RegionIds.Contains(x.RegionId) || !options.RegionIds.Any())
             .OrderBy(x => x.Start)
+            .Skip((options.Page - 1) * options.PageSize)
+            .Take(options.PageSize)
             .ToListAsync(cancellationToken);
         return calendarEvents;
     }
