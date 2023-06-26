@@ -48,7 +48,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
 
         if (response.Any())
         {
-            totalCount = response.First().TotalCount;
+            totalCount = response[0].TotalCount;
         }
 
         var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
