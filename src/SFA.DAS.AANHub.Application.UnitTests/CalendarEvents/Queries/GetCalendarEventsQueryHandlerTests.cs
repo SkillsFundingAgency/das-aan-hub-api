@@ -30,7 +30,20 @@ public class GetCalendarEventsQueryHandlerTests
         .ReturnsAsync(() => new List<CalendarEventSummary>());
 
         var sut = new GetCalendarEventsQueryHandler(calendarEventsReadRepositoryMock.Object);
-        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), new CancellationToken());
+
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+
+        var result = await sut.Handle(query, new CancellationToken());
 
         result.Result.CalendarEvents.Count.Should().Be(0);
         result.Result.TotalCount.Should().Be(0);
@@ -54,7 +67,19 @@ public class GetCalendarEventsQueryHandlerTests
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
         var sut = new GetCalendarEventsQueryHandler(calendarEventsReadRepositoryMock.Object);
-        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), cancellationToken);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+
+        var result = await sut.Handle(query, cancellationToken);
 
         result.Result.CalendarEvents.Count.Should().Be(1);
         result.Result.TotalCount.Should().Be(0);
@@ -83,7 +108,18 @@ public class GetCalendarEventsQueryHandlerTests
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
-        var result = await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), cancellationToken);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+        var result = await sut.Handle(query, cancellationToken);
 
         result.Result.CalendarEvents.Count.Should().Be(0);
         result.Result.TotalCount.Should().Be(0);
@@ -109,7 +145,19 @@ public class GetCalendarEventsQueryHandlerTests
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, DateTime.Today, toDate, eventFormats, calendarIds, regionIds, 1, 5), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
-        await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), cancellationToken);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+
+        await sut.Handle(query, cancellationToken);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), cancellationToken), Times.Once);
     }
 
@@ -131,8 +179,18 @@ public class GetCalendarEventsQueryHandlerTests
 
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, DateTime.Today, toDate, eventFormats, calendarIds, regionIds, 1, 5), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
-
-        await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), cancellationToken);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+        await sut.Handle(query, cancellationToken);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), cancellationToken), Times.Once);
     }
 
@@ -156,7 +214,19 @@ public class GetCalendarEventsQueryHandlerTests
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, DateTime.Today, todayPlusOneYear, eventFormats, calendarIds, regionIds, 1, 5), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
-        await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1, 5), cancellationToken);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+
+        await sut.Handle(query, cancellationToken);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), cancellationToken), Times.Once);
     }
 }
