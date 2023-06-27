@@ -31,15 +31,24 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             return new ValidatedResponse<GetCalendarEventsQueryResult>(
                 new GetCalendarEventsQueryResult
                 {
-                    Page = page,
+                    Page = 0,
                     PageSize = pageSize,
                     TotalCount = 0,
                     CalendarEvents = new List<CalendarEventSummaryModel>()
                 });
         }
 
-        var options = new GetCalendarEventsOptions(request.RequestedByMemberId, fromDate, toDate, request.EventFormats,
-            request.CalendarIds, request.RegionIds, page, pageSize);
+        var options = new GetCalendarEventsOptions
+        {
+            MemberId = request.RequestedByMemberId,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = request.EventFormats,
+            CalendarIds = request.CalendarIds,
+            RegionIds = request.RegionIds,
+            Page = page,
+            PageSize = pageSize
+        };
 
         var response =
             await _calendarEventsReadRepository.GetCalendarEvents(options, cancellationToken);

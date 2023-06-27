@@ -44,8 +44,6 @@ public class CalendarEventsController : ActionResponseControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetCalendarEvents([FromQuery] GetCalendarEventsModel model, CancellationToken cancellationToken)
     {
-        // create model for the parameters
-
         _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", model.RequestedByMemberId);
         if (model.Page < 1)
         {
@@ -57,9 +55,6 @@ public class CalendarEventsController : ActionResponseControllerBase
             model.PageSize = Domain.Common.Constants.CalendarEvents.PageSize;
         }
 
-        // model has operator to convert to GetCalendarQuery
-
-        // var response = await _mediator.Send((GetCalendarEventsQuery)model);
         var response = await _mediator.Send((GetCalendarEventsQuery)model, cancellationToken);
 
         return GetResponse(response);

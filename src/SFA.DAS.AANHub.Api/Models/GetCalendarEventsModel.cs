@@ -41,6 +41,4 @@ public class GetCalendarEventsModel
         Page = model.Page,
         PageSize = model.PageSize
     };
-
-
 }
