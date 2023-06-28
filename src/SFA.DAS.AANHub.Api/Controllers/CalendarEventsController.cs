@@ -45,12 +45,12 @@ public class CalendarEventsController : ActionResponseControllerBase
     public async Task<IActionResult> GetCalendarEvents([FromQuery] GetCalendarEventsModel model, CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", model.RequestedByMemberId);
-        if (model.Page < 1)
+        if (model.Page <= 0)
         {
             model.Page = 1;
         }
 
-        if (model.PageSize < 1)
+        if (model.PageSize <= 0)
         {
             model.PageSize = Domain.Common.Constants.CalendarEvents.PageSize;
         }
