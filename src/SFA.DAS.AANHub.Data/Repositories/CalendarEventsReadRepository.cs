@@ -1,9 +1,9 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -61,7 +61,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 	                            ) EmployerDetails on EmployerDetails.MemberId = {options.MemberId}
                             LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = {options.MemberId}
                             WHERE CE.IsActive = 1
-                            AND CE.StartDate >= convert(date,{options.FromDate}) 
+                            AND CE.StartDate >= convert(datetime2,{options.FromDate}) 
                             AND CE.EndDate < convert(date,dateadd(day,1,{options.ToDate}))";
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!

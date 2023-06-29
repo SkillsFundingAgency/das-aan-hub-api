@@ -19,11 +19,11 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
     {
         var pageSize = 0;
         var page = 1;
-        var fromDate = request.FromDate == null || request.FromDate.GetValueOrDefault() < DateTime.Today ? DateTime.Today : request.FromDate.GetValueOrDefault();
+        var fromDate = request.FromDate == null || request.FromDate.GetValueOrDefault() <= DateTime.Today ? DateTime.Now : request.FromDate.GetValueOrDefault();
 
         var toDate = request.ToDate ?? DateTime.Today.AddYears(1);
 
-        if (fromDate > toDate)
+        if (fromDate.Date > toDate)
         {
             return new ValidatedResponse<GetCalendarEventsQueryResult>(
                 new GetCalendarEventsQueryResult
