@@ -12,5 +12,6 @@ Post-Deployment Script Template
 
 :r .\AddRegionData.sql
 :r .\AddProfileData.sql
+:r .\AddPreferenceData.sql
 :r .\AddCalendarData.sql
 

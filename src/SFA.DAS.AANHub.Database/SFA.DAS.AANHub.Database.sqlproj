@@ -80,11 +80,15 @@
     <Build Include="Tables\FeedbackAttribute.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
     <None Include="Scripts\PreDeploymentClearDown.sql" />
+    <Build Include="Tables\Preference.sql" />
+    <Build Include="Tables\MemberPreference.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
     <None Include="Scripts\AddProfileData.sql" />
     <None Include="Scripts\AddCalendarData.sql" />
+    <None Include="Scripts\AddPreferenceData.sql" />
+    <None Include="SFA.DAS.AANHub.Database.publish.xml" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
