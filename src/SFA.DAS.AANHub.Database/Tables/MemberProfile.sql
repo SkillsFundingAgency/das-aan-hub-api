@@ -10,7 +10,7 @@
 );
 GO
 
-CREATE INDEX IXU_MemberProfile ON [MemberProfile] ([MemberId], [ProfileId])
+CREATE UNIQUE INDEX IXU_MemberProfile ON [MemberProfile] ([MemberId], [ProfileId])
 INCLUDE ([ProfileValue]);
 GO
 
