@@ -129,7 +129,7 @@ public class GetCalendarEventsQueryHandlerTests
         var fromDate = DateTime.Today.AddDays(-7);
         var toDate = DateTime.Today;
 
-        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, DateTime.Today, toDate, eventFormats, calendarIds, regionIds, 1), It.IsAny<CancellationToken>()))
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, It.IsAny<DateTime>(), toDate, eventFormats, calendarIds, regionIds, 1), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
 
         await sut.Handle(new GetCalendarEventsQuery(member.Id, fromDate, toDate, eventFormats, calendarIds, regionIds, 1), cancellationToken);
