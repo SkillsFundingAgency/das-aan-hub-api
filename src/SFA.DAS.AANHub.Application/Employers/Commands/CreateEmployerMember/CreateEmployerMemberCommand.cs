@@ -31,5 +31,5 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
         MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList()
     };
 
-    private static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
+    public static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
 }

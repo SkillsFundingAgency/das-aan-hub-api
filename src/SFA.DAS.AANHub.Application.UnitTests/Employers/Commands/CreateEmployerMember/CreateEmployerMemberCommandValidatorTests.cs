@@ -12,7 +12,7 @@ public class CreateEmployerMemberCommandValidatorTests
 {
     private Mock<IEmployersReadRepository> employersReadRepository = null!;
     private Mock<IProfilesReadRepository> profilesReadRepository = null!;
-    CreateEmployerMemberCommandValidator sut = null!;
+    private CreateEmployerMemberCommandValidator sut = null!;
 
     [SetUp]
     public void Init()
@@ -65,7 +65,7 @@ public class CreateEmployerMemberCommandValidatorTests
 
         if (userRefAlreadyExist)
         {
-            result.ShouldHaveValidationErrorFor(c => c.UserRef).WithErrorMessage("UserRef already exists");
+            result.ShouldHaveValidationErrorFor(c => c.UserRef).WithErrorMessage(CreateEmployerMemberCommandValidator.UserRefAlreadyCreatedErrorMessage);
         }
         else
         {

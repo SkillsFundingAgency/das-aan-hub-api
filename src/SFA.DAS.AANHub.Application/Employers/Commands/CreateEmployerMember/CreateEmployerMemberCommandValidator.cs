@@ -7,9 +7,9 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 
 public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmployerMemberCommand>
 {
-    private const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
-    private const string ProfileValuesMustNotBeEmptyErrorMessage = "ProfileValues cannot be empty";
-    private const string InvalidProfileIdsErrorMessage = "Some of the profile ids are invalid for Employer user type";
+    public const string UserRefAlreadyCreatedErrorMessage = "UserRef already exists";
+    public const string ProfileValuesMustNotBeEmptyErrorMessage = "ProfileValues cannot be empty";
+    public const string InvalidProfileIdsErrorMessage = "Some of the profile ids are invalid for Employer user type";
 
     private readonly IEmployersReadRepository _employersReadRepository;
     private readonly IProfilesReadRepository _profilesReadRepository;
@@ -37,7 +37,7 @@ public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmpl
             {
                 var profiles = await _profilesReadRepository.GetProfilesByUserType(MembershipUserType.Employer);
                 var profileIds = profiles.Select(profile => profile.Id);
-                var b = profileValues.Select(v => v.Id).All(i => profileIds.Contains(i));
+                var b = profileValues.All(p => profileIds.Contains(p.Id));
                 return b;
             })
             .WithMessage(InvalidProfileIdsErrorMessage);
