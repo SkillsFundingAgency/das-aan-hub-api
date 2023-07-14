@@ -30,7 +30,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
        List<int> regionIds,
        CancellationToken cancellationToken)
     {
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = requestedByMemberId,
             FromDate = fromDate,
@@ -64,7 +64,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(emptyResponse);
 
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = requestedByMemberId,
             FromDate = fromDate,
@@ -96,7 +96,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(response);
 
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = requestedByMemberId,
             FromDate = fromDate,
@@ -130,7 +130,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
                     .ReturnsAsync(errorResponse);
 
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = requestedByMemberId,
             FromDate = fromDate,
@@ -165,7 +165,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         mediatorMock.Setup(x => x.Send(It.IsAny<GetCalendarEventsQuery>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(result);
 
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = Guid.NewGuid(),
             FromDate = DateTime.Today,
@@ -195,7 +195,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         mediatorMock.Setup(x => x.Send(It.IsAny<GetCalendarEventsQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(result);
 
-        var getCalendarEventsModel = new GetCalendarEventsModel
+        var getCalendarEventsModel = new GetCalendarEventsRequestModel
         {
             RequestedByMemberId = Guid.NewGuid(),
             FromDate = DateTime.Today,
