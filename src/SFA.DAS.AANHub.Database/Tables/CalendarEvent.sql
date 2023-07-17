@@ -28,3 +28,10 @@ GO
 CREATE INDEX IX_CalendarEventSearch ON [CalendarEvent] ([IsActive], [StartDate], [EndDate], [EventFormat], [RegionId])
 INCLUDE ([Title], [Summary], [Location], [Postcode], [Latitude], [Longitude], [EventLink], [ContactName], [ContactEmail]);
 GO
+
+CREATE FULLTEXT CATALOG calendarevent_catalog;  
+
+GO
+CREATE FULLTEXT INDEX ON [CalendarEvent](Title)
+ KEY INDEX [PK_CalendarEvent]   
+		  ON calendarevent_catalog;
