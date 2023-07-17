@@ -32,9 +32,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
         var keywordSql = string.Empty;
 
-        if (!string.IsNullOrEmpty(options.Keyword?.Trim()))
+        if (!string.IsNullOrWhiteSpace(options.Keyword))
         {
-            keywordSql = " INNER JOIN FREETEXTTABLE(CalendarEvent, Title, '" + options.Keyword?.Trim() + "') ft ON (CE.ID = ft.[Key]) ";
+            keywordSql = " INNER JOIN FREETEXTTABLE(CalendarEvent, Title, '" + options.Keyword.Trim() + "') ft ON (CE.ID = ft.[Key]) ";
         }
 
         var sql = $@"select	               

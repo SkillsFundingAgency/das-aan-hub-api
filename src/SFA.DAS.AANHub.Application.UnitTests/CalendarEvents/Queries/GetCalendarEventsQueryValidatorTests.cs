@@ -74,6 +74,7 @@ public class GetCalendarEventsQueryValidatorTests
             EventFormats = new List<EventFormat>(),
             CalendarIds = new List<int>(),
             RegionIds = new List<int>(),
+            Keyword = string.Empty,
             Page = 1,
             PageSize = 5
         };

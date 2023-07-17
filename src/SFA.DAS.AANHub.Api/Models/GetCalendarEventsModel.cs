@@ -11,7 +11,8 @@ public class GetCalendarEventsModel
     public Guid RequestedByMemberId { get; set; }
 
     [FromQuery]
-    public string? Keyword { get; set; }
+    public string Keyword { get; set; } = string.Empty;
+
     [FromQuery]
     public DateTime? FromDate { get; set; }
 

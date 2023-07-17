@@ -4,7 +4,7 @@ namespace SFA.DAS.AANHub.Domain.Models;
 public class GetCalendarEventsOptions
 {
     public Guid MemberId { get; set; }
-    public string? Keyword { get; set; }
+    public string Keyword { get; set; } = string.Empty;
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public List<EventFormat> EventFormats { get; set; } = new List<EventFormat>();
