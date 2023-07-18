@@ -30,6 +30,13 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var eventTypes = GenerateEventTypesSql(options.CalendarIds);
         var regions = GenerateRegionsSql(options.RegionIds);
 
+        var keywordSql = string.Empty;
+
+        if (!string.IsNullOrWhiteSpace(options.Keyword))
+        {
+            keywordSql = " INNER JOIN FREETEXTTABLE(CalendarEvent, Title, '" + options.Keyword.Trim() + "') ft ON (CE.ID = ft.[Key]) ";
+        }
+
         var sql = $@"select	               
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
@@ -64,6 +71,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
     GROUP BY MemberId
     ) EmployerDetails on EmployerDetails.MemberId = '{options.MemberId}'
  LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = '{options.MemberId}'
+{keywordSql}
  WHERE CE.IsActive = 1
  AND CE.StartDate >= convert(date,'{options.FromDate?.ToString("yyyy-MM-dd")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))

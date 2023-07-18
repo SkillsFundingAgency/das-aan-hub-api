@@ -41,6 +41,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         var options = new GetCalendarEventsOptions
         {
             MemberId = request.RequestedByMemberId,
+            Keyword = request.Keyword,
             FromDate = fromDate,
             ToDate = toDate,
             EventFormats = request.EventFormats,

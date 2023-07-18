@@ -16,10 +16,11 @@ public class GetCalendarEventsQueryHandlerTests
     [RecursiveMoqAutoData]
     public async Task Handle_CalendarEventsNotFound_ReturnsEmptyList(
         Member member,
-         List<EventFormat> eventFormats,
-         List<int> calendarIds,
+        List<EventFormat> eventFormats,
+        List<int> calendarIds,
         List<int> regionIds,
-         CancellationToken cancellationToken
+        string keyword,
+        CancellationToken cancellationToken
      )
     {
         var fromDate = DateTime.Today;
@@ -39,6 +40,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         };
@@ -62,6 +64,7 @@ public class GetCalendarEventsQueryHandlerTests
         var regionIds = new List<int> { 1 };
         var fromDate = DateTime.Today;
         var toDate = DateTime.Today.AddDays(7);
+        var keyword = "test";
         var calendarEvent = new CalendarEventSummary();
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
@@ -75,6 +78,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         };
@@ -99,6 +103,7 @@ public class GetCalendarEventsQueryHandlerTests
         List<EventFormat> eventFormats,
         List<int> calendarIds,
         List<int> regionIds,
+        String keyword,
         CancellationToken cancellationToken
     )
     {
@@ -113,6 +118,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -126,6 +132,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         };
@@ -146,6 +153,7 @@ public class GetCalendarEventsQueryHandlerTests
         List<EventFormat> eventFormats,
         List<int> calendarIds,
         List<int> regionIds,
+        String keyword,
         CancellationToken cancellationToken
     )
     {
@@ -160,6 +168,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -173,6 +182,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         };
@@ -196,7 +206,7 @@ public class GetCalendarEventsQueryHandlerTests
         var regionIds = new List<int>();
         var fromDate = DateTime.Today.AddDays(-7);
         var toDate = DateTime.Today;
-
+        var keyword = string.Empty;
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
         {
             MemberId = member.Id,
@@ -205,6 +215,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -241,6 +252,7 @@ public class GetCalendarEventsQueryHandlerTests
         var fromDate = DateTime.Today;
         DateTime? toDate = null;
         var todayPlusOneYear = DateTime.Today.AddYears(1);
+        var keyword = string.Empty;
 
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
         {
@@ -250,6 +262,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -263,6 +276,7 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
             Page = 1,
             PageSize = 5
         };
