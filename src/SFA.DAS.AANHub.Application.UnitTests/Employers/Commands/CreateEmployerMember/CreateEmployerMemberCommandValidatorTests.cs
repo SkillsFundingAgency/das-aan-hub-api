@@ -76,7 +76,7 @@ public class CreateEmployerMemberCommandValidatorTests
     [TestCase(123, true)]
     [TestCase(null, false)]
     [TestCase(0, false)]
-    public async Task Validates_AccountId_NotNull(long id, bool isValid)
+    public async Task Validates_AccountId(long id, bool isValid)
     {
         var command = new CreateEmployerMemberCommand
         {
@@ -89,6 +89,26 @@ public class CreateEmployerMemberCommandValidatorTests
             result.ShouldNotHaveValidationErrorFor(c => c.AccountId);
         else
             result.ShouldHaveValidationErrorFor(c => c.AccountId);
+    }
+
+    [TestCase(1, true)]
+    [TestCase(2, true)]
+    [TestCase(50, false)]
+    public async Task Validate_ProfileValues(int profileId, bool isValid)
+    {
+        var command = new CreateEmployerMemberCommand();
+        command.ProfileValues.Add(new(profileId, Guid.NewGuid().ToString()));
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+        {
+            result.ShouldNotHaveValidationErrorFor(c => c.ProfileValues);
+        }
+        else
+        {
+            result.ShouldHaveValidationErrorFor(c => c.ProfileValues).WithErrorMessage(CreateEmployerMemberCommandValidator.InvalidProfileIdsErrorMessage);
+        }
     }
 
     [Test]
