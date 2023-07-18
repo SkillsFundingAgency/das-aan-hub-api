@@ -6,19 +6,9 @@ public class GetCalendarEventsOptions
     public Guid MemberId { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
-    public List<EventFormat> EventFormats { get; set; }
-    public List<int> CalendarIds { get; set; }
-    public List<int> RegionIds { get; set; }
-    public int? Page { get; }
-
-    public GetCalendarEventsOptions(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int? page)
-    {
-        MemberId = requestedByMemberId;
-        FromDate = fromDate;
-        ToDate = toDate;
-        EventFormats = eventFormats;
-        CalendarIds = calendarIds;
-        RegionIds = regionIds;
-        Page = page;
-    }
+    public List<EventFormat> EventFormats { get; set; } = new List<EventFormat>();
+    public List<int> CalendarIds { get; set; } = new List<int>();
+    public List<int> RegionIds { get; set; } = new List<int>();
+    public int Page { get; set; }
+    public int PageSize { get; set; }
 }
