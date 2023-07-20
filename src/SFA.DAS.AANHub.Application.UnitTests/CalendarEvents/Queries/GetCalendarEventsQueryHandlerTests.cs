@@ -284,4 +284,43 @@ public class GetCalendarEventsQueryHandlerTests
         await sut.Handle(query, cancellationToken);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), cancellationToken), Times.Once);
     }
+
+    [TestCase(null, null, 0)]
+    [TestCase("", "", 0)]
+    [TestCase("event", "event", 1)]
+    [TestCase("west event", "west event", 2)]
+    [TestCase("north-west event", "north west event", 3)]
+    [TestCase("1 event", "1 event", 2)]
+    [TestCase("'--;<>/**/_1 event 2 3", "1 event 2 3", 4)]
+    public async Task Handle_Keyword_CheckUsedKeywordExpected(string? keyword, string? expectedKeywordUsed, int keywordCount)
+    {
+        var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
+        var cancellationToken = new CancellationToken();
+        var calendarEvent = new CalendarEventSummary();
+        var memberId = Guid.NewGuid();
+        var eventFormats = new List<EventFormat>();
+        var calendarIds = new List<int>();
+        var regionIds = new List<int>();
+
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
+
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = memberId,
+            FromDate = DateTime.Today,
+            ToDate = DateTime.Today,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Keyword = keyword,
+            Page = 1,
+            PageSize = 5
+        };
+        var sut = new GetCalendarEventsQueryHandler(calendarEventsReadRepositoryMock.Object);
+
+        await sut.Handle(query, cancellationToken);
+        calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(
+            It.Is<GetCalendarEventsOptions>(c => c.Keyword == expectedKeywordUsed && c.KeywordCount == keywordCount), cancellationToken), Times.Once);
+    }
 }
