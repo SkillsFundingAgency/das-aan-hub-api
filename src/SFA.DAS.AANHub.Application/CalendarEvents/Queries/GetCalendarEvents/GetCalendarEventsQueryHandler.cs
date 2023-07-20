@@ -82,7 +82,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
     private static string? ProcessedKeyword(string? keyword)
     {
         if (keyword == null) return null;
-        var rgx = new Regex("[^a-zA-Z0-9 ]");
+        var rgx = new Regex("[^a-zA-Z0-9 ]", RegexOptions.None, TimeSpan.FromMilliseconds(100));
         return rgx.Replace(keyword, " ").Trim();
 
     }
