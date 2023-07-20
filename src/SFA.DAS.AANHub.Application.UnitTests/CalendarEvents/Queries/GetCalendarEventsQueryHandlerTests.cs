@@ -286,7 +286,7 @@ public class GetCalendarEventsQueryHandlerTests
     }
 
     [TestCase(null, null, 0)]
-    [TestCase("", "", 0)]
+    [TestCase("", null, 0)]
     [TestCase("event", "event", 1)]
     [TestCase("west event", "west event", 2)]
     [TestCase("north-west event", "north west event", 3)]
