@@ -32,7 +32,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
         var keywordSql = options.KeywordCount switch
         {
-            1 => " ANFREETEXT(Title,'" + options.Keyword?.Trim() + "') ",
+            1 => " AND FREETEXT(Title,'" + options.Keyword?.Trim() + "') ",
             > 1 => " AND CONTAINS(Title,'\"" + options.Keyword?.Trim() + "\"') ",
             _ => string.Empty
         };
