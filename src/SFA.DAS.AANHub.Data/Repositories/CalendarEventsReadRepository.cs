@@ -40,7 +40,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var isActiveSql = string.Empty;
         if (options.IsActive != null)
         {
-            isActiveSql = options.IsActive.Value ? " AMD CE.IsActive = 1 " : " AND CE.IsActive = 0 ";
+            isActiveSql = options.IsActive.Value ? " AND CE.IsActive = 1 " : " AND CE.IsActive = 0 ";
         }
 
         var sql = $@"select	               
@@ -84,7 +84,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
           ,SUM(CASE WHEN IsAttending = 1 THEN 1 ELSE 0 END) Attendees 
    FROM Attendance
    GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
- WHERE  CE.StartDate >= convert(date,'{options.FromDate?.ToString("yyyy-MM-dd")}') 
+ WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
  {isActiveSql}
  {keywordSql}
