@@ -72,7 +72,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
     ) EmployerDetails on EmployerDetails.MemberId = '{options.MemberId}'
  LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = '{options.MemberId}'
  WHERE CE.IsActive = 1
- AND CE.StartDate >= convert(date,'{options.FromDate?.ToString("yyyy-MM-dd")}') 
+ AND CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
  {keywordSql}
  {eventFormats}

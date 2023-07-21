@@ -158,7 +158,7 @@ public class GetCalendarEventsQueryHandlerTests
     )
     {
         DateTime? fromDate = null;
-        var toDate = DateTime.Today;
+        var toDate = DateTime.Today.AddDays(1);
 
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
         {
@@ -205,7 +205,7 @@ public class GetCalendarEventsQueryHandlerTests
         var calendarIds = new List<int>();
         var regionIds = new List<int>();
         var fromDate = DateTime.Today.AddDays(-7);
-        var toDate = DateTime.Today;
+        var toDate = DateTime.Today.AddDays(1);
         var keyword = string.Empty;
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
         {
@@ -308,8 +308,8 @@ public class GetCalendarEventsQueryHandlerTests
         var query = new GetCalendarEventsQuery
         {
             RequestedByMemberId = memberId,
-            FromDate = DateTime.Today,
-            ToDate = DateTime.Today,
+            FromDate = DateTime.Now,
+            ToDate = DateTime.Today.AddDays(1),
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
