@@ -41,6 +41,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = null,
             Page = 1,
             PageSize = 5
         };
@@ -79,6 +80,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = true,
             Page = 1,
             PageSize = 5
         };
@@ -104,6 +106,7 @@ public class GetCalendarEventsQueryHandlerTests
         List<int> calendarIds,
         List<int> regionIds,
         String keyword,
+        bool? isActive,
         CancellationToken cancellationToken
     )
     {
@@ -119,6 +122,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -133,6 +137,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         };
@@ -154,6 +159,7 @@ public class GetCalendarEventsQueryHandlerTests
         List<int> calendarIds,
         List<int> regionIds,
         String keyword,
+        Boolean? isActive,
         CancellationToken cancellationToken
     )
     {
@@ -169,6 +175,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -183,6 +190,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         };
@@ -216,6 +224,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = null,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -229,6 +238,8 @@ public class GetCalendarEventsQueryHandlerTests
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
+            Keyword = keyword,
+            IsActive = null,
             Page = 1,
             PageSize = 5
         };
@@ -253,6 +264,7 @@ public class GetCalendarEventsQueryHandlerTests
         DateTime? toDate = null;
         var todayPlusOneYear = DateTime.Today.AddYears(1);
         var keyword = string.Empty;
+        bool? isActive = null;
 
         calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
         {
@@ -263,6 +275,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         }, It.IsAny<CancellationToken>()))
@@ -277,6 +290,7 @@ public class GetCalendarEventsQueryHandlerTests
             CalendarIds = calendarIds,
             RegionIds = regionIds,
             Keyword = keyword,
+            IsActive = isActive,
             Page = 1,
             PageSize = 5
         };
@@ -361,5 +375,42 @@ public class GetCalendarEventsQueryHandlerTests
         await sut.Handle(query, cancellationToken);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(
             It.Is<GetCalendarEventsOptions>(c => c.Keyword == expectedKeywordUsed && c.KeywordCount == keywordCount), cancellationToken), Times.Once);
+    }
+
+    [TestCase(null)]
+    [TestCase(true)]
+    [TestCase(false)]
+    public async Task Handle_IsActive_CheckIsActiveExpected(bool? isActive)
+    {
+        var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
+        var cancellationToken = new CancellationToken();
+        var calendarEvent = new CalendarEventSummary();
+        var memberId = Guid.NewGuid();
+        var eventFormats = new List<EventFormat>();
+        var calendarIds = new List<int>();
+        var regionIds = new List<int>();
+        var keyword = "test";
+
+        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<CalendarEventSummary> { calendarEvent });
+
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = memberId,
+            FromDate = DateTime.Today,
+            ToDate = DateTime.Today,
+            EventFormats = eventFormats,
+            CalendarIds = calendarIds,
+            RegionIds = regionIds,
+            Keyword = keyword,
+            IsActive = isActive,
+            Page = 1,
+            PageSize = 5
+        };
+        var sut = new GetCalendarEventsQueryHandler(calendarEventsReadRepositoryMock.Object);
+
+        await sut.Handle(query, cancellationToken);
+        calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(
+            It.Is<GetCalendarEventsOptions>(c => c.IsActive == isActive), cancellationToken), Times.Once);
     }
 }

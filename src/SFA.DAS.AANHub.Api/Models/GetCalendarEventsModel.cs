@@ -29,6 +29,9 @@ public class GetCalendarEventsModel
     public List<int> RegionId { get; set; } = new List<int>();
 
     [FromQuery]
+    public bool? IsActive { get; set; }
+
+    [FromQuery]
     public int Page { get; set; } = 1;
 
     [FromQuery] public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
@@ -42,6 +45,7 @@ public class GetCalendarEventsModel
         EventFormats = model.EventFormat,
         RegionIds = model.RegionId,
         CalendarIds = model.CalendarId,
+        IsActive = model.IsActive,
         Page = model.Page,
         PageSize = model.PageSize
     };

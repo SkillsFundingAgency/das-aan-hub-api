@@ -50,6 +50,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             EventFormats = query.EventFormats,
             CalendarIds = query.CalendarIds,
             RegionIds = query.RegionIds,
+            IsActive = query.IsActive,
             Page = page,
             PageSize = pageSize
         };

@@ -13,6 +13,8 @@ public class GetCalendarEventsOptions
     public List<EventFormat> EventFormats { get; set; } = new List<EventFormat>();
     public List<int> CalendarIds { get; set; } = new List<int>();
     public List<int> RegionIds { get; set; } = new List<int>();
+    public bool? IsActive { get; set; }
     public int Page { get; set; }
     public int PageSize { get; set; }
+
 }
