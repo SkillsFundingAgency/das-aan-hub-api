@@ -347,8 +347,8 @@ public class GetCalendarEventsQueryHandlerTests
         var query = new GetCalendarEventsQuery
         {
             RequestedByMemberId = memberId,
-            FromDate = DateTime.Today,
-            ToDate = DateTime.Today,
+            FromDate = DateTime.Now,
+            ToDate = DateTime.Today.AddDays(1),
             EventFormats = eventFormats,
             CalendarIds = calendarIds,
             RegionIds = regionIds,
