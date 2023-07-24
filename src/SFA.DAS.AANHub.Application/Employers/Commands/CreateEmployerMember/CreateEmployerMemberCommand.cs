@@ -10,7 +10,6 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
 {
     public long AccountId { get; init; }
     public Guid UserRef { get; init; }
-    public string Organisation { get; set; } = null!;
 
     public static implicit operator Member(CreateEmployerMemberCommand command) => new()
     {
@@ -28,6 +27,9 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
             MemberId = command.MemberId,
             AccountId = command.AccountId,
             UserRef = command.UserRef
-        }
+        },
+        MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList()
     };
+
+    public static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
 }
