@@ -4,6 +4,10 @@ namespace SFA.DAS.AANHub.Domain.Models;
 public class GetCalendarEventsOptions
 {
     public Guid MemberId { get; set; }
+    public string? Keyword { get; set; }
+
+    public int KeywordCount => string.IsNullOrWhiteSpace(Keyword) ? 0 : Keyword.Split(" ").Length;
+
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
     public List<EventFormat> EventFormats { get; set; } = new List<EventFormat>();

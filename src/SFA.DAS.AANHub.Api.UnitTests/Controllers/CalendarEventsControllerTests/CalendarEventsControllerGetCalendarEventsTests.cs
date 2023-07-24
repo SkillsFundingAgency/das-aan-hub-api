@@ -28,6 +28,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
        List<EventFormat> eventFormats,
        List<int> calendarIds,
        List<int> regionIds,
+       string keyword,
        CancellationToken cancellationToken)
     {
         var getCalendarEventsModel = new GetCalendarEventsModel
@@ -37,7 +38,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             ToDate = toDate,
             EventFormat = eventFormats,
             CalendarId = calendarIds,
-            RegionId = regionIds
+            RegionId = regionIds,
+            Keyword = keyword
         };
 
         await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -58,6 +60,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<EventFormat> eventFormats,
         List<int> calendarIds,
         List<int> regionIds,
+        string keyword,
         CancellationToken cancellationToken)
     {
         var emptyResponse = ValidatedResponse<GetCalendarEventsQueryResult>.EmptySuccessResponse();
@@ -71,7 +74,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             ToDate = toDate,
             EventFormat = eventFormats,
             CalendarId = calendarIds,
-            RegionId = regionIds
+            RegionId = regionIds,
+            Keyword = keyword
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -90,6 +94,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<EventFormat> eventFormats,
         List<int> calendarIds,
         List<int> regionIds,
+        string keyword,
         CancellationToken cancellationToken)
     {
         var response = new ValidatedResponse<GetCalendarEventsQueryResult>(queryResult);
@@ -103,7 +108,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             ToDate = toDate,
             EventFormat = eventFormats,
             CalendarId = calendarIds,
-            RegionId = regionIds
+            RegionId = regionIds,
+            Keyword = keyword
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -124,6 +130,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<EventFormat> eventFormats,
         List<int> calendarIds,
         List<int> regionIds,
+        string keyword,
         CancellationToken cancellationToken)
     {
         var errorResponse = new ValidatedResponse<GetCalendarEventsQueryResult>(errors);
@@ -137,7 +144,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             ToDate = toDate,
             EventFormat = eventFormats,
             CalendarId = calendarIds,
-            RegionId = regionIds
+            RegionId = regionIds,
+            Keyword = keyword
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -173,6 +181,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
             EventFormat = new List<EventFormat>(),
             CalendarId = new List<int>(),
             RegionId = new List<int>(),
+            Keyword = string.Empty,
             Page = page,
             PageSize = pageSize
         };
@@ -202,7 +211,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             ToDate = DateTime.Today,
             EventFormat = new List<EventFormat>(),
             CalendarId = new List<int>(),
-            RegionId = new List<int>()
+            RegionId = new List<int>(),
+            Keyword = string.Empty
         };
 
         await sut.GetCalendarEvents(getCalendarEventsModel, new CancellationToken());
