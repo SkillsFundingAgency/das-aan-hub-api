@@ -23,9 +23,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         var page = query.Page;
 
 
-        var fromDate = query.FromDate == null || query.FromDate.GetValueOrDefault() <= DateTime.Today
-                ? DateTime.UtcNow
-                : query.FromDate.GetValueOrDefault();
+        var fromDate = query.FromDate ?? DateTime.Today;
 
         var toDate = query.ToDate ?? DateTime.Today.AddYears(1);
 
