@@ -37,6 +37,12 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             _ => string.Empty
         };
 
+        var isActiveSql = string.Empty;
+        if (options.IsActive != null)
+        {
+            isActiveSql = options.IsActive.Value ? " AND CE.IsActive = 1 " : " AND CE.IsActive = 0 ";
+        }
+
         var sql = $@"select	               
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
@@ -60,7 +66,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
     ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
     .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
     as Distance,
- ISNULL(A.IsAttending, 0) AS IsAttending
+CONVERT(bit,ISNULL(A.IsAttending, 0)) AS IsAttending,
+CE.IsActive,
+ISNULL(A.Attendees,0) as NumberOfAttendees
  FROM CalendarEvent CE INNER JOIN Calendar C ON CE.CalendarId = C.Id
  LEFT OUTER JOIN (
     SELECT MemberId,
@@ -70,10 +78,15 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
     WHERE MemberId = '{options.MemberId}'
     GROUP BY MemberId
     ) EmployerDetails on EmployerDetails.MemberId = '{options.MemberId}'
- LEFT outer join Attendance A on A.CalendarEventId = CE.Id and A.MemberId = '{options.MemberId}'
- WHERE CE.IsActive = 1
- AND CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
+ LEFT outer join (
+    SELECT CalendarEventId
+          ,MAX(CASE WHEN MemberId = '{options.MemberId}' THEN isAttending ELSE 0 END)  isAttending
+          ,SUM(CASE WHEN IsAttending = 1 THEN 1 ELSE 0 END) Attendees 
+   FROM Attendance
+   GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
+ WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
+ {isActiveSql}
  {keywordSql}
  {eventFormats}
  {eventTypes}
