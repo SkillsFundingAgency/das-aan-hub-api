@@ -4,23 +4,40 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployerMember;
 
 public class CreateEmployerMemberCommandValidatorTests
 {
+    private Mock<IEmployersReadRepository> employersReadRepository = null!;
+    private Mock<IProfilesReadRepository> profilesReadRepository = null!;
+    private CreateEmployerMemberCommandValidator sut = null!;
+
+    [SetUp]
+    public void Init()
+    {
+        employersReadRepository = new();
+        profilesReadRepository = new();
+
+        profilesReadRepository.Setup(r => r.GetProfilesByUserType(MembershipUserType.Employer)).ReturnsAsync(new List<Profile>
+        {
+            new Profile{ Id = 1 },
+            new Profile{ Id = 2 }
+        });
+
+        sut = new(employersReadRepository.Object, profilesReadRepository.Object);
+    }
+
     [TestCase("00000000-0000-0000-0000-000000000000", false)]
     [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", true)]
     public async Task Validates_UserRef_NotNull(string userRef, bool isValid)
     {
-        Mock<IEmployersReadRepository> employersReadRepository = new();
         var guid = Guid.Parse(userRef);
         var command = new CreateEmployerMemberCommand
         {
             UserRef = guid
         };
-
-        var sut = new CreateEmployerMemberCommandValidator(employersReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 
@@ -34,7 +51,6 @@ public class CreateEmployerMemberCommandValidatorTests
     [TestCase(false)]
     public async Task Validates_UserRef_Exist(bool userRefAlreadyExist)
     {
-        Mock<IEmployersReadRepository> employersReadRepository = new();
         Employer? employer = null;
 
         if (userRefAlreadyExist) employer = new Employer();
@@ -44,13 +60,12 @@ public class CreateEmployerMemberCommandValidatorTests
         };
 
         employersReadRepository.Setup(x => x.GetEmployerByUserRef(It.IsAny<Guid>())).ReturnsAsync(employer);
-        var sut = new CreateEmployerMemberCommandValidator(employersReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 
         if (userRefAlreadyExist)
         {
-            result.ShouldHaveValidationErrorFor(c => c.UserRef).WithErrorMessage("UserRef already exists");
+            result.ShouldHaveValidationErrorFor(c => c.UserRef).WithErrorMessage(CreateEmployerMemberCommandValidator.UserRefAlreadyCreatedErrorMessage);
         }
         else
         {
@@ -61,15 +76,12 @@ public class CreateEmployerMemberCommandValidatorTests
     [TestCase(123, true)]
     [TestCase(null, false)]
     [TestCase(0, false)]
-    public async Task Validates_AccountId_NotNull(long id, bool isValid)
+    public async Task Validates_AccountId(long id, bool isValid)
     {
-        Mock<IEmployersReadRepository> employersReadRepository = new();
         var command = new CreateEmployerMemberCommand
         {
             AccountId = id
         };
-
-        var sut = new CreateEmployerMemberCommandValidator(employersReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 
@@ -79,10 +91,29 @@ public class CreateEmployerMemberCommandValidatorTests
             result.ShouldHaveValidationErrorFor(c => c.AccountId);
     }
 
+    [TestCase(1, true)]
+    [TestCase(2, true)]
+    [TestCase(50, false)]
+    public async Task Validate_ProfileValues(int profileId, bool isValid)
+    {
+        var command = new CreateEmployerMemberCommand();
+        command.ProfileValues.Add(new(profileId, Guid.NewGuid().ToString()));
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+        {
+            result.ShouldNotHaveValidationErrorFor(c => c.ProfileValues);
+        }
+        else
+        {
+            result.ShouldHaveValidationErrorFor(c => c.ProfileValues).WithErrorMessage(CreateEmployerMemberCommandValidator.InvalidProfileIdsErrorMessage);
+        }
+    }
+
     [Test]
     public async Task Validate_BaseClassFields()
     {
-        Mock<IEmployersReadRepository> employersReadRepository = new();
         CreateEmployerMemberCommand command = new()
         {
             Email = "bad email",
@@ -92,7 +123,6 @@ public class CreateEmployerMemberCommandValidatorTests
             RegionId = 999,
             OrganisationName = new string('a', 251)
         };
-        CreateEmployerMemberCommandValidator sut = new(employersReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 

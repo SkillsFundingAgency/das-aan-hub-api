@@ -18,4 +18,5 @@ public class CalendarEventSummary
     public bool IsAttending { get; set; }
     public int CalendarId { get; set; }
     public int RegionId { get; set; }
+    public int TotalCount { get; set; }
 }
