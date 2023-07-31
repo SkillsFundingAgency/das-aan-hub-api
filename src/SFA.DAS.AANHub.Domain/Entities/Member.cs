@@ -14,14 +14,14 @@ public class Member
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }
     public DateTime LastUpdatedDate { get; set; }
+    public bool IsRegionalChair { get; set; }
+    public string FullName { get; set; } = null!;
+
     public List<MemberProfile> MemberProfiles { get; set; } = new();
     public List<Attendance> Attendances { get; set; } = new();
 
-    public string FullName => $"{FirstName} {LastName}";
-
     public virtual Region? Region { get; set; }
-    [JsonIgnore]
-    public virtual Admin? Admin { get; set; }
+
     [JsonIgnore]
     public virtual Apprentice? Apprentice { get; set; }
     [JsonIgnore]
