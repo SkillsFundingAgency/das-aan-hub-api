@@ -7,41 +7,40 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember
+namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
+
+public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMemberCommand, ValidatedResponse<CreateMemberCommandResponse>>
 {
-    public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMemberCommand, ValidatedResponse<CreateMemberCommandResponse>>
+    private readonly IAanDataContext _aanDataContext;
+    private readonly IAuditWriteRepository _auditWriteRepository;
+    private readonly IMembersWriteRepository _membersWriteRepository;
+
+    public CreateAdminMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
+        IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
     {
-        private readonly IAanDataContext _aanDataContext;
-        private readonly IAuditWriteRepository _auditWriteRepository;
-        private readonly IMembersWriteRepository _membersWriteRepository;
+        _membersWriteRepository = membersWriteRepository;
+        _aanDataContext = aanDataContext;
+        _auditWriteRepository = auditWriteRepository;
+    }
 
-        public CreateAdminMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
-            IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
+    public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateAdminMemberCommand command,
+        CancellationToken cancellationToken)
+    {
+        Member member = command;
+
+        _membersWriteRepository.Create(member);
+
+        _auditWriteRepository.Create(new Audit
         {
-            _membersWriteRepository = membersWriteRepository;
-            _aanDataContext = aanDataContext;
-            _auditWriteRepository = auditWriteRepository;
-        }
+            Action = "Create",
+            ActionedBy = command.MemberId,
+            AuditTime = DateTime.UtcNow,
+            After = JsonSerializer.Serialize(member),
+            Resource = MembershipUserType.Admin
+        });
 
-        public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateAdminMemberCommand command,
-            CancellationToken cancellationToken)
-        {
-            Member member = command;
+        await _aanDataContext.SaveChangesAsync(cancellationToken);
 
-            _membersWriteRepository.Create(member);
-
-            _auditWriteRepository.Create(new Audit
-            {
-                Action = "Create",
-                ActionedBy = command.MemberId,
-                AuditTime = DateTime.UtcNow,
-                After = JsonSerializer.Serialize(member.Admin),
-                Resource = MembershipUserType.Admin
-            });
-
-            await _aanDataContext.SaveChangesAsync(cancellationToken);
-
-            return new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(member.Id));
-        }
+        return new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(member.Id));
     }
 }

@@ -15,16 +15,15 @@ public class CreateAdminMemberCommandTests
     {
         Member member = sut;
 
-        member.Admin.Should().NotBeNull();
         member.Id.Should().Be(sut.MemberId);
         member.UserType.Should().Be(MembershipUserType.Admin);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
         member.FirstName.Should().Be(sut.FirstName);
         member.LastName.Should().Be(sut.LastName);
-        member.JoinedDate.Should().Be(sut.JoinedDate);
-        member.OrganisationName.Should().Be(sut.OrganisationName);
-        member.Admin!.MemberId.Should().Be(sut.MemberId);
-        member.Admin!.UserName.Should().Be(sut.UserName);
+        member.JoinedDate.Date.Should().Be(DateTime.UtcNow.Date);
+        member.OrganisationName.Should().Be("DFE");
+        member.RegionId.Should().BeNull();
+        member.Id.Should().Be(sut.MemberId);
     }
 }

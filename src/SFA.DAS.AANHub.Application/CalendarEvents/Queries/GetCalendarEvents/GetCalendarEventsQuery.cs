@@ -8,21 +8,15 @@ namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 public class GetCalendarEventsQuery : IRequest<ValidatedResponse<GetCalendarEventsQueryResult>>, IRequestedByMemberId
 {
     public Guid RequestedByMemberId { get; set; }
+    public string? Keyword { get; set; }
     public DateTime? FromDate { get; set; }
     public DateTime? ToDate { get; set; }
-    public List<EventFormat> EventFormats { get; set; }
-    public List<int> CalendarIds { get; set; }
-    public List<int> RegionIds { get; set; }
-    public int? Page { get; }
+    public List<EventFormat> EventFormats { get; set; } = new List<EventFormat>();
+    public List<int> CalendarIds { get; set; } = new List<int>();
+    public List<int> RegionIds { get; set; } = new List<int>();
 
-    public GetCalendarEventsQuery(Guid requestedByMemberId, DateTime? fromDate, DateTime? toDate, List<EventFormat> eventFormats, List<int> calendarIds, List<int> regionIds, int? page)
-    {
-        RequestedByMemberId = requestedByMemberId;
-        FromDate = fromDate;
-        ToDate = toDate;
-        Page = page;
-        EventFormats = eventFormats;
-        CalendarIds = calendarIds;
-        RegionIds = regionIds;
-    }
+    public bool? IsActive { get; set; }
+    public int Page { get; set; } = 1;
+
+    public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
 }

@@ -58,13 +58,13 @@
     <Folder Include="Properties" />
     <Folder Include="Tables" />
     <Folder Include="Scripts" />
+    <Folder Include="Scripts\Manual" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Member.sql" />
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\Apprentice.sql" />
     <Build Include="Tables\Employer.sql" />
-    <Build Include="Tables\Admin.sql" />
     <Build Include="Tables\Partner.sql" />
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
@@ -82,6 +82,7 @@
     <None Include="Scripts\PreDeploymentClearDown.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
+    <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />

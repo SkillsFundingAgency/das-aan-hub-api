@@ -19,6 +19,7 @@
     [ContactEmail] NVARCHAR(256) NOT NULL, 
     [IsActive] BIT NOT NULL DEFAULT 1,
     [CancelReason] NVARCHAR(max) NULL,
+    [PlannedAttendees] INT NULL,
     CONSTRAINT [PK_CalendarEvent] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_CalendarEvent_Calendar] FOREIGN KEY ([CalendarId]) REFERENCES [Calendar]([Id])
 );
@@ -27,3 +28,10 @@ GO
 CREATE INDEX IX_CalendarEventSearch ON [CalendarEvent] ([IsActive], [StartDate], [EndDate], [EventFormat], [RegionId])
 INCLUDE ([Title], [Summary], [Location], [Postcode], [Latitude], [Longitude], [EventLink], [ContactName], [ContactEmail]);
 GO
+
+CREATE FULLTEXT CATALOG calendarevent_catalog;  
+
+GO
+CREATE FULLTEXT INDEX ON [CalendarEvent](Title)
+ KEY INDEX [PK_CalendarEvent]   
+		  ON calendarevent_catalog;

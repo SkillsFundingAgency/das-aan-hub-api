@@ -14,21 +14,45 @@ public class GetCalendarEventsQueryValidatorTests
     [Test, RecursiveMoqAutoData]
     public async Task ValidateMemberId_NotActiveMemberId_FailsValidation(Member member, CancellationToken cancellationToken)
     {
-        var startDate = DateTime.UtcNow;
+        var fromDate = DateTime.UtcNow;
         var toDate = DateTime.Today.AddYears(1);
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
             .ReturnsAsync(member);
 
-        var query = new GetCalendarEventsQuery(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), new List<int>(), 1);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = member.Id,
+            FromDate = fromDate,
+            ToDate = toDate,
+            EventFormats = new List<EventFormat>(),
+            CalendarIds = new List<int>(),
+            RegionIds = new List<int>(),
+            Page = 1,
+            PageSize = 5
+        };
+
         var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-
-        calendarEventsReadRepositoryMock.Setup(a => a.GetCalendarEvents(new GetCalendarEventsOptions(member.Id, startDate, toDate, new List<EventFormat>(), new List<int>(), new List<int>(), 1), cancellationToken))!.ReturnsAsync(calendarEvents);
+        calendarEventsReadRepositoryMock
+            .Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
+            {
+                MemberId = member.Id,
+                FromDate = fromDate,
+                ToDate = toDate,
+                EventFormats = new List<EventFormat>(),
+                CalendarIds = new List<int>(),
+                RegionIds = new List<int>(),
+                Page = 1,
+                PageSize = 5
+            }, It.IsAny<CancellationToken>()))
+            .ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
-        var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
+
+        //Action
+        var result = await sut.TestValidateAsync(query);
 
         result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
     }
@@ -45,7 +69,17 @@ public class GetCalendarEventsQueryValidatorTests
         membersReadRepositoryMock.Setup(m => m.GetMember(inactiveGuid))
             .ReturnsAsync(new Member() { Status = inactiveMembershipStatus });
 
-        var query = new GetCalendarEventsQuery(inactiveGuid, DateTime.Today, DateTime.Today, new List<EventFormat>(), new List<int>(), new List<int>(), 1);
+        var query = new GetCalendarEventsQuery
+        {
+            RequestedByMemberId = inactiveGuid,
+            FromDate = DateTime.Today,
+            ToDate = DateTime.Today,
+            EventFormats = new List<EventFormat>(),
+            CalendarIds = new List<int>(),
+            RegionIds = new List<int>(),
+            Page = 1,
+            PageSize = 5
+        };
 
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
 

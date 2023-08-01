@@ -19,6 +19,9 @@ public class CalendarEventSummaryModel
     public double? Distance { get; set; }
     public bool IsAttending { get; set; }
 
+    public bool IsActive { get; set; }
+    public int NumberOfAttendees { get; set; }
+
     public static implicit operator CalendarEventSummaryModel(CalendarEventSummary summary) => new()
     {
         CalendarEventId = summary.CalendarEventId,
@@ -34,6 +37,8 @@ public class CalendarEventSummaryModel
         Longitude = summary.Longitude,
         Latitude = summary.Latitude,
         Distance = summary.Distance,
-        IsAttending = summary.IsAttending
+        IsAttending = summary.IsAttending,
+        IsActive = summary.IsActive,
+        NumberOfAttendees = summary.NumberOfAttendees
     };
 }
