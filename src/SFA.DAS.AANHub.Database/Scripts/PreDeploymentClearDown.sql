@@ -25,3 +25,8 @@ GO
 IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Notifications')
   DROP TABLE Notifications;
 GO
+
+IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Admin')
+  DROP TABLE Admin;
+GO
+

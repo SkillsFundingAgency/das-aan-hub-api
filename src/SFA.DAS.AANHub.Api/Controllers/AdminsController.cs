@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 using SFA.DAS.AANHub.Application.Admins.Queries;
 using SFA.DAS.AANHub.Application.Common;
@@ -25,23 +26,25 @@ public class AdminsController : ActionResponseControllerBase
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status201Created)]
-    public async Task<IActionResult> CreateAdmin(CreateAdminMemberCommand command)
+    public async Task<IActionResult> CreateAdmin(CreateAdminMemberRequestModel model)
     {
+        CreateAdminMemberCommand command = model;
+
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response, new { userName = command.UserName });
+        return GetPostResponse(response, new { email = command.Email });
     }
 
     [HttpGet]
-    [Route("{userName}")]
+    [Route("{email}")]
     [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status404NotFound)]
-    public async Task<IActionResult> Get(string userName)
+    public async Task<IActionResult> Get(string email)
     {
-        _logger.LogInformation("AAN Hub API: Received command to get Admin by Username: {userName}", userName);
+        _logger.LogInformation("AAN Hub API: Received command to get Admin by email: {userName}", email);
 
-        var response = await _mediator.Send(new GetAdminMemberQuery(userName));
+        var response = await _mediator.Send(new GetAdminMemberQuery(email));
 
         return GetResponse(response);
     }

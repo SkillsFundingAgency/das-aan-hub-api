@@ -21,5 +21,5 @@ CREATE INDEX [IX_Member_Search] ON [Member] ([UserType], [Status], [FullName], [
 INCLUDE ([Id], [Email], [JoinedDate], [OrganisationName], [LastUpdatedDate])
 GO
 
-CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FirstName], [LastName], [Usertype], [Status])
+CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FirstName], [LastName], [UserType], [Status])
 GO

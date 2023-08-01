@@ -36,20 +36,23 @@ public class GetCalendarEventsQueryValidatorTests
         var calendarEvents = (List<CalendarEventSummary>)null!;
         var calendarEventsReadRepositoryMock = new Mock<ICalendarEventsReadRepository>();
 
-        calendarEventsReadRepositoryMock.Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
-        {
-            MemberId = member.Id,
-            FromDate = fromDate,
-            ToDate = toDate,
-            EventFormats = new List<EventFormat>(),
-            CalendarIds = new List<int>(),
-            RegionIds = new List<int>(),
-            Page = 1,
-            PageSize = 5
-        }, It.IsAny<CancellationToken>()))
+        calendarEventsReadRepositoryMock
+            .Setup(c => c.GetCalendarEvents(new GetCalendarEventsOptions
+            {
+                MemberId = member.Id,
+                FromDate = fromDate,
+                ToDate = toDate,
+                EventFormats = new List<EventFormat>(),
+                CalendarIds = new List<int>(),
+                RegionIds = new List<int>(),
+                Page = 1,
+                PageSize = 5
+            }, It.IsAny<CancellationToken>()))
             .ReturnsAsync(calendarEvents);
         var sut = new GetCalendarEventsQueryValidator(membersReadRepositoryMock.Object);
-        var result = await sut.TestValidateAsync(query, cancellationToken: cancellationToken);
+
+        //Action
+        var result = await sut.TestValidateAsync(query);
 
         result.ShouldHaveValidationErrorFor(c => c.RequestedByMemberId);
     }
