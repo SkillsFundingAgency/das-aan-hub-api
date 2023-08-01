@@ -38,8 +38,6 @@ public static class ServiceCollectionExtensions
     {
         services.AddTransient<IAuditWriteRepository, AuditWriteRepository>();
         services.AddTransient<IRegionsReadRepository, RegionsReadRepository>();
-        services.AddTransient<IAdminsWriteRepository, AdminsWriteRepository>();
-        services.AddTransient<IAdminsReadRepository, AdminsReadRepository>();
         services.AddTransient<IStagedApprenticesReadRepository, StagedApprenticesReadRepository>();
         services.AddTransient<IEmployersWriteRepository, EmployersWriteRepository>();
         services.AddTransient<IEmployersReadRepository, EmployersReadRepository>();

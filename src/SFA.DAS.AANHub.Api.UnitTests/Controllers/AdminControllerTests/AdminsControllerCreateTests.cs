@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
+using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
@@ -21,17 +22,18 @@ public class AdminsControllerCreateTests
     public async Task CreateAdmin_InvokesRequest(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] AdminsController sut,
-        CreateAdminMemberCommand command)
+        CreateAdminMemberRequestModel model,
+        Guid memberId)
     {
-        var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(command.MemberId));
+        var response = new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(memberId));
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.CreateAdmin(command) as CreatedAtActionResult;
+        var result = await sut.CreateAdmin(model) as CreatedAtActionResult;
 
         result?.ControllerName.Should().Be("Admins");
         result?.ActionName.Should().Be("Get");
         result?.StatusCode.Should().Be(StatusCodes.Status201Created);
-        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(command.MemberId);
+        result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(memberId);
     }
 
     [Test]
@@ -42,7 +44,7 @@ public class AdminsControllerCreateTests
         List<ValidationFailure> errors)
     {
         var errorResponse = new ValidatedResponse<CreateMemberCommandResponse>(errors);
-        var command = new CreateAdminMemberCommand();
+        var command = new CreateAdminMemberRequestModel(string.Empty, string.Empty, string.Empty);
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateAdminMemberCommand>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
         var result = await sut.CreateAdmin(command);

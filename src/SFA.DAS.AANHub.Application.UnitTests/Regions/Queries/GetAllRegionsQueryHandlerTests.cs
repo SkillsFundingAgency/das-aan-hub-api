@@ -22,7 +22,7 @@ public class WhenRequestingGetAllRegions
     {
         regionsReadRepositoryMock.Setup(r => r.GetAllRegions(cancellationToken)).ReturnsAsync(regions);
 
-        var result = await handler.Handle(query, CancellationToken.None);
+        var result = await handler.Handle(query, cancellationToken);
 
         result?.Result.Regions.Should().BeEquivalentTo(regions, c => c.ExcludingMissingMembers());
     }

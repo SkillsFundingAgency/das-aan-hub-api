@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data;
 
@@ -14,7 +14,6 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Apprentice> Apprentices => Set<Apprentice>();
     public DbSet<Employer> Employers => Set<Employer>();
     public DbSet<Partner> Partners => Set<Partner>();
-    public DbSet<Admin> Admins => Set<Admin>();
     public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();
     public DbSet<Calendar> Calendars => Set<Calendar>();
     public DbSet<Profile> Profiles => Set<Profile>();

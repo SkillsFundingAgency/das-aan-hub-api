@@ -21,11 +21,11 @@ public class AdminsControllerGetTests
     public async Task GetAdmin_InvokesQueryHandler(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] AdminsController sut,
-        string userName)
+        string email)
     {
-        await sut.Get(userName);
+        await sut.Get(email);
 
-        mediatorMock.Verify(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()));
+        mediatorMock.Verify(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.Email == email), It.IsAny<CancellationToken>()));
     }
 
     [Test]
@@ -33,13 +33,13 @@ public class AdminsControllerGetTests
     public async Task GetAdmin_InvokesQueryHandler_HandlerReturnsNullResult_ReturnsNotFoundResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] AdminsController sut,
-        string userName)
+        string email)
     {
         var notFoundResponse = ValidatedResponse<GetMemberResult>.EmptySuccessResponse();
-        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.Email == email), It.IsAny<CancellationToken>()))
             .ReturnsAsync(notFoundResponse);
 
-        var result = await sut.Get(userName);
+        var result = await sut.Get(email);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -49,14 +49,14 @@ public class AdminsControllerGetTests
     public async Task GetAdmin_HandlerReturnsData_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] AdminsController sut,
-        string userName,
+        string email,
         GetMemberResult getMemberResult)
     {
         var response = new ValidatedResponse<GetMemberResult>(getMemberResult);
-        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>()))
+        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.Email == email), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.Get(userName);
+        var result = await sut.Get(email);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
@@ -68,12 +68,12 @@ public class AdminsControllerGetTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] AdminsController sut,
         List<ValidationFailure> errors,
-        string userName)
+        string email)
     {
         var errorResponse = new ValidatedResponse<GetMemberResult>(errors);
-        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.UserName == userName), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
+        mediatorMock.Setup(m => m.Send(It.Is<GetAdminMemberQuery>(q => q.Email == email), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-        var result = await sut.Get(userName);
+        var result = await sut.Get(email);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);
