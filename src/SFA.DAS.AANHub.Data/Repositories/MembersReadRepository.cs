@@ -17,4 +17,10 @@ internal class MembersReadRepository : IMembersReadRepository
         .AsNoTracking()
         .Where(m => m.Id == id)
         .SingleOrDefaultAsync();
+
+    public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext
+        .Members
+        .AsNoTracking()
+        .Where(m => m.Email == Email)
+        .SingleOrDefaultAsync();
 }

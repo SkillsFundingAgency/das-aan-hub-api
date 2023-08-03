@@ -5,11 +5,11 @@
 
 DECLARE 
 -- number of calendar events required
-@results int = 10000,
+@results int = 200,
  -- number of events per week
-@eventsperweek int = 160,
+@eventsperweek int = 5,
 -- make it a Monday
-@stardate datetime = '29-May-23',
+@stardate datetime = DATEADD(month, -1, GETUTCDATE()),
 -- set to 1 to add members and attendance
 @addattendance int = 1;
 

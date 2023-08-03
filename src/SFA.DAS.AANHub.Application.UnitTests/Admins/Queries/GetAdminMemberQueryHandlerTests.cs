@@ -15,28 +15,28 @@ public class GetAdminMemberQueryHandlerTests
     [Test]
     [RecursiveMoqAutoData]
     public async Task Handle_AdminFound_ReturnsMemder(
-        [Frozen] Mock<IAdminsReadRepository> adminReadRepositoryMock,
+        [Frozen] Mock<IMembersReadRepository> membersReadRepositoryMock,
         GetAdminMemberQueryHandler sut,
         GetAdminMemberQuery query,
-        Admin admin)
+        Member member)
     {
-        adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(query.UserName)).ReturnsAsync(admin);
+        membersReadRepositoryMock.Setup(a => a.GetMemberByEmail(query.Email)).ReturnsAsync(member);
 
-        var result = await sut.Handle(new GetAdminMemberQuery(query.UserName), new CancellationToken());
+        var result = await sut.Handle(new GetAdminMemberQuery(query.Email), new CancellationToken());
 
-        result.Result.Should().BeEquivalentTo(admin.Member, c => c.ExcludingMissingMembers());
+        result.Result.Should().BeEquivalentTo(member, c => c.ExcludingMissingMembers());
     }
 
     [Test]
     [RecursiveMoqAutoData]
     public async Task Handle_ApprenticeNotFound_ReturnsNull(
-        [Frozen] Mock<IAdminsReadRepository> adminReadRepositoryMock,
+        [Frozen] Mock<IMembersReadRepository> membersReadRepositoryMock,
         GetAdminMemberQueryHandler sut,
         GetAdminMemberQuery query)
     {
-        adminReadRepositoryMock.Setup(a => a.GetAdminByUserName(query.UserName)).ReturnsAsync(() => null);
+        membersReadRepositoryMock.Setup(a => a.GetMemberByEmail(query.Email)).ReturnsAsync(() => null);
 
-        var result = await sut.Handle(new GetAdminMemberQuery(query.UserName), new CancellationToken());
+        var result = await sut.Handle(new GetAdminMemberQuery(query.Email), new CancellationToken());
 
         result.Result.Should().BeNull();
     }

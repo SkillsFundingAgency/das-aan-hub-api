@@ -46,7 +46,7 @@ public class GetCalendarEventsQueryHandlerTests
             PageSize = 5
         };
 
-        var result = await sut.Handle(query, new CancellationToken());
+        var result = await sut.Handle(query, cancellationToken);
 
         result.Result.CalendarEvents.Count.Should().Be(0);
         result.Result.TotalCount.Should().Be(0);

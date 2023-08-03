@@ -6,6 +6,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Common.CreateMemberCommandBaseVal
 
 public class WhenValidatingRegionId
 {
+    [TestCase(null, true)]
     [TestCase(0, false)]
     [TestCase(1, true)]
     [TestCase(2, true)]
@@ -17,7 +18,7 @@ public class WhenValidatingRegionId
     [TestCase(8, true)]
     [TestCase(9, true)]
     [TestCase(10, false)]
-    public async Task ThenOnlySpecificValuesAreAllowed(int value, bool isValid)
+    public async Task ThenOnlySpecificValuesAreAllowed(int? value, bool isValid)
     {
         CreateMemberCommandBaseValidator sut = new();
         TestTarget target = new()

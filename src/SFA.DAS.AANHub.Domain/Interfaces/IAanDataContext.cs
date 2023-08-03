@@ -1,22 +1,20 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces
+namespace SFA.DAS.AANHub.Domain.Interfaces;
+
+public interface IAanDataContext
 {
-    public interface IAanDataContext
-    {
-        DbSet<Audit> Audits { get; }
-        DbSet<Region> Regions { get; }
-        DbSet<Member> Members { get; }
-        DbSet<Apprentice> Apprentices { get; }
-        DbSet<Employer> Employers { get; }
-        DbSet<Partner> Partners { get; }
-        DbSet<Admin> Admins { get; }
-        DbSet<StagedApprentice> StagedApprentices { get; }
-        DbSet<Calendar> Calendars { get; }
-        DbSet<Profile> Profiles { get; }
-        DbSet<CalendarEvent> CalendarEvents { get; }
-        DbSet<Attendance> Attendances { get; }
-        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
-    }
+    DbSet<Audit> Audits { get; }
+    DbSet<Region> Regions { get; }
+    DbSet<Member> Members { get; }
+    DbSet<Apprentice> Apprentices { get; }
+    DbSet<Employer> Employers { get; }
+    DbSet<Partner> Partners { get; }
+    DbSet<StagedApprentice> StagedApprentices { get; }
+    DbSet<Calendar> Calendars { get; }
+    DbSet<Profile> Profiles { get; }
+    DbSet<CalendarEvent> CalendarEvents { get; }
+    DbSet<Attendance> Attendances { get; }
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

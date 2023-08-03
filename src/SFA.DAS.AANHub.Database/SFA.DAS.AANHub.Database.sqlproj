@@ -64,7 +64,6 @@
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\Apprentice.sql" />
     <Build Include="Tables\Employer.sql" />
-    <Build Include="Tables\Admin.sql" />
     <Build Include="Tables\Partner.sql" />
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
@@ -80,6 +79,7 @@
     <Build Include="Tables\FeedbackAttribute.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
     <None Include="Scripts\PreDeploymentClearDown.sql" />
+    <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
   </ItemGroup>

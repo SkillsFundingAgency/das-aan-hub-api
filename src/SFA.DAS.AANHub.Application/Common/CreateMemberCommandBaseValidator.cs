@@ -34,8 +34,6 @@ public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCo
             .LessThan(DateTime.Today.AddDays(1).Date);
         RuleFor(x => x.RegionId)
             .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(CreateMemberCommandBase.RegionId)))
             .InclusiveBetween(1, 9)
             .WithMessage(InvalidRegionErrorMessage);
         RuleFor(x => x.OrganisationName)
