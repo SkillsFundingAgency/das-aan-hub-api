@@ -1,11 +1,9 @@
 ﻿CREATE TABLE [dbo].[NotificationTemplate]
 (
-    [Id] BIGINT NOT NULL IDENTITY(1, 1) PRIMARY KEY, 
-    [Type] NVARCHAR(10) NOT NULL, 
+    [Id] BIGINT NOT NULL, 
     [Description] NVARCHAR(200) NOT NULL, 
-    [MessageBody] NVARCHAR(256) NOT NULL, 
-    [TemplateId] BIGINT NOT NULL, 
+    [TemplateName] NVARCHAR(200) NOT NULL, 
     [MergeFields] NVARCHAR(MAX) NOT NULL, 
-    [IsActive] BIT NOT NULL, 
-    [IsSystem] BIT NOT NULL
+    [IsActive] BIT NOT NULL DEFAULT 1, 
+    CONSTRAINT [PK_NotificationTemplate] PRIMARY KEY ([Id])        
 )
