@@ -14,7 +14,7 @@ public class Member
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }
     public DateTime LastUpdatedDate { get; set; }
-    public bool IsRegionalChair { get; set; }
+    public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
 
     public List<MemberProfile> MemberProfiles { get; set; } = new();
