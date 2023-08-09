@@ -21,8 +21,7 @@ public class GetMemberByEmailQueryHandlerTests
         result.Result.Should().BeEquivalentTo(member, c => c.ExcludingMissingMembers());
     }
 
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_ReturnsNull_IfMemberIsNotFound(
         [Frozen] Mock<IMembersReadRepository> membersReadRepositoryMock,
         GetMemberByEmailQueryHandler sut,
