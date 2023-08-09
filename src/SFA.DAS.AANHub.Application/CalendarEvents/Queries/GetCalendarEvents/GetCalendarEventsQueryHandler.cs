@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using System.Text.RegularExpressions;
@@ -7,7 +6,7 @@ using System.Text.RegularExpressions;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 
-public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQuery, ValidatedResponse<GetCalendarEventsQueryResult>>
+public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQuery, GetCalendarEventsQueryResult>
 {
     private readonly ICalendarEventsReadRepository _calendarEventsReadRepository;
 
@@ -16,7 +15,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
         _calendarEventsReadRepository = calendarEventsReadRepository;
     }
 
-    public async Task<ValidatedResponse<GetCalendarEventsQueryResult>> Handle(GetCalendarEventsQuery query,
+    public async Task<GetCalendarEventsQueryResult> Handle(GetCalendarEventsQuery query,
         CancellationToken cancellationToken)
     {
         var pageSize = query.PageSize;
@@ -29,14 +28,13 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
 
         if (fromDate.Date > toDate)
         {
-            return new ValidatedResponse<GetCalendarEventsQueryResult>(
-                new GetCalendarEventsQueryResult
-                {
-                    Page = 0,
-                    PageSize = pageSize,
-                    TotalCount = 0,
-                    CalendarEvents = new List<CalendarEventSummaryModel>()
-                });
+            return new GetCalendarEventsQueryResult
+            {
+                Page = 0,
+                PageSize = pageSize,
+                TotalCount = 0,
+                CalendarEvents = new List<CalendarEventSummaryModel>()
+            };
         }
 
         var options = new GetCalendarEventsOptions
@@ -76,7 +74,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             CalendarEvents = responseProcessed
         };
 
-        return new ValidatedResponse<GetCalendarEventsQueryResult>(result);
+        return result;
     }
 
     private static string? ProcessedKeyword(string? keyword)

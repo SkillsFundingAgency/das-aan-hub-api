@@ -1,11 +1,10 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 
-public class GetCalendarEventsQuery : IRequest<ValidatedResponse<GetCalendarEventsQueryResult>>, IRequestedByMemberId
+public class GetCalendarEventsQuery : IRequest<GetCalendarEventsQueryResult>, IRequestedByMemberId
 {
     public Guid RequestedByMemberId { get; set; }
     public string? Keyword { get; set; }

@@ -48,8 +48,8 @@ public class GetCalendarEventsQueryHandlerTests
 
         var result = await sut.Handle(query, cancellationToken);
 
-        result.Result.CalendarEvents.Count.Should().Be(0);
-        result.Result.TotalCount.Should().Be(0);
+        result.CalendarEvents.Count.Should().Be(0);
+        result.TotalCount.Should().Be(0);
     }
 
     [Test]
@@ -87,10 +87,10 @@ public class GetCalendarEventsQueryHandlerTests
 
         var result = await sut.Handle(query, cancellationToken);
 
-        result.Result.CalendarEvents.Count.Should().Be(1);
-        result.Result.TotalCount.Should().Be(0);
+        result.CalendarEvents.Count.Should().Be(1);
+        result.TotalCount.Should().Be(0);
 
-        var calendarEvents = result.Result.CalendarEvents;
+        var calendarEvents = result.CalendarEvents;
 
         calendarEvents.First().Should().BeEquivalentTo(calendarEvent, options => options.Excluding(c => c.CalendarId).Excluding(c => c.RegionId).Excluding(c => c.TotalCount));
     }
@@ -143,8 +143,8 @@ public class GetCalendarEventsQueryHandlerTests
         };
         var result = await sut.Handle(query, cancellationToken);
 
-        result.Result.CalendarEvents.Count.Should().Be(0);
-        result.Result.TotalCount.Should().Be(0);
+        result.CalendarEvents.Count.Should().Be(0);
+        result.TotalCount.Should().Be(0);
         calendarEventsReadRepositoryMock.Verify(x => x.GetCalendarEvents(It.IsAny<GetCalendarEventsOptions>(), cancellationToken), Times.Never);
     }
 

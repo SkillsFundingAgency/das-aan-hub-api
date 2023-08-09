@@ -41,7 +41,7 @@ public class CalendarEventsController : ActionResponseControllerBase
 
     [HttpGet]
     [ProducesResponseType(typeof(GetCalendarEventsQueryResult), StatusCodes.Status200OK)]
-    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
     public async Task<IActionResult> GetCalendarEvents([FromQuery] GetCalendarEventsModel model, CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get calendar events", model.RequestedByMemberId);
@@ -57,7 +57,9 @@ public class CalendarEventsController : ActionResponseControllerBase
 
         var response = await _mediator.Send((GetCalendarEventsQuery)model, cancellationToken);
 
-        return GetResponse(response);
+        if (response == null) return NotFound();
+
+        return new OkObjectResult(response);
     }
 
     [HttpPut("{calendarEventId}/attendance")]
