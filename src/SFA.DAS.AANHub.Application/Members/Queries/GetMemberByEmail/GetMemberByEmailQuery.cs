@@ -4,4 +4,4 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 
 namespace SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 
-public record GetMemberByEmailQuery(string Email) : IRequest<ValidatedResponse<GetMemberByEmailResult>>;
+public record GetMemberByEmailQuery(string Email) : IRequest<ValidatedResponse<GetMemberResult>>;

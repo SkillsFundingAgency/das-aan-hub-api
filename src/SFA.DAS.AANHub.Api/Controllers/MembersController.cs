@@ -49,7 +49,7 @@ public class MembersController : ActionResponseControllerBase
     [HttpGet]
     [Route("{email}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
-    [ProducesResponseType(typeof(GetMemberByEmailResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> Get(string email)
     {
         _logger.LogInformation("AAN Hub API: Received command to get member by email: {email}", email);

@@ -11,6 +11,7 @@ public class GetMemberResult
     public string Status { get; set; } = null!;
     public string? OrganisationName { get; set; }
     public int? RegionId { get; set; }
+    public string UserType { get; set; } = null!;
 
     public static implicit operator GetMemberResult?(Member? member)
     {
@@ -25,7 +26,8 @@ public class GetMemberResult
             LastName = member.LastName,
             Status = member.Status!,
             OrganisationName = member.OrganisationName,
-            RegionId = member.RegionId
+            RegionId = member.RegionId,
+            UserType = member.UserType
         };
     }
 }

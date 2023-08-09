@@ -31,7 +31,7 @@ public class MembersControllerGetByEmailTests
         [Greedy] MembersController sut,
         string email)
     {
-        var notFoundResponse = ValidatedResponse<GetMemberByEmailResult>.EmptySuccessResponse();
+        var notFoundResponse = ValidatedResponse<GetMemberResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetMemberByEmailQuery>(q => q.Email == email), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
         var result = await sut.Get(email);
@@ -44,9 +44,9 @@ public class MembersControllerGetByEmailTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,
         string email,
-        GetMemberByEmailResult getMemberByEmailResult)
+        GetMemberResult getMemberByEmailResult)
     {
-        var response = new ValidatedResponse<GetMemberByEmailResult>(getMemberByEmailResult);
+        var response = new ValidatedResponse<GetMemberResult>(getMemberByEmailResult);
         mediatorMock.Setup(m => m.Send(It.Is<GetMemberByEmailQuery>(q => q.Email == email), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
