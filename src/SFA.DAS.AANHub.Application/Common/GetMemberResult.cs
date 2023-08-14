@@ -12,6 +12,9 @@ public class GetMemberResult
     public string? OrganisationName { get; set; }
     public int? RegionId { get; set; }
     public string UserType { get; set; } = null!;
+    public DateTime JoinedDate { get; set; }
+    public bool? IsRegionalChair { get; set; }
+    public string FullName { get; set; } = null!;
 
     public static implicit operator GetMemberResult?(Member? member)
     {
@@ -27,7 +30,10 @@ public class GetMemberResult
             Status = member.Status!,
             OrganisationName = member.OrganisationName,
             RegionId = member.RegionId,
-            UserType = member.UserType
+            UserType = member.UserType,
+            JoinedDate = member.JoinedDate,
+            IsRegionalChair = member.IsRegionalChair,
+            FullName = member.FullName
         };
     }
 }

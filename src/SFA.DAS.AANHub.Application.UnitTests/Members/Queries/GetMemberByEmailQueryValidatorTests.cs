@@ -1,29 +1,27 @@
 ﻿using FluentValidation.TestHelper;
-using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
-using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries;
 
 public class GetMemberByEmailQueryValidatorTests
 {
-    [Test, RecursiveMoqAutoData]
-    public async Task MissingUser_Fails_Validation(Member member)
+    [TestCase("test@test.com", true)]
+    [TestCase(null, false)]
+    [TestCase("", false)]
+    [TestCase(" ", false)]
+    public async Task Validates_Member_Email_NotNull_Not_Empty(string email, bool isValid)
     {
-        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
-        membersReadRepositoryMock.Setup(m => m.GetMemberByEmail(member.Email))
-            .ReturnsAsync(member);
-
-        var query = new GetMemberByEmailQuery(string.Empty);
-
+        var query = new GetMemberByEmailQuery(email);
         var sut = new GetMemberByEmailQueryValidator();
-
         var result = await sut.TestValidateAsync(query);
 
-        result.ShouldHaveValidationErrorFor(c => c.Email)
-            .WithErrorMessage(GetMemberByEmailQueryValidator.EmailMissingMessage);
+        if (isValid)
+            result.ShouldNotHaveValidationErrorFor(c => c.Email);
+        else
+        {
+            result.ShouldHaveValidationErrorFor(c => c.Email)
+                .WithErrorMessage(GetMemberByEmailQueryValidator.EmailMissingMessage);
+        }
     }
 }

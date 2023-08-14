@@ -1,11 +1,13 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
+using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 using SFA.DAS.Testing.AutoFixture;
@@ -54,5 +56,22 @@ public class MembersControllerGetByEmailTests
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberByEmailResult);
+    }
+
+    [Test]
+    [MoqAutoData]
+    public async Task GetAdmin_InvalidRequest_ReturnsBadRequestResponse(
+        [Frozen] Mock<IMediator> mediatorMock,
+        [Greedy] MembersController sut,
+        List<ValidationFailure> errors,
+        string email)
+    {
+        var errorResponse = new ValidatedResponse<GetMemberResult>(errors);
+        mediatorMock.Setup(m => m.Send(It.Is<GetMemberByEmailQuery>(q => q.Email == email), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
+
+        var result = await sut.Get(email);
+
+        result.As<BadRequestObjectResult>().Should().NotBeNull();
+        result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);
     }
 }
