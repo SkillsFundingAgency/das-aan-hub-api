@@ -10,10 +10,10 @@
 
 INSERT INTO #NotificationTemplate
 VALUES 
-(1,'ask for industry advice','AANIndustryAdvice','"FirstName"',1),
-(2,'ask for help with a network activity','AANAskForHelp','"FirstName"',1),
-(3,'request a case study','AANRequestCaseStudy','"FirstName"',1),
-(4,'get in touch after meeting at a network event','AANGetInTouch','"FirstName"',1);
+(1,'ask for industry advice','AANIndustryAdvice','"contact","link"',1),
+(2,'ask for help with a network activity','AANAskForHelp','"contact","link"',1),
+(3,'request a case study','AANRequestCaseStudy','"contact","link"',1),
+(4,'get in touch after meeting at a network event','AANGetInTouch','"contact","link"',1);
 
 
 MERGE INTO [dbo].[NotificationTemplate] src
