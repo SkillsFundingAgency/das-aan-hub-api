@@ -28,6 +28,6 @@ public class AdminsController : ActionResponseControllerBase
 
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response, new { email = command.Email });
+        return GetPostResponse(response, "Members", new { email = command.Email });
     }
 }
