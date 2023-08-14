@@ -34,16 +34,6 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    protected IActionResult GetPostResponse<T>(ValidatedResponse<T> response, string controllerName, object? routeParameters) where T : class
-    {
-        if (response.IsValidResponse)
-        {
-            return new CreatedAtActionResult(GetMethodName, controllerName, routeParameters, response.Result);
-        }
-
-        return new BadRequestObjectResult(FormatErrors(response.Errors));
-    }
-
     protected IActionResult GetPutResponse(ValidatedResponse<SuccessCommandResult> response)
     {
         return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));

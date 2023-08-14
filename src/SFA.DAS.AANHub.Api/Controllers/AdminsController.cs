@@ -12,7 +12,7 @@ public class AdminsController : ActionResponseControllerBase
 {
     private readonly IMediator _mediator;
 
-    public override string ControllerName => "Admins";
+    public override string ControllerName => "Members";
 
     public AdminsController(IMediator mediator)
     {
@@ -28,6 +28,6 @@ public class AdminsController : ActionResponseControllerBase
 
         var response = await _mediator.Send(command);
 
-        return GetPostResponse(response, "Members", new { email = command.Email });
+        return GetPostResponse(response, new { email = command.Email });
     }
 }
