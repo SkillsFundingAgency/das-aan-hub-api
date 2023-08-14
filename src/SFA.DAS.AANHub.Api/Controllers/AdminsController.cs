@@ -10,14 +10,12 @@ namespace SFA.DAS.AANHub.Api.Controllers;
 [ApiController]
 public class AdminsController : ActionResponseControllerBase
 {
-    private readonly ILogger<AdminsController> _logger;
     private readonly IMediator _mediator;
 
     public override string ControllerName => "Admins";
 
-    public AdminsController(ILogger<AdminsController> logger, IMediator mediator)
+    public AdminsController(IMediator mediator)
     {
-        _logger = logger;
         _mediator = mediator;
     }
 
