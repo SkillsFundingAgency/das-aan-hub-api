@@ -14,6 +14,6 @@ Post-Deployment Script Template
 :r .\AddProfileData.sql
 :r .\AddPreferenceData.sql
 :r .\AddCalendarData.sql
-:r .\AddNotificationData.sql
+:r .\AddNotificationTemplateData.sql
 
 

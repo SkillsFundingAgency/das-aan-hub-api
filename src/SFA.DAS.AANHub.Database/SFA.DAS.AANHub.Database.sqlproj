@@ -90,7 +90,7 @@
     <None Include="Scripts\AddCalendarData.sql" />
     <None Include="Scripts\AddPreferenceData.sql" />
     <None Include="SFA.DAS.AANHub.Database.publish.xml" />
-    <None Include="Scripts\AddNotificationData.sql" />
+    <None Include="Scripts\AddNotificationTemplateData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
