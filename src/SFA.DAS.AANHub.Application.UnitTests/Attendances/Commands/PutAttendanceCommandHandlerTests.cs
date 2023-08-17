@@ -1,5 +1,6 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions.Execution;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
@@ -250,6 +251,42 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands
             await sut.Handle(command, new CancellationToken());
 
             notificationWriteRepository.Verify(a => a.Create(It.Is<Notification>(x => x.TemplateName.Equals(templateName))));
+        }
+
+        [Test]
+        [RecursiveMoqInlineAutoData("testValue 1")]
+        public async Task Handle_WhenUserTypeIsInvalid_GetNotImplementedException(
+            string userType,
+            [Frozen] Mock<IAanDataContext> aanDataContext,
+            [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
+            [Frozen] Mock<IMembersReadRepository> membersReadRepository,
+            [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepository,
+            PutAttendanceCommandHandler sut,
+            Attendance existingAttendance,
+            Member member,
+            CalendarEvent calendarEvent)
+        {
+            existingAttendance.IsAttending = false;
+            member.Id = existingAttendance.MemberId;
+            member.UserType = userType;
+            calendarEvent.Id = existingAttendance.CalendarEventId;
+            attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                      .ReturnsAsync(existingAttendance);
+            membersReadRepository.Setup(a => a.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
+            calendarEventsReadRepository.Setup(a => a.GetCalendarEvent(It.IsAny<Guid>())).ReturnsAsync(calendarEvent);
+
+            var command = new PutAttendanceCommand(
+                existingAttendance.CalendarEventId,
+                existingAttendance.MemberId,
+                true);
+
+            Func<Task> result = async () => await sut.Handle(command, new CancellationToken());
+
+            using (new AssertionScope())
+            {
+                await result.Should().ThrowAsync<NotImplementedException>();
+                aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
+            }
         }
     }
 }
