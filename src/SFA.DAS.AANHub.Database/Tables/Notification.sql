@@ -9,6 +9,12 @@
     [SendAfterTime] DATETIME NULL,
     [SentTime] DATETIME NULL,
     [IsSystem] BIT NOT NULL,
+    [ReferenceId] varchar(36) NULL,
     CONSTRAINT [PK_Notification] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Notifications_Member] FOREIGN KEY ([MemberId]) REFERENCES [Member]([Id])
 )
+
+GO
+
+CREATE INDEX [IX_Notifications] ON [dbo].[Notification](CreatedDate, IsSystem)
+INCLUDE (Id, MemberId, TemplateName, Tokens, CreatedBy, SendAfterTime, SentTime, ReferenceId)

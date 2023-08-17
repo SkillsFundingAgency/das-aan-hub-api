@@ -52,6 +52,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ICalendarsReadRepository, CalendarsReadRepository>();
         services.AddTransient<IAttendancesWriteRepository, AttendancesWriteRepository>();
         services.AddTransient<IAttendancesReadRepository, AttendancesReadRepository>();
+        services.AddTransient<INotificationsWriteRepository, NotificationsWriteRepository>();
     }
 
     public static async Task<string> GenerateTokenAsync()
