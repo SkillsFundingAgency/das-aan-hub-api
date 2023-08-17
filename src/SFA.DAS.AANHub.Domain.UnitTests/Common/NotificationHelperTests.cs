@@ -21,7 +21,7 @@ public class NotificationHelperTests
             result.Tokens.Should().Be(tokens);
             result.CreatedDate.Minute.Should().Be(DateTime.UtcNow.Minute);
             result.IsSystem.Should().Be(isSystem);
-            result.ReferenceId.Should().Be(null);
+            result.ReferenceId.Should().BeNull();
         };
     }
 }
