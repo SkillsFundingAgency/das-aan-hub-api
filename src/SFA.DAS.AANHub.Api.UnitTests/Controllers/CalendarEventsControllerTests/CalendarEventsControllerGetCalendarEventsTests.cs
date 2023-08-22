@@ -80,7 +80,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
-        result.As<NotFoundResult>().Should().NotBeNull();
+        result.As<OkObjectResult>().Should().NotBeNull();
     }
 
     [Test]
