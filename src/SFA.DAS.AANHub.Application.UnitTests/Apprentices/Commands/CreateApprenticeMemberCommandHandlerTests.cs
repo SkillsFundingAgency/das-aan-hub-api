@@ -29,7 +29,7 @@ public class CreateApprenticeMemberCommandHandlerTests
         var response = await sut.Handle(command, new CancellationToken());
 
         var mockRegion = await regionsReadRepository.Object.GetRegionById(command.RegionId.GetValueOrDefault(), CancellationToken.None);
-        var mockToken = new ApprenticeOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
+        var mockToken = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
         var mockTokenSerialised = JsonSerializer.Serialize(mockToken);
 
         using (new AssertionScope())

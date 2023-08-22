@@ -37,5 +37,9 @@ public static class Constants
     {
         public const string ApprenticeOnboardingTemplate = "AANApprenticeOnboarding";
         public const string EmployerOnboardingTemplate = "AANEmployerOnboarding";
+        public const string EmployerEventSignUpTemplate = "AANEmployerEventSignup";
+        public const string EmployerEventCancelTemplate = "AANEmployerEventCancel";
+        public const string ApprenticeEventSignUpTemplate = "AANApprenticeEventSignup";
+        public const string ApprenticeEventCancelTemplate = "AANApprenticeEventCancel";
     }
 }
