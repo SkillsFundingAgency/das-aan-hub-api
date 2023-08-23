@@ -36,5 +36,6 @@ public static class Constants
     public static class EmailTemplateName
     {
         public const string ApprenticeOnboardingTemplate = "AANApprenticeOnboarding";
+        public const string EmployerOnboardingTemplate = "AANEmployerOnboarding";
     }
 }

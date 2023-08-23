@@ -26,15 +26,15 @@ public class CreateApprenticeMemberCommandHandlerTests
         CreateApprenticeMemberCommand command)
     {
         regionsReadRepository.Setup(x => x.GetRegionById(It.IsAny<int>(), CancellationToken.None)).ReturnsAsync(region);
-
         var response = await sut.Handle(command, new CancellationToken());
-        response.Result.MemberId.Should().Be(command.MemberId);
+
         var mockRegion = await regionsReadRepository.Object.GetRegionById(command.RegionId.GetValueOrDefault(), CancellationToken.None);
-        var mockToken = new ApprenticeOnboardingEmailTemplate(command.FirstName!, command.LastName!, mockRegion!.Area, command.NetworkHubLink);
+        var mockToken = new ApprenticeOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
         var mockTokenSerialised = JsonSerializer.Serialize(mockToken);
 
         using (new AssertionScope())
         {
+            response.Result.MemberId.Should().Be(command.MemberId);
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId)));
             auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));

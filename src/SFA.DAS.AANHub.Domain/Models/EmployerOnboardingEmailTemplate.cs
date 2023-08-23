@@ -1,9 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace SFA.DAS.AANHub.Domain.Models;
-public class ApprenticeOnboardingEmailTemplate
+public class EmployerOnboardingEmailTemplate
 {
-    public ApprenticeOnboardingEmailTemplate(string firstName, string lastName, string region)
+    public EmployerOnboardingEmailTemplate(string firstName, string lastName, string region)
     {
         Contact = $"{firstName} {lastName}";
         Region = region;
