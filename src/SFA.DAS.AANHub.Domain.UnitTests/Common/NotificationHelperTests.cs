@@ -11,7 +11,7 @@ public class NotificationHelperTests
     [Test, MoqAutoData]
     public void Create_Notification(Guid memberId, string templateName, string tokens, bool isSystem)
     {
-        var result = NotificationHelper.CreateNotification(memberId, templateName, tokens, isSystem);
+        var result = NotificationHelper.CreateNotification(memberId, templateName, tokens, memberId, isSystem);
 
         using (new AssertionScope())
         {

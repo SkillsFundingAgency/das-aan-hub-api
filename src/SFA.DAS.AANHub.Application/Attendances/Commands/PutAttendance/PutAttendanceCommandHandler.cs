@@ -103,7 +103,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         var templateName = GetTemplateName(command, member!);
         var tokens = await GetTokens(command, member!);
 
-        Notification notification = NotificationHelper.CreateNotification(command.RequestedByMemberId, templateName, tokens, true);
+        Notification notification = NotificationHelper.CreateNotification(command.RequestedByMemberId, templateName, tokens, command.RequestedByMemberId, true);
         _notificationsWriteRepository.Create(notification);
     }
 

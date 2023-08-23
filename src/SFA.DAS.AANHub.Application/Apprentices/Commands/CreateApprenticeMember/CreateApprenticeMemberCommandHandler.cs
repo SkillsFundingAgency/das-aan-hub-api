@@ -47,7 +47,7 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         });
 
         var tokens = await GetTokens(command, cancellationToken);
-        Notification notification = NotificationHelper.CreateNotification(command.MemberId, EmailTemplateName.ApprenticeOnboardingTemplate, tokens, true);
+        Notification notification = NotificationHelper.CreateNotification(command.MemberId, EmailTemplateName.ApprenticeOnboardingTemplate, tokens, command.MemberId, true);
         _notificationsWriteRepository.Create(notification);
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);
