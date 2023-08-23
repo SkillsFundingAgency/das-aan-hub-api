@@ -58,7 +58,7 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
     private async Task<string> GetTokens(CreateApprenticeMemberCommand command, CancellationToken cancellationToken)
     {
         var region = await _regionsReadRepository.GetRegionById(command.RegionId.GetValueOrDefault(), cancellationToken);
-        var apprenticeOnboardingEmailTemplate = new ApprenticeOnboardingEmailTemplate(command.FirstName!, command.LastName!, region?.Area!, command.NetworkHubLink);
+        var apprenticeOnboardingEmailTemplate = new ApprenticeOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
         return JsonSerializer.Serialize(apprenticeOnboardingEmailTemplate);
     }
 }
