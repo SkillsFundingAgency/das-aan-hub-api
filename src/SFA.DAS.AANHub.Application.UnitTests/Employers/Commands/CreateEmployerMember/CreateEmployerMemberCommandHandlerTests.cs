@@ -29,7 +29,7 @@ public class CreateEmployerMemberCommandHandlerTests
 
         var response = await sut.Handle(command, new CancellationToken());
         var mockRegion = await regionsReadRepository.Object.GetRegionById(command.RegionId.GetValueOrDefault(), CancellationToken.None);
-        var mockToken = new EmployerOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
+        var mockToken = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
         var mockTokenSerialised = JsonSerializer.Serialize(mockToken);
 
         using (new AssertionScope())
@@ -61,7 +61,7 @@ public class CreateEmployerMemberCommandHandlerTests
         regionsReadRepository.Setup(x => x.GetRegionById(It.IsAny<int>(), CancellationToken.None)).ReturnsAsync(region);
 
         var response = await sut.Handle(command, new CancellationToken());
-        var mockToken = new EmployerOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region!.Area} team");
+        var mockToken = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region!.Area} team");
         var mockTokenSerialised = JsonSerializer.Serialize(mockToken);
 
         using (new AssertionScope())

@@ -1,13 +1,13 @@
 ﻿using MediatR;
-using Newtonsoft.Json.Linq;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Reflection.Metadata.Ecma335;
+using SFA.DAS.AANHub.Domain.Models;
 using System.Text.Json;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 
@@ -16,14 +16,23 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     private readonly IAanDataContext _aanDataContext;
     private readonly IAuditWriteRepository _auditWriteRepository;
     private readonly IAttendancesWriteRepository _attendancesWriteRepository;
-                                       
+    private readonly IMembersReadRepository _membersReadRepository;
+    private readonly ICalendarEventsReadRepository _calendarEventReadRepository;
+    private readonly INotificationsWriteRepository _notificationsWriteRepository;
+
     public PutAttendanceCommandHandler(IAanDataContext aanDataContext,
                                        IAuditWriteRepository auditWriteRepository,
-                                       IAttendancesWriteRepository attendancesWriteRepository)
+                                       IAttendancesWriteRepository attendancesWriteRepository,
+                                       IMembersReadRepository membersReadRepository,
+                                       ICalendarEventsReadRepository calendarEventsReadRepository,
+                                       INotificationsWriteRepository notificationsWriteRepository)
     {
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
         _attendancesWriteRepository = attendancesWriteRepository;
+        _membersReadRepository = membersReadRepository;
+        _calendarEventReadRepository = calendarEventsReadRepository;
+        _notificationsWriteRepository = notificationsWriteRepository;
     }
 
     public async Task<ValidatedResponse<SuccessCommandResult>> Handle(PutAttendanceCommand command, CancellationToken cancellationToken)
@@ -40,8 +49,8 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     }
 
     private async Task<ValidatedResponse<SuccessCommandResult>> UpdateAttendance(
-        Attendance existingAttendance, 
-        PutAttendanceCommand command, 
+        Attendance existingAttendance,
+        PutAttendanceCommand command,
         CancellationToken token)
     {
         var audit = new Audit()
@@ -58,8 +67,10 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         audit.After = JsonSerializer.Serialize(existingAttendance);
         _auditWriteRepository.Create(audit);
 
+        await CreateNotification(command);
+
         await _aanDataContext.SaveChangesAsync(token);
-        
+
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
     }
 
@@ -79,8 +90,42 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
 
         _attendancesWriteRepository.Create(newAttendance);
 
+        await CreateNotification(command);
+
         await _aanDataContext.SaveChangesAsync(token);
 
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
+    }
+
+    private async Task CreateNotification(PutAttendanceCommand command)
+    {
+        var member = await _membersReadRepository.GetMember(command.RequestedByMemberId);
+        var templateName = GetTemplateName(command, member!);
+        var tokens = await GetTokens(command, member!);
+
+        Notification notification = NotificationHelper.CreateNotification(command.RequestedByMemberId, templateName, tokens, true);
+        _notificationsWriteRepository.Create(notification);
+    }
+
+    private static string GetTemplateName(PutAttendanceCommand command, Member member)
+    {
+        return (command.IsAttending, member.UserType) switch
+        {
+            (true, "Apprentice") => EmailTemplateName.ApprenticeEventSignUpTemplate,
+            (false, "Apprentice") => EmailTemplateName.ApprenticeEventCancelTemplate,
+            (true, "Employer") => EmailTemplateName.EmployerEventSignUpTemplate,
+            (false, "Employer") => EmailTemplateName.EmployerEventCancelTemplate,
+            _ => throw new NotImplementedException()
+        };
+    }
+
+    private async Task<string> GetTokens(PutAttendanceCommand command, Member member)
+    {
+        var calendarEvent = await _calendarEventReadRepository.GetCalendarEvent(command.CalendarEventId);
+        var date = calendarEvent!.StartDate.ToString("dd/MM/yyyy");
+        var time = calendarEvent!.StartDate.ToString("HH:mm");
+
+        var emailTemplate = new EventAttendanceEmailTemplate(member.FirstName, member.LastName, calendarEvent!.Title, date, time);
+        return JsonSerializer.Serialize(emailTemplate);
     }
 }

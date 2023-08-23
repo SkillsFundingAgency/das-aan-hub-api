@@ -69,7 +69,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
                 region = await _regionsReadRepository.GetRegionById(command.RegionId.GetValueOrDefault(), cancellationToken);
             }
 
-            var employerOnboardingEmailTemplate = new EmployerOnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
+            var employerOnboardingEmailTemplate = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
             return JsonSerializer.Serialize(employerOnboardingEmailTemplate);
         }
     }
