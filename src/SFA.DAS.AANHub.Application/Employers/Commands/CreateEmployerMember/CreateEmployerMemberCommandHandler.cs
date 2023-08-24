@@ -48,7 +48,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             });
 
             var tokens = await GetTokens(command, cancellationToken);
-            Notification notification = NotificationHelper.CreateNotification(command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true);
+            Notification notification = NotificationHelper.CreateNotification(command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true, null);
             _notificationsWriteRepository.Create(notification);
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
