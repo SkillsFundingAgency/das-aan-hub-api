@@ -1,6 +1,5 @@
 ﻿using AutoFixture.NUnit3;
 using FluentAssertions;
-using FluentValidation.Results;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
@@ -9,8 +8,6 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
-using SFA.DAS.AANHub.Application.Mediatr.Common;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.Testing.AutoFixture;
 
@@ -66,8 +63,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
         bool? isActive,
         CancellationToken cancellationToken)
     {
-        var emptyResponse = ValidatedResponse<GetCalendarEventsQueryResult>.EmptySuccessResponse();
-        mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
+        var emptyResponse = (GetCalendarEventsQueryResult?)null;
+        mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))!
                     .ReturnsAsync(emptyResponse);
 
         var getCalendarEventsModel = new GetCalendarEventsModel
@@ -83,7 +80,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
-        result.As<NotFoundResult>().Should().NotBeNull();
+        result.As<OkObjectResult>().Should().NotBeNull();
     }
 
     [Test]
@@ -102,9 +99,9 @@ public class CalendarEventsControllerGetCalendarEventsTests
         bool? isActive,
         CancellationToken cancellationToken)
     {
-        var response = new ValidatedResponse<GetCalendarEventsQueryResult>(queryResult);
+
         mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(response);
+                    .ReturnsAsync(queryResult);
 
         var getCalendarEventsModel = new GetCalendarEventsModel
         {
@@ -124,45 +121,6 @@ public class CalendarEventsControllerGetCalendarEventsTests
         result.As<OkObjectResult>().Value.Should().Be(queryResult);
     }
 
-    [Test]
-    [MoqAutoData]
-    public async Task Get_InvalidRequest_ReturnsBadRequestResponse(
-        [Frozen] Mock<IMediator> mediatorMock,
-        [Greedy] CalendarEventsController sut,
-        List<ValidationFailure> errors,
-        Guid requestedByMemberId,
-        DateTime? fromDate,
-        DateTime? toDate,
-        List<EventFormat> eventFormats,
-        List<int> calendarIds,
-        List<int> regionIds,
-        string keyword,
-        bool? isActive,
-        CancellationToken cancellationToken)
-    {
-        var errorResponse = new ValidatedResponse<GetCalendarEventsQueryResult>(errors);
-        mediatorMock.Setup(m => m.Send(It.Is<GetCalendarEventsQuery>(q => q.RequestedByMemberId == requestedByMemberId), It.IsAny<CancellationToken>()))
-                    .ReturnsAsync(errorResponse);
-
-        var getCalendarEventsModel = new GetCalendarEventsModel
-        {
-            RequestedByMemberId = requestedByMemberId,
-            FromDate = fromDate,
-            ToDate = toDate,
-            EventFormat = eventFormats,
-            CalendarId = calendarIds,
-            RegionId = regionIds,
-            Keyword = keyword,
-            IsActive = isActive
-        };
-
-        var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
-
-        result.As<BadRequestObjectResult>().Should().NotBeNull();
-        result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);
-    }
-
-
     [TestCase(1, 5, 1, 5)]
     [TestCase(0, 5, 1, 5)]
     [TestCase(-1, 5, 1, 5)]
@@ -176,7 +134,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         var mediatorMock = new Mock<IMediator>();
         var loggerMock = new Mock<ILogger<CalendarEventsController>>();
         var sut = new CalendarEventsController(loggerMock.Object, mediatorMock.Object);
-        var result = new ValidatedResponse<GetCalendarEventsQueryResult>();
+        var result = new GetCalendarEventsQueryResult();
 
         mediatorMock.Setup(x => x.Send(It.IsAny<GetCalendarEventsQuery>(), It.IsAny<CancellationToken>()))
         .ReturnsAsync(result);
@@ -208,7 +166,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         var mediatorMock = new Mock<IMediator>();
         var loggerMock = new Mock<ILogger<CalendarEventsController>>();
         var sut = new CalendarEventsController(loggerMock.Object, mediatorMock.Object);
-        var result = new ValidatedResponse<GetCalendarEventsQueryResult>();
+        var result = new GetCalendarEventsQueryResult();
         var defaultPage = 1;
         mediatorMock.Setup(x => x.Send(It.IsAny<GetCalendarEventsQuery>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(result);
