@@ -57,15 +57,15 @@ public class GetNotificationQueryValidatorTests
     [Test]
     [RecursiveMoqInlineAutoData("00000000-0000-0000-0000-000000000000")]
     public async Task Validate_NotificationIdIsNull(
-        string notificationId,
+        string mockNotificationId,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         Member member)
     {
-        var id = Guid.Parse(notificationId);
+        var notificationId = Guid.Parse(mockNotificationId);
         membersReadRepository.Setup(m => m.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
 
         var sut = new GetNotificationQueryValidator(membersReadRepository.Object);
-        var result = await sut.TestValidateAsync(new GetNotificationQuery(id, member.Id));
+        var result = await sut.TestValidateAsync(new GetNotificationQuery(notificationId, member.Id));
 
         using (new AssertionScope())
         {
