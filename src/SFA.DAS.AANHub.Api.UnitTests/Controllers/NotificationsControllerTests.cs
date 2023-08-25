@@ -14,8 +14,7 @@ using SFA.DAS.Testing.AutoFixture;
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
 public class NotificationsControllerTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task GetNotification_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediator,
         [Greedy] NotificationsController sut,
@@ -24,7 +23,7 @@ public class NotificationsControllerTests
         var response = new ValidatedResponse<GetNotificationQueryResult>(notification);
         mediator.Setup(m => m.Send(It.IsAny<GetNotificationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>());
+        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>());
         var resultObjectResult = result as ObjectResult;
 
         using (new AssertionScope())
@@ -36,8 +35,7 @@ public class NotificationsControllerTests
         }
     }
 
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task GetNotifications_WithInvalidNotificationId_ReturnsNotFoundResponse(
         [Frozen] Mock<IMediator> mediator,
         [Greedy] NotificationsController sut)
@@ -45,13 +43,12 @@ public class NotificationsControllerTests
         var response = new ValidatedResponse<GetNotificationQueryResult>((GetNotificationQueryResult)null!);
         mediator.Setup(m => m.Send(It.IsAny<GetNotificationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>());
+        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>());
 
         result.Should().BeOfType<NotFoundResult>();
     }
 
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task GetNotifications_WithInvalidMemberId_ReturnsBadRequestObjectResult(
         [Frozen] Mock<IMediator> mediator,
         [Greedy] NotificationsController sut,
@@ -60,7 +57,7 @@ public class NotificationsControllerTests
         var errorResponse = new ValidatedResponse<GetNotificationQueryResult>(errors);
         mediator.Setup(m => m.Send(It.IsAny<GetNotificationQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(errorResponse);
 
-        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>());
+        var result = await sut.Get(It.IsAny<Guid>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>());
 
         result.Should().BeOfType<BadRequestObjectResult>();
     }

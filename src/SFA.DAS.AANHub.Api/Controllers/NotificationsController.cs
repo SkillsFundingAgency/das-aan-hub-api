@@ -1,7 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
-using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
@@ -21,16 +20,15 @@ public class NotificationsController : ActionResponseControllerBase
         _logger = logger;
     }
 
-    [HttpGet]
-    [Route("{id}")]
+    [HttpGet("{id}")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GetNotificationQueryResult), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get([FromRoute] Guid id, [FromHeader] Guid requestedByMemberId)
+    public async Task<IActionResult> Get([FromRoute] Guid id, [FromHeader] Guid requestedByMemberId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command to get notification by Id: {notificationId}", id);
 
-        var response = await _mediator.Send(new GetNotificationQuery(id, requestedByMemberId));
+        var response = await _mediator.Send(new GetNotificationQuery(id, requestedByMemberId), cancellationToken);
 
         return GetResponse(response);
     }

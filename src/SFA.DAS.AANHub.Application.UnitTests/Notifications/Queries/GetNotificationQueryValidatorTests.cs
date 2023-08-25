@@ -17,8 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Notifications.Queries;
 public class GetNotificationQueryValidatorTests
 {
 
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task ValidateCalendarId_Missing_FailsValidation(Member member)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
@@ -35,17 +34,15 @@ public class GetNotificationQueryValidatorTests
               .WithErrorMessage(GetCalendarEventByIdQueryValidator.CalendarEventIdMissingMessage);
     }
 
-    [Test, RecursiveMoqInlineAutoData("93231c8f-7645-48c8-90e7-316f3f15c0ed")]
+    [Test, RecursiveMoqAutoData]
     public async Task Validate_NotificationIdIsValid(
-        string notificationId,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         Member member)
     {
-        var id = Guid.Parse(notificationId);
         member.Status = MembershipStatus.Live;
         membersReadRepository.Setup(m => m.GetMember(member.Id)).ReturnsAsync(member);
 
-        var query = new GetNotificationQuery(id, member.Id);
+        var query = new GetNotificationQuery(Guid.NewGuid(), member.Id);
         var sut = new GetNotificationQueryValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(query);
         var errors = result.Errors.ToList();
