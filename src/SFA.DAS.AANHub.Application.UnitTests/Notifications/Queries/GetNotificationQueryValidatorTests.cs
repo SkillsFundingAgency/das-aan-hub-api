@@ -5,6 +5,7 @@ using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -72,7 +73,7 @@ public class GetNotificationQueryValidatorTests
         using (new AssertionScope())
         {
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(m => m.NotificationId).WithErrorMessage("NotificationId must have a value");
+            result.ShouldHaveValidationErrorFor(m => m.NotificationId).WithErrorMessage(GetNotificationQueryValidator.NotificationIdIsRequired);
         }
     }
 
@@ -108,7 +109,7 @@ public class GetNotificationQueryValidatorTests
         {
             result.IsValid.Should().BeFalse();
             result.ShouldHaveValidationErrorFor(m => m.RequestedByMemberId)
-                .WithErrorMessage("Could not find a valid active Member ID matching the X-RequestedByMemberId header");
+                .WithErrorMessage(RequestedByMemberIdValidator.RequestedByMemberIdNotFoundMessage);
         }
     }
 
@@ -126,7 +127,7 @@ public class GetNotificationQueryValidatorTests
         using (new AssertionScope())
         {
             result.IsValid.Should().BeFalse();
-            result.ShouldHaveValidationErrorFor(m => m.RequestedByMemberId).WithErrorMessage("X-RequestedByMemberId header is empty");
+            result.ShouldHaveValidationErrorFor(m => m.RequestedByMemberId).WithErrorMessage(RequestedByMemberIdValidator.RequestedByMemberHeaderEmptyErrorMessage);
         }
     }
 }
