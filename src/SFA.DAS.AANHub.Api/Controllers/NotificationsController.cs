@@ -24,7 +24,7 @@ public class NotificationsController : ActionResponseControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
     [ProducesResponseType(typeof(GetNotificationQueryResult), StatusCodes.Status200OK)]
-    public async Task<IActionResult> Get([FromRoute] Guid id, [FromHeader] Guid requestedByMemberId, CancellationToken cancellationToken)
+    public async Task<IActionResult> Get([FromRoute] Guid id, [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command to get notification by Id: {notificationId}", id);
 
