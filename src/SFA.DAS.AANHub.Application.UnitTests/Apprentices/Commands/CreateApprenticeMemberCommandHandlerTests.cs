@@ -5,6 +5,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -41,5 +42,18 @@ public class CreateApprenticeMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
         }
+    }
+
+    [Test, MoqAutoData]
+    public async Task Handle_AddsNewApprentice_WithDefaultMemberPreference(
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        CreateApprenticeMemberCommandHandler sut,
+        CreateApprenticeMemberCommand command)
+    {
+        var response = await sut.Handle(command, new CancellationToken());
+
+        response.Result.MemberId.Should().Be(command.MemberId);
+
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == DefaultMemberPreference.GetDefaultMemberPreferences(UserType.Apprentice).Count)));
     }
 }

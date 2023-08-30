@@ -26,10 +26,10 @@ public class MemberProfilesController : ActionResponseControllerBase
     public async Task<IActionResult> PutMemberProfile(
             [FromRoute] Guid memberId,
             [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
-            [FromBody] UpdateMemberProfileModel model)
+            [FromBody] UpdateMemberProfileModel model, CancellationToken cancellationToken)
     {
         UpdateMemberProfilesCommand command = new(memberId, requestedByMemberId, model.Profiles, model.Preferences);
-        var response = await _mediator.Send(command);
+        var response = await _mediator.Send(command, cancellationToken);
 
         return GetPutResponse(response);
     }

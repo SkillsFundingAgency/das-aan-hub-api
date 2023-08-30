@@ -29,39 +29,57 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
 
     public async Task<ValidatedResponse<SuccessCommandResult>> Handle(UpdateMemberProfilesCommand command, CancellationToken cancellationToken)
     {
-        var existingMemberProfile = await _membersWriteRepository.Get(command.MemberId);
+        var existingMember = await _membersWriteRepository.Get(command.MemberId);
 
-        //existingMemberProfile.
-
-        return existingMemberProfile switch
-        {
-            null => new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()),
-            not null => await UpdateMemberProfile(existingMemberProfile, command, cancellationToken),
-        };
+        if (existingMember != null && existingMember.Status == "live") return await UpdateMemberProfile(existingMember, command, cancellationToken);
+        else return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult(false));
     }
 
     private async Task<ValidatedResponse<SuccessCommandResult>> UpdateMemberProfile(
-        Member existingMemberProfile,
+        Member existingMember,
         UpdateMemberProfilesCommand command,
         CancellationToken token)
     {
         var audit = new Audit()
         {
             Action = "Put",
-            Before = JsonSerializer.Serialize(existingMemberProfile),
+            Before = JsonSerializer.Serialize(existingMember),
             ActionedBy = command.RequestedByMemberId,
-            AuditTime = _dateTimeProvider.Now,// DateTime.UtcNow,
+            AuditTime = _dateTimeProvider.Now,
             Resource = nameof(Attendance),
         };
 
-        //update the existing member profile
-        //existingMemberProfile.MemberProfiles = command.PutMemberProfileModel.Profiles;
+        command.Profiles.ToList().ForEach(p =>
+        {
+            var memberProfile = existingMember.MemberProfiles.Find(x => x.ProfileId == p.ProfileId);
+            if (memberProfile != null) memberProfile.ProfileValue = p.Value!;
+            else InsertMemberProfile(existingMember, p.ProfileId, p.Value);
 
-        audit.After = JsonSerializer.Serialize(existingMemberProfile);
+        });
+
+        command.Preferences.ToList().ForEach(p =>
+        {
+            var preference = existingMember.MemberPreferences.Find(x => x.PreferenceId == p.PreferenceId);
+            if (preference != null) preference.AllowSharing = p.Value;
+            else InsertMemberPreference(existingMember, p.PreferenceId, p.Value);
+
+        });
+
+        audit.After = JsonSerializer.Serialize(existingMember);
         _auditWriteRepository.Create(audit);
 
         await _aanDataContext.SaveChangesAsync(token);
 
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
+    }
+
+    private void InsertMemberProfile(Member existingMember, int profileId, string? profileValue)
+    {
+        existingMember.MemberProfiles.Add(new MemberProfile() { Member = existingMember, ProfileId = profileId, ProfileValue = profileValue! });
+    }
+
+    private void InsertMemberPreference(Member existingMember, int preferenceId, bool profileValue)
+    {
+        existingMember.MemberPreferences.Add(new MemberPreference() { Member = existingMember, PreferenceId = preferenceId, AllowSharing = profileValue });
     }
 }

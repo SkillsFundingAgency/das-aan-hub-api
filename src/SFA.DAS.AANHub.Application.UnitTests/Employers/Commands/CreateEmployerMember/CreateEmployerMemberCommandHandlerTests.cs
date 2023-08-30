@@ -5,6 +5,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -73,5 +74,18 @@ public class CreateEmployerMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify((p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None)), Times.Never);
         }
+    }
+
+    [Test, MoqAutoData]
+    public async Task Handle_AddsNewEmployer_WithDefaultMemberPreference(
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        CreateEmployerMemberCommandHandler sut,
+        CreateEmployerMemberCommand command)
+    {
+        var response = await sut.Handle(command, new CancellationToken());
+
+        response.Result.MemberId.Should().Be(command.MemberId);
+
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == DefaultMemberPreference.GetDefaultMemberPreferences(UserType.Employer).Count)));
     }
 }

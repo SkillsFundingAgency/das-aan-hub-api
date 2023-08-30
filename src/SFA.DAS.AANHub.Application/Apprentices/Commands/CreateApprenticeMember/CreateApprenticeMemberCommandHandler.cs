@@ -34,6 +34,7 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         CancellationToken cancellationToken)
     {
         Member member = command;
+        member.MemberPreferences = DefaultMemberPreference.GetDefaultMemberPreferences(UserType.Apprentice);
 
         _membersWriteRepository.Create(member);
 
