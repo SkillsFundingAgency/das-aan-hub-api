@@ -56,7 +56,7 @@ internal class MembersReadRepository : IMembersReadRepository
                       FETCH NEXT {options.PageSize} ROWS ONLY";
 
         var members = await _aanDataContext.MembersSummaries!
-            .FromSqlRaw(sql)
+            .FromSqlRaw(sql, keywordSql)
             .ToListAsync(cancellationToken);
         return members;
     }
@@ -84,7 +84,7 @@ internal class MembersReadRepository : IMembersReadRepository
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.HasValue ? (isRegionalChair.Value ? 1 : 0) : null)}";
+            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0)}";
         }
         return subSqlQuery;
     }
