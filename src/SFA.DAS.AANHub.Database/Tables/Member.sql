@@ -23,3 +23,10 @@ GO
 
 CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FirstName], [LastName], [UserType], [Status])
 GO
+
+CREATE FULLTEXT CATALOG member_catalog;  
+
+GO
+CREATE FULLTEXT INDEX ON [Member](FullName)
+ KEY INDEX [PK_Member]   
+		  ON member_catalog;

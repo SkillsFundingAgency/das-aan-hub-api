@@ -32,4 +32,9 @@ public static class Constants
         public const int Longitude = 36;
         public const int Latitude = 37;
     }
+
+    public static class Members
+    {
+        public static readonly int PageSize = 30;
+    }
 }
