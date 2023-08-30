@@ -4,7 +4,6 @@ using FluentAssertions.Execution;
 using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Employers.Queries;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
@@ -16,24 +15,6 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 namespace SFA.DAS.AANHub.Application.UnitTests.Notifications.Queries;
 public class GetNotificationQueryValidatorTests
 {
-
-    [Test, RecursiveMoqAutoData]
-    public async Task ValidateCalendarId_Missing_FailsValidation(Member member)
-    {
-        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
-        membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
-                                 .ReturnsAsync(member);
-
-        var query = new GetCalendarEventByIdQuery(Guid.Empty, member.Id);
-
-        var sut = new GetCalendarEventByIdQueryValidator(membersReadRepositoryMock.Object);
-
-        var result = await sut.TestValidateAsync(query);
-
-        result.ShouldHaveValidationErrorFor(c => c.CalendarEventId)
-              .WithErrorMessage(GetCalendarEventByIdQueryValidator.CalendarEventIdMissingMessage);
-    }
-
     [Test, RecursiveMoqAutoData]
     public async Task Validate_NotificationIdIsValid(
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,

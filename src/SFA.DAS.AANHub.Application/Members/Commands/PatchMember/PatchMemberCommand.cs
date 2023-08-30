@@ -1,13 +1,14 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.JsonPatch;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
 using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 
-public class PatchMemberCommand : IRequest<ValidatedResponse<SuccessCommandResult>>
+public class PatchMemberCommand : IRequest<ValidatedResponse<SuccessCommandResult>>, IMemberId
 {
     public Guid MemberId { get; set; }
     public JsonPatchDocument<Member> PatchDoc { get; set; } = new();

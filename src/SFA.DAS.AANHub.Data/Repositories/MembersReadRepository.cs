@@ -23,4 +23,10 @@ internal class MembersReadRepository : IMembersReadRepository
         .AsNoTracking()
         .Where(m => m.Email == email)
         .SingleOrDefaultAsync();
+
+    public async Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken) => await _aanDataContext
+        .Members
+        .AsNoTracking()
+        .Where(m => memberIds.Contains(m.Id))
+        .ToListAsync(cancellationToken);
 }

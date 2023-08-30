@@ -16,5 +16,8 @@ public interface IAanDataContext
     DbSet<Profile> Profiles { get; }
     DbSet<CalendarEvent> CalendarEvents { get; }
     DbSet<Attendance> Attendances { get; }
+    DbSet<Notification> Notifications { get; }
+    DbSet<NotificationTemplate> NotificationTemplates { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
