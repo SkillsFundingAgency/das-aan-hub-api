@@ -84,7 +84,7 @@ internal class MembersReadRepository : IMembersReadRepository
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.HasValue ? (isRegionalChair.Value ? 1 : 0) : null)}";
+            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0)}";
         }
         return subSqlQuery;
     }

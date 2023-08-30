@@ -1,8 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 
 namespace SFA.DAS.AANHub.Domain.Entities;
 
 [Keyless]
+[ExcludeFromCodeCoverage]
 public class MembersSummary
 {
     public Guid MemberId { get; set; }
