@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Microsoft.AspNetCore.JsonPatch.Operations;
+using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
 using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -7,7 +8,6 @@ namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 
 public class PatchMemberCommandValidator : AbstractValidator<PatchMemberCommand>
 {
-    public const string MemberIdNotRecognisedErrorMessage = "Member record not found";
     public const string NoPatchOperationsPresentErrorMessage = "There are no patch operations in this request";
     public static readonly string TooManyPatchOperationsPresentErrorMessage = $"There are too many patch operations in this request, a maximum of {MemberPatchFields.PatchFields.Length} operations are allowed";
     public const string FoundDuplicatePatchOperationsErrorMessage = "There are duplicate patch operations in this request";
@@ -21,17 +21,7 @@ public class PatchMemberCommandValidator : AbstractValidator<PatchMemberCommand>
 
     public PatchMemberCommandValidator(IMembersReadRepository membersReadRepository)
     {
-        RuleFor(x => x.MemberId)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(PatchMemberCommand.MemberId)))
-            .MustAsync(async (memberId, cancellation) =>
-            {
-                var member = await membersReadRepository.GetMember(memberId);
-                return member != null;
-            })
-            .WithMessage(MemberIdNotRecognisedErrorMessage);
-
+        Include(new MemberIdValidator(membersReadRepository));
         RuleFor(c => c.PatchDoc)
             .Must(p => p.Operations.Count > 0)
             .WithMessage(NoPatchOperationsPresentErrorMessage)

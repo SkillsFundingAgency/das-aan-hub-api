@@ -11,8 +11,8 @@ using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
-public class NotificationsControllerTests
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.NotificationsControllerTests;
+public class NotificationsControllerGetTests
 {
     [Test, RecursiveMoqAutoData]
     public async Task GetNotification_ReturnsOkResponse(

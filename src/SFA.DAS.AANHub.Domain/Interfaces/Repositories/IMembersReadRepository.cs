@@ -7,4 +7,6 @@ public interface IMembersReadRepository
     Task<Member?> GetMember(Guid id);
 
     Task<Member?> GetMemberByEmail(string Email);
+    Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken);
+
 }

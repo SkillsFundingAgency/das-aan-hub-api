@@ -3,8 +3,9 @@
 namespace SFA.DAS.AANHub.Domain.Common;
 public static class NotificationHelper
 {
-    public static Notification CreateNotification(Guid memberId, string templateName, string tokens, Guid createdBy, bool isSystem, string? referenceId) => new Notification()
+    public static Notification CreateNotification(Guid notificationId, Guid memberId, string templateName, string tokens, Guid createdBy, bool isSystem, string? referenceId) => new Notification()
     {
+        Id = notificationId,
         MemberId = memberId,
         TemplateName = templateName,
         Tokens = tokens,

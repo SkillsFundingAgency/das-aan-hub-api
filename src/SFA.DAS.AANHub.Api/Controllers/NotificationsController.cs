@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Notifications.Commands;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
@@ -31,5 +34,16 @@ public class NotificationsController : ActionResponseControllerBase
         var response = await _mediator.Send(new GetNotificationQuery(id, requestedByMemberId), cancellationToken);
 
         return GetResponse(response);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateMemberCommandResponse), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateNotification([FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId, 
+        [FromBody] CreateNotificationModel model, CancellationToken cancellationToken)
+    {
+        var response = await _mediator.Send(new CreateNotificationCommand() { RequestedByMemberId = requestedByMemberId, MemberId = model.MemberId, NotificationTemplateId = model.NotificationTemplateId }, cancellationToken);
+
+        return GetPostResponse(response, new { id = (response.Result != null) ? response.Result.NotificationId : Guid.NewGuid()});
     }
 }
