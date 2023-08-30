@@ -31,7 +31,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
     {
         var existingMember = await _membersWriteRepository.Get(command.MemberId);
 
-        if (existingMember != null && existingMember.Status == "live") return await UpdateMemberProfile(existingMember, command, cancellationToken);
+        if (existingMember != null) return await UpdateMemberProfile(existingMember, command, cancellationToken);
         else return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult(false));
     }
 
@@ -73,12 +73,12 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
     }
 
-    private void InsertMemberProfile(Member existingMember, int profileId, string? profileValue)
+    private static void InsertMemberProfile(Member existingMember, int profileId, string? profileValue)
     {
         existingMember.MemberProfiles.Add(new MemberProfile() { Member = existingMember, ProfileId = profileId, ProfileValue = profileValue! });
     }
 
-    private void InsertMemberPreference(Member existingMember, int preferenceId, bool profileValue)
+    private static void InsertMemberPreference(Member existingMember, int preferenceId, bool profileValue)
     {
         existingMember.MemberPreferences.Add(new MemberPreference() { Member = existingMember, PreferenceId = preferenceId, AllowSharing = profileValue });
     }
