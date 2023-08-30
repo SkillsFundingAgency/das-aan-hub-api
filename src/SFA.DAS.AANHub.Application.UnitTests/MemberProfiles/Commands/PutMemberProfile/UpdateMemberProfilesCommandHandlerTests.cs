@@ -39,7 +39,34 @@ public class UpdateMemberProfilesCommandHandlerTests
     {
         Member existingMember = new();
         existingMember.Id = Guid.NewGuid();
-        UpdateMemberProfilesCommand command = new(existingMember.Id, existingMember.Id, new List<UpdateProfileModel>(), new List<UpdatePreferenceModel>());
+
+        existingMember.MemberProfiles = new List<MemberProfile>()
+        {   new MemberProfile { ProfileId = 41, ProfileValue = "ToBeUpdated" },
+            new MemberProfile { ProfileId = 42, ProfileValue = "NotToBeUpdated" },
+            new MemberProfile { ProfileId = 44, ProfileValue = "ToBeSetToNull" }
+        };
+
+        var updateProfileModel = new List<UpdateProfileModel>()
+        {
+            new UpdateProfileModel { ProfileId = 41, Value = "UpdatedValue" },
+            new UpdateProfileModel { ProfileId = 43, Value = "ToBeInsertedValue" },
+            new UpdateProfileModel { ProfileId = 44, Value = null }
+        };
+
+        existingMember.MemberPreferences = new List<MemberPreference>()
+        {
+            new MemberPreference{ PreferenceId =1, AllowSharing =true },
+            new MemberPreference{ PreferenceId =2, AllowSharing =false }
+        };
+
+        var updatePreferenceModel = new List<UpdatePreferenceModel>()
+        {
+            new UpdatePreferenceModel { PreferenceId = 1, Value = false },
+            new UpdatePreferenceModel { PreferenceId = 2, Value = true }
+        };
+
+        UpdateMemberProfilesCommand command = new(existingMember.Id, existingMember.Id, updateProfileModel, updatePreferenceModel);
+
         membersWriteRepository.Setup(x => x.Get(existingMember.Id)).ReturnsAsync(() => existingMember);
 
         await sut.Handle(command, new CancellationToken());
@@ -51,7 +78,7 @@ public class UpdateMemberProfilesCommandHandlerTests
         auditWriteRepository.Verify(a => a.Create(
                 It.Is<Audit>(
                     a => a.Action == "Put"
-                    && a.Before == serializedExistingMember
+                    && a.After == serializedExistingMember
                     && a.ActionedBy == command.RequestedByMemberId
                     && a.Resource == nameof(Member))),
                 Times.Once);
