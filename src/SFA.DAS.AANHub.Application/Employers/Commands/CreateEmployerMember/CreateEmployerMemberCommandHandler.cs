@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
@@ -35,7 +36,7 @@ public class CreateEmployerMemberCommandHandler :
         CancellationToken cancellationToken)
     {
         Member member = command;
-        member.MemberPreferences = DefaultMemberPreference.GetDefaultMemberPreferences(UserType.Employer);
+        member.MemberPreferences = MemberPreferenceService.GetDefaultMemberPreferences(UserType.Employer);
 
         _membersWriteRepository.Create(member);
 

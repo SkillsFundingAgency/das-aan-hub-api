@@ -5,6 +5,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -54,6 +55,6 @@ public class CreateApprenticeMemberCommandHandlerTests
 
         response.Result.MemberId.Should().Be(command.MemberId);
 
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == DefaultMemberPreference.GetDefaultMemberPreferences(UserType.Apprentice).Count)));
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultMemberPreferences(UserType.Apprentice).Count)));
     }
 }

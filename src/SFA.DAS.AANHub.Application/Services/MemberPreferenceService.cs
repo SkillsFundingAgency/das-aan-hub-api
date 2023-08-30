@@ -1,8 +1,8 @@
-﻿using SFA.DAS.AANHub.Domain.Entities;
+﻿using SFA.DAS.AANHub.Domain.Common;
+using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Common;
-
-public static class DefaultMemberPreference
+namespace SFA.DAS.AANHub.Application.Services;
+public static class MemberPreferenceService
 {
     public const int AreasOfInterest = 1;
     public const int JobTitle = 2;

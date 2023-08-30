@@ -46,7 +46,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
             Before = JsonSerializer.Serialize(existingMember),
             ActionedBy = command.RequestedByMemberId,
             AuditTime = _dateTimeProvider.Now,
-            Resource = nameof(Attendance),
+            Resource = nameof(Member),
         };
 
         command.Profiles.ToList().ForEach(p =>
