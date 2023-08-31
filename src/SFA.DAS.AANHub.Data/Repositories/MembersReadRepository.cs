@@ -56,7 +56,7 @@ internal class MembersReadRepository : IMembersReadRepository
                       FETCH NEXT {options.PageSize} ROWS ONLY";
 
         var members = await _aanDataContext.MembersSummaries!
-            .FromSqlRaw(sql, keywordSql)
+            .FromSqlRaw(sql)
             .ToListAsync(cancellationToken);
         return members;
     }

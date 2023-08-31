@@ -20,4 +20,12 @@ public class GetMemberOptionsTests
 
         Assert.That(sut.KeywordCount, Is.EqualTo(0));
     }
+
+    [Test, RecursiveMoqAutoData]
+    public void GetMembersOptions_Keyword_HasSpace_ResultsIn_KeywordCount(GetMembersOptions sut)
+    {
+        sut.Keyword = " ";
+
+        Assert.That(sut.KeywordCount, Is.EqualTo(0));
+    }
 }
