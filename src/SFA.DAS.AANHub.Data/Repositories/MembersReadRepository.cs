@@ -84,7 +84,7 @@ internal class MembersReadRepository : IMembersReadRepository
             switch (userType.Count)
             {
                 case 1:
-                    subSqlQuery = $" Mem.[UserType] = '{userType.First()}'";
+                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}'";
                     break;
                 default:
                     subSqlQuery = " Mem.[UserType] IN ('";

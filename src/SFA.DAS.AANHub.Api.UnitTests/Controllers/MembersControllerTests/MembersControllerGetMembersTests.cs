@@ -157,7 +157,7 @@ public class MembersControllerGetMembersTests
         var getMembersModel = new GetMembersModel
         {
             RequestedByMemberId = Guid.NewGuid(),
-            UserType = null,
+            UserType = new List<MemberUserType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,
@@ -186,7 +186,7 @@ public class MembersControllerGetMembersTests
         var getMembersModel = new GetMembersModel
         {
             RequestedByMemberId = Guid.NewGuid(),
-            UserType = null,
+            UserType = new List<MemberUserType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,
