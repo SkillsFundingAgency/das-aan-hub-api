@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -21,7 +22,7 @@ public class GetMembersQueryValidatorTests
         var query = new GetMembersQuery
         {
             RequestedByMemberId = member.Id,
-            UserType = "employer",
+            UserType = new List<MemberUserType>(),
             IsRegionalChair = false,
             Keyword = "test",
             RegionIds = new List<int>(),
@@ -35,7 +36,7 @@ public class GetMembersQueryValidatorTests
             .Setup(c => c.GetMembers(new GetMembersOptions
             {
                 MemberId = member.Id,
-                UserType = "employer",
+                UserType = new List<MemberUserType>(),
                 IsRegionalChair = false,
                 Keyword = "test",
                 RegionIds = new List<int>(),
@@ -66,7 +67,7 @@ public class GetMembersQueryValidatorTests
         var query = new GetMembersQuery
         {
             RequestedByMemberId = inactiveGuid,
-            UserType = "employer",
+            UserType = new List<MemberUserType>(),
             IsRegionalChair = false,
             Keyword = "test",
             RegionIds = new List<int>(),

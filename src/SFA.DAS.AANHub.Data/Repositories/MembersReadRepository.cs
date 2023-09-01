@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -75,12 +76,22 @@ internal class MembersReadRepository : IMembersReadRepository
                 return eventTypes;
         }
     }
-    private static string GenerateUserTypeSql(string? userType, bool? isRegionalChair)
+    private static string GenerateUserTypeSql(List<MemberUserType> userType, bool? isRegionalChair)
     {
         string subSqlQuery = string.Empty;
-        if (!string.IsNullOrEmpty(userType))
+        if (userType != null && userType.Count > 0)
         {
-            subSqlQuery = $" Mem.[UserType] = '{userType}'";
+            switch (userType.Count)
+            {
+                case 1:
+                    subSqlQuery = $" Mem.[UserType] = '{userType.First()}'";
+                    break;
+                default:
+                    subSqlQuery = " Mem.[UserType] IN ('";
+                    subSqlQuery += string.Join("','", userType.ToList());
+                    subSqlQuery += "')";
+                    break;
+            }
         }
         else if (isRegionalChair is not null)
         {

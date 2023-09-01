@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
+using SFA.DAS.AANHub.Domain.Common;
 using Constants = SFA.DAS.AANHub.Api.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.Models;
@@ -16,7 +17,7 @@ public class GetMembersModel
     public List<int> RegionId { get; set; } = new List<int>();
 
     [FromQuery]
-    public string? UserType { get; set; }
+    public List<MemberUserType> UserType { get; set; } = new List<MemberUserType>();
 
     [FromQuery]
     public bool? IsRegionalChair { get; set; }

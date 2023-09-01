@@ -3,6 +3,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
@@ -16,7 +17,7 @@ public class GetMembersQueryHandlerTests
         Member member,
         List<int> regionIds,
         string keyword,
-        string? userType,
+        List<MemberUserType> userType,
         CancellationToken cancellationToken
      )
     {
@@ -53,7 +54,7 @@ public class GetMembersQueryHandlerTests
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var regionIds = new List<int> { 1 };
         var keyword = "test";
-        var userType = "employer";
+        var userType = new List<MemberUserType> { MemberUserType.Employer };
         var membersSummary = new MembersSummary();
         var isRegionalChair = false;
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
@@ -96,7 +97,7 @@ public class GetMembersQueryHandlerTests
         var membersSummary = new MembersSummary();
         var memberId = Guid.NewGuid();
         var regionIds = new List<int>();
-        var userType = "employer";
+        var userType = new List<MemberUserType>();
         var isRegionalChair = false;
 
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
@@ -129,7 +130,7 @@ public class GetMembersQueryHandlerTests
         var membersSummary = new MembersSummary();
         var memberId = Guid.NewGuid();
         var regionIds = new List<int>();
-        var userType = "employer";
+        var userType = new List<MemberUserType>();
         var keyword = "test";
 
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
@@ -152,9 +153,8 @@ public class GetMembersQueryHandlerTests
             It.Is<GetMembersOptions>(c => c.IsRegionalChair == isRegionalChair), cancellationToken), Times.Once);
     }
 
-    [TestCase(null)]
-    [TestCase("employer")]
-    public async Task Handle_UserType_CheckUserTypeExpected(string? userType)
+    [Test, TestCaseSource(nameof(_Data))]
+    public async Task Handle_UserType_CheckUserTypeExpected(List<MemberUserType> userType)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
@@ -183,4 +183,10 @@ public class GetMembersQueryHandlerTests
         membersReadRepositoryMock.Verify(x => x.GetMembers(
             It.Is<GetMembersOptions>(c => c.UserType == userType), cancellationToken), Times.Once);
     }
+
+    private static readonly object?[] _Data =
+    {
+      null,
+      new object[] {new List<MemberUserType> { MemberUserType.Employer} }
+    };
 }
