@@ -68,11 +68,22 @@ internal class MembersReadRepository : IMembersReadRepository
             case 0:
                 return "";
             case 1:
-                return $" Reg.Id = {regions.First()}";
+                if (regions.Where(region => region == 0).Count() > 0)
+                {
+                    return $" Reg.Id IS NULL";
+                }
+                else
+                {
+                    return $" Reg.Id = {regions.First()}";
+                }
             default:
                 var eventTypes = " Reg.Id IN (";
-                eventTypes += string.Join(",", regions.ToList());
+                eventTypes += string.Join(",", regions.Where(region => region != 0).ToList());
                 eventTypes += ")";
+                if (regions.Where(region => region == 0).Count() > 0)
+                {
+                    eventTypes = " ( " + eventTypes + " OR Reg.Id IS NULL)";
+                }
                 return eventTypes;
         }
     }
