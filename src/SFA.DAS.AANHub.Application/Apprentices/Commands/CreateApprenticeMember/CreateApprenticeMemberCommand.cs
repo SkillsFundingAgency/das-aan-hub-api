@@ -9,7 +9,6 @@ namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember
 public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<ValidatedResponse<CreateMemberCommandResponse>>
 {
     public Guid ApprenticeId { get; set; }
-    public string NetworkHubLink { get; set; } = null!;
 
     public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
     {
