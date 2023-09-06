@@ -30,7 +30,7 @@ public class AdminsControllerCreateTests
 
         var result = await sut.CreateAdmin(model) as CreatedAtActionResult;
 
-        result?.ControllerName.Should().Be("Admins");
+        result?.ControllerName.Should().Be("Members");
         result?.ActionName.Should().Be("Get");
         result?.StatusCode.Should().Be(StatusCodes.Status201Created);
         result?.Value.As<CreateMemberCommandResponse>().MemberId.Should().Be(memberId);

@@ -6,5 +6,5 @@ public interface IMembersReadRepository
 {
     Task<Member?> GetMember(Guid id);
 
-    Task<Member?> GetMemberByEmail(string Email);
+    Task<Member?> GetMemberByEmail(string email);
 }
