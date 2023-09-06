@@ -69,7 +69,7 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
         };
 
         var tokens = GetTokens(member);
-        Notification notification = NotificationHelper.CreateNotification(member.Id, emailTemplate, tokens, member.Id, true, null);
+        Notification notification = NotificationHelper.CreateNotification(Guid.NewGuid(), member.Id, emailTemplate, tokens, member.Id, true, null);
         _notificationsWriteRepository.Create(notification);
     }
 
