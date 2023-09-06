@@ -16,5 +16,11 @@ namespace SFA.DAS.AANHub.Data.Repositories
                 .Regions
                 .AsNoTracking()
                 .ToListAsync(cancellationToken);
+
+        public async Task<Region> GetRegionById(int Id, CancellationToken cancellationToken) => await _aanDataContext
+                .Regions
+                .AsNoTracking()
+                .Where(r => r.Id == Id)
+                .SingleAsync(cancellationToken);
     }
 }

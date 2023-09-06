@@ -21,6 +21,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<CalendarEventSummary>? CalendarEventSummaries { get; set; }
     public DbSet<Attendance> Attendances => Set<Attendance>();
     public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
+    public DbSet<Notification> Notifications => Set<Notification>();
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
