@@ -23,6 +23,7 @@ public class GetMembersQueryValidatorTests
         {
             RequestedByMemberId = member.Id,
             UserType = new List<MemberUserType>(),
+            Status = new List<MembershipStatusType>(),
             IsRegionalChair = false,
             Keyword = "test",
             RegionIds = new List<int>(),
@@ -37,6 +38,7 @@ public class GetMembersQueryValidatorTests
             {
                 MemberId = member.Id,
                 UserType = new List<MemberUserType>(),
+                Status = new List<MembershipStatusType>(),
                 IsRegionalChair = false,
                 Keyword = "test",
                 RegionIds = new List<int>(),
@@ -68,6 +70,7 @@ public class GetMembersQueryValidatorTests
         {
             RequestedByMemberId = inactiveGuid,
             UserType = new List<MemberUserType>(),
+            Status = new List<MembershipStatusType>(),
             IsRegionalChair = false,
             Keyword = "test",
             RegionIds = new List<int>(),

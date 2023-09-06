@@ -9,6 +9,7 @@ public class GetMembersQuery : IRequest<ValidatedResponse<GetMembersQueryResult>
 {
     public Guid RequestedByMemberId { get; set; }
     public List<MemberUserType> UserType { get; set; } = new List<MemberUserType>();
+    public List<MembershipStatusType> Status { get; set; } = new List<MembershipStatusType>();
     public bool? IsRegionalChair { get; set; }
     public List<int> RegionIds { get; set; } = new List<int>();
     public string? Keyword { get; set; }

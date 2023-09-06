@@ -23,6 +23,7 @@ public class MembersControllerGetMembersTests
        [Greedy] MembersController sut,
        Guid requestedByMemberId,
        List<MemberUserType> userType,
+       List<MembershipStatusType> status,
        bool? isRegionalChair,
        List<int> regionIds,
        string keyword,
@@ -32,6 +33,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = requestedByMemberId,
             UserType = userType,
+            Status = status,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -50,6 +52,7 @@ public class MembersControllerGetMembersTests
         [Greedy] MembersController sut,
         Guid requestedByMemberId,
         List<MemberUserType> userType,
+        List<MembershipStatusType> status,
         bool? isRegionalChair,
         List<int> regionIds,
         string keyword,
@@ -63,6 +66,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = requestedByMemberId,
             UserType = userType,
+            Status = status,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -79,6 +83,7 @@ public class MembersControllerGetMembersTests
         Guid requestedByMemberId,
         GetMembersQueryResult queryResult,
         List<MemberUserType> userType,
+        List<MembershipStatusType> status,
         bool? isRegionalChair,
         List<int> regionIds,
         string keyword,
@@ -92,6 +97,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = requestedByMemberId,
             UserType = userType,
+            Status = status,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -111,6 +117,7 @@ public class MembersControllerGetMembersTests
         Guid requestedByMemberId,
         GetMembersQueryResult queryResult,
         List<MemberUserType> userType,
+        List<MembershipStatusType> status,
         bool? isRegionalChair,
         List<int> regionIds,
         string keyword,
@@ -124,6 +131,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = requestedByMemberId,
             UserType = userType,
+            Status = status,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -158,6 +166,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = Guid.NewGuid(),
             UserType = new List<MemberUserType>(),
+            Status = new List<MembershipStatusType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,
@@ -187,6 +196,7 @@ public class MembersControllerGetMembersTests
         {
             RequestedByMemberId = Guid.NewGuid(),
             UserType = new List<MemberUserType>(),
+            Status = new List<MembershipStatusType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,

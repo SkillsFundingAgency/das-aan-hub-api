@@ -20,6 +20,9 @@ public class GetMembersModel
     public List<MemberUserType> UserType { get; set; } = new List<MemberUserType>();
 
     [FromQuery]
+    public List<MembershipStatusType> Status { get; set; } = new List<MembershipStatusType>();
+
+    [FromQuery]
     public bool? IsRegionalChair { get; set; }
 
     [FromQuery]
@@ -33,6 +36,7 @@ public class GetMembersModel
         Keyword = model.Keyword,
         RegionIds = model.RegionId,
         UserType = model.UserType,
+        Status = model.Status,
         IsRegionalChair = model.IsRegionalChair,
         Page = model.Page,
         PageSize = model.PageSize
