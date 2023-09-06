@@ -53,7 +53,7 @@ internal class MembersReadRepository : IMembersReadRepository
                       {keywordSql}
                       {((!string.IsNullOrEmpty(keywordSql) && !string.IsNullOrEmpty(regions)) ? " AND " : "") + regions}
                       {(((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions)) && !string.IsNullOrEmpty(userType)) ? " AND " : "") + userType}
-                      {(((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions)) && !string.IsNullOrEmpty(userType) && !string.IsNullOrEmpty(status)) ? " AND " : "") + status}
+                      {(((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions) || !string.IsNullOrEmpty(userType)) && !string.IsNullOrEmpty(status)) ? " AND " : "") + status}
                       ORDER BY Mem.[FullName]  
                       OFFSET {(options.Page - 1) * options.PageSize} ROWS 
                       FETCH NEXT {options.PageSize} ROWS ONLY";
