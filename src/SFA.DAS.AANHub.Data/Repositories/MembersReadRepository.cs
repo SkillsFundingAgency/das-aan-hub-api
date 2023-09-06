@@ -70,7 +70,7 @@ internal class MembersReadRepository : IMembersReadRepository
             case 0:
                 return "";
             case 1:
-                if (regions.Where(region => region == 0).Any())
+                if (regions.Any(region => region == 0))
                 {
                     return $" Reg.Id IS NULL";
                 }
@@ -82,7 +82,7 @@ internal class MembersReadRepository : IMembersReadRepository
                 var eventTypes = " Reg.Id IN (";
                 eventTypes += string.Join(",", regions.Where(region => region != 0).ToList());
                 eventTypes += ")";
-                if (regions.Where(region => region == 0).Any())
+                if (regions.Any(region => region == 0))
                 {
                     eventTypes = " ( " + eventTypes + " OR Reg.Id IS NULL)";
                 }
