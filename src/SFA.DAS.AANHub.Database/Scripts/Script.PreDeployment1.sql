@@ -11,3 +11,5 @@
 */
 
 :r .\PreDeploymentClearDown.sql
+:r .\DropFeedbackTable.sql
+:r .\DropFeedbackAttributeTable.sql

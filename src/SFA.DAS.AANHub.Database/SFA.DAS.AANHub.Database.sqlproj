@@ -76,8 +76,6 @@
     <Build Include="Tables\Document.sql" />
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\EventGuest.sql" />
-    <Build Include="Tables\Feedback.sql" />
-    <Build Include="Tables\FeedbackAttribute.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
     <None Include="Scripts\PreDeploymentClearDown.sql" />
     <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
@@ -94,6 +92,8 @@
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
+    <None Include="Scripts\DropFeedbackTable.sql" />
+    <None Include="Scripts\DropFeedbackAttributeTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />
