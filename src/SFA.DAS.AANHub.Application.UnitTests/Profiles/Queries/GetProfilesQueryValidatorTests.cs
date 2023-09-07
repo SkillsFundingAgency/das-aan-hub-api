@@ -9,7 +9,6 @@ public class GetProfilesQueryValidatorTests
 {
     [TestCase("apprenticE", true)]
     [TestCase("Employer", true)]
-    [TestCase("PARTNER", true)]
     [TestCase("admin", true)]
     [TestCase("None", true)]
     [TestCase(null, false)]
