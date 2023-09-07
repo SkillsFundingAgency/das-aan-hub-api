@@ -4,8 +4,10 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 using SFA.DAS.AANHub.Domain.Entities;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -17,6 +19,8 @@ public class MembersController : ActionResponseControllerBase
 {
     private readonly ILogger<MembersController> _logger;
     private readonly IMediator _mediator;
+
+    private readonly ILogger<MembersController> _logger;
 
     public override string ControllerName => "Members";
 
@@ -63,5 +67,18 @@ public class MembersController : ActionResponseControllerBase
         var response = await _mediator.Send(command, cancellationToken);
 
         return GetPatchResponse(response);
+    }
+
+    [HttpGet]
+    [Route("{email}")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status404NotFound)]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> Get(string email)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get member by email: {email}", email);
+
+        var response = await _mediator.Send(new GetMemberByEmailQuery(email));
+
+        return GetResponse(response);
     }
 }

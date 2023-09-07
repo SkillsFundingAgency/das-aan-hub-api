@@ -20,10 +20,10 @@ internal class MembersReadRepository : IMembersReadRepository
         .Where(m => m.Id == id)
         .SingleOrDefaultAsync();
 
-    public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext
+    public async Task<Member?> GetMemberByEmail(string email) => await _aanDataContext
         .Members
         .AsNoTracking()
-        .Where(m => m.Email == Email)
+        .Where(m => m.Email == email)
         .SingleOrDefaultAsync();
 
     public async Task<List<MembersSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
