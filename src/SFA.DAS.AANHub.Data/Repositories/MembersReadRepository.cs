@@ -30,12 +30,11 @@ internal class MembersReadRepository : IMembersReadRepository
     {
         var regions = GenerateRegionsSql(options.RegionIds);
         var userType = GenerateUserTypeSql(options.UserType, options.IsRegionalChair);
-        var status = GenerateStatusSql(options.Status);
 
         var keywordSql = options.KeywordCount switch
         {
-            1 => " FREETEXT(FullName,'" + options.Keyword?.Trim() + "') ",
-            > 1 => " CONTAINS(FullName,'\"" + options.Keyword?.Trim() + "\"') ",
+            1 => " AND FREETEXT(FullName,'" + options.Keyword?.Trim() + "') ",
+            > 1 => " AND CONTAINS(FullName,'\"" + options.Keyword?.Trim() + "\"') ",
             _ => string.Empty
         };
 
@@ -49,11 +48,10 @@ internal class MembersReadRepository : IMembersReadRepository
                       ,Mem.[JoinedDate]
                       FROM [SFA.DAS.AANHub.Database].[dbo].[Member] AS Mem
                       LEFT JOIN [SFA.DAS.AANHub.Database].[dbo].[Region] AS Reg ON Mem.RegionId = Reg.Id
-                      {((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions) || !string.IsNullOrEmpty(userType) || !string.IsNullOrEmpty(status)) ? " WHERE  " : "")}
+                       WHERE  Mem.[Status] = '{MembershipStatusType.Live}'
                       {keywordSql}
-                      {((!string.IsNullOrEmpty(keywordSql) && !string.IsNullOrEmpty(regions)) ? " AND " : "") + regions}
-                      {(((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions)) && !string.IsNullOrEmpty(userType)) ? " AND " : "") + userType}
-                      {(((!string.IsNullOrEmpty(keywordSql) || !string.IsNullOrEmpty(regions) || !string.IsNullOrEmpty(userType)) && !string.IsNullOrEmpty(status)) ? " AND " : "") + status}
+                      {((!string.IsNullOrEmpty(regions)) ? " AND " : "") + regions}
+                      {((!string.IsNullOrEmpty(userType)) ? " AND " : "") + userType}
                       ORDER BY Mem.[FullName]  
                       OFFSET {(options.Page - 1) * options.PageSize} ROWS 
                       FETCH NEXT {options.PageSize} ROWS ONLY";
@@ -109,26 +107,6 @@ internal class MembersReadRepository : IMembersReadRepository
         else if (isRegionalChair is not null)
         {
             subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0)}";
-        }
-        return subSqlQuery;
-    }
-
-    private static string GenerateStatusSql(List<MembershipStatusType> status)
-    {
-        string subSqlQuery = string.Empty;
-        if (status != null && status.Count > 0)
-        {
-            switch (status.Count)
-            {
-                case 1:
-                    subSqlQuery = $" Mem.[Status] = '{status[0]}'";
-                    break;
-                default:
-                    subSqlQuery = " Mem.[Status] IN ('";
-                    subSqlQuery += string.Join("','", status.ToList());
-                    subSqlQuery += "')";
-                    break;
-            }
         }
         return subSqlQuery;
     }

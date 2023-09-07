@@ -31,7 +31,6 @@ public class MembersController : ActionResponseControllerBase
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMembers([FromQuery] GetMembersModel model, CancellationToken cancellationToken)
     {
-        _logger.LogInformation("AAN Hub API: Received command from User ID {requestedByMemberId} to get members", model.RequestedByMemberId);
         if (model.Page <= 0)
         {
             model.Page = 1;
@@ -44,7 +43,7 @@ public class MembersController : ActionResponseControllerBase
 
         var response = await _mediator.Send((GetMembersQuery)model, cancellationToken);
 
-        return GetResponse(response);
+        return new OkObjectResult(response);
     }
 
     [HttpPatch]

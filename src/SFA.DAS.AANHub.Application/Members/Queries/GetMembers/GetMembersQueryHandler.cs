@@ -1,13 +1,12 @@
 ﻿using System.Text.RegularExpressions;
 using MediatR;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 
 
 namespace SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 
-public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, ValidatedResponse<GetMembersQueryResult>>
+public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, GetMembersQueryResult>
 {
     private readonly IMembersReadRepository _membersReadRepository;
 
@@ -16,7 +15,7 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, Validated
         _membersReadRepository = membersReadRepository;
     }
 
-    public async Task<ValidatedResponse<GetMembersQueryResult>> Handle(GetMembersQuery query,
+    public async Task<GetMembersQueryResult> Handle(GetMembersQuery query,
         CancellationToken cancellationToken)
     {
         var pageSize = query.PageSize;
@@ -24,10 +23,8 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, Validated
 
         var options = new GetMembersOptions
         {
-            MemberId = query.RequestedByMemberId,
             Keyword = ProcessedKeyword(query.Keyword),
             UserType = query.UserType,
-            Status = query.Status,
             IsRegionalChair = query.IsRegionalChair,
             RegionIds = query.RegionIds,
             Page = page,
@@ -57,7 +54,7 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, Validated
             Members = responseProcessed
         };
 
-        return new ValidatedResponse<GetMembersQueryResult>(result);
+        return result;
     }
 
     private static string? ProcessedKeyword(string? keyword)
