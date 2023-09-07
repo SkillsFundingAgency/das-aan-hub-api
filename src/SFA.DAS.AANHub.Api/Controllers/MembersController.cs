@@ -6,8 +6,8 @@ using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
-using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 using SFA.DAS.AANHub.Domain.Entities;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -19,8 +19,6 @@ public class MembersController : ActionResponseControllerBase
 {
     private readonly ILogger<MembersController> _logger;
     private readonly IMediator _mediator;
-
-    private readonly ILogger<MembersController> _logger;
 
     public override string ControllerName => "Members";
 
