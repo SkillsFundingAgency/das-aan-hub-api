@@ -65,7 +65,6 @@
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\Apprentice.sql" />
     <Build Include="Tables\Employer.sql" />
-    <Build Include="Tables\Partner.sql" />
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
     <Build Include="Tables\Calendar.sql" />
@@ -94,6 +93,7 @@
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
     <None Include="Scripts\DropFeedbackTable.sql" />
     <None Include="Scripts\DropFeedbackAttributeTable.sql" />
+    <None Include="Scripts\DropPartnerTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />

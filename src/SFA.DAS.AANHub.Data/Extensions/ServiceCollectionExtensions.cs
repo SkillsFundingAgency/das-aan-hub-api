@@ -43,8 +43,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEmployersReadRepository, EmployersReadRepository>();
         services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
         services.AddTransient<IApprenticesReadRepository, ApprenticesReadRepository>();
-        services.AddTransient<IPartnersWriteRepository, PartnersWriteRepository>();
-        services.AddTransient<IPartnersReadRepository, PartnersReadRepository>();
         services.AddTransient<IMembersWriteRepository, MembersWriteRepository>();
         services.AddTransient<IMembersReadRepository, MembersReadRepository>();
         services.AddTransient<IProfilesReadRepository, ProfilesReadRepository>();

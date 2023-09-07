@@ -26,6 +26,4 @@ public class Member
     public virtual Apprentice? Apprentice { get; set; }
     [JsonIgnore]
     public virtual Employer? Employer { get; set; }
-    [JsonIgnore]
-    public virtual Partner? Partner { get; set; }
 }

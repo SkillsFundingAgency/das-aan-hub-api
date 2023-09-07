@@ -7,6 +7,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Partners\**" />
+    <EmbeddedResource Remove="Partners\**" />
+    <None Remove="Partners\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleToAttribute">
       <_Parameter1>SFA.DAS.AANHub.Api.UnitTests</_Parameter1>
     </AssemblyAttribute>
