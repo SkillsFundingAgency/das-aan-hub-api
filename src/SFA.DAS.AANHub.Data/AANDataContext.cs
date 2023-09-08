@@ -13,7 +13,6 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Apprentice> Apprentices => Set<Apprentice>();
     public DbSet<Employer> Employers => Set<Employer>();
-    public DbSet<Partner> Partners => Set<Partner>();
     public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();
     public DbSet<Calendar> Calendars => Set<Calendar>();
     public DbSet<Profile> Profiles => Set<Profile>();

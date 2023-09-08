@@ -10,7 +10,6 @@ public interface IAanDataContext
     DbSet<Member> Members { get; }
     DbSet<Apprentice> Apprentices { get; }
     DbSet<Employer> Employers { get; }
-    DbSet<Partner> Partners { get; }
     DbSet<StagedApprentice> StagedApprentices { get; }
     DbSet<Calendar> Calendars { get; }
     DbSet<Profile> Profiles { get; }

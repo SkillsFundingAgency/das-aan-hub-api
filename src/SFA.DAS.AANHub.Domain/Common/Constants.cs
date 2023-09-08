@@ -18,7 +18,6 @@ public static class Constants
     {
         public static readonly string Apprentice = UserType.Apprentice.ToString();
         public static readonly string Employer = UserType.Employer.ToString();
-        public static readonly string Partner = UserType.Partner.ToString();
         public static readonly string Admin = UserType.Admin.ToString();
     }
 
