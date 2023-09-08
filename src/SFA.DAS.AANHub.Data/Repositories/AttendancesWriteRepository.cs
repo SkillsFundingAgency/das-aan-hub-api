@@ -6,7 +6,7 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 namespace SFA.DAS.AANHub.Data.Repositories;
 
 [ExcludeFromCodeCoverage]
-public class AttendancesWriteRepository : IAttendancesWriteRepository
+internal class AttendancesWriteRepository : IAttendancesWriteRepository
 {
     private readonly AanDataContext _aanDataContext;
 
