@@ -12,6 +12,8 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Region> Regions => Set<Region>();
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Apprentice> Apprentices => Set<Apprentice>();
+    public DbSet<MemberProfile> MemberProfile => Set<MemberProfile>();
+    public DbSet<MemberPreference> MemberPreference => Set<MemberPreference>();
     public DbSet<Employer> Employers => Set<Employer>();
     public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();
     public DbSet<Calendar> Calendars => Set<Calendar>();
@@ -22,6 +24,8 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
+
+    public DbSet<Preference> Preference => Set<Preference>();
 
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 

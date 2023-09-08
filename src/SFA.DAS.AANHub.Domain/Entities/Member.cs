@@ -16,11 +16,9 @@ public class Member
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
-
     public List<MemberProfile> MemberProfiles { get; set; } = new();
     public List<MemberPreference> MemberPreferences { get; set; } = new();
     public List<Attendance> Attendances { get; set; } = new();
-
     public virtual Region? Region { get; set; }
 
     [JsonIgnore]
