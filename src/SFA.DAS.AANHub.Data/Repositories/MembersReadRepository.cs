@@ -44,8 +44,8 @@ internal class MembersReadRepository : IMembersReadRepository
                       LEFT JOIN [SFA.DAS.AANHub.Database].[dbo].[Region] AS Reg ON Mem.RegionId = Reg.Id
                        WHERE  Mem.[Status] = '{MembershipStatusType.Live}'
                       {keywordSql}
-                      {((!string.IsNullOrEmpty(regions)) ? " AND " : "") + regions}
-                      {((!string.IsNullOrEmpty(userType)) ? " AND " : "") + userType}
+                      {((!string.IsNullOrEmpty(regions)) ? " AND " : string.Empty) + regions}
+                      {((!string.IsNullOrEmpty(userType)) ? " AND " : string.Empty) + userType}
                       ORDER BY Mem.[FullName]  
                       OFFSET {(options.Page - 1) * options.PageSize} ROWS 
                       FETCH NEXT {options.PageSize} ROWS ONLY";
@@ -62,7 +62,7 @@ internal class MembersReadRepository : IMembersReadRepository
         {
             return $" AND Mem.[FullName] LIKE '%{keyword}%' ";
         }
-        return "";
+        return string.Empty;
     }
 
     private static string GenerateRegionsSql(IReadOnlyCollection<int> regions)
@@ -70,7 +70,7 @@ internal class MembersReadRepository : IMembersReadRepository
         switch (regions.Count)
         {
             case 0:
-                return "";
+                return string.Empty;
             case 1:
                 if (regions.Any(region => region == 0))
                 {
@@ -100,12 +100,12 @@ internal class MembersReadRepository : IMembersReadRepository
             switch (userType.Count)
             {
                 case 1:
-                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : "");
+                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : string.Empty);
                     break;
                 default:
                     subSqlQuery = " Mem.[UserType] IN ('";
                     subSqlQuery += string.Join("','", userType.ToList());
-                    subSqlQuery += "')  " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : "");
+                    subSqlQuery += "')  " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : string.Empty);
                     break;
             }
         }
