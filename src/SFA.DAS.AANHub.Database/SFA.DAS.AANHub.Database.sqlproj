@@ -81,7 +81,7 @@
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
     <Build Include="Tables\LeavingReason.sql" />
-    <Build Include="Tables\Leaving.sql" />
+    <Build Include="Tables\MemberLeavingReason.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
