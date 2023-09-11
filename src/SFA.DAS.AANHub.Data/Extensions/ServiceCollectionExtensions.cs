@@ -43,8 +43,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEmployersReadRepository, EmployersReadRepository>();
         services.AddTransient<IApprenticesWriteRepository, ApprenticesWriteRepository>();
         services.AddTransient<IApprenticesReadRepository, ApprenticesReadRepository>();
-        services.AddTransient<IPartnersWriteRepository, PartnersWriteRepository>();
-        services.AddTransient<IPartnersReadRepository, PartnersReadRepository>();
         services.AddTransient<IMembersWriteRepository, MembersWriteRepository>();
         services.AddTransient<IMembersReadRepository, MembersReadRepository>();
         services.AddTransient<IProfilesReadRepository, ProfilesReadRepository>();
@@ -53,6 +51,8 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAttendancesWriteRepository, AttendancesWriteRepository>();
         services.AddTransient<IAttendancesReadRepository, AttendancesReadRepository>();
         services.AddTransient<INotificationsWriteRepository, NotificationsWriteRepository>();
+        services.AddTransient<INotificationsReadRepository, NotificationsReadRepository>();
+        services.AddTransient<INotificationTemplateReadRepository, NotificationTemplateReadRepository>();
     }
 
     public static async Task<string> GenerateTokenAsync()

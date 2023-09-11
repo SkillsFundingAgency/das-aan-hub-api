@@ -75,6 +75,7 @@ internal class MembersReadRepository : IMembersReadRepository
                 return keyWord;
         }
     }
+    
     private static string GenerateRegionsSql(IReadOnlyCollection<int> regions)
     {
         switch (regions.Count)
@@ -101,6 +102,7 @@ internal class MembersReadRepository : IMembersReadRepository
                 return eventTypes;
         }
     }
+    
     private static string GenerateUserTypeSql(List<MemberUserType> userType, bool? isRegionalChair)
     {
         string subSqlQuery = string.Empty;
@@ -124,4 +126,11 @@ internal class MembersReadRepository : IMembersReadRepository
         }
         return subSqlQuery;
     }
+
+    public async Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken) => await _aanDataContext
+        .Members
+        .AsNoTracking()
+        .Where(m => memberIds.Contains(m.Id))
+        .ToListAsync(cancellationToken);
+
 }

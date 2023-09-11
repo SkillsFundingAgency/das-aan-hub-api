@@ -10,4 +10,6 @@ public interface IMembersReadRepository
     Task<Member?> GetMemberByEmail(string Email);
 
     Task<List<MembersSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken);
+
+    Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken);
 }

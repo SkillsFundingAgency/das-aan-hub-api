@@ -15,5 +15,6 @@ Post-Deployment Script Template
 :r .\AddPreferenceData.sql
 :r .\AddCalendarData.sql
 :r .\AddNotificationTemplateData.sql
+:r .\AddLeavingReasonData.sql
 
 

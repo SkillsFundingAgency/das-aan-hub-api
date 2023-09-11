@@ -10,11 +10,13 @@ public interface IAanDataContext
     DbSet<Member> Members { get; }
     DbSet<Apprentice> Apprentices { get; }
     DbSet<Employer> Employers { get; }
-    DbSet<Partner> Partners { get; }
     DbSet<StagedApprentice> StagedApprentices { get; }
     DbSet<Calendar> Calendars { get; }
     DbSet<Profile> Profiles { get; }
     DbSet<CalendarEvent> CalendarEvents { get; }
     DbSet<Attendance> Attendances { get; }
+    DbSet<Notification> Notifications { get; }
+    DbSet<NotificationTemplate> NotificationTemplates { get; }
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

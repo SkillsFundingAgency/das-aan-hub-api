@@ -65,7 +65,6 @@
     <Build Include="Tables\Region.sql" />
     <Build Include="Tables\Apprentice.sql" />
     <Build Include="Tables\Employer.sql" />
-    <Build Include="Tables\Partner.sql" />
     <Build Include="Tables\MemberProfile.sql" />
     <Build Include="Tables\Profile.sql" />
     <Build Include="Tables\Calendar.sql" />
@@ -83,6 +82,8 @@
     <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
+    <Build Include="Tables\LeavingReason.sql" />
+    <Build Include="Tables\Leaving.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
@@ -91,9 +92,13 @@
     <None Include="Scripts\AddPreferenceData.sql" />
     <None Include="SFA.DAS.AANHub.Database.publish.xml" />
     <None Include="Scripts\AddNotificationTemplateData.sql" />
+    <None Include="Scripts\AddLeavingReasonData.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
+    <None Include="Scripts\DropFeedbackTable.sql" />
+    <None Include="Scripts\DropFeedbackAttributeTable.sql" />
+    <None Include="Scripts\DropPartnerTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />

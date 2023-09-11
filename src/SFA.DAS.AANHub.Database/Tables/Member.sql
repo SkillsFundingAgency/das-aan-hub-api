@@ -7,6 +7,7 @@
     [Email] NVARCHAR(256) NOT NULL,
     [Status] NVARCHAR(10) NOT NULL,
     [JoinedDate] DATETIME2 NOT NULL,
+    [EndDate] DATETIME2 NULL,
     [RegionId] INT NULL,
     [OrganisationName] NVARCHAR(250) NULL,
     [LastUpdatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
@@ -18,8 +19,8 @@
 GO
 
 CREATE INDEX [IX_Member_Search] ON [Member] ([UserType], [Status], [FullName], [RegionId]) 
-INCLUDE ([Id], [Email], [JoinedDate], [OrganisationName], [LastUpdatedDate])
+INCLUDE ([Id], [Email], [JoinedDate], [EndDate], [OrganisationName], [LastUpdatedDate])
 GO
 
-CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FirstName], [LastName], [UserType], [Status])
+CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FullName], [UserType], [Status])
 GO

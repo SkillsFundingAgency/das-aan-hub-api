@@ -13,7 +13,6 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Member> Members => Set<Member>();
     public DbSet<Apprentice> Apprentices => Set<Apprentice>();
     public DbSet<Employer> Employers => Set<Employer>();
-    public DbSet<Partner> Partners => Set<Partner>();
     public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();
     public DbSet<Calendar> Calendars => Set<Calendar>();
     public DbSet<Profile> Profiles => Set<Profile>();
@@ -22,6 +21,8 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Attendance> Attendances => Set<Attendance>();
     public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
     public DbSet<Notification> Notifications => Set<Notification>();
+    public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
+
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
