@@ -20,10 +20,10 @@ internal class MembersReadRepository : IMembersReadRepository
         .Where(m => m.Id == id)
         .SingleOrDefaultAsync();
 
-    public async Task<Member?> GetMemberByEmail(string email) => await _aanDataContext
+    public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext
         .Members
         .AsNoTracking()
-        .Where(m => m.Email == email)
+        .Where(m => m.Email == Email)
         .SingleOrDefaultAsync();
 
     public async Task<List<MembersSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
@@ -55,6 +55,11 @@ internal class MembersReadRepository : IMembersReadRepository
             .ToListAsync(cancellationToken);
         return members;
     }
+    public async Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken) => await _aanDataContext
+    .Members
+    .AsNoTracking()
+    .Where(m => memberIds.Contains(m.Id))
+    .ToListAsync(cancellationToken);
 
     private static string GenerateKeywordSql(string? keyword)
     {
@@ -97,29 +102,23 @@ internal class MembersReadRepository : IMembersReadRepository
         string subSqlQuery = string.Empty;
         if (userType != null && userType.Count > 0)
         {
+            string isRegionalQuery = " OR Mem.[IsRegionalChair] = 1 ";
             switch (userType.Count)
             {
                 case 1:
-                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : string.Empty);
+                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' {isRegionalQuery}";
                     break;
                 default:
                     subSqlQuery = " Mem.[UserType] IN ('";
                     subSqlQuery += string.Join("','", userType.ToList());
-                    subSqlQuery += "')  " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : string.Empty);
+                    subSqlQuery += "')  " + isRegionalQuery;
                     break;
             }
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0) + " " + (!isRegionalChair.Value ? " OR Mem.[IsRegionalChair] IS NULL" : string.Empty)}";
+            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : (0 + " OR Mem.[IsRegionalChair] IS NULL "))}";
         }
         return subSqlQuery;
     }
-
-    public async Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken) => await _aanDataContext
-        .Members
-        .AsNoTracking()
-        .Where(m => memberIds.Contains(m.Id))
-        .ToListAsync(cancellationToken);
-
 }
