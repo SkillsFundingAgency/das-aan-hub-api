@@ -102,7 +102,7 @@ internal class MembersReadRepository : IMembersReadRepository
         string subSqlQuery = string.Empty;
         if (userType != null && userType.Count > 0)
         {
-            string isRegionalQuery = " OR Mem.[IsRegionalChair] = 1 ";
+            string isRegionalQuery = (isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1 " : string.Empty;
             switch (userType.Count)
             {
                 case 1:
