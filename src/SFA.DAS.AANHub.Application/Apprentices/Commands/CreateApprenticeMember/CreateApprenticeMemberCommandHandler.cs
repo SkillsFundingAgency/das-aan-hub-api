@@ -37,9 +37,10 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         CancellationToken cancellationToken)
     {
         Member member = command;
+        CreateDefaultPreferencesHelper createDefaultPreferencesHelper = new CreateDefaultPreferencesHelper(_memberPreferenceWriteRepository);
         _membersWriteRepository.Create(member);
-        CreateDefaultPreferences(member.Id);
-
+        createDefaultPreferencesHelper.CreateDefaultPreferences(member.Id);
+        
         _auditWriteRepository.Create(new Audit
         {
             Action = "Create",
@@ -63,41 +64,5 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         var region = await _regionsReadRepository.GetRegionById(command.RegionId.GetValueOrDefault(), cancellationToken);
         var apprenticeOnboardingEmailTemplate = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
         return JsonSerializer.Serialize(apprenticeOnboardingEmailTemplate);
-    }
-
-    private void CreateDefaultPreferences(Guid memberId)
-    {
-        var memberPreferences = new List<MemberPreference>()
-        {
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 1,
-                AllowSharing = Constants.MemberPreference.JobTitle
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 2,
-                AllowSharing = Constants.MemberPreference.Biography
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 3,
-                AllowSharing = Constants.MemberPreference.Apprenticeship
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 4,
-                AllowSharing = Constants.MemberPreference.LinkedIn
-            }
-        };
-
-        foreach (var memberPreference in memberPreferences)
-        {
-            _memberPreferenceWriteRepository.Create(memberPreference);
-        }
     }
 }

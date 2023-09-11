@@ -38,8 +38,9 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             CancellationToken cancellationToken)
         {
             Member member = command;
+            CreateDefaultPreferencesHelper createDefaultPreferencesHelper = new CreateDefaultPreferencesHelper(_memberPreferenceWriteRepository);
             _membersWriteRepository.Create(member);
-            CreateDefaultPreferences(member.Id);
+            createDefaultPreferencesHelper.CreateDefaultPreferences(member.Id);
 
             _auditWriteRepository.Create(new Audit
             {
@@ -51,7 +52,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
             });
 
             var tokens = await GetTokens(command, cancellationToken);
-            Notification notification = NotificationHelper.CreateNotification(Guid.NewGuid(), command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true, null);
+            Notification notification = NotificationHelper.CreateNotification(Guid.NewGuid(),command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true, null);
             _notificationsWriteRepository.Create(notification);
 
             await _aanDataContext.SaveChangesAsync(cancellationToken);
@@ -74,42 +75,6 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 
             var employerOnboardingEmailTemplate = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
             return JsonSerializer.Serialize(employerOnboardingEmailTemplate);
-        }
-
-        private void CreateDefaultPreferences(Guid memberId)
-        {
-            var memberPreferences = new List<MemberPreference>()
-        {
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 1,
-                AllowSharing = Constants.MemberPreference.JobTitle
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 2,
-                AllowSharing = Constants.MemberPreference.Biography
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 3,
-                AllowSharing = Constants.MemberPreference.Apprenticeship
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 4,
-                AllowSharing = Constants.MemberPreference.LinkedIn
-            }
-        };
-
-            foreach (var memberPreference in memberPreferences)
-            {
-                _memberPreferenceWriteRepository.Create(memberPreference);
-            }
         }
     }
 }
