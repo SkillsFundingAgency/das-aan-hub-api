@@ -106,18 +106,18 @@ internal class MembersReadRepository : IMembersReadRepository
             switch (userType.Count)
             {
                 case 1:
-                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' {isRegionalQuery}";
+                    subSqlQuery = $" (Mem.[UserType] = '{userType[0]}' {isRegionalQuery} )";
                     break;
                 default:
-                    subSqlQuery = " Mem.[UserType] IN ('";
+                    subSqlQuery = " (Mem.[UserType] IN ('";
                     subSqlQuery += string.Join("','", userType.ToList());
-                    subSqlQuery += "')  " + isRegionalQuery;
+                    subSqlQuery += "')  " + isRegionalQuery + " )";
                     break;
             }
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : (0 + " OR Mem.[IsRegionalChair] IS NULL "))}";
+            subSqlQuery = $" ( Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : (0 + " OR Mem.[IsRegionalChair] IS NULL "))} ) ";
         }
         return subSqlQuery;
     }
