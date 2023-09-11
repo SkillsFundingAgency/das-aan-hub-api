@@ -30,13 +30,7 @@ internal class MembersReadRepository : IMembersReadRepository
     {
         var regions = GenerateRegionsSql(options.RegionIds);
         var userType = GenerateUserTypeSql(options.UserType, options.IsRegionalChair);
-
-        var keywordSql = options.KeywordCount switch
-        {
-            1 => " AND FREETEXT(FullName,'" + options.Keyword?.Trim() + "') ",
-            > 1 => " AND CONTAINS(FullName,'\"" + options.Keyword?.Trim() + "\"') ",
-            _ => string.Empty
-        };
+        var keywordSql = GenerateKeywordSql(options.Keyword?.Trim(), options.KeywordCount);
 
         var sql = $@"SELECT Mem.[Id] AS MemberId
                       ,COUNT(*) OVER () TotalCount
@@ -60,6 +54,26 @@ internal class MembersReadRepository : IMembersReadRepository
             .FromSqlRaw(sql)
             .ToListAsync(cancellationToken);
         return members;
+    }
+
+    private static string GenerateKeywordSql(string? keyword, int keywordCount)
+    {
+        switch (keywordCount)
+        {
+            case 0:
+                return "";
+            case 1:
+                return $" AND Mem.[FullName] LIKE '%{keyword}%' ";
+            default:
+                List<string> keywords = keyword!.Split(" ").ToList();
+                var keyWord = " AND (";
+                foreach (var word in keywords.Select((value, i) => new { i, value }))
+                {
+                    keyWord += $" Mem.[FullName] LIKE '%{word.value}%' {(word.i != (keywords.Count() - 1) ? " OR " : " ")}";
+                }
+                keyWord += ")";
+                return keyWord;
+        }
     }
     private static string GenerateRegionsSql(IReadOnlyCollection<int> regions)
     {
@@ -95,18 +109,18 @@ internal class MembersReadRepository : IMembersReadRepository
             switch (userType.Count)
             {
                 case 1:
-                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}'";
+                    subSqlQuery = $" Mem.[UserType] = '{userType[0]}' " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : "");
                     break;
                 default:
                     subSqlQuery = " Mem.[UserType] IN ('";
                     subSqlQuery += string.Join("','", userType.ToList());
-                    subSqlQuery += "')";
+                    subSqlQuery += "')  " + ((isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1" : "");
                     break;
             }
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0)}";
+            subSqlQuery = $" Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : 0) + " " + (!isRegionalChair.Value ? " OR Mem.[IsRegionalChair] IS NULL" : string.Empty)}";
         }
         return subSqlQuery;
     }
