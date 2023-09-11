@@ -18,6 +18,7 @@ public class CreateApprenticeMemberCommandHandlerTests
     [RecursiveMoqAutoData]
     public async Task Handle_AddsNewApprentice(
         [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
@@ -40,6 +41,7 @@ public class CreateApprenticeMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(4));
         }
     }
 }

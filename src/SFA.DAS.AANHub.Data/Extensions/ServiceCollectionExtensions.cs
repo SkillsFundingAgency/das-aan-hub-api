@@ -53,6 +53,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<INotificationsWriteRepository, NotificationsWriteRepository>();
         services.AddTransient<INotificationsReadRepository, NotificationsReadRepository>();
         services.AddTransient<INotificationTemplateReadRepository, NotificationTemplateReadRepository>();
+        services.AddTransient<IMemberPreferenceWriteRepository, MemberPreferenceWriteRepository>();
     }
 
     public static async Task<string> GenerateTokenAsync()

@@ -19,24 +19,28 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
     private readonly IMembersWriteRepository _membersWriteRepository;
     private readonly IRegionsReadRepository _regionsReadRepository;
     private readonly INotificationsWriteRepository _notificationsWriteRepository;
+    private readonly IMemberPreferenceWriteRepository _memberPreferenceWriteRepository;
 
     public CreateApprenticeMemberCommandHandler(IMembersWriteRepository membersWriteRepository, IAanDataContext aanDataContext,
-        IAuditWriteRepository auditWriteRepository, IRegionsReadRepository regionsReadRepository, INotificationsWriteRepository notificationsWriteRepository)
+        IAuditWriteRepository auditWriteRepository, IRegionsReadRepository regionsReadRepository,
+        INotificationsWriteRepository notificationsWriteRepository, IMemberPreferenceWriteRepository memberPreferenceWriteRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
         _regionsReadRepository = regionsReadRepository;
         _notificationsWriteRepository = notificationsWriteRepository;
+        _memberPreferenceWriteRepository = memberPreferenceWriteRepository;
     }
 
     public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateApprenticeMemberCommand command,
         CancellationToken cancellationToken)
     {
         Member member = command;
-
+        CreateDefaultPreferencesHelper createDefaultPreferencesHelper = new CreateDefaultPreferencesHelper(_memberPreferenceWriteRepository);
         _membersWriteRepository.Create(member);
-
+        createDefaultPreferencesHelper.CreateDefaultPreferences(member.Id);
+        
         _auditWriteRepository.Create(new Audit
         {
             Action = "Create",

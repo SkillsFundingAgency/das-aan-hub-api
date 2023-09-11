@@ -19,24 +19,28 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
         private readonly IMembersWriteRepository _membersWriteRepository;
         private readonly INotificationsWriteRepository _notificationsWriteRepository;
         private readonly IRegionsReadRepository _regionsReadRepository;
+        private readonly IMemberPreferenceWriteRepository _memberPreferenceWriteRepository;
 
         public CreateEmployerMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
             IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository,
-            INotificationsWriteRepository notificationsWriteRepository, IRegionsReadRepository regionsReadRepository)
+            INotificationsWriteRepository notificationsWriteRepository, IRegionsReadRepository regionsReadRepository,
+            IMemberPreferenceWriteRepository memberPreferenceWriteRepository)
         {
             _membersWriteRepository = membersWriteRepository;
             _aanDataContext = aanDataContext;
             _auditWriteRepository = auditWriteRepository;
             _notificationsWriteRepository = notificationsWriteRepository;
             _regionsReadRepository = regionsReadRepository;
+            _memberPreferenceWriteRepository = memberPreferenceWriteRepository;
         }
 
         public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
             CancellationToken cancellationToken)
         {
             Member member = command;
-
+            CreateDefaultPreferencesHelper createDefaultPreferencesHelper = new CreateDefaultPreferencesHelper(_memberPreferenceWriteRepository);
             _membersWriteRepository.Create(member);
+            createDefaultPreferencesHelper.CreateDefaultPreferences(member.Id);
 
             _auditWriteRepository.Create(new Audit
             {

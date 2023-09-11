@@ -11,6 +11,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Audit> Audits => Set<Audit>();
     public DbSet<Region> Regions => Set<Region>();
     public DbSet<Member> Members => Set<Member>();
+    public DbSet<MemberPreference> MemberPreferences => Set<MemberPreference>();
     public DbSet<Apprentice> Apprentices => Set<Apprentice>();
     public DbSet<Employer> Employers => Set<Employer>();
     public DbSet<StagedApprentice> StagedApprentices => Set<StagedApprentice>();

@@ -20,6 +20,7 @@ public class CreateEmployerMemberCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         Region region,
         CreateEmployerMemberCommandHandler sut,
         CreateEmployerMemberCommand command)
@@ -43,6 +44,7 @@ public class CreateEmployerMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(4));
         }
     }
 
@@ -52,6 +54,7 @@ public class CreateEmployerMemberCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         Region region,
         CreateEmployerMemberCommandHandler sut,
         CreateEmployerMemberCommand command)
@@ -72,6 +75,7 @@ public class CreateEmployerMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify((p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None)), Times.Never);
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(4));
         }
     }
 }

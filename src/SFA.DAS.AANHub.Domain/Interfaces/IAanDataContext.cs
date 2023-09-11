@@ -8,6 +8,7 @@ public interface IAanDataContext
     DbSet<Audit> Audits { get; }
     DbSet<Region> Regions { get; }
     DbSet<Member> Members { get; }
+    DbSet<MemberPreference> MemberPreferences { get; }
     DbSet<Apprentice> Apprentices { get; }
     DbSet<Employer> Employers { get; }
     DbSet<StagedApprentice> StagedApprentices { get; }
