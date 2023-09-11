@@ -7,8 +7,8 @@ CREATE TABLE #TempPreference
 
 INSERT INTO #TempPreference VALUES
 (1,'Job Title'),
-(2,'Region where you work'),
-(3,'Biography'),
+(2,'Biography'),
+(3,'Apprenticeship'),
 (4,'LinkedIn');
 
 MERGE [Preference] TARGET
@@ -17,6 +17,8 @@ WHEN MATCHED THEN
     UPDATE SET TARGET.[Group] = SOURCE.[Group]
 WHEN NOT MATCHED BY TARGET THEN 
     INSERT (Id, [Group])
-    VALUES (SOURCE.Id, SOURCE.[Group]);
+    VALUES (SOURCE.Id, SOURCE.[Group])
+WHEN NOT MATCHED BY SOURCE THEN
+    DELETE;
 
 DROP TABLE #TempPreference
