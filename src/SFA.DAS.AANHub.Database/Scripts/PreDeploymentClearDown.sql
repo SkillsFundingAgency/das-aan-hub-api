@@ -30,3 +30,6 @@ IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Admin')
   DROP TABLE Admin;
 GO
 
+IF EXISTS(SELECT * FROM sys.tables WHERE Name = 'Leaving')
+  DROP TABLE Leaving;
+GO
