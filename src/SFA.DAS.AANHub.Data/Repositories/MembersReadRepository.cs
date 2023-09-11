@@ -30,7 +30,7 @@ internal class MembersReadRepository : IMembersReadRepository
     {
         var regions = GenerateRegionsSql(options.RegionIds);
         var userType = GenerateUserTypeSql(options.UserType, options.IsRegionalChair);
-        var keywordSql = GenerateKeywordSql(options.Keyword?.Trim(), options.KeywordCount);
+        var keywordSql = GenerateKeywordSql(options.Keyword?.Trim());
 
         var sql = $@"SELECT Mem.[Id] AS MemberId
                       ,COUNT(*) OVER () TotalCount
@@ -56,26 +56,15 @@ internal class MembersReadRepository : IMembersReadRepository
         return members;
     }
 
-    private static string GenerateKeywordSql(string? keyword, int keywordCount)
+    private static string GenerateKeywordSql(string? keyword)
     {
-        switch (keywordCount)
+        if (!string.IsNullOrEmpty(keyword))
         {
-            case 0:
-                return "";
-            case 1:
-                return $" AND Mem.[FullName] LIKE '%{keyword}%' ";
-            default:
-                List<string> keywords = keyword!.Split(" ").ToList();
-                var keyWord = " AND (";
-                foreach (var word in keywords.Select((value, i) => new { i, value }))
-                {
-                    keyWord += $" Mem.[FullName] LIKE '%{word.value}%' {(word.i != (keywords.Count() - 1) ? " OR " : " ")}";
-                }
-                keyWord += ")";
-                return keyWord;
+            return $" AND Mem.[FullName] LIKE '%{keyword}%' ";
         }
+        return "";
     }
-    
+
     private static string GenerateRegionsSql(IReadOnlyCollection<int> regions)
     {
         switch (regions.Count)
@@ -102,7 +91,7 @@ internal class MembersReadRepository : IMembersReadRepository
                 return eventTypes;
         }
     }
-    
+
     private static string GenerateUserTypeSql(List<MemberUserType> userType, bool? isRegionalChair)
     {
         string subSqlQuery = string.Empty;

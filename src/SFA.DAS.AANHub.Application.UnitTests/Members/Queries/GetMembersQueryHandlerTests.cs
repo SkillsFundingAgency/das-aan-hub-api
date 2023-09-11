@@ -80,14 +80,14 @@ public class GetMembersQueryHandlerTests
         }
     }
 
-    [TestCase(null, null, 0)]
-    [TestCase("", null, 0)]
-    [TestCase("event", "event", 1)]
-    [TestCase("west event", "west event", 2)]
-    [TestCase("north-west event", "north west event", 3)]
-    [TestCase("1 event", "1 event", 2)]
-    [TestCase("'--;<>/**/_1 event 2 3", "1 event 2 3", 4)]
-    public async Task Handle_Keyword_CheckUsedKeywordExpected(string? keyword, string? expectedKeywordUsed, int keywordCount)
+    [TestCase(null, null)]
+    [TestCase("", null)]
+    [TestCase("event", "event")]
+    [TestCase("west event", "west event")]
+    [TestCase("north-west event", "north west event")]
+    [TestCase("1 event", "1 event")]
+    [TestCase("'--;<>/**/_1 event 2 3", "1 event 2 3")]
+    public async Task Handle_Keyword_CheckUsedKeywordExpected(string? keyword, string? expectedKeywordUsed)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
@@ -113,7 +113,7 @@ public class GetMembersQueryHandlerTests
 
         await sut.Handle(query, cancellationToken);
         membersReadRepositoryMock.Verify(x => x.GetMembers(
-            It.Is<GetMembersOptions>(c => c.Keyword == expectedKeywordUsed && c.KeywordCount == keywordCount), cancellationToken), Times.Once);
+            It.Is<GetMembersOptions>(c => c.Keyword == expectedKeywordUsed), cancellationToken), Times.Once);
     }
 
     [TestCase(null)]
