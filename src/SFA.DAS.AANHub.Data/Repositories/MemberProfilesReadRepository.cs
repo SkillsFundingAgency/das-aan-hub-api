@@ -15,6 +15,6 @@ internal class MemberProfilesReadRepository : IMemberProfilesReadRepository
     public async Task<IEnumerable<MemberProfile>?> GetMemberProfilesByMember(Guid memberId, CancellationToken cancellationToken) => await _aanDataContext
         .MemberProfile
         .AsNoTracking()
-        .Where(m => m.MemberId == memberId).Include(x => x.Profile)//.ThenInclude(x => x.Preference)
+        .Where(m => m.MemberId == memberId).Include(x => x.Profile)
         .ToListAsync(cancellationToken);
 }
