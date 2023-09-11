@@ -18,18 +18,21 @@ public class CreateEmployerMemberCommandHandler :
     private readonly IAanDataContext _aanDataContext;
     private readonly IAuditWriteRepository _auditWriteRepository;
     private readonly IMembersWriteRepository _membersWriteRepository;
-        private readonly INotificationsWriteRepository _notificationsWriteRepository;
-        private readonly IRegionsReadRepository _regionsReadRepository;
+    private readonly INotificationsWriteRepository _notificationsWriteRepository;
+    private readonly IRegionsReadRepository _regionsReadRepository;
 
-    public CreateEmployerMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
-            IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository,
-            INotificationsWriteRepository notificationsWriteRepository, IRegionsReadRepository regionsReadRepository)
+    public CreateEmployerMemberCommandHandler(
+        IMembersWriteRepository membersWriteRepository,
+        IAanDataContext aanDataContext,
+        IAuditWriteRepository auditWriteRepository,
+        INotificationsWriteRepository notificationsWriteRepository,
+        IRegionsReadRepository regionsReadRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
-            _notificationsWriteRepository = notificationsWriteRepository;
-            _regionsReadRepository = regionsReadRepository;
+        _notificationsWriteRepository = notificationsWriteRepository;
+        _regionsReadRepository = regionsReadRepository;
     }
 
     public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
@@ -49,29 +52,29 @@ public class CreateEmployerMemberCommandHandler :
             Resource = MembershipUserType.Employer
         });
 
-            var tokens = await GetTokens(command, cancellationToken);
-            Notification notification = NotificationHelper.CreateNotification(Guid.NewGuid(),command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true, null);
-            _notificationsWriteRepository.Create(notification);
+        var tokens = await GetTokens(command, cancellationToken);
+        Notification notification = NotificationHelper.CreateNotification(Guid.NewGuid(), command.MemberId, EmailTemplateName.EmployerOnboardingTemplate, tokens, command.MemberId, true, null);
+        _notificationsWriteRepository.Create(notification);
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);
 
         return new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(member.Id));
+    }
+
+    private async Task<string> GetTokens(CreateEmployerMemberCommand command, CancellationToken cancellationToken)
+    {
+        var region = new Region();
+
+        if (command.RegionId == null)
+        {
+            region.Area = "Multi-region team";
+        }
+        else
+        {
+            region = await _regionsReadRepository.GetRegionById(command.RegionId.GetValueOrDefault(), cancellationToken);
         }
 
-        private async Task<string> GetTokens(CreateEmployerMemberCommand command, CancellationToken cancellationToken)
-        {
-            var region = new Region();
-
-            if (command.RegionId == null)
-            {
-                region.Area = "Multi-region team";
-            }
-            else
-            {
-                region = await _regionsReadRepository.GetRegionById(command.RegionId.GetValueOrDefault(), cancellationToken);
-            }
-
-            var employerOnboardingEmailTemplate = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
-            return JsonSerializer.Serialize(employerOnboardingEmailTemplate);
+        var employerOnboardingEmailTemplate = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{region?.Area!} team");
+        return JsonSerializer.Serialize(employerOnboardingEmailTemplate);
     }
 }

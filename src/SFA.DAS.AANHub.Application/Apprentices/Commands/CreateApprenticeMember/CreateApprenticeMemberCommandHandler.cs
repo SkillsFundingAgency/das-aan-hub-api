@@ -21,8 +21,12 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
     private readonly IRegionsReadRepository _regionsReadRepository;
     private readonly INotificationsWriteRepository _notificationsWriteRepository;
 
-    public CreateApprenticeMemberCommandHandler(IMembersWriteRepository membersWriteRepository, IAanDataContext aanDataContext,
-        IAuditWriteRepository auditWriteRepository, IRegionsReadRepository regionsReadRepository, INotificationsWriteRepository notificationsWriteRepository)
+    public CreateApprenticeMemberCommandHandler(
+        IMembersWriteRepository membersWriteRepository,
+        IAanDataContext aanDataContext,
+        IAuditWriteRepository auditWriteRepository,
+        IRegionsReadRepository regionsReadRepository,
+        INotificationsWriteRepository notificationsWriteRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;

@@ -8,6 +8,7 @@ using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
@@ -16,8 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands;
 
 public class CreateApprenticeMemberCommandHandlerTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_AddsNewApprentice(
         [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
@@ -47,10 +47,15 @@ public class CreateApprenticeMemberCommandHandlerTests
 
     [Test, MoqAutoData]
     public async Task Handle_AddsNewApprentice_WithDefaultMemberPreference(
-        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
-        CreateApprenticeMemberCommandHandler sut,
         CreateApprenticeMemberCommand command)
     {
+        Mock<IMembersWriteRepository> membersWriteRepository = new();
+        Mock<IAanDataContext> aanDataContext = new();
+        Mock<IAuditWriteRepository> auditWriteRepository = new();
+        Mock<IRegionsReadRepository> regionsReadRepository = new();
+        Mock<INotificationsWriteRepository> notificationsWriteRepository = new();
+        CreateApprenticeMemberCommandHandler sut = new(membersWriteRepository.Object, aanDataContext.Object, auditWriteRepository.Object, regionsReadRepository.Object, notificationsWriteRepository.Object);
+
         var response = await sut.Handle(command, new CancellationToken());
 
         response.Result.MemberId.Should().Be(command.MemberId);
