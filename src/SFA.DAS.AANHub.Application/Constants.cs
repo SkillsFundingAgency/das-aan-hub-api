@@ -14,5 +14,13 @@
             public const string Withdrawn = "withdrawn";
             public const string Deleted = "deleted";
         }
+
+        public static class  MemberPreference
+        {
+            public const bool JobTitle = false;
+            public const bool Biography = false;
+            public const bool Apprenticeship = true;
+            public const bool LinkedIn = false;
+        }
     }
 }
