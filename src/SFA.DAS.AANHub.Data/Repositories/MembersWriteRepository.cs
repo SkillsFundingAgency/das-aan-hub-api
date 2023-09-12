@@ -14,5 +14,5 @@ internal class MembersWriteRepository : IMembersWriteRepository
 
     public void Create(Member member) => _aanDataContext.Members.Add(member);
 
-    public async Task<Member?> Get(Guid id) => await _aanDataContext.Members.Where(m => m.Id == id).SingleOrDefaultAsync();
+    public async Task<Member?> Get(Guid id) => await _aanDataContext.Members.Where(m => m.Id == id).Include(x => x.MemberProfiles).Include(x => x.MemberPreferences).SingleOrDefaultAsync();
 }
