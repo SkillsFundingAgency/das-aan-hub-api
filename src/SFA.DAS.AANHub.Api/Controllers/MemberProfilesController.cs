@@ -1,6 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.MemberProfiles.Commands.PutMemberProfile;
 using SFA.DAS.AANHub.Application.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
@@ -33,7 +36,7 @@ public class MemberProfilesController : ActionResponseControllerBase
 
         return GetResponse(response);
     }
-    
+
     [HttpPut("{memberId}/profile")]
     [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
