@@ -120,7 +120,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
 
                 if (regionsToProcess.Any())
                 {
-                    regionSql = "AND ISNULL(CE.RegionId,0) IN (";
+                    regionSql = "AND CE.RegionId IN (";
                     regionSql += string.Join(",", regions.ToList());
                     regionSql += ") ";
                 }
