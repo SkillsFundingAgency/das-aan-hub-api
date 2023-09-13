@@ -14,6 +14,7 @@ public class MemberConfiguration : IEntityTypeConfiguration<Member>
         builder.HasKey(x => x.Id);
         builder.HasOne(m => m.Region).WithMany(r => r.Members);
         builder.HasMany(m => m.MemberProfiles).WithOne(mp => mp.Member);
+        builder.HasMany(m => m.MemberPreferences).WithOne(mp => mp.Member);
         builder.HasMany(m => m.Attendances).WithOne(a => a.Member);
         builder.Property(m => m.FullName).ValueGeneratedOnAddOrUpdate();
     }

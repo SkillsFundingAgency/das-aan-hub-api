@@ -2,6 +2,7 @@
 using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
@@ -20,8 +21,12 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
     private readonly IRegionsReadRepository _regionsReadRepository;
     private readonly INotificationsWriteRepository _notificationsWriteRepository;
 
-    public CreateApprenticeMemberCommandHandler(IMembersWriteRepository membersWriteRepository, IAanDataContext aanDataContext,
-        IAuditWriteRepository auditWriteRepository, IRegionsReadRepository regionsReadRepository, INotificationsWriteRepository notificationsWriteRepository)
+    public CreateApprenticeMemberCommandHandler(
+        IMembersWriteRepository membersWriteRepository,
+        IAanDataContext aanDataContext,
+        IAuditWriteRepository auditWriteRepository,
+        IRegionsReadRepository regionsReadRepository,
+        INotificationsWriteRepository notificationsWriteRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;
@@ -34,6 +39,7 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
         CancellationToken cancellationToken)
     {
         Member member = command;
+        member.MemberPreferences = MemberPreferenceService.GetDefaultMemberPreferences(UserType.Apprentice);
 
         _membersWriteRepository.Create(member);
 

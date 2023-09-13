@@ -5,7 +5,10 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Application.Services;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
+using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
@@ -14,8 +17,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands;
 
 public class CreateApprenticeMemberCommandHandlerTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_AddsNewApprentice(
         [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
@@ -41,5 +43,23 @@ public class CreateApprenticeMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
         }
+    }
+
+    [Test, MoqAutoData]
+    public async Task Handle_AddsNewApprentice_WithDefaultMemberPreference(
+        CreateApprenticeMemberCommand command)
+    {
+        Mock<IMembersWriteRepository> membersWriteRepository = new();
+        Mock<IAanDataContext> aanDataContext = new();
+        Mock<IAuditWriteRepository> auditWriteRepository = new();
+        Mock<IRegionsReadRepository> regionsReadRepository = new();
+        Mock<INotificationsWriteRepository> notificationsWriteRepository = new();
+        CreateApprenticeMemberCommandHandler sut = new(membersWriteRepository.Object, aanDataContext.Object, auditWriteRepository.Object, regionsReadRepository.Object, notificationsWriteRepository.Object);
+
+        var response = await sut.Handle(command, new CancellationToken());
+
+        response.Result.MemberId.Should().Be(command.MemberId);
+
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultMemberPreferences(UserType.Apprentice).Count)));
     }
 }

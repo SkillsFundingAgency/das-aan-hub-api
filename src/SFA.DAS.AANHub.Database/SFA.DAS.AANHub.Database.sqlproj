@@ -75,15 +75,13 @@
     <Build Include="Tables\Document.sql" />
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\EventGuest.sql" />
-    <Build Include="Tables\Feedback.sql" />
-    <Build Include="Tables\FeedbackAttribute.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
     <None Include="Scripts\PreDeploymentClearDown.sql" />
     <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
     <Build Include="Tables\LeavingReason.sql" />
-    <Build Include="Tables\Leaving.sql" />
+    <Build Include="Tables\MemberLeavingReason.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
