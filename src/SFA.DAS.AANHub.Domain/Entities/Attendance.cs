@@ -9,9 +9,7 @@ public class Attendance
     public Guid MemberId { get; set; }
     public DateTime? AddedDate { get; set; }
     public bool IsAttending { get; set; }
-    public bool Attended { get; set; }
-    public int? OverallRating { get; set; }
-    public DateTime? FeedbackCompletedDate { get; set; }
+
 
     [JsonIgnore]
     public CalendarEvent CalendarEvent { get; set; } = null!;
