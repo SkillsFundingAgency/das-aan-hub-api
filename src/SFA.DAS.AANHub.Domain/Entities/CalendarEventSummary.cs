@@ -17,7 +17,7 @@ public class CalendarEventSummary
     public double? Distance { get; set; }
     public bool IsAttending { get; set; }
     public int CalendarId { get; set; }
-    public int RegionId { get; set; }
+    public int? RegionId { get; set; }
     public bool IsActive { get; set; }
     public int TotalCount { get; set; }
     public int NumberOfAttendees { get; set; }
