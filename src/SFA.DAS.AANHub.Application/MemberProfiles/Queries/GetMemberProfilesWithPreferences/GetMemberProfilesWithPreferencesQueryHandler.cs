@@ -26,7 +26,7 @@ public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetM
 
         if (request.IsPublicView)
         {
-            result.Profiles = memberProfilesWithPreferenceId.FindAll(x => memberPreferences!.Where(x => x.AllowSharing).Select(x => x.PreferenceId).Contains(x.PreferenceId));
+            result.Profiles = memberProfilesWithPreferenceId.FindAll(x => memberPreferences!.Where(x => x.AllowSharing).Select(x => x.PreferenceId).Contains((int)x.PreferenceId!));
             result.Preferences = null!;
         }
         else

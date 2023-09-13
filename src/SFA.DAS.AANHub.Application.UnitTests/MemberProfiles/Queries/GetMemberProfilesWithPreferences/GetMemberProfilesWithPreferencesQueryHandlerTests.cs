@@ -46,7 +46,7 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
         if (isPublicView)
         {
             queryOutPut.Profiles = memberProfiles!.Select(p => (MemberProfileModel)p).ToList()
-                                    .FindAll(x => memberPreferences!.Where(x => x.AllowSharing).Select(x => x.PreferenceId).Contains(x.PreferenceId));
+                                    .FindAll(x => memberPreferences!.Where(x => x.AllowSharing).Select(x => x.PreferenceId).Contains((int)x.PreferenceId!));
             queryOutPut.Preferences = null!;
         }
         else
