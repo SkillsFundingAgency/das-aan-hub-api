@@ -109,24 +109,12 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
             case 0:
                 return "";
             case 1:
-                {
-                    var regionId = regions.First();
-                    return regionId != 0 ? $"AND CE.RegionId = {regionId}" : $"AND CE.RegionId IS NULL ";
-                }
+                return $"AND CE.RegionId = {regions.First()}";
             default:
-                var regionsToProcess = regions.Where(x => x != 0);
-
-                var regionSql = string.Empty;
-
-                if (regionsToProcess.Any())
-                {
-                    regionSql = "AND CE.RegionId IN (";
-                    regionSql += string.Join(",", regions.ToList());
-                    regionSql += ") ";
-                }
-
-
-                return regionSql;
+                var eventTypes = "AND CE.RegionId IN (";
+                eventTypes += string.Join(",", regions.ToList());
+                eventTypes += ")";
+                return eventTypes;
         }
     }
 
