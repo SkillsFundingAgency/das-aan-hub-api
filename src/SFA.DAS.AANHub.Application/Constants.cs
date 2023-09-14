@@ -1,4 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Application
+﻿using SFA.DAS.AANHub.Application.Common;
+
+namespace SFA.DAS.AANHub.Application
 {
     public static class Constants
     {
@@ -13,6 +15,25 @@
         {
             public const string Withdrawn = "withdrawn";
             public const string Deleted = "deleted";
+        }
+
+        public static class DefaultMemberPreferencesAllowSharing
+        {
+            public const bool JobTitle = false;
+            public const bool Biography = false;
+            public const bool Apprenticeship = true;
+            public const bool LinkedIn = false;
+
+            public static List<DefaultMemberPreference> GetDefaultMemberPreferences()
+            {
+                return new List<DefaultMemberPreference>()
+                {
+                    new DefaultMemberPreference(1, Constants.DefaultMemberPreferencesAllowSharing.JobTitle),
+                    new DefaultMemberPreference(2, Constants.DefaultMemberPreferencesAllowSharing.Biography),
+                    new DefaultMemberPreference(3, Constants.DefaultMemberPreferencesAllowSharing.Apprenticeship),
+                    new DefaultMemberPreference(4, Constants.DefaultMemberPreferencesAllowSharing.LinkedIn)
+                };
+            }
         }
     }
 }

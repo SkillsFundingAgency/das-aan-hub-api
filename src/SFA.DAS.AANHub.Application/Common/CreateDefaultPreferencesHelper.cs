@@ -8,37 +8,16 @@ public class CreateDefaultPreferencesHelper
     public CreateDefaultPreferencesHelper(IMemberPreferenceWriteRepository memberPreferenceWriteRepository) => _memberPreferenceWriteRespository = memberPreferenceWriteRepository;
     public void CreateDefaultPreferences(Guid memberId)
     {
-        var memberPreferences = new List<MemberPreference>()
-        {
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 1,
-                AllowSharing = false
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 2,
-                AllowSharing = false
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 3,
-                AllowSharing = true
-            },
-            new MemberPreference()
-            {
-                MemberId = memberId,
-                PreferenceId = 4,
-                AllowSharing = false
-            }
-        };
+        var defaultMemberPreferences = Constants.DefaultMemberPreferencesAllowSharing.GetDefaultMemberPreferences();
 
-        foreach (var memberPreference in memberPreferences)
+        foreach (var defaultMemberPreference in defaultMemberPreferences)
         {
-            _memberPreferenceWriteRespository.Create(memberPreference);
+            _memberPreferenceWriteRespository.Create(new MemberPreference()
+            {
+                MemberId = memberId,
+                PreferenceId = defaultMemberPreference.Id,
+                AllowSharing = defaultMemberPreference.AllowSharing
+            });
         }
     }
 }
