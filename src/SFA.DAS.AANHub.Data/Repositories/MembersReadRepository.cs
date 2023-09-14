@@ -40,8 +40,8 @@ internal class MembersReadRepository : IMembersReadRepository
 	                  ,Mem.[UserType]
 	                  ,Mem.[IsRegionalChair]
                       ,Mem.[JoinedDate]
-                      FROM [SFA.DAS.AANHub.Database].[dbo].[Member] AS Mem
-                      LEFT JOIN [SFA.DAS.AANHub.Database].[dbo].[Region] AS Reg ON Mem.RegionId = Reg.Id
+                      FROM [Member] AS Mem
+                      LEFT JOIN [Region] AS Reg ON Mem.RegionId = Reg.Id
                        WHERE  Mem.[Status] = '{MembershipStatusType.Live}'
                       {keywordSql}
                       {((!string.IsNullOrEmpty(regions)) ? " AND " : string.Empty) + regions}
