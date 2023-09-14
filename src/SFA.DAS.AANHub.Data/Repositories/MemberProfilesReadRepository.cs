@@ -12,7 +12,7 @@ internal class MemberProfilesReadRepository : IMemberProfilesReadRepository
 
     public MemberProfilesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-    public async Task<IEnumerable<MemberProfile>?> GetMemberProfilesByMember(Guid memberId, CancellationToken cancellationToken) => await _aanDataContext
+    public async Task<IEnumerable<MemberProfile>> GetMemberProfilesByMember(Guid memberId, CancellationToken cancellationToken) => await _aanDataContext
         .MemberProfile
         .AsNoTracking()
         .Where(m => m.MemberId == memberId).Include(x => x.Profile)

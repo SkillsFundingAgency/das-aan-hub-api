@@ -4,5 +4,5 @@ namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 public interface IMemberProfilesReadRepository
 {
-    Task<IEnumerable<MemberProfile>?> GetMemberProfilesByMember(Guid memberId, CancellationToken cancellationToken);
+    Task<IEnumerable<MemberProfile>> GetMemberProfilesByMember(Guid memberId, CancellationToken cancellationToken);
 }

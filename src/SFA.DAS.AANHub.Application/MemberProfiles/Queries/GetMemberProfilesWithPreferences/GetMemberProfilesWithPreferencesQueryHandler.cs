@@ -17,22 +17,29 @@ public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetM
 
     public async Task<ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>> Handle(GetMemberProfilesWithPreferencesQuery request, CancellationToken cancellationToken)
     {
-        var memberProfiles = await _memberProfilesReadRepository.GetMemberProfilesByMember(request.MemberId, cancellationToken);
-        var memberProfilesWithPreferenceId = memberProfiles!.Select(p => (MemberProfileModel)p).ToList();
-
+        var memberProfiles = (await _memberProfilesReadRepository.GetMemberProfilesByMember(request.MemberId, cancellationToken)).Select(p => (MemberProfileModel)p);
         var memberPreferences = await _memberPreferencesReadRepository.GetMemberPreferencesByMember(request.MemberId, cancellationToken);
+
+        var preferenceIdsAllowedForSharing = memberPreferences.Where(x => x.AllowSharing).Select(x => x.PreferenceId);
 
         GetMemberProfilesWithPreferencesQueryResult result = new();
 
         if (request.IsPublicView)
         {
-            result.Profiles = memberProfilesWithPreferenceId.FindAll(x => memberPreferences!.Where(x => x.AllowSharing).Select(x => x.PreferenceId).Contains((int)x.PreferenceId!));
+            List<MemberProfileModel> profilesResult = new();
+            foreach (var m in memberProfiles)
+            {
+                if (m.PreferenceId.HasValue && preferenceIdsAllowedForSharing.Contains((int)m.PreferenceId))
+                    profilesResult.Add(m);
+            }
+
+            result.Profiles = profilesResult;
             result.Preferences = null!;
         }
         else
         {
-            result.Profiles = memberProfilesWithPreferenceId;
-            result.Preferences = memberPreferences!.Select(p => (MemberPreferenceModel)p);
+            result.Profiles = memberProfiles;
+            result.Preferences = memberPreferences.Select(p => (MemberPreferenceModel)p);
         }
 
         return (memberProfiles != null && memberPreferences != null)
