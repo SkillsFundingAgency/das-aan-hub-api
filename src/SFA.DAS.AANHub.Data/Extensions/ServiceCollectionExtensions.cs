@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.Azure.Services.AppAuthentication;
+using Azure.Core;
+using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,16 +13,32 @@ namespace SFA.DAS.AANHub.Data.Extensions;
 [ExcludeFromCodeCoverage]
 public static class ServiceCollectionExtensions
 {
+    private static readonly string AzureResource = "https://database.windows.net/";
+
+    private static readonly ChainedTokenCredential AzureTokenProvider = new ChainedTokenCredential(
+        new ManagedIdentityCredential(),
+        new AzureCliCredential(),
+        new VisualStudioCodeCredential(),
+        new VisualStudioCredential()
+    );
+
     public static IServiceCollection AddAanDataContext(this IServiceCollection services, string connectionString, string environmentName)
     {
         services.AddDbContext<AanDataContext>((serviceProvider, options) =>
         {
-            var connection = new SqlConnection(connectionString);
+            SqlConnection connection = null!;
 
             if (!environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase))
             {
-                var generateTokenTask = GenerateTokenAsync();
-                connection.AccessToken = generateTokenTask.GetAwaiter().GetResult();
+                connection = new SqlConnection
+                {
+                    ConnectionString = connectionString,
+                    AccessToken = AzureTokenProvider.GetToken(new TokenRequestContext(scopes: new string[] { AzureResource })).Token
+                };
+            }
+            else
+            {
+                connection = new SqlConnection(connectionString);
             }
 
             options.UseSqlServer(
@@ -53,14 +70,5 @@ public static class ServiceCollectionExtensions
         services.AddTransient<INotificationsWriteRepository, NotificationsWriteRepository>();
         services.AddTransient<INotificationsReadRepository, NotificationsReadRepository>();
         services.AddTransient<INotificationTemplateReadRepository, NotificationTemplateReadRepository>();
-    }
-
-    public static async Task<string> GenerateTokenAsync()
-    {
-        const string AzureResource = "https://database.windows.net/";
-        var azureServiceTokenProvider = new AzureServiceTokenProvider();
-        var accessToken = await azureServiceTokenProvider.GetAccessTokenAsync(AzureResource);
-
-        return accessToken;
     }
 }
