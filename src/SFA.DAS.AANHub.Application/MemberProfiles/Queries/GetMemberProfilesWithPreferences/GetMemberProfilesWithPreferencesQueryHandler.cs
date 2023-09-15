@@ -29,12 +29,14 @@ public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetM
             List<MemberProfileModel> profilesResult = new();
             foreach (var m in memberProfiles)
             {
-                if (m.PreferenceId.HasValue && preferenceIdsAllowedForSharing.Contains((int)m.PreferenceId))
+                if (!m.PreferenceId.HasValue)
+                    profilesResult.Add(m);
+                else if (m.PreferenceId.HasValue && preferenceIdsAllowedForSharing.Contains((int)m.PreferenceId))
                     profilesResult.Add(m);
             }
 
             result.Profiles = profilesResult;
-            result.Preferences = null!;
+            result.Preferences = Enumerable.Empty<MemberPreferenceModel>();
         }
         else
         {

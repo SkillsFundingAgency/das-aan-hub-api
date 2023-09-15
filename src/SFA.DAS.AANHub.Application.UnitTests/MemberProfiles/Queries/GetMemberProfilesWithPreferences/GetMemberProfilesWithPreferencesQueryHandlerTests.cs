@@ -1,62 +1,22 @@
-﻿using AutoFixture.NUnit3;
-using FluentAssertions;
+﻿using FluentAssertions;
+using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
-using SFA.DAS.AANHub.Application.Models;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
 public class GetMemberProfilesWithPreferencesQueryHandlerTests
 {
-    [Test, MoqAutoData]
-    public async Task Handle_WhenPublicViewIsFalse_Returns_All_MemberProfileWithPreference(
-        [Frozen] Mock<IMemberProfilesReadRepository> memberProfilesReadRepository,
-        [Frozen] Mock<IMemberPreferencesReadRepository> memberPreferencesReadRepository,
-        Guid memberId)
-    {
-        bool isPublicView = false;
+    Mock<IMemberProfilesReadRepository> _memberProfilesReadRepository = null!;
+    Mock<IMemberPreferencesReadRepository> _memberPreferencesReadRepository = null!;
+    GetMemberProfilesWithPreferencesQueryHandler _sut = null!;
+    ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult> _response = null!;
+    Guid memberId = Guid.NewGuid();
 
-        List<MemberProfile> memberProfiles = new()
-        {
-            new MemberProfile { ProfileId= 41, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= 1 } },
-            new MemberProfile { ProfileId= 42, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= 1 } },
-            new MemberProfile { ProfileId= 43, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= 2 } },
-            new MemberProfile { ProfileId= 44, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= null } },
-        };
-
-        List<MemberPreference> memberPreferences = new()
-        {
-            new MemberPreference{ PreferenceId = 1, AllowSharing =  true },
-            new MemberPreference{ PreferenceId = 2, AllowSharing =  true },
-            new MemberPreference{ PreferenceId = 3, AllowSharing =  false },
-        };
-
-        memberProfilesReadRepository.Setup(a => a.GetMemberProfilesByMember(memberId, new CancellationToken())).ReturnsAsync(memberProfiles);
-        memberPreferencesReadRepository.Setup(a => a.GetMemberPreferencesByMember(memberId, new CancellationToken())).ReturnsAsync(memberPreferences);
-
-        GetMemberProfilesWithPreferencesQueryHandler sut = new(memberProfilesReadRepository.Object, memberPreferencesReadRepository.Object);
-        var result = await sut.Handle(new GetMemberProfilesWithPreferencesQuery(memberId, isPublicView), new CancellationToken());
-
-        GetMemberProfilesWithPreferencesQueryResult queryOutPut = new();
-
-        queryOutPut.Profiles = memberProfiles.Select(p => (MemberProfileModel)p);
-        queryOutPut.Preferences = memberPreferences.Select(p => (MemberPreferenceModel)p);
-
-        result.Result.Should().BeEquivalentTo(queryOutPut);
-    }
-
-    [Test, MoqAutoData]
-    public async Task Handle_WhenPublicViewIsTrue_Returns_MemberProfilesWherePreferenceSharingIsAllowed(
-        [Frozen] Mock<IMemberProfilesReadRepository> memberProfilesReadRepository,
-        [Frozen] Mock<IMemberPreferencesReadRepository> memberPreferencesReadRepository,
-        Guid memberId)
-    {
-        bool isPublicView = true;
-
-        List<MemberProfile> memberProfiles = new()
+    static readonly List<MemberProfile> memberProfiles = new()
         {
             new MemberProfile { ProfileId= 41, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= 1 } },
             new MemberProfile { ProfileId= 42, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= 1 } },
@@ -65,34 +25,78 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
             new MemberProfile { ProfileId= 45, ProfileValue = Guid.NewGuid().ToString(), Profile = new Profile(){ PreferenceId= null } },
         };
 
-        List<MemberPreference> memberPreferences = new()
+    static readonly List<MemberPreference> memberPreferences = new()
         {
             new MemberPreference{ PreferenceId = 1, AllowSharing =  true },
             new MemberPreference{ PreferenceId = 2, AllowSharing =  true },
             new MemberPreference{ PreferenceId = 3, AllowSharing =  false },
         };
 
-        memberProfilesReadRepository.Setup(a => a.GetMemberProfilesByMember(memberId, new CancellationToken())).ReturnsAsync(memberProfiles);
-        memberPreferencesReadRepository.Setup(a => a.GetMemberPreferencesByMember(memberId, new CancellationToken())).ReturnsAsync(memberPreferences);
+    [SetUp]
+    public void Init()
+    {
+        //Arranging
+        _memberProfilesReadRepository = new();
+        _memberPreferencesReadRepository = new();
 
-        GetMemberProfilesWithPreferencesQueryHandler sut = new(memberProfilesReadRepository.Object, memberPreferencesReadRepository.Object);
-        var result = await sut.Handle(new GetMemberProfilesWithPreferencesQuery(memberId, isPublicView), new CancellationToken());
+        _memberProfilesReadRepository.Setup(a => a.GetMemberProfilesByMember(memberId, new CancellationToken())).ReturnsAsync(memberProfiles);
+        _memberPreferencesReadRepository.Setup(a => a.GetMemberPreferencesByMember(memberId, new CancellationToken())).ReturnsAsync(memberPreferences);
 
-        GetMemberProfilesWithPreferencesQueryResult queryOutPut = new();
-        List<MemberProfileModel> profilesResult = new();
+        _sut = new(_memberProfilesReadRepository.Object, _memberPreferencesReadRepository.Object);
+    }
 
-        var preferenceIdsAllowedForSharing = memberPreferences.Where(x => x.AllowSharing).Select(x => x.PreferenceId);
+    //Action
+    private async Task InvokeHandler(bool isPublicView)
+    {
+        _response = await _sut.Handle(new GetMemberProfilesWithPreferencesQuery(memberId, isPublicView), new CancellationToken());
+    }
 
+    [Test]
+    public async Task Handle_PublicViewIsTrue_HasPreferenceToShare_RetrunsProfileAllowedToShare()
+    {
+        await InvokeHandler(true);
+        _response.Result.Profiles.Select(x => x.ProfileId).Should().Contain(new List<int> { 41, 42, 43 });
+    }
 
-        foreach (var profileModel in memberProfiles!.Select(p => (MemberProfileModel)p))
+    [Test]
+    public async Task Handle_PublicViewIsTrue_ProfileDoesNotHavePreference_ReturnsProfile()
+    {
+        await InvokeHandler(true);
+        _response.Result.Profiles.Select(x => x.ProfileId).Should().Contain(45);
+    }
+
+    [Test]
+    public async Task Handle_PublicViewIsTrue_RetrunsEmptyPreferencesList()
+    {
+        await InvokeHandler(true);
+        _response.Result.Preferences.Should().BeEmpty();
+    }
+
+    [Test]
+    public async Task Handle_PublicViewIsTrue_HasNoPreferenceToShare_IgnoresProfile()
+    {
+        await InvokeHandler(true);
+        _response.Result.Profiles.Select(x => x.ProfileId).Should().NotContain(44);
+    }
+
+    [Test]
+    public async Task Handle_PubliViewFalse_ReturnsAllProfilesAndPreference()
+    {
+        await InvokeHandler(false);
+        using (new AssertionScope("Public view false should return all profiles and preferences"))
         {
-            if (profileModel.PreferenceId.HasValue && preferenceIdsAllowedForSharing.Contains((int)profileModel.PreferenceId))
-                profilesResult.Add(profileModel);
+            _response.Result.Profiles.Count().Should().Be(5);
+            _response.Result.Preferences.Count().Should().Be(3);
+
+            _response.Result.Profiles.Select(x => x.ProfileId).Should().Contain(new List<int> { 41, 42, 43, 44, 45 });
+            _response.Result.Preferences.Select(x => x.PreferenceId).Should().Contain(new List<int> { 1, 2, 3 });
         }
+    }
 
-        queryOutPut.Profiles = profilesResult;
-        queryOutPut.Preferences = null!;
-
-        result.Result.Should().BeEquivalentTo(queryOutPut);
+    [TearDown]
+    public void Dispose()
+    {
+        _sut = null!;
+        _response = null!;
     }
 }
