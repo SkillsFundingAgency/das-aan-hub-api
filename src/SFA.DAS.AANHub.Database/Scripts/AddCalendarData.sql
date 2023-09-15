@@ -12,8 +12,7 @@ INSERT INTO #TempCalendar VALUES
 (3, 'School and College event', 3), 
 (4, 'Careers event', 4),
 (5, 'Social/Networking activity', 5),
-(6, 'Training event', 6),
-(7, 'Other', 7);
+(6, 'Training event', 6);
 
 
 MERGE Calendar TARGET

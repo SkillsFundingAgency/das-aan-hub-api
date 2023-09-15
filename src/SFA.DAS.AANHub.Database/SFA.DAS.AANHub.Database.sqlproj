@@ -91,6 +91,7 @@
     <None Include="SFA.DAS.AANHub.Database.publish.xml" />
     <None Include="Scripts\AddNotificationTemplateData.sql" />
     <None Include="Scripts\AddLeavingReasonData.sql" />
+    <None Include="Scripts\RemoveOtherFromCalendar.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
