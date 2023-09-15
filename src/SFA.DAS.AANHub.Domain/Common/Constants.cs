@@ -32,6 +32,11 @@ public static class Constants
         public const int Latitude = 37;
     }
 
+    public static class Members
+    {
+        public static readonly int PageSize = 30;
+    }
+  
     public static class EmailTemplateName
     {
         public const string ApprenticeOnboardingTemplate = "AANApprenticeOnboarding";

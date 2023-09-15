@@ -2,10 +2,12 @@
 using Microsoft.AspNetCore.JsonPatch;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
+using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 using SFA.DAS.AANHub.Domain.Entities;
 using Swashbuckle.AspNetCore.Filters;
 
@@ -15,16 +17,35 @@ namespace SFA.DAS.AANHub.Api.Controllers;
 [ApiController]
 public class MembersController : ActionResponseControllerBase
 {
-    private readonly IMediator _mediator;
-
     private readonly ILogger<MembersController> _logger;
+    private readonly IMediator _mediator;
 
     public override string ControllerName => "Members";
 
-    public MembersController(IMediator mediator, ILogger<MembersController> logger)
+    public MembersController(ILogger<MembersController> logger, IMediator mediator)
     {
-        _mediator = mediator;
         _logger = logger;
+        _mediator = mediator;
+    }
+
+    [HttpGet]
+    [ProducesResponseType(typeof(GetMembersQueryResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetMembers([FromQuery] GetMembersModel model, CancellationToken cancellationToken)
+    {
+        if (model.Page <= 0)
+        {
+            model.Page = 1;
+        }
+
+        if (model.PageSize <= 0)
+        {
+            model.PageSize = Domain.Common.Constants.Members.PageSize;
+        }
+
+        var response = await _mediator.Send((GetMembersQuery)model, cancellationToken);
+
+        return new OkObjectResult(response);
     }
 
     [HttpPatch]

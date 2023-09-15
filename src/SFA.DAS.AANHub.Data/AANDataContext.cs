@@ -19,6 +19,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
     public DbSet<CalendarEventSummary>? CalendarEventSummaries { get; set; }
     public DbSet<Attendance> Attendances => Set<Attendance>();
+    public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
 
