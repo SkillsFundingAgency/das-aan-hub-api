@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Application.Models;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
+
 public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetMemberProfilesWithPreferencesQuery, ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>>
 {
     private readonly IMemberProfilesReadRepository _memberProfilesReadRepository;
@@ -44,8 +45,6 @@ public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetM
             result.Preferences = memberPreferences.Select(p => (MemberPreferenceModel)p);
         }
 
-        return (memberProfiles != null && memberPreferences != null)
-            ? new ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>(result)
-            : ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>.EmptySuccessResponse();
+        return new ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>(result);
     }
 }

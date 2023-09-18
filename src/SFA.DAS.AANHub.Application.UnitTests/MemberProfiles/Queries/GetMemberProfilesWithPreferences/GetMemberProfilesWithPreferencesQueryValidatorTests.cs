@@ -1,21 +1,60 @@
 ﻿using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
 public class GetMemberProfilesWithPreferencesQueryValidatorTests
 {
-    [TestCase("8fad718f-4c72-4fb4-8da0-6763efa8fb9c", true, true)]
-    [TestCase("8fad718f-4c72-4fb4-8da0-6763efa8fb9c", false, true)]
-    [TestCase("00000000-0000-0000-0000-000000000000", true, false)]
-    [TestCase("00000000-0000-0000-0000-000000000000", false, false)]
-    public async Task Validates_ApprenticeId_NotNull_NotFound(Guid employerId, bool isPublicView, bool isValid)
+    [Test, MoqAutoData]
+    public async Task ValidateMemberId_Empty_FailsValidation(GetMemberProfilesWithPreferencesQuery mockQuery)
     {
-        var query = new GetMemberProfilesWithPreferencesQuery(employerId, isPublicView);
-        var sut = new GetMemberProfilesWithPreferencesQueryValidator();
+        mockQuery.MemberId = Guid.Empty;
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
 
-        var result = await sut.TestValidateAsync(query);
+        var sut = new GetMemberProfilesWithPreferencesQueryValidator(membersReadRepositoryMock.Object);
+        var result = await sut.TestValidateAsync(mockQuery);
 
-        result.IsValid.Equals(isValid);
+        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdEmptyErrorMessage);
+    }
+
+    [Test, MoqAutoData]
+    public async Task ValidateMemberId_WhenNoMemberReturned_FailsValidation(GetMemberProfilesWithPreferencesQuery mockQuery)
+    {
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+        membersReadRepositoryMock.Setup(m => m.GetMember(It.IsAny<Guid>())).ReturnsAsync(() => null);
+
+        var sut = new GetMemberProfilesWithPreferencesQueryValidator(membersReadRepositoryMock.Object);
+        var result = await sut.TestValidateAsync(mockQuery);
+
+        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+    }
+
+    [Test, MoqAutoData]
+    public async Task ValidateRequestedByMemberId_Empty_FailsValidation(GetMemberProfilesWithPreferencesQuery mockQuery)
+    {
+        mockQuery.RequestedByMemberId = Guid.Empty;
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+
+        var sut = new GetMemberProfilesWithPreferencesQueryValidator(membersReadRepositoryMock.Object);
+        var result = await sut.TestValidateAsync(mockQuery);
+
+        result.ShouldHaveValidationErrorFor(nt => nt.RequestedByMemberId).WithErrorMessage(RequestedByMemberIdValidator.RequestedByMemberHeaderEmptyErrorMessage);
+    }
+
+    [Test, MoqAutoData]
+    public async Task ValidateRequestedByMemberId_WhenNoMemberReturned_FailsValidation(GetMemberProfilesWithPreferencesQuery mockQuery)
+    {
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+        membersReadRepositoryMock.Setup(m => m.GetMember(mockQuery.RequestedByMemberId)).ReturnsAsync(() => null);
+
+        var sut = new GetMemberProfilesWithPreferencesQueryValidator(membersReadRepositoryMock.Object);
+        var result = await sut.TestValidateAsync(mockQuery);
+
+        result.ShouldHaveValidationErrorFor(nt => nt.RequestedByMemberId).WithErrorMessage(RequestedByMemberIdValidator.RequestedByMemberIdNotFoundMessage);
     }
 }

@@ -1,12 +1,15 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
+using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.MemberProfiles.Queries.GetMemberProfilesWithPreferences;
 
 public class GetMemberProfilesWithPreferencesQueryValidator : AbstractValidator<GetMemberProfilesWithPreferencesQuery>
 {
-    public GetMemberProfilesWithPreferencesQueryValidator()
+    public GetMemberProfilesWithPreferencesQueryValidator(IMembersReadRepository membersReadRepository)
     {
-        RuleFor(a => a.MemberId)
-            .NotEmpty();
+        Include(new RequestedByMemberIdValidator(membersReadRepository));
+        Include(new MemberIdValidator(membersReadRepository));
     }
 }

@@ -15,6 +15,7 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     GetMemberProfilesWithPreferencesQueryHandler _sut = null!;
     ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult> _response = null!;
     Guid memberId = Guid.NewGuid();
+    Guid requestedByMemberId = Guid.NewGuid();
 
     static readonly List<MemberProfile> memberProfiles = new()
         {
@@ -48,7 +49,7 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     //Action
     private async Task InvokeHandler(bool isPublicView)
     {
-        _response = await _sut.Handle(new GetMemberProfilesWithPreferencesQuery(memberId, isPublicView), new CancellationToken());
+        _response = await _sut.Handle(new GetMemberProfilesWithPreferencesQuery() { RequestedByMemberId = requestedByMemberId, MemberId = memberId, IsPublicView = isPublicView }, new CancellationToken());
     }
 
     [Test]
