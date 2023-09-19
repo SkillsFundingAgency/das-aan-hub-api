@@ -42,7 +42,7 @@ internal class MembersReadRepository : IMembersReadRepository
                       ,Mem.[JoinedDate]
                       FROM [Member] AS Mem
                       LEFT JOIN [Region] AS Reg ON Mem.RegionId = Reg.Id
-                       WHERE  Mem.[Status] = '{MembershipStatusType.Live}'
+                      WHERE  (Mem.[Status] = '{MembershipStatusType.Live}' AND (Mem.[UserType] IN ('{UserType.Employer}','{UserType.Apprentice}')))
                       {keywordSql}
                       {((!string.IsNullOrEmpty(regions)) ? " AND " : string.Empty) + regions}
                       {((!string.IsNullOrEmpty(userType)) ? " AND " : string.Empty) + userType}
