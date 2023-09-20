@@ -1,4 +1,5 @@
-﻿using FluentAssertions;
+﻿using System.Data;
+using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
@@ -175,6 +176,41 @@ public class GetMembersQueryHandlerTests
         await sut.Handle(query, cancellationToken);
         membersReadRepositoryMock.Verify(x => x.GetMembers(
             It.Is<GetMembersOptions>(c => c.UserType == userType), cancellationToken), Times.Once);
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Handle_UserType_ShouldNotReturnMemberWithAnyUserTypeExceptEmployerAndApprentice(
+        CancellationToken cancellationToken
+    )
+    {
+        // arrange
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+        var membersSummary = new MembersSummary();
+        membersSummary.UserType = UserType.Employer.ToString();
+        membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+        var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
+        var query = new GetMembersQuery
+        {
+            Keyword = string.Empty,
+            UserType = new List<MemberUserType>(),
+            IsRegionalChair = null,
+            RegionIds = new List<int>(),
+            Page = 1,
+            PageSize = 5
+        };
+        List<string> allowableUserType = new List<string>() { UserType.Apprentice.ToString(), UserType.Employer.ToString() };
+
+        // act
+        var result = await sut.Handle(query, cancellationToken);
+        var membersWithOtherUserRole = result.Members.Where(obj => !allowableUserType.Contains(obj.UserType)).ToList();
+
+        // assert
+        using (new AssertionScope())
+        {
+            result.Members.Count.Should().BeGreaterThanOrEqualTo(1);
+            Assert.IsEmpty(membersWithOtherUserRole);
+        }
     }
 
     private static readonly object?[] _Data =
