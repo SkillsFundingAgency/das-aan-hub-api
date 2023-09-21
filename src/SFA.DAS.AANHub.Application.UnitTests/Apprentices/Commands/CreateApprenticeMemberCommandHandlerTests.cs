@@ -8,7 +8,6 @@ using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
@@ -23,13 +22,14 @@ public class CreateApprenticeMemberCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         Region region,
         CreateApprenticeMemberCommandHandler sut,
         CreateApprenticeMemberCommand command)
     {
         regionsReadRepository.Setup(x => x.GetRegionById(It.IsAny<int>(), CancellationToken.None)).ReturnsAsync(region);
-        var response = await sut.Handle(command, new CancellationToken());
 
+        var response = await sut.Handle(command, new CancellationToken());
         var mockRegion = await regionsReadRepository.Object.GetRegionById(command.RegionId.GetValueOrDefault(), CancellationToken.None);
         var mockToken = new OnboardingEmailTemplate(command.FirstName!, command.LastName!, $"{mockRegion!.Area} team");
         var mockTokenSerialised = JsonSerializer.Serialize(mockToken);
@@ -42,24 +42,24 @@ public class CreateApprenticeMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
         }
     }
 
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_AddsNewApprentice_WithDefaultMemberPreference(
-        CreateApprenticeMemberCommand command)
+        CreateApprenticeMemberCommand command,
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
+        [Greedy] CreateApprenticeMemberCommandHandler sut)
     {
-        Mock<IMembersWriteRepository> membersWriteRepository = new();
-        Mock<IAanDataContext> aanDataContext = new();
-        Mock<IAuditWriteRepository> auditWriteRepository = new();
-        Mock<IRegionsReadRepository> regionsReadRepository = new();
-        Mock<INotificationsWriteRepository> notificationsWriteRepository = new();
-        CreateApprenticeMemberCommandHandler sut = new(membersWriteRepository.Object, aanDataContext.Object, auditWriteRepository.Object, regionsReadRepository.Object, notificationsWriteRepository.Object);
-
         var response = await sut.Handle(command, new CancellationToken());
 
-        response.Result.MemberId.Should().Be(command.MemberId);
-
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultMemberPreferences(UserType.Apprentice).Count)));
+        using (new AssertionScope())
+        {
+            response.Result.MemberId.Should().Be(command.MemberId);
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count)));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
+        }
     }
 }
