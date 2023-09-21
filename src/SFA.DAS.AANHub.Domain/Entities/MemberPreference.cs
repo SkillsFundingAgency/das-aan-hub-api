@@ -1,7 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
 namespace SFA.DAS.AANHub.Domain.Entities;
-
 public class MemberPreference
 {
     public long Id { get; set; }

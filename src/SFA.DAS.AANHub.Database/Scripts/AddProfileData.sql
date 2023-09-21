@@ -36,15 +36,15 @@ INSERT INTO #TempProfile VALUES
 (36,'Employer address longitude','Employer',7, 'Apprentice',null),
 (37,'Employer address latitude','Employer',8, 'Apprentice',null),
 (41,'Meet other employer ambassadors and grow your network','ReasonToJoin',1, 'Employer',null),
-(42,'Share your knowledge, experience and best practice','ReasonToJoin',2, 'Employer',null),
-(43,'Project manage and deliver network events','ReasonToJoin',3, 'Employer',null),
+(42,'Share your knowledge, experience and best practice','ReasonToJoin',2, 'Employer',1),
+(43,'Project manage and deliver network events','ReasonToJoin',3, 'Employer',1),
 (44,'Be a role model and act as an informal mentor','ReasonToJoin',4, 'Employer',null),
-(45,'Champion apprenticeship delivery within your networks','ReasonToJoin',5, 'Employer',null),
-(51,'Building apprenticeship profile of my organisation','Support',1, 'Employer',null),
-(52,'Increasing engagement with schools and colleges','Support',2, 'Employer',null),
-(53,'Getting started with apprenticeships','Support',3, 'Employer',null),
-(54,'Understanding training providers and resources others are using','Support',4, 'Employer',null),
-(55,'Using the network to best benefit my organisation','Support',5, 'Employer',null),
+(45,'Champion apprenticeship delivery within your networks','ReasonToJoin',5, 'Employer',1),
+(51,'Building apprenticeship profile of my organisation','Support',1, 'Employer',1),
+(52,'Increasing engagement with schools and colleges','Support',2, 'Employer',1),
+(53,'Getting started with apprenticeships','Support',3, 'Employer',1),
+(54,'Understanding training providers and resources others are using','Support',4, 'Employer',1),
+(55,'Using the network to best benefit my organisation','Support',5, 'Employer',1),
 (61,'Engaged with a previous ambassador in the network','Personal',1, 'Employer',null)
 
 MERGE [Profile] TARGET

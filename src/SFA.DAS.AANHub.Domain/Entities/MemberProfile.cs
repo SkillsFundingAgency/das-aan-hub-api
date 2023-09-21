@@ -11,4 +11,7 @@ public class MemberProfile
 
     [JsonIgnore]
     public virtual Member Member { get; set; } = null!;
+
+    [JsonIgnore]
+    public virtual Profile Profile { get; set; } = null!;
 }
