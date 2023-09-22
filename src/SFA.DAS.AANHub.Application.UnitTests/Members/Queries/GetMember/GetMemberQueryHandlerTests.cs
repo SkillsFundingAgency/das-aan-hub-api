@@ -1,19 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit3;
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
-using SFA.DAS.AANHub.Application.Employers.Queries;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries.GetMember;
+
 public class GetMemberQueryHandlerTests
 {
     [Test]

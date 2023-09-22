@@ -10,7 +10,8 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries.GetMembers;
+
 public class GetMembersQueryHandlerTests
 {
     [Test, RecursiveMoqAutoData]

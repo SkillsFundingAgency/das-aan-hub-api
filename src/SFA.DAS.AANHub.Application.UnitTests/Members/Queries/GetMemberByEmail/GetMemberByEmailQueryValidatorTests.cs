@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries.GetMemberByEmail;
 
 public class GetMemberByEmailQueryValidatorTests
 {
