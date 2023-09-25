@@ -7,7 +7,8 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Members.Queries.GetMemberByEmail;
+
 public class GetMemberByEmailQueryHandlerTests
 {
     [Test, RecursiveMoqAutoData]

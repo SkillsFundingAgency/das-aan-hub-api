@@ -5,7 +5,7 @@ using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
-using SFA.DAS.AANHub.Application.Employers.Queries;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMember;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -69,7 +69,7 @@ public class GetNotificationQueryValidatorTests
         using (new AssertionScope())
         {
             result.IsValid.Should().BeTrue();
-            result.ShouldNotHaveValidationErrorFor(m => m.UserRef);
+            result.ShouldNotHaveValidationErrorFor(m => m.MemberId);
         }
     }
 

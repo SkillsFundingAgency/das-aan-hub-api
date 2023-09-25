@@ -6,6 +6,7 @@ using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMember;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -76,6 +77,20 @@ public class MembersController : ActionResponseControllerBase
         _logger.LogInformation("AAN Hub API: Received command to get member by email: {email}", email);
 
         var response = await _mediator.Send(new GetMemberByEmailQuery(email));
+
+        return GetResponse(response);
+    }
+
+    [HttpGet]
+    [Route("{memberId:guid}")]
+    [ProducesResponseType(typeof(GetMemberResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> GetMember(Guid memberId)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get member by memberId: {memberId}", memberId);
+
+        var response = await _mediator.Send(new GetMemberQuery(memberId));
 
         return GetResponse(response);
     }
