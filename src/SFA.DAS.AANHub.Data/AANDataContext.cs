@@ -24,6 +24,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
+    public DbSet<MemberPreference> MemberPreferences => Set<MemberPreference>();
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

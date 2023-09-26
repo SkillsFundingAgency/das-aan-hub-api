@@ -4,6 +4,7 @@ using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
@@ -23,6 +24,7 @@ public class CreateEmployerMemberCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         Region region,
         CreateEmployerMemberCommandHandler sut,
         CreateEmployerMemberCommand command)
@@ -46,6 +48,7 @@ public class CreateEmployerMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify(p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
         }
     }
 
@@ -55,6 +58,7 @@ public class CreateEmployerMemberCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
         [Frozen] Mock<IRegionsReadRepository> regionsReadRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
         Region region,
         CreateEmployerMemberCommandHandler sut,
         CreateEmployerMemberCommand command)
@@ -75,25 +79,24 @@ public class CreateEmployerMemberCommandHandlerTests
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.MemberId == command.MemberId)));
             notificationsWriteRepository.Verify(p => p.Create(It.Is<Notification>(x => x.Tokens == mockTokenSerialised)));
             regionsReadRepository.Verify((p => p.GetRegionById(It.Is<int>(x => x == command.RegionId), CancellationToken.None)), Times.Never);
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
         }
     }
 
-    [Test, MoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_AddsNewEmployer_WithDefaultMemberPreference(
-        CreateEmployerMemberCommand command)
+        CreateEmployerMemberCommand command,
+        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
+        [Greedy] CreateEmployerMemberCommandHandler sut)
     {
-        Mock<IMembersWriteRepository> membersWriteRepository = new();
-        Mock<IAanDataContext> aanDataContext = new();
-        Mock<IAuditWriteRepository> auditWriteRepository = new();
-        Mock<IRegionsReadRepository> regionsReadRepository = new();
-        Mock<INotificationsWriteRepository> notificationsWriteRepository = new();
-
-        CreateEmployerMemberCommandHandler sut = new(membersWriteRepository.Object, aanDataContext.Object, auditWriteRepository.Object, notificationsWriteRepository.Object, regionsReadRepository.Object);
-
         var response = await sut.Handle(command, new CancellationToken());
 
-        response.Result.MemberId.Should().Be(command.MemberId);
-
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultMemberPreferences(UserType.Employer).Count)));
+        using (new AssertionScope())
+        {
+            response.Result.MemberId.Should().Be(command.MemberId);
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count)));
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
+        }
     }
 }

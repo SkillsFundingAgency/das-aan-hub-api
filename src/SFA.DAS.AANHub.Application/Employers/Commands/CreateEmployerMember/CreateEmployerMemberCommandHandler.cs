@@ -20,28 +20,34 @@ public class CreateEmployerMemberCommandHandler :
     private readonly IMembersWriteRepository _membersWriteRepository;
     private readonly INotificationsWriteRepository _notificationsWriteRepository;
     private readonly IRegionsReadRepository _regionsReadRepository;
+    private readonly IMemberPreferenceWriteRepository _memberPreferenceWriteRepository;
 
     public CreateEmployerMemberCommandHandler(
         IMembersWriteRepository membersWriteRepository,
         IAanDataContext aanDataContext,
         IAuditWriteRepository auditWriteRepository,
         INotificationsWriteRepository notificationsWriteRepository,
-        IRegionsReadRepository regionsReadRepository)
+        IRegionsReadRepository regionsReadRepository,
+        IMemberPreferenceWriteRepository memberPreferenceWriteRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
         _notificationsWriteRepository = notificationsWriteRepository;
         _regionsReadRepository = regionsReadRepository;
+        _memberPreferenceWriteRepository = memberPreferenceWriteRepository;
     }
 
     public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateEmployerMemberCommand command,
         CancellationToken cancellationToken)
     {
         Member member = command;
-        member.MemberPreferences = MemberPreferenceService.GetDefaultMemberPreferences(UserType.Employer);
+        var defaultMemberPreferences = MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Employer, member.Id);
 
+        member.MemberPreferences = defaultMemberPreferences;
         _membersWriteRepository.Create(member);
+
+        defaultMemberPreferences.ForEach(preference => _memberPreferenceWriteRepository.Create(preference));
 
         _auditWriteRepository.Create(new Audit
         {
