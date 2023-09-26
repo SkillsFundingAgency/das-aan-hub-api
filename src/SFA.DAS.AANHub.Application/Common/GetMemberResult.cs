@@ -5,6 +5,7 @@ namespace SFA.DAS.AANHub.Application.Common;
 public class GetMemberResult
 {
     public Guid MemberId { get; set; }
+    public Guid? ApprenticeId { get; set; }
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
@@ -13,6 +14,8 @@ public class GetMemberResult
     public int? RegionId { get; set; }
     public string UserType { get; set; } = null!;
     public DateTime JoinedDate { get; set; }
+    public DateTime EndDate { get; set; }
+    public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
 
@@ -21,9 +24,14 @@ public class GetMemberResult
         if (member == null)
             return null;
 
+        Guid? apprenticeId = null;
+        if (member.Apprentice != null)
+            apprenticeId = member.Apprentice!.ApprenticeId;
+
         return new GetMemberResult
         {
             MemberId = member.Id,
+            ApprenticeId = apprenticeId,
             Email = member.Email,
             FirstName = member.FirstName,
             LastName = member.LastName,

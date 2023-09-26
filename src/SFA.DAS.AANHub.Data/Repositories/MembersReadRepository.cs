@@ -17,7 +17,7 @@ internal class MembersReadRepository : IMembersReadRepository
     public async Task<Member?> GetMember(Guid id) => await _aanDataContext
         .Members
         .AsNoTracking()
-        .Where(m => m.Id == id)
+        .Where(m => m.Id == id).Include(x => x.Apprentice)
         .SingleOrDefaultAsync();
 
     public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext
