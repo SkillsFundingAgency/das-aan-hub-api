@@ -6,6 +6,7 @@ public class GetMemberResult
 {
     public Guid MemberId { get; set; }
     public Guid? ApprenticeId { get; set; }
+    public Guid? UserRef { get; set; }
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
@@ -14,7 +15,7 @@ public class GetMemberResult
     public int? RegionId { get; set; }
     public string UserType { get; set; } = null!;
     public DateTime JoinedDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public DateTime? EndDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
@@ -28,20 +29,27 @@ public class GetMemberResult
         if (member.Apprentice != null)
             apprenticeId = member.Apprentice!.ApprenticeId;
 
+        Guid? userRef = null;
+        if (member.Employer != null)
+            userRef = member.Employer!.UserRef;
+
         return new GetMemberResult
         {
             MemberId = member.Id,
-            ApprenticeId = apprenticeId,
-            Email = member.Email,
+            UserType = member.UserType,
             FirstName = member.FirstName,
             LastName = member.LastName,
+            Email = member.Email,
             Status = member.Status!,
-            OrganisationName = member.OrganisationName,
-            RegionId = member.RegionId,
-            UserType = member.UserType,
             JoinedDate = member.JoinedDate,
+            EndDate = member.EndDate,
+            RegionId = member.RegionId,
+            OrganisationName = member.OrganisationName,
+            LastUpdatedDate = member.LastUpdatedDate,
             IsRegionalChair = member.IsRegionalChair,
-            FullName = member.FullName
+            FullName = member.FullName,
+            ApprenticeId = apprenticeId,
+            UserRef = userRef
         };
     }
 }
