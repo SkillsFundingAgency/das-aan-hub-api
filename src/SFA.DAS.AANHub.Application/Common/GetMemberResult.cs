@@ -17,16 +17,15 @@ public class GetMemberResult
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
-
-    public EmployerModel? Employer { get; set; } = null!;
-    public ApprenticeModel? Apprentice { get; set; } = null!;
+    public EmployerModel? Employer { get; set; }
+    public ApprenticeModel? Apprentice { get; set; }
 
     public static implicit operator GetMemberResult?(Member? member)
     {
         if (member == null)
             return null;
 
-        return new GetMemberResult
+        GetMemberResult getMemberResult = new()
         {
             MemberId = member.Id,
             UserType = member.UserType,
@@ -40,10 +39,14 @@ public class GetMemberResult
             OrganisationName = member.OrganisationName,
             LastUpdatedDate = member.LastUpdatedDate,
             IsRegionalChair = member.IsRegionalChair,
-            FullName = member.FullName,
-            Apprentice = new ApprenticeModel(member?.Apprentice?.ApprenticeId),
-            Employer = new EmployerModel(member?.Employer?.AccountId, member?.Employer?.UserRef)
+            FullName = member.FullName
         };
+
+        if (member.Apprentice != null) getMemberResult.Apprentice = new ApprenticeModel(member.Apprentice.ApprenticeId);
+
+        if (member.Employer != null) getMemberResult.Employer = new EmployerModel(member.Employer.AccountId, member.Employer.UserRef);
+
+        return getMemberResult;
     }
 }
 
