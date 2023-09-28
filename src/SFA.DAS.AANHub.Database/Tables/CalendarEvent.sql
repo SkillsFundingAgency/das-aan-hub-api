@@ -20,7 +20,7 @@
     [IsActive] BIT NOT NULL DEFAULT 1,
     [CancelReason] NVARCHAR(max) NULL,
     [PlannedAttendees] INT NULL,
-    [CreatedOn] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedDate] DATETIME2 DEFAULT GETUTCDATE(),
     CONSTRAINT [PK_CalendarEvent] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_CalendarEvent_Calendar] FOREIGN KEY ([CalendarId]) REFERENCES [Calendar]([Id])
 );
@@ -30,7 +30,7 @@ CREATE INDEX IX_CalendarEventSearch ON [CalendarEvent] ([IsActive], [StartDate],
 INCLUDE ([Title], [Summary], [Location], [Postcode], [Latitude], [Longitude], [EventLink], [ContactName], [ContactEmail]);
 GO
 
-CREATE INDEX IX_CalendarEventCreatedOn ON [CalendarEvent] ([CreatedOn], [Id])
+CREATE INDEX IX_CalendarEventCreatedDate ON [CalendarEvent] ([CreatedDate], [Id])
 GO
 
 CREATE FULLTEXT CATALOG calendarevent_catalog;  
