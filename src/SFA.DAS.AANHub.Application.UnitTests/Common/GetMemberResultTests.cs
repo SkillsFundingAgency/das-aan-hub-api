@@ -25,8 +25,9 @@ public class GetMemberResultTests
         result.LastUpdatedDate.Should().Be(member.LastUpdatedDate);
         result.IsRegionalChair.Should().Be(member.IsRegionalChair);
         result.FullName.Should().Be(member.FullName);
-        result.ApprenticeId.Should().Be(member.Apprentice!.ApprenticeId);
-        result.UserRef.Should().Be(member.Employer!.UserRef);
+        result.Apprentice?.ApprenticeId.Should().Be(member.Apprentice!.ApprenticeId);
+        result.Employer?.UserRef.Should().Be(member.Employer!.UserRef);
+        result.Employer?.AccountId.Should().Be(member.Employer!.AccountId);
     }
 
     [Test]

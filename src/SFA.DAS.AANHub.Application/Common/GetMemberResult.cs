@@ -5,8 +5,6 @@ namespace SFA.DAS.AANHub.Application.Common;
 public class GetMemberResult
 {
     public Guid MemberId { get; set; }
-    public Guid? ApprenticeId { get; set; }
-    public Guid? UserRef { get; set; }
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
@@ -20,18 +18,13 @@ public class GetMemberResult
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
 
+    public EmployerModel? Employer { get; set; } = null!;
+    public ApprenticeModel? Apprentice { get; set; } = null!;
+
     public static implicit operator GetMemberResult?(Member? member)
     {
         if (member == null)
             return null;
-
-        Guid? apprenticeId = null;
-        if (member.Apprentice != null)
-            apprenticeId = member.Apprentice!.ApprenticeId;
-
-        Guid? userRef = null;
-        if (member.Employer != null)
-            userRef = member.Employer!.UserRef;
 
         return new GetMemberResult
         {
@@ -48,8 +41,12 @@ public class GetMemberResult
             LastUpdatedDate = member.LastUpdatedDate,
             IsRegionalChair = member.IsRegionalChair,
             FullName = member.FullName,
-            ApprenticeId = apprenticeId,
-            UserRef = userRef
+            Apprentice = new ApprenticeModel(member?.Apprentice?.ApprenticeId),
+            Employer = new EmployerModel(member?.Employer?.AccountId, member?.Employer?.UserRef)
         };
     }
 }
+
+public record EmployerModel(long? AccountId, Guid? UserRef);
+
+public record ApprenticeModel(Guid? ApprenticeId);
