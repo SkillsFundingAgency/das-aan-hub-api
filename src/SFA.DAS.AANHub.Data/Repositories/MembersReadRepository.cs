@@ -18,12 +18,16 @@ internal class MembersReadRepository : IMembersReadRepository
         .Members
         .AsNoTracking()
         .Where(m => m.Id == id)
+        .Include(x => x.Apprentice)
+        .Include(x => x.Employer)
         .SingleOrDefaultAsync();
 
     public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext
         .Members
         .AsNoTracking()
         .Where(m => m.Email == Email)
+        .Include(x => x.Apprentice)
+        .Include(x => x.Employer)
         .SingleOrDefaultAsync();
 
     public async Task<List<MembersSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
