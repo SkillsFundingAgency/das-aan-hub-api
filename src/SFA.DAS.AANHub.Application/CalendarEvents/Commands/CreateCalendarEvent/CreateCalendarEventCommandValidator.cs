@@ -14,6 +14,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string EndDateMustNotBeEmpty = "endDate must have a valid value";
     public const string EndDateMustBeInFuture = "endDate must be a future date";
     public const string EndDateMustBeLessThanEndDate = "endDate must be greater than or equal to startDate";
+    public const string TitleMustNotBeEmpty = "title must have a value";
+    public const string TitleMustNotExceedLength = "title must not be greater than 200 characters long";
+    public const string TitleMustExcludeSpecialCharacters = "title must not include any special characters: @, #, $, ^, =, +, \\, /, <, >, %";
 
     public CreateCalendarEventCommandValidator(ICalendarsReadRepository calendarsReadRepository)
     {
@@ -48,5 +51,13 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(EndDateMustBeInFuture)
             .GreaterThanOrEqualTo(c => c.StartDate)
             .WithMessage(EndDateMustBeLessThanEndDate);
+
+        RuleFor(c => c.Title)
+            .NotEmpty()
+            .WithMessage(TitleMustNotBeEmpty)
+            .MaximumLength(200)
+            .WithMessage(TitleMustNotExceedLength)
+            .Matches(Constants.RegularExpressions.ExcludedCharactersRegex)
+            .WithMessage(TitleMustExcludeSpecialCharacters);
     }
 }
