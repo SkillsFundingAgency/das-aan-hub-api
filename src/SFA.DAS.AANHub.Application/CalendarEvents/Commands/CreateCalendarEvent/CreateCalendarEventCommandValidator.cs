@@ -8,6 +8,10 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string CalendarTypeIdMustNotBeEmpty = "calendarId must have a value";
     public const string CalendarTypeIdMustBeValid = "calendarId must have a valid value";
     public const string EventFormatMustNotBeEmpty = "eventFormat must have a valid value";
+    public const string StartDateMustNotBeEmpty = "startDate must have a valid value";
+    public const string StartDateMustBeInFuture = "startDate must be a future date";
+    public const string StartDateMustBeLessThanEndDate = "startDate must be less than or equal to endDate";
+
     public CreateCalendarEventCommandValidator(ICalendarsReadRepository calendarsReadRepository)
     {
         RuleFor(c => c.CalendarId)
@@ -24,5 +28,13 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .NotEmpty()
             .WithMessage(EventFormatMustNotBeEmpty);
 
+        RuleFor(c => c.StartDate)
+            .Cascade(CascadeMode.Stop)
+            .NotEmpty()
+            .WithMessage(StartDateMustNotBeEmpty)
+            .GreaterThan(DateTime.UtcNow)
+            .WithMessage(StartDateMustBeInFuture)
+            .LessThanOrEqualTo(c => c.EndDate)
+            .WithMessage(StartDateMustBeLessThanEndDate);
     }
 }

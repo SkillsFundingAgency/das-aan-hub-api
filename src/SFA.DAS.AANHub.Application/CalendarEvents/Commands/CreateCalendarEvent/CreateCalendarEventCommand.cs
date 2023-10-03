@@ -6,8 +6,8 @@ public class CreateCalendarEventCommand
 {
     public int CalendarId { get; set; }
     public EventFormat? EventFormat { get; set; }
-    public DateTime StartDate { get; set; }
-    public DateTime EndDate { get; set; }
+    public DateTime? StartDate { get; set; }
+    public DateTime? EndDate { get; set; }
     public string Title { get; set; } = null!;
     public string? Description { get; set; }
     public string? Summary { get; set; }

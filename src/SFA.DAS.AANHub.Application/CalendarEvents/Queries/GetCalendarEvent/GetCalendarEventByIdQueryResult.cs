@@ -35,7 +35,7 @@ public class GetCalendarEventByIdQueryResult
             StartDate = source.StartDate,
             EndDate = source.EndDate,
             Title = source.Title,
-            Description = source.Description,
+            Description = source.Description!,
             Summary = source.Summary,
             Location = source.Location,
             Postcode = source.Postcode,
