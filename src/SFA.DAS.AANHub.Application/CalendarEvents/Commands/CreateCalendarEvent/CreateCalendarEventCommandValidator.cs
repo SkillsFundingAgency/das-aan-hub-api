@@ -22,7 +22,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string DescriptionMustNotBeEmpty = "description must have a value";
     public const string DescriptionMustNotExceedLength = "description must not be greater than 2000 characters long";
 
-    public CreateCalendarEventCommandValidator(ICalendarsReadRepository calendarsReadRepository)
+    public CreateCalendarEventCommandValidator(
+        ICalendarsReadRepository calendarsReadRepository,
+        IRegionsReadRepository regionsReadRepository)
     {
         RuleFor(c => c.CalendarId)
             .GreaterThan(0)
@@ -75,5 +77,13 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(DescriptionMustNotBeEmpty)
             .MaximumLength(2000)
             .WithMessage(DescriptionMustNotExceedLength);
+
+        RuleFor(c => c.RegionId)
+            .MustAsync(async (regionId, cancellationToken) =>
+            {
+                var regions = await regionsReadRepository.GetAllRegions(cancellationToken);
+                return regions.Any(r => r.Id == regionId);
+            })
+            .When(c => c.RegionId.HasValue);
     }
 }
