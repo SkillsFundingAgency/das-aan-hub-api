@@ -1,9 +1,11 @@
-﻿namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
+﻿using SFA.DAS.AANHub.Domain.Common;
+
+namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 
 public class CreateCalendarEventCommand
 {
     public int CalendarId { get; set; }
-    public string EventFormat { get; set; } = null!;
+    public EventFormat? EventFormat { get; set; }
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }
     public string Title { get; set; } = null!;
