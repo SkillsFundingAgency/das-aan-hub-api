@@ -19,6 +19,8 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string TitleMustExcludeSpecialCharacters = "title must not include any special characters: @, #, $, ^, =, +, \\, /, <, >, %";
     public const string SummaryMustNotBeEmpty = "summary must have a value";
     public const string SummaryMustNotExceedLength = "summary must not be greater than 200 characters long";
+    public const string DescriptionMustNotBeEmpty = "description must have a value";
+    public const string DescriptionMustNotExceedLength = "description must not be greater than 2000 characters long";
 
     public CreateCalendarEventCommandValidator(ICalendarsReadRepository calendarsReadRepository)
     {
@@ -67,5 +69,11 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(SummaryMustNotBeEmpty)
             .MaximumLength(200)
             .WithMessage(SummaryMustNotExceedLength);
+
+        RuleFor(c => c.Description)
+            .NotEmpty()
+            .WithMessage(DescriptionMustNotBeEmpty)
+            .MaximumLength(2000)
+            .WithMessage(DescriptionMustNotExceedLength);
     }
 }
