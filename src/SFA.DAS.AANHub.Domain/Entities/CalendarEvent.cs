@@ -18,10 +18,13 @@ public class CalendarEvent
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public string? EventLink { get; set; }
-    public string ContactName { get; set; } = string.Empty;
-    public string ContactEmail { get; set; } = string.Empty;
+    public string ContactName { get; set; } = null!;
+    public string ContactEmail { get; set; } = null!;
     public bool IsActive { get; set; }
     public string? CancelReason { get; set; } = null!;
+    public int PlannedAttendees { get; set; }
+    public long? Urn { get; set; }
+    public DateTime? CreatedDate { get; set; }
 
     [JsonIgnore]
     public List<Attendance> Attendees { get; set; } = new();
