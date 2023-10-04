@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
@@ -21,11 +22,16 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string SummaryMustNotExceedLength = "summary must not be greater than 200 characters long";
     public const string DescriptionMustNotBeEmpty = "description must have a value";
     public const string DescriptionMustNotExceedLength = "description must not be greater than 2000 characters long";
+    public const string LocationMustNotBeEmpty = "location must have a value when event format is InPerson or Hybrid";
+    public const string LocationMustBeEmpty = "location must be empty when event format is Online";
+    public const string LocationMustNotExceedLength = "location must not be greater than 2000 characters long";
 
     public CreateCalendarEventCommandValidator(
         ICalendarsReadRepository calendarsReadRepository,
         IRegionsReadRepository regionsReadRepository)
     {
+        RuleLevelCascadeMode = CascadeMode.Stop;
+
         RuleFor(c => c.CalendarId)
             .GreaterThan(0)
             .WithMessage(CalendarTypeIdMustNotBeEmpty)
@@ -50,7 +56,6 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(StartDateMustBeLessThanEndDate);
 
         RuleFor(c => c.EndDate)
-            .Cascade(CascadeMode.Stop)
             .NotEmpty()
             .WithMessage(EndDateMustNotBeEmpty)
             .GreaterThan(DateTime.UtcNow)
@@ -85,5 +90,21 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 return regions.Any(r => r.Id == regionId);
             })
             .When(c => c.RegionId.HasValue);
+
+        When(c => c.EventFormat != EventFormat.Online, () =>
+        {
+            RuleFor(c => c.Location)
+                .NotEmpty()
+                .WithMessage(LocationMustNotBeEmpty)
+                .MaximumLength(200)
+                .WithMessage(LocationMustNotExceedLength);
+        });
+
+        When(c => c.EventFormat == EventFormat.Online, () =>
+        {
+            RuleFor(c => c.Location)
+                .Empty()
+                .WithMessage(LocationMustBeEmpty);
+        });
     }
 }
