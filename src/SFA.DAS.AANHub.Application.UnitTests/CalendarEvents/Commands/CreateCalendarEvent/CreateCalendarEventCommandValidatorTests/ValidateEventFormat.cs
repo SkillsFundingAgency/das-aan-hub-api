@@ -11,7 +11,7 @@ public class ValidateEventFormat
     [TestCase(EventFormat.Hybrid, true)]
     [TestCase(EventFormat.InPerson, true)]
     [TestCase(null, false)]
-    public async Task ShouldBeValidValue(EventFormat? eventFormat, bool isValid)
+    public async Task Validate_EventFormat_ShouldBeValidValue(EventFormat? eventFormat, bool isValid)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
         CreateCalendarEventCommand command = new() { EventFormat = eventFormat };

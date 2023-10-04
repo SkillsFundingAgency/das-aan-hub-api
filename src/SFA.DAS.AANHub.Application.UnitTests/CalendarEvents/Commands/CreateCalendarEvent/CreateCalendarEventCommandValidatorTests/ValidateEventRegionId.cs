@@ -4,12 +4,12 @@ using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
 
-public class ValidateRegionId
+public class ValidateEventRegionId
 {
     [TestCase(null, true)]
     [TestCase(1, true)]
     [TestCase(99, false)]
-    public async Task ShouldBeValidValue(int? regionId, bool isValid)
+    public async Task Validate_EventRegionId_ShouldBeValidValue(int? regionId, bool isValid)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
 

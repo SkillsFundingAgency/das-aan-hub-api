@@ -12,7 +12,7 @@ public class ValidateEventDescription
     [TestCase(0, " ", false, ErrorConstants.DescriptionMustNotBeEmpty)]
     [TestCase(0, "some valid Description ", true, null)]
     [TestCase(2001, "", false, ErrorConstants.DescriptionMustNotExceedLength)]
-    public async Task ShouldHaveValidValue(int length, string? Description, bool isValid, string? errorMessage)
+    public async Task Validate_EventDescription_ShouldHaveValidValue(int length, string? Description, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
 

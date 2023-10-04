@@ -10,7 +10,7 @@ public class ValidateCalendarType
     [TestCase(0, false, CreateCalendarEventCommandValidator.CalendarTypeIdMustNotBeEmpty)]
     [TestCase(-1, false, CreateCalendarEventCommandValidator.CalendarTypeIdMustNotBeEmpty)]
     [TestCase(6, false, CreateCalendarEventCommandValidator.CalendarTypeIdMustBeValid)]
-    public async Task ShouldBeValidValue(int calendarId, bool isValid, string? error)
+    public async Task EventCalendarShouldBeValidValue(int calendarId, bool isValid, string? error)
     {
         CreateCalendarEventCommand command = new() { CalendarId = calendarId };
 

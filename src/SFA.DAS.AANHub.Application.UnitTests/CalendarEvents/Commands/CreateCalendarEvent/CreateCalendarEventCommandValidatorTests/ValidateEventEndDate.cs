@@ -11,7 +11,7 @@ public class ValidateEventEndDate
     [TestCase(0, false, ErrorConstants.EndDateMustBeInFuture)]
     [TestCase(-1, false, ErrorConstants.EndDateMustBeInFuture)]
     [TestCase(1, true, null)]
-    public async Task ShouldBeValidValue(int? mins, bool isValid, string? errorMessage)
+    public async Task Validate_EventEndDate_ShouldBeValidValue(int? mins, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
         CreateCalendarEventCommand command = new()

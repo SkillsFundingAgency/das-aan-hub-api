@@ -15,7 +15,7 @@ public class ValidateEventLocation
     [TestCase(EventFormat.InPerson, 201, "", false, ErrorConstants.LocationMustNotExceedLength)]
     [TestCase(EventFormat.Hybrid, 0, null, false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.Online, 0, "valid Location", false, ErrorConstants.LocationMustBeEmpty)]
-    public async Task ShouldHaveValidValue(EventFormat eventFormat, int length, string? Location, bool isValid, string? errorMessage)
+    public async Task Validate_EventLocation_ShouldBeValidValue(EventFormat eventFormat, int length, string? Location, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
 
