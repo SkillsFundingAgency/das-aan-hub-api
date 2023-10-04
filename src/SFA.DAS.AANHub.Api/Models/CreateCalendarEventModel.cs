@@ -1,13 +1,10 @@
-﻿using MediatR;
-using SFA.DAS.AANHub.Application.Mediatr.Responses;
+﻿using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Domain.Common;
-using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
+namespace SFA.DAS.AANHub.Api.Models;
 
-public class CreateCalendarEventCommand : IRequest<ValidatedResponse<CreateCalendarEventCommandResult>>
+public class CreateCalendarEventModel
 {
-    public Guid AdminMemberId { get; set; }
     public int? CalendarId { get; set; }
     public EventFormat? EventFormat { get; set; }
     public DateTime? StartDate { get; set; }
@@ -26,25 +23,25 @@ public class CreateCalendarEventCommand : IRequest<ValidatedResponse<CreateCalen
     public int? PlannedAttendees { get; set; }
     public long? Urn { get; set; }
 
-    public static implicit operator CalendarEvent(CreateCalendarEventCommand source) =>
+    public static implicit operator CreateCalendarEventCommand(CreateCalendarEventModel source) =>
         new()
         {
-            CalendarId = source.CalendarId!.Value,
-            EventFormat = source.EventFormat!.Value.ToString(),
-            StartDate = source.StartDate!.Value,
-            EndDate = source.EndDate!.Value,
-            Title = source.Title!,
+            CalendarId = source.CalendarId,
+            EventFormat = source.EventFormat,
+            StartDate = source.StartDate,
+            EndDate = source.EndDate,
+            Title = source.Title,
             Description = source.Description!,
-            Summary = source.Summary!,
-            RegionId = source.RegionId!.Value,
+            Summary = source.Summary,
+            RegionId = source.RegionId,
             Location = source.Location,
             Postcode = source.Postcode,
             Latitude = source.Latitude,
             Longitude = source.Longitude,
             EventLink = source.EventLink,
-            ContactName = source.ContactName!,
-            ContactEmail = source.ContactEmail!,
-            PlannedAttendees = source.PlannedAttendees!.Value,
-            Urn = source.Urn!.Value
+            ContactName = source.ContactName,
+            ContactEmail = source.ContactEmail,
+            PlannedAttendees = source.PlannedAttendees,
+            Urn = source.Urn
         };
 }
