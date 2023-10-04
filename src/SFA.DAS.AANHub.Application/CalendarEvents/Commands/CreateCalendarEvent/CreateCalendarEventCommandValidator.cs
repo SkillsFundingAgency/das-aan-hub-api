@@ -28,9 +28,12 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string PostcodeMustNotBeEmpty = "postcode must have a value when event format is InPerson or Hybrid";
     public const string PostcodeMustBeEmpty = "postcode must be empty when event format is Online";
     public const string PostcodeMustBeValid = "postcode must be a valid postcode";
-    public const string LatitudeMustNotBeEmpty = "Latitude must have a value when event format is InPerson or Hybrid";
-    public const string LatitudeMustBeEmpty = "Latitude must be empty when event format is Online";
-    public const string LatitudeMustBeValid = "Latitude must be between -90 and 90 ";
+    public const string LatitudeMustNotBeEmpty = "latitude must have a value when event format is InPerson or Hybrid";
+    public const string LatitudeMustBeEmpty = "latitude must be empty when event format is Online";
+    public const string LatitudeMustBeValid = "latitude must be between -90 and 90 ";
+    public const string LongitudeMustNotBeEmpty = "longitude must have a value when event format is InPerson or Hybrid";
+    public const string LongitudeMustBeEmpty = "longitude must be empty when event format is Onlint";
+    public const string LongitudeMustBeValid = "longitude must be between -180 and 180 ";
 
     public CreateCalendarEventCommandValidator(
         ICalendarsReadRepository calendarsReadRepository,
@@ -116,6 +119,12 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 .WithMessage(LatitudeMustNotBeEmpty)
                 .InclusiveBetween(-90, 90)
                 .WithMessage(LatitudeMustBeValid);
+
+            RuleFor(c => c.Longitude)
+                .NotEmpty()
+                .WithMessage(LongitudeMustNotBeEmpty)
+                .InclusiveBetween(-180, 180)
+                .WithMessage(LongitudeMustBeValid);
         });
 
         When(c => c.EventFormat == EventFormat.Online, () =>
@@ -129,6 +138,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             RuleFor(c => c.Latitude)
                 .Empty()
                 .WithMessage(LatitudeMustBeEmpty);
+            RuleFor(c => c.Longitude)
+                .Empty()
+                .WithMessage(LongitudeMustBeEmpty);
         });
     }
 }
