@@ -12,13 +12,13 @@ public class ValidateEventLocation
     [TestCase(EventFormat.InPerson, 0, "", false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.InPerson, 0, " ", false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.InPerson, 0, "some valid Location ", true, null)]
-    [TestCase(EventFormat.InPerson, 201, "", false, ErrorConstants.LocationMustNotExceedLength)]
+    [TestCase(EventFormat.InPerson, 201, null, false, ErrorConstants.LocationMustNotExceedLength)]
     [TestCase(EventFormat.Hybrid, 0, null, false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, 0, null, false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, 0, "", false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, 0, " ", false, ErrorConstants.LocationMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, 0, "some valid Location ", true, null)]
-    [TestCase(EventFormat.Hybrid, 201, "", false, ErrorConstants.LocationMustNotExceedLength)]
+    [TestCase(EventFormat.Hybrid, 201, null, false, ErrorConstants.LocationMustNotExceedLength)]
     [TestCase(EventFormat.Online, 0, "valid Location", false, ErrorConstants.LocationMustBeEmpty)]
     public async Task Validate_EventLocation_ShouldBeValidValue(EventFormat eventFormat, int length, string? Location, bool isValid, string? errorMessage)
     {

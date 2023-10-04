@@ -10,7 +10,7 @@ public class ValidateContactName
     [TestCase(0, null, false, ErrorConstants.ContactNameMustNotBeEmpty)]
     [TestCase(0, "", false, ErrorConstants.ContactNameMustNotBeEmpty)]
     [TestCase(0, " ", false, ErrorConstants.ContactNameMustNotBeEmpty)]
-    [TestCase(201, "", false, ErrorConstants.ContactNameMustNotExceedLength)]
+    [TestCase(201, null, false, ErrorConstants.ContactNameMustNotExceedLength)]
     [TestCase(0, "some valid ContactName ", true, null)]
     public async Task Validate_EventContactName_ShouldHaveValidValue(int length, string? contactName, bool isValid, string? errorMessage)
     {

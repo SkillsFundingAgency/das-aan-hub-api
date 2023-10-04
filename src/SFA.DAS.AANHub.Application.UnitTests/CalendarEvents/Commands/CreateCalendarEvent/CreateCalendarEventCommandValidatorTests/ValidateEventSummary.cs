@@ -11,7 +11,7 @@ public class ValidateEventSummary
     [TestCase(0, "", false, ErrorConstants.SummaryMustNotBeEmpty)]
     [TestCase(0, " ", false, ErrorConstants.SummaryMustNotBeEmpty)]
     [TestCase(0, "some valid Summary ", true, null)]
-    [TestCase(201, "", false, ErrorConstants.SummaryMustNotExceedLength)]
+    [TestCase(201, null, false, ErrorConstants.SummaryMustNotExceedLength)]
     public async Task Validate_EventSummary_ShouldBeValidValue(int length, string? Summary, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();

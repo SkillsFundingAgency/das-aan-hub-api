@@ -22,7 +22,7 @@ public class ValidateEventTitle
     [TestCase(0, "> event", false, ErrorConstants.TitleMustExcludeSpecialCharacters)]
     [TestCase(0, "% event", false, ErrorConstants.TitleMustExcludeSpecialCharacters)]
     [TestCase(0, "some valid title ", true, null)]
-    [TestCase(201, "", false, ErrorConstants.TitleMustNotExceedLength)]
+    [TestCase(201, null, false, ErrorConstants.TitleMustNotExceedLength)]
     public async Task Validate_EventTitle_ShouldHaveValidValue(int length, string? title, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();

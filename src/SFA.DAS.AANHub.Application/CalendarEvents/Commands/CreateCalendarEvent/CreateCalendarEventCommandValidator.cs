@@ -27,7 +27,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string LocationMustNotExceedLength = "location must not be greater than 2000 characters long";
     public const string PostcodeMustNotBeEmpty = "postcode must have a value when event format is InPerson or Hybrid";
     public const string PostcodeMustBeEmpty = "postcode must be empty when event format is Online";
-    public const string PostcodeMustBeValid = "postcode must be a valid postcode";
+    public const string PostcodeMustBeValid = "postcode must be a valid in postcode format";
     public const string LatitudeMustNotBeEmpty = "latitude must have a value when event format is InPerson or Hybrid";
     public const string LatitudeMustBeEmpty = "latitude must be empty when event format is Online";
     public const string LatitudeMustBeValid = "latitude must be between -90 and 90 ";
@@ -39,6 +39,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string EventLinkMustNotExceedLength = "eventLink must not be greater than 2000 characters long";
     public const string ContactNameMustNotBeEmpty = "contactName must have a value";
     public const string ContactNameMustNotExceedLength = "contactName must not be greater than 200 characters long";
+    public const string ContactEmailMustNotBeEmpty = "contactEmail must have a value";
+    public const string ContactEmailMustNotExceedLength = "contactEmail must not be greater than 256 characters long";
+    public const string ContactEmailMustBeValid = "contactEmail must be a valid email format";
 
 
     public CreateCalendarEventCommandValidator(
@@ -200,5 +203,19 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(ContactNameMustNotBeEmpty)
             .MaximumLength(200)
             .WithMessage(ContactNameMustNotExceedLength);
+
+        RuleFor(c => c.ContactName)
+            .NotEmpty()
+            .WithMessage(ContactNameMustNotBeEmpty)
+            .MaximumLength(200)
+            .WithMessage(ContactNameMustNotExceedLength);
+
+        RuleFor(c => c.ContactEmail)
+            .NotEmpty()
+            .WithMessage(ContactEmailMustNotBeEmpty)
+            .MaximumLength(256)
+            .WithMessage(ContactEmailMustNotExceedLength)
+            .Matches(Constants.RegularExpressions.EmailRegex)
+            .WithMessage(ContactEmailMustBeValid);
     }
 }
