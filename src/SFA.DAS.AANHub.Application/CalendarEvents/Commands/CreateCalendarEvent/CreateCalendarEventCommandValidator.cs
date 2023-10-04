@@ -32,8 +32,12 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string LatitudeMustBeEmpty = "latitude must be empty when event format is Online";
     public const string LatitudeMustBeValid = "latitude must be between -90 and 90 ";
     public const string LongitudeMustNotBeEmpty = "longitude must have a value when event format is InPerson or Hybrid";
-    public const string LongitudeMustBeEmpty = "longitude must be empty when event format is Onlint";
+    public const string LongitudeMustBeEmpty = "longitude must be empty when event format is Online";
     public const string LongitudeMustBeValid = "longitude must be between -180 and 180 ";
+    public const string EventLinkMustBeValid = "eventLink must be a valid url";
+    public const string EventLinkMustBeEmpty = "eventLink must be empty when event format is InPerson";
+    public const string EventLinkMustNotExceedLength = "eventLink must not be greater than 2000 characters long";
+
 
     public CreateCalendarEventCommandValidator(
         ICalendarsReadRepository calendarsReadRepository,
@@ -125,6 +129,22 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 .WithMessage(LongitudeMustNotBeEmpty)
                 .InclusiveBetween(-180, 180)
                 .WithMessage(LongitudeMustBeValid);
+
+            When(c => c.EventFormat == EventFormat.InPerson, () =>
+            {
+                RuleFor(c => c.EventLink)
+                    .Empty()
+                    .WithMessage(EventLinkMustBeEmpty);
+            });
+
+            When(c => c.EventFormat == EventFormat.Hybrid, () =>
+            {
+                RuleFor(c => c.EventLink)
+                    .MaximumLength(2000)
+                    .WithMessage(EventLinkMustNotExceedLength)
+                    .Matches(Constants.RegularExpressions.UrlRegex)
+                    .WithMessage(EventLinkMustBeValid);
+            });
         });
 
         When(c => c.EventFormat == EventFormat.Online, () =>
@@ -132,15 +152,24 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             RuleFor(c => c.Location)
                 .Empty()
                 .WithMessage(LocationMustBeEmpty);
+
             RuleFor(c => c.Postcode)
                 .Empty()
                 .WithMessage(PostcodeMustBeEmpty);
+
             RuleFor(c => c.Latitude)
                 .Empty()
                 .WithMessage(LatitudeMustBeEmpty);
+
             RuleFor(c => c.Longitude)
                 .Empty()
                 .WithMessage(LongitudeMustBeEmpty);
+
+            RuleFor(c => c.EventLink)
+                .MaximumLength(2000)
+                .WithMessage(EventLinkMustNotExceedLength)
+                .Matches(Constants.RegularExpressions.UrlRegex)
+                .WithMessage(EventLinkMustBeValid);
         });
     }
 }
