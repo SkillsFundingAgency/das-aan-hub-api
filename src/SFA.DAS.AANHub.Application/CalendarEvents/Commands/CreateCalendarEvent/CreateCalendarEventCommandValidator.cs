@@ -28,6 +28,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string PostcodeMustNotBeEmpty = "postcode must have a value when event format is InPerson or Hybrid";
     public const string PostcodeMustBeEmpty = "postcode must be empty when event format is Online";
     public const string PostcodeMustBeValid = "postcode must be a valid postcode";
+    public const string LatitudeMustNotBeEmpty = "Latitude must have a value when event format is InPerson or Hybrid";
+    public const string LatitudeMustBeEmpty = "Latitude must be empty when event format is Online";
+    public const string LatitudeMustBeValid = "Latitude must be between -90 and 90 ";
 
     public CreateCalendarEventCommandValidator(
         ICalendarsReadRepository calendarsReadRepository,
@@ -107,6 +110,12 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 .WithMessage(PostcodeMustNotBeEmpty)
                 .Matches(Constants.RegularExpressions.PostcodeRegex)
                 .WithMessage(PostcodeMustBeValid);
+
+            RuleFor(c => c.Latitude)
+                .NotEmpty()
+                .WithMessage(LatitudeMustNotBeEmpty)
+                .InclusiveBetween(-90, 90)
+                .WithMessage(LatitudeMustBeValid);
         });
 
         When(c => c.EventFormat == EventFormat.Online, () =>
@@ -117,6 +126,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             RuleFor(c => c.Postcode)
                 .Empty()
                 .WithMessage(PostcodeMustBeEmpty);
+            RuleFor(c => c.Latitude)
+                .Empty()
+                .WithMessage(LatitudeMustBeEmpty);
         });
     }
 }
