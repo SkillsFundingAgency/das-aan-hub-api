@@ -104,7 +104,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             })
             .When(c => c.RegionId.HasValue);
 
-        When(c => c.EventFormat != EventFormat.Online, () =>
+        When(c => c.EventFormat == EventFormat.InPerson, () =>
         {
             RuleFor(c => c.Location)
                 .NotEmpty()
@@ -130,21 +130,9 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 .InclusiveBetween(-180, 180)
                 .WithMessage(LongitudeMustBeValid);
 
-            When(c => c.EventFormat == EventFormat.InPerson, () =>
-            {
-                RuleFor(c => c.EventLink)
-                    .Empty()
-                    .WithMessage(EventLinkMustBeEmpty);
-            });
-
-            When(c => c.EventFormat == EventFormat.Hybrid, () =>
-            {
-                RuleFor(c => c.EventLink)
-                    .MaximumLength(2000)
-                    .WithMessage(EventLinkMustNotExceedLength)
-                    .Matches(Constants.RegularExpressions.UrlRegex)
-                    .WithMessage(EventLinkMustBeValid);
-            });
+            RuleFor(c => c.EventLink)
+                .Empty()
+                .WithMessage(EventLinkMustBeEmpty);
         });
 
         When(c => c.EventFormat == EventFormat.Online, () =>
@@ -164,6 +152,39 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             RuleFor(c => c.Longitude)
                 .Empty()
                 .WithMessage(LongitudeMustBeEmpty);
+
+            RuleFor(c => c.EventLink)
+                .MaximumLength(2000)
+                .WithMessage(EventLinkMustNotExceedLength)
+                .Matches(Constants.RegularExpressions.UrlRegex)
+                .WithMessage(EventLinkMustBeValid);
+        });
+
+        When(c => c.EventFormat == EventFormat.Hybrid, () =>
+        {
+            RuleFor(c => c.Location)
+                .NotEmpty()
+                .WithMessage(LocationMustNotBeEmpty)
+                .MaximumLength(200)
+                .WithMessage(LocationMustNotExceedLength);
+
+            RuleFor(c => c.Postcode)
+                .NotEmpty()
+                .WithMessage(PostcodeMustNotBeEmpty)
+                .Matches(Constants.RegularExpressions.PostcodeRegex)
+                .WithMessage(PostcodeMustBeValid);
+
+            RuleFor(c => c.Latitude)
+                .NotEmpty()
+                .WithMessage(LatitudeMustNotBeEmpty)
+                .InclusiveBetween(-90, 90)
+                .WithMessage(LatitudeMustBeValid);
+
+            RuleFor(c => c.Longitude)
+                .NotEmpty()
+                .WithMessage(LongitudeMustNotBeEmpty)
+                .InclusiveBetween(-180, 180)
+                .WithMessage(LongitudeMustBeValid);
 
             RuleFor(c => c.EventLink)
                 .MaximumLength(2000)

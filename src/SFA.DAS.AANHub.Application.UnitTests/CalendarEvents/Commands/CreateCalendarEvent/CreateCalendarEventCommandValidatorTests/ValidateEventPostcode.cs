@@ -10,12 +10,12 @@ namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCal
 public class ValidateEventPostcode
 {
     [TestCase(EventFormat.InPerson, null, false, ErrorConstants.PostcodeMustNotBeEmpty)]
-    [TestCase(EventFormat.InPerson, "", false, ErrorConstants.PostcodeMustNotBeEmpty)]
-    [TestCase(EventFormat.InPerson, " ", false, ErrorConstants.PostcodeMustNotBeEmpty)]
-    [TestCase(EventFormat.InPerson, "invalid-value", false, ErrorConstants.PostcodeMustBeValid)]
     [TestCase(EventFormat.Hybrid, null, false, ErrorConstants.PostcodeMustNotBeEmpty)]
+    [TestCase(EventFormat.InPerson, "", false, ErrorConstants.PostcodeMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, "", false, ErrorConstants.PostcodeMustNotBeEmpty)]
+    [TestCase(EventFormat.InPerson, " ", false, ErrorConstants.PostcodeMustNotBeEmpty)]
     [TestCase(EventFormat.Hybrid, " ", false, ErrorConstants.PostcodeMustNotBeEmpty)]
+    [TestCase(EventFormat.InPerson, "invalid-value", false, ErrorConstants.PostcodeMustBeValid)]
     [TestCase(EventFormat.Hybrid, "xxxx 111", false, ErrorConstants.PostcodeMustBeValid)]
     [TestCase(EventFormat.Online, "CV1 2RJ", false, ErrorConstants.PostcodeMustBeEmpty)]
     [TestCase(EventFormat.InPerson, "CV1 2RJ", true, null)]
