@@ -44,186 +44,203 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string ContactEmailMustBeValid = "contactEmail must be a valid email format";
     public const string PlannedAttendeesMustNotBeEmpty = "plannedAttendees must have a value";
     public const string PlannedAttendeesMustBeValid = "plannedAttendees must be  between 1 to 1000000";
-
+    public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
+    public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active, admin member or regional chair";
 
     public CreateCalendarEventCommandValidator(
         ICalendarsReadRepository calendarsReadRepository,
-        IRegionsReadRepository regionsReadRepository)
+        IRegionsReadRepository regionsReadRepository,
+        IMembersReadRepository membersReadRepository)
     {
         RuleLevelCascadeMode = CascadeMode.Stop;
 
-        RuleFor(c => c.CalendarId)
-            .GreaterThan(0)
-            .WithMessage(CalendarTypeIdMustNotBeEmpty)
-            .MustAsync(async (id, cancellationToken) =>
+        RuleFor(c => c.AdminMemberId)
+            .NotEmpty()
+            .WithMessage(RequestedByMemberIdMustNotBeEmpty)
+            .MustAsync(async (memberId, cancellationToken) =>
             {
-                var calendarTypes = await calendarsReadRepository.GetAllCalendars(cancellationToken);
-                return calendarTypes.Any(c => c.Id == id);
+                var member = await membersReadRepository.GetMember(memberId);
+                return
+                    member != null &&
+                    member!.Status == MembershipStatusType.Live.ToString() &&
+                    (member.UserType == UserType.Admin.ToString() || member.IsRegionalChair.GetValueOrDefault());
             })
-            .WithMessage(CalendarTypeIdMustBeValid);
-
-        RuleFor(c => c.EventFormat)
-            .NotEmpty()
-            .WithMessage(EventFormatMustNotBeEmpty);
-
-        RuleFor(c => c.StartDate)
-            .Cascade(CascadeMode.Stop)
-            .NotEmpty()
-            .WithMessage(StartDateMustNotBeEmpty)
-            .GreaterThan(DateTime.UtcNow)
-            .WithMessage(StartDateMustBeInFuture)
-            .LessThanOrEqualTo(c => c.EndDate)
-            .WithMessage(StartDateMustBeLessThanEndDate);
-
-        RuleFor(c => c.EndDate)
-            .NotEmpty()
-            .WithMessage(EndDateMustNotBeEmpty)
-            .GreaterThan(DateTime.UtcNow)
-            .WithMessage(EndDateMustBeInFuture)
-            .GreaterThanOrEqualTo(c => c.StartDate)
-            .WithMessage(EndDateMustBeLessThanEndDate);
-
-        RuleFor(c => c.Title)
-            .NotEmpty()
-            .WithMessage(TitleMustNotBeEmpty)
-            .MaximumLength(200)
-            .WithMessage(TitleMustNotExceedLength)
-            .Matches(Constants.RegularExpressions.ExcludedCharactersRegex)
-            .WithMessage(TitleMustExcludeSpecialCharacters);
-
-        RuleFor(c => c.Summary)
-            .NotEmpty()
-            .WithMessage(SummaryMustNotBeEmpty)
-            .MaximumLength(200)
-            .WithMessage(SummaryMustNotExceedLength);
-
-        RuleFor(c => c.Description)
-            .NotEmpty()
-            .WithMessage(DescriptionMustNotBeEmpty)
-            .MaximumLength(2000)
-            .WithMessage(DescriptionMustNotExceedLength);
-
-        RuleFor(c => c.RegionId)
-            .MustAsync(async (regionId, cancellationToken) =>
+            .WithMessage(RequestedByMemberIdMustBeAdmin)
+            .DependentRules(() =>
             {
-                var regions = await regionsReadRepository.GetAllRegions(cancellationToken);
-                return regions.Any(r => r.Id == regionId);
-            })
-            .When(c => c.RegionId.HasValue);
+                RuleFor(c => c.CalendarId)
+                    .GreaterThan(0)
+                    .WithMessage(CalendarTypeIdMustNotBeEmpty)
+                    .MustAsync(async (id, cancellationToken) =>
+                    {
+                        var calendarTypes = await calendarsReadRepository.GetAllCalendars(cancellationToken);
+                        return calendarTypes.Any(c => c.Id == id);
+                    })
+                    .WithMessage(CalendarTypeIdMustBeValid);
 
-        When(c => c.EventFormat == EventFormat.InPerson, () =>
-        {
-            RuleFor(c => c.Location)
-                .NotEmpty()
-                .WithMessage(LocationMustNotBeEmpty)
-                .MaximumLength(200)
-                .WithMessage(LocationMustNotExceedLength);
+                RuleFor(c => c.EventFormat)
+                    .NotEmpty()
+                    .WithMessage(EventFormatMustNotBeEmpty);
 
-            RuleFor(c => c.Postcode)
-                .NotEmpty()
-                .WithMessage(PostcodeMustNotBeEmpty)
-                .Matches(Constants.RegularExpressions.PostcodeRegex)
-                .WithMessage(PostcodeMustBeValid);
+                RuleFor(c => c.StartDate)
+                    .Cascade(CascadeMode.Stop)
+                    .NotEmpty()
+                    .WithMessage(StartDateMustNotBeEmpty)
+                    .GreaterThan(DateTime.UtcNow)
+                    .WithMessage(StartDateMustBeInFuture)
+                    .LessThanOrEqualTo(c => c.EndDate)
+                    .WithMessage(StartDateMustBeLessThanEndDate);
 
-            RuleFor(c => c.Latitude)
-                .NotEmpty()
-                .WithMessage(LatitudeMustNotBeEmpty)
-                .InclusiveBetween(-90, 90)
-                .WithMessage(LatitudeMustBeValid);
+                RuleFor(c => c.EndDate)
+                    .NotEmpty()
+                    .WithMessage(EndDateMustNotBeEmpty)
+                    .GreaterThan(DateTime.UtcNow)
+                    .WithMessage(EndDateMustBeInFuture)
+                    .GreaterThanOrEqualTo(c => c.StartDate)
+                    .WithMessage(EndDateMustBeLessThanEndDate);
 
-            RuleFor(c => c.Longitude)
-                .NotEmpty()
-                .WithMessage(LongitudeMustNotBeEmpty)
-                .InclusiveBetween(-180, 180)
-                .WithMessage(LongitudeMustBeValid);
+                RuleFor(c => c.Title)
+                    .NotEmpty()
+                    .WithMessage(TitleMustNotBeEmpty)
+                    .MaximumLength(200)
+                    .WithMessage(TitleMustNotExceedLength)
+                    .Matches(Constants.RegularExpressions.ExcludedCharactersRegex)
+                    .WithMessage(TitleMustExcludeSpecialCharacters);
 
-            RuleFor(c => c.EventLink)
-                .Empty()
-                .WithMessage(EventLinkMustBeEmpty);
-        });
+                RuleFor(c => c.Summary)
+                    .NotEmpty()
+                    .WithMessage(SummaryMustNotBeEmpty)
+                    .MaximumLength(200)
+                    .WithMessage(SummaryMustNotExceedLength);
 
-        When(c => c.EventFormat == EventFormat.Online, () =>
-        {
-            RuleFor(c => c.Location)
-                .Empty()
-                .WithMessage(LocationMustBeEmpty);
+                RuleFor(c => c.Description)
+                    .NotEmpty()
+                    .WithMessage(DescriptionMustNotBeEmpty)
+                    .MaximumLength(2000)
+                    .WithMessage(DescriptionMustNotExceedLength);
 
-            RuleFor(c => c.Postcode)
-                .Empty()
-                .WithMessage(PostcodeMustBeEmpty);
+                RuleFor(c => c.RegionId)
+                    .MustAsync(async (regionId, cancellationToken) =>
+                    {
+                        var regions = await regionsReadRepository.GetAllRegions(cancellationToken);
+                        return regions.Any(r => r.Id == regionId);
+                    })
+                    .When(c => c.RegionId.HasValue);
 
-            RuleFor(c => c.Latitude)
-                .Empty()
-                .WithMessage(LatitudeMustBeEmpty);
+                When(c => c.EventFormat == EventFormat.InPerson, () =>
+                {
+                    RuleFor(c => c.Location)
+                        .NotEmpty()
+                        .WithMessage(LocationMustNotBeEmpty)
+                        .MaximumLength(200)
+                        .WithMessage(LocationMustNotExceedLength);
 
-            RuleFor(c => c.Longitude)
-                .Empty()
-                .WithMessage(LongitudeMustBeEmpty);
+                    RuleFor(c => c.Postcode)
+                        .NotEmpty()
+                        .WithMessage(PostcodeMustNotBeEmpty)
+                        .Matches(Constants.RegularExpressions.PostcodeRegex)
+                        .WithMessage(PostcodeMustBeValid);
 
-            RuleFor(c => c.EventLink)
-                .MaximumLength(2000)
-                .WithMessage(EventLinkMustNotExceedLength)
-                .Matches(Constants.RegularExpressions.UrlRegex)
-                .WithMessage(EventLinkMustBeValid);
-        });
+                    RuleFor(c => c.Latitude)
+                        .NotEmpty()
+                        .WithMessage(LatitudeMustNotBeEmpty)
+                        .InclusiveBetween(-90, 90)
+                        .WithMessage(LatitudeMustBeValid);
 
-        When(c => c.EventFormat == EventFormat.Hybrid, () =>
-        {
-            RuleFor(c => c.Location)
-                .NotEmpty()
-                .WithMessage(LocationMustNotBeEmpty)
-                .MaximumLength(200)
-                .WithMessage(LocationMustNotExceedLength);
+                    RuleFor(c => c.Longitude)
+                        .NotEmpty()
+                        .WithMessage(LongitudeMustNotBeEmpty)
+                        .InclusiveBetween(-180, 180)
+                        .WithMessage(LongitudeMustBeValid);
 
-            RuleFor(c => c.Postcode)
-                .NotEmpty()
-                .WithMessage(PostcodeMustNotBeEmpty)
-                .Matches(Constants.RegularExpressions.PostcodeRegex)
-                .WithMessage(PostcodeMustBeValid);
+                    RuleFor(c => c.EventLink)
+                        .Empty()
+                        .WithMessage(EventLinkMustBeEmpty);
+                });
 
-            RuleFor(c => c.Latitude)
-                .NotEmpty()
-                .WithMessage(LatitudeMustNotBeEmpty)
-                .InclusiveBetween(-90, 90)
-                .WithMessage(LatitudeMustBeValid);
+                When(c => c.EventFormat == EventFormat.Online, () =>
+                {
+                    RuleFor(c => c.Location)
+                        .Empty()
+                        .WithMessage(LocationMustBeEmpty);
 
-            RuleFor(c => c.Longitude)
-                .NotEmpty()
-                .WithMessage(LongitudeMustNotBeEmpty)
-                .InclusiveBetween(-180, 180)
-                .WithMessage(LongitudeMustBeValid);
+                    RuleFor(c => c.Postcode)
+                        .Empty()
+                        .WithMessage(PostcodeMustBeEmpty);
 
-            RuleFor(c => c.EventLink)
-                .MaximumLength(2000)
-                .WithMessage(EventLinkMustNotExceedLength)
-                .Matches(Constants.RegularExpressions.UrlRegex)
-                .WithMessage(EventLinkMustBeValid);
-        });
+                    RuleFor(c => c.Latitude)
+                        .Empty()
+                        .WithMessage(LatitudeMustBeEmpty);
 
-        RuleFor(c => c.ContactName)
-            .NotEmpty()
-            .WithMessage(ContactNameMustNotBeEmpty)
-            .MaximumLength(200)
-            .WithMessage(ContactNameMustNotExceedLength);
+                    RuleFor(c => c.Longitude)
+                        .Empty()
+                        .WithMessage(LongitudeMustBeEmpty);
 
-        RuleFor(c => c.ContactName)
-            .NotEmpty()
-            .WithMessage(ContactNameMustNotBeEmpty)
-            .MaximumLength(200)
-            .WithMessage(ContactNameMustNotExceedLength);
+                    RuleFor(c => c.EventLink)
+                        .MaximumLength(2000)
+                        .WithMessage(EventLinkMustNotExceedLength)
+                        .Matches(Constants.RegularExpressions.UrlRegex)
+                        .WithMessage(EventLinkMustBeValid);
+                });
 
-        RuleFor(c => c.ContactEmail)
-            .NotEmpty()
-            .WithMessage(ContactEmailMustNotBeEmpty)
-            .MaximumLength(256)
-            .WithMessage(ContactEmailMustNotExceedLength)
-            .Matches(Constants.RegularExpressions.EmailRegex)
-            .WithMessage(ContactEmailMustBeValid);
+                When(c => c.EventFormat == EventFormat.Hybrid, () =>
+                {
+                    RuleFor(c => c.Location)
+                        .NotEmpty()
+                        .WithMessage(LocationMustNotBeEmpty)
+                        .MaximumLength(200)
+                        .WithMessage(LocationMustNotExceedLength);
 
-        RuleFor(c => c.PlannedAttendees)
-            .NotEmpty()
-            .WithMessage(PlannedAttendeesMustNotBeEmpty)
-            .InclusiveBetween(1, 1000000)
-            .WithMessage(PlannedAttendeesMustBeValid);
+                    RuleFor(c => c.Postcode)
+                        .NotEmpty()
+                        .WithMessage(PostcodeMustNotBeEmpty)
+                        .Matches(Constants.RegularExpressions.PostcodeRegex)
+                        .WithMessage(PostcodeMustBeValid);
+
+                    RuleFor(c => c.Latitude)
+                        .NotEmpty()
+                        .WithMessage(LatitudeMustNotBeEmpty)
+                        .InclusiveBetween(-90, 90)
+                        .WithMessage(LatitudeMustBeValid);
+
+                    RuleFor(c => c.Longitude)
+                        .NotEmpty()
+                        .WithMessage(LongitudeMustNotBeEmpty)
+                        .InclusiveBetween(-180, 180)
+                        .WithMessage(LongitudeMustBeValid);
+
+                    RuleFor(c => c.EventLink)
+                        .MaximumLength(2000)
+                        .WithMessage(EventLinkMustNotExceedLength)
+                        .Matches(Constants.RegularExpressions.UrlRegex)
+                        .WithMessage(EventLinkMustBeValid);
+                });
+
+                RuleFor(c => c.ContactName)
+                    .NotEmpty()
+                    .WithMessage(ContactNameMustNotBeEmpty)
+                    .MaximumLength(200)
+                    .WithMessage(ContactNameMustNotExceedLength);
+
+                RuleFor(c => c.ContactName)
+                    .NotEmpty()
+                    .WithMessage(ContactNameMustNotBeEmpty)
+                    .MaximumLength(200)
+                    .WithMessage(ContactNameMustNotExceedLength);
+
+                RuleFor(c => c.ContactEmail)
+                    .NotEmpty()
+                    .WithMessage(ContactEmailMustNotBeEmpty)
+                    .MaximumLength(256)
+                    .WithMessage(ContactEmailMustNotExceedLength)
+                    .Matches(Constants.RegularExpressions.EmailRegex)
+                    .WithMessage(ContactEmailMustBeValid);
+
+                RuleFor(c => c.PlannedAttendees)
+                    .NotEmpty()
+                    .WithMessage(PlannedAttendeesMustNotBeEmpty)
+                    .InclusiveBetween(1, 1000000)
+                    .WithMessage(PlannedAttendeesMustBeValid);
+            });
     }
 }

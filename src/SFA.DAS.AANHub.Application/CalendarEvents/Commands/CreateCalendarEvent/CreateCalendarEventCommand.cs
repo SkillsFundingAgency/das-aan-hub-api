@@ -1,9 +1,11 @@
-﻿using SFA.DAS.AANHub.Domain.Common;
+﻿using MediatR;
+using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 
-public class CreateCalendarEventCommand
+public class CreateCalendarEventCommand : IRequest<CreateCalendarEventCommandResult>
 {
+    public Guid AdminMemberId { get; set; }
     public int? CalendarId { get; set; }
     public EventFormat? EventFormat { get; set; }
     public DateTime? StartDate { get; set; }
