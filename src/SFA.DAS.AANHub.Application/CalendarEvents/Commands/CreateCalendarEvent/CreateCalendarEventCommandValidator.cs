@@ -30,10 +30,10 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string PostcodeMustBeValid = "postcode must be a valid in postcode format";
     public const string LatitudeMustNotBeEmpty = "latitude must have a value when event format is InPerson or Hybrid";
     public const string LatitudeMustBeEmpty = "latitude must be empty when event format is Online";
-    public const string LatitudeMustBeValid = "latitude must be between -90 and 90 ";
+    public const string LatitudeMustBeValid = "latitude must be between -90 and 90";
     public const string LongitudeMustNotBeEmpty = "longitude must have a value when event format is InPerson or Hybrid";
     public const string LongitudeMustBeEmpty = "longitude must be empty when event format is Online";
-    public const string LongitudeMustBeValid = "longitude must be between -180 and 180 ";
+    public const string LongitudeMustBeValid = "longitude must be between -180 and 180";
     public const string EventLinkMustBeValid = "eventLink must be a valid url";
     public const string EventLinkMustBeEmpty = "eventLink must be empty when event format is InPerson";
     public const string EventLinkMustNotExceedLength = "eventLink must not be greater than 2000 characters long";
@@ -42,6 +42,8 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string ContactEmailMustNotBeEmpty = "contactEmail must have a value";
     public const string ContactEmailMustNotExceedLength = "contactEmail must not be greater than 256 characters long";
     public const string ContactEmailMustBeValid = "contactEmail must be a valid email format";
+    public const string PlannedAttendeesMustNotBeEmpty = "plannedAttendees must have a value";
+    public const string PlannedAttendeesMustBeValid = "plannedAttendees must be  between 1 to 1000000";
 
 
     public CreateCalendarEventCommandValidator(
@@ -217,5 +219,11 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
             .WithMessage(ContactEmailMustNotExceedLength)
             .Matches(Constants.RegularExpressions.EmailRegex)
             .WithMessage(ContactEmailMustBeValid);
+
+        RuleFor(c => c.PlannedAttendees)
+            .NotEmpty()
+            .WithMessage(PlannedAttendeesMustNotBeEmpty)
+            .InclusiveBetween(1, 1000000)
+            .WithMessage(PlannedAttendeesMustBeValid);
     }
 }
