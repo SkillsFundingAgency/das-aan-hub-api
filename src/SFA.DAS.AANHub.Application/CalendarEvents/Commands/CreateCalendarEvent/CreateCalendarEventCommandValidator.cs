@@ -37,6 +37,8 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string EventLinkMustBeValid = "eventLink must be a valid url";
     public const string EventLinkMustBeEmpty = "eventLink must be empty when event format is InPerson";
     public const string EventLinkMustNotExceedLength = "eventLink must not be greater than 2000 characters long";
+    public const string ContactNameMustNotBeEmpty = "contactName must have a value";
+    public const string ContactNameMustNotExceedLength = "contactName must not be greater than 200 characters long";
 
 
     public CreateCalendarEventCommandValidator(
@@ -192,5 +194,11 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                 .Matches(Constants.RegularExpressions.UrlRegex)
                 .WithMessage(EventLinkMustBeValid);
         });
+
+        RuleFor(c => c.ContactName)
+            .NotEmpty()
+            .WithMessage(ContactNameMustNotBeEmpty)
+            .MaximumLength(200)
+            .WithMessage(ContactNameMustNotExceedLength);
     }
 }
