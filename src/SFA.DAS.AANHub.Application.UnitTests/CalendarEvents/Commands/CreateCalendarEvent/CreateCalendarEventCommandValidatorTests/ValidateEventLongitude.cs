@@ -23,6 +23,7 @@ public class ValidateEventLongitude
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             Longitude = longitude
         };

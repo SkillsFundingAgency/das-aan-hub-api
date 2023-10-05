@@ -23,6 +23,7 @@ public class ValidateEventLink
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             EventLink = length == 0 ? eventLink : new string('a', length)
         };

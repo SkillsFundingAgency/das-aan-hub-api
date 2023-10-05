@@ -26,6 +26,7 @@ public class ValidateEventPostcode
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             Postcode = postcode
         };

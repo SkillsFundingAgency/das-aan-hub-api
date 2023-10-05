@@ -12,7 +12,7 @@ public class ValidateCalendarType
     [TestCase(6, false, CreateCalendarEventCommandValidator.CalendarTypeIdMustBeValid)]
     public async Task EventCalendarShouldBeValidValue(int calendarId, bool isValid, string? error)
     {
-        CreateCalendarEventCommand command = new() { CalendarId = calendarId };
+        CreateCalendarEventCommand command = new() { AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(), CalendarId = calendarId };
 
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
 

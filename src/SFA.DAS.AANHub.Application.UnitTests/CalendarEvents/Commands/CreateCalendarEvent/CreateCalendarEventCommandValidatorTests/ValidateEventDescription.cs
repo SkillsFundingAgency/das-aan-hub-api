@@ -18,6 +18,7 @@ public class ValidateEventDescription
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             Description = length == 0 ? Description : new string('a', length)
         };
 

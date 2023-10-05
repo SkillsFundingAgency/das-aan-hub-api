@@ -16,6 +16,7 @@ public class ValidateEventStartDate
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             StartDate = mins switch
             {
                 0 => DateTime.MinValue,
@@ -46,6 +47,7 @@ public class ValidateEventStartDate
         var date = DateTime.UtcNow;
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             StartDate = date,
             EndDate = date.AddMinutes(addMinsToEndDate)
         };

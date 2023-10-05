@@ -14,7 +14,7 @@ public class ValidateEventFormat
     public async Task Validate_EventFormat_ShouldBeValidValue(EventFormat? eventFormat, bool isValid)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
-        CreateCalendarEventCommand command = new() { EventFormat = eventFormat };
+        CreateCalendarEventCommand command = new() { AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(), EventFormat = eventFormat };
 
         var result = await sut.TestValidateAsync(command);
 

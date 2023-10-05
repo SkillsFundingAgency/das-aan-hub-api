@@ -19,6 +19,7 @@ public class ValidateContactEmail
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             ContactEmail = length == 0 ? contactEmail : new string('a', 250) + "@mail.com"
         };
 

@@ -15,6 +15,7 @@ public class ValidateEventRegionId
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             RegionId = regionId
         };
 

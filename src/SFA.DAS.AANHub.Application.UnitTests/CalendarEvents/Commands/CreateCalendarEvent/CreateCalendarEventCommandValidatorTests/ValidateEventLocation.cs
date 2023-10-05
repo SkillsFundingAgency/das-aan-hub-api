@@ -26,6 +26,7 @@ public class ValidateEventLocation
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             Location = length == 0 ? Location : new string('a', length)
         };

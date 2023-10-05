@@ -18,6 +18,7 @@ public class ValidateEventSummary
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             Summary = length == 0 ? Summary : new string('a', length)
         };
 

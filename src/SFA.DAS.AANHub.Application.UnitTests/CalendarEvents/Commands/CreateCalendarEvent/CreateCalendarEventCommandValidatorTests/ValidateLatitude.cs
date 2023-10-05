@@ -24,6 +24,7 @@ public class ValidateLatitude
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             Latitude = latitude
         };

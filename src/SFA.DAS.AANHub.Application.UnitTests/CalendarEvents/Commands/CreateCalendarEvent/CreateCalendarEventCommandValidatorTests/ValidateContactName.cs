@@ -18,6 +18,7 @@ public class ValidateContactName
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             ContactName = length == 0 ? contactName : new string('a', length)
         };
 

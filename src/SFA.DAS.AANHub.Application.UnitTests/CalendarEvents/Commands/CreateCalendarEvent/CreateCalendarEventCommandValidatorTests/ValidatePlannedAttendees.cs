@@ -17,6 +17,7 @@ public class ValidatePlannedAttendees
 
         CreateCalendarEventCommand command = new()
         {
+            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
             PlannedAttendees = plannedAttendees
         };
 
