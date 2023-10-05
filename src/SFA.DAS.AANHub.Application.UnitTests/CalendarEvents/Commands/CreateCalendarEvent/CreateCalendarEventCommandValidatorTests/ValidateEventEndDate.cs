@@ -60,7 +60,7 @@ public class ValidateEventEndDate
         }
         else
         {
-            result.ShouldHaveValidationErrorFor(c => c.EndDate).WithErrorMessage(ErrorConstants.EndDateMustBeLessThanEndDate);
+            result.ShouldHaveValidationErrorFor(c => c.EndDate).WithErrorMessage(ErrorConstants.EndDateMustBeLessThanStartDate);
         }
     }
 }

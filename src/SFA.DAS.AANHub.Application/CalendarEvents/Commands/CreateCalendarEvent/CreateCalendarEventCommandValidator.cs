@@ -14,7 +14,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string StartDateMustBeLessThanEndDate = "startDate must be less than or equal to endDate";
     public const string EndDateMustNotBeEmpty = "endDate must have a valid value";
     public const string EndDateMustBeInFuture = "endDate must be a future date";
-    public const string EndDateMustBeLessThanEndDate = "endDate must be greater than or equal to startDate";
+    public const string EndDateMustBeLessThanStartDate = "endDate must be greater than or equal to startDate";
     public const string TitleMustNotBeEmpty = "title must have a value";
     public const string TitleMustNotExceedLength = "title must not be greater than 200 characters long";
     public const string TitleMustExcludeSpecialCharacters = "title must not include any special characters: @, #, $, ^, =, +, \\, /, <, >, %";
@@ -97,7 +97,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                     .GreaterThan(DateTime.UtcNow)
                     .WithMessage(EndDateMustBeInFuture)
                     .GreaterThanOrEqualTo(c => c.StartDate)
-                    .WithMessage(EndDateMustBeLessThanEndDate);
+                    .WithMessage(EndDateMustBeLessThanStartDate);
 
                 RuleFor(c => c.Title)
                     .NotEmpty()
