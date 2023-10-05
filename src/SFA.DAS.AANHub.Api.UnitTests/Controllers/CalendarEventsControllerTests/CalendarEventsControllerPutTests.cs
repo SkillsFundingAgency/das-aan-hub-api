@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
+using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
@@ -57,8 +58,9 @@ public class CalendarEventsControllerPutTests
     [Greedy] CalendarEventsController sut,
     [Frozen] List<ValidationFailure> errors)
     {
-        calendarEventsReadRepository.Setup(c => c.GetCalendarEvent(It.IsAny<Guid>()))
-                                    .ReturnsAsync(() => null);
+        calendarEventsReadRepository
+            .Setup(c => c.GetCalendarEvent(It.IsAny<Guid>()))
+            .ReturnsAsync(() => null);
 
         var response = new ValidatedResponse<SuccessCommandResult>(errors);
 

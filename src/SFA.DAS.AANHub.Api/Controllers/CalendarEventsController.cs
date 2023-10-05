@@ -95,5 +95,3 @@ public class CalendarEventsController : ActionResponseControllerBase
         return GetPostResponse(result, new { result.Result?.CalendarEventId });
     }
 }
-
-public record struct PutAttendanceModel(bool IsAttending);
