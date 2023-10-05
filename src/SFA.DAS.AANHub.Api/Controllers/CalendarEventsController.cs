@@ -7,6 +7,7 @@ using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Models;
 using Constants = SFA.DAS.AANHub.Api.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
@@ -94,4 +95,16 @@ public class CalendarEventsController : ActionResponseControllerBase
 
         return GetPostResponse(result, new { result.Result?.CalendarEventId });
     }
+
+    [HttpPut("{calendarEventId}/eventguests")]
+    [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> PutEventGuests(
+        Guid calendarEventId,
+        [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
+        [FromBody] EventGuestModel model)
+    {
+        return NoContent();
+    }
+
 }
