@@ -28,7 +28,7 @@ public class CalendarEventsControllerPostTests
     }
 
     [Test, AutoData]
-    public async Task CreateCalendarEvent_ReturnsCreatedResult(Guid requestedByMemberId, CreateCalendarEventModel model, CancellationToken cancellationToken, Guid calendarEventId)
+    public async Task CreateCalendarEvent_ReturnsCreatedResult(Guid requestedByMemberId, CreateCalendarEventModel model, Guid calendarEventId, CancellationToken cancellationToken)
     {
         Mock<IMediator> mediatorMock = new();
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<CreateCalendarEventCommandResult>(new CreateCalendarEventCommandResult(calendarEventId)));
@@ -43,7 +43,7 @@ public class CalendarEventsControllerPostTests
     }
 
     [Test, AutoData]
-    public async Task CreateCalendarEvent_ReturnsBadRequestResult(Guid requestedByMemberId, CreateCalendarEventModel model, CancellationToken cancellationToken, Guid calendarEventId)
+    public async Task CreateCalendarEvent_ReturnsBadRequestResult(Guid requestedByMemberId, CreateCalendarEventModel model, CancellationToken cancellationToken)
     {
         var errorResponse = new ValidatedResponse<CreateCalendarEventCommandResult>
         (new List<ValidationFailure>

@@ -74,7 +74,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                     .MustAsync(async (id, cancellationToken) =>
                     {
                         var calendarTypes = await calendarsReadRepository.GetAllCalendars(cancellationToken);
-                        return calendarTypes.Any(c => c.Id == id);
+                        return calendarTypes.Exists(c => c.Id == id);
                     })
                     .WithMessage(CalendarTypeIdMustBeValid);
 
@@ -123,7 +123,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                     .MustAsync(async (regionId, cancellationToken) =>
                     {
                         var regions = await regionsReadRepository.GetAllRegions(cancellationToken);
-                        return regions.Any(r => r.Id == regionId);
+                        return regions.Exists(r => r.Id == regionId);
                     })
                     .When(c => c.RegionId.HasValue);
 
