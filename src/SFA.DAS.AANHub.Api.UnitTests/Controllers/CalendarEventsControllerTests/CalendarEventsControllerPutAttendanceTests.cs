@@ -16,7 +16,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.CalendarEventsControllerTests;
 
-public class CalendarEventsControllerPutTests
+public class CalendarEventsControllerPutAttendanceTests
 {
     [Test]
     [MoqAutoData]
