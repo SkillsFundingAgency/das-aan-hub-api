@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
@@ -76,6 +77,22 @@ public class CalendarEventsController : ActionResponseControllerBase
         var response = await _mediator.Send(command);
 
         return GetPutResponse(response);
+    }
+
+    [HttpPost]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(CreateCalendarEventCommandResult), StatusCodes.Status201Created)]
+    public async Task<IActionResult> CreateCalendarEvent(
+        [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
+        [FromBody] CreateCalendarEventModel model,
+        CancellationToken cancellationToken)
+    {
+        CreateCalendarEventCommand command = model;
+        command.AdminMemberId = requestedByMemberId;
+
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return GetPostResponse(result, new { result.Result?.CalendarEventId });
     }
 }
 

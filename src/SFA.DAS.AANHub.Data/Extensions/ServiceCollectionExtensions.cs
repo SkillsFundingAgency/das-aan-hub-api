@@ -73,5 +73,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<INotificationsReadRepository, NotificationsReadRepository>();
         services.AddTransient<INotificationTemplateReadRepository, NotificationTemplateReadRepository>();
         services.AddTransient<IMemberPreferenceWriteRepository, MemberPreferenceWriteRepository>();
+        services.AddTransient<ICalendarEventsWriteRepository, CalendarEventsWriteRepository>();
     }
 }
