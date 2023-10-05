@@ -222,12 +222,6 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
                     .MaximumLength(200)
                     .WithMessage(ContactNameMustNotExceedLength);
 
-                RuleFor(c => c.ContactName)
-                    .NotEmpty()
-                    .WithMessage(ContactNameMustNotBeEmpty)
-                    .MaximumLength(200)
-                    .WithMessage(ContactNameMustNotExceedLength);
-
                 RuleFor(c => c.ContactEmail)
                     .NotEmpty()
                     .WithMessage(ContactEmailMustNotBeEmpty)
