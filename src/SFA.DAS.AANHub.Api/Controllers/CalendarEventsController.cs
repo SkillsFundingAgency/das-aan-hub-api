@@ -7,6 +7,8 @@ using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.EventGuests.PutEventGuests;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using Constants = SFA.DAS.AANHub.Api.Common.Constants;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
@@ -17,13 +19,15 @@ public class CalendarEventsController : ActionResponseControllerBase
 {
     private readonly ILogger<CalendarEventsController> _logger;
     private readonly IMediator _mediator;
+    private readonly ICalendarEventsReadRepository _calendarEventsReadRepository;
 
     public override string ControllerName => "CalendarEvents";
 
-    public CalendarEventsController(ILogger<CalendarEventsController> logger, IMediator mediator)
+    public CalendarEventsController(ILogger<CalendarEventsController> logger, IMediator mediator, ICalendarEventsReadRepository calendarEventsReadRepository)
     {
         _logger = logger;
         _mediator = mediator;
+        _calendarEventsReadRepository = calendarEventsReadRepository;
     }
 
     [HttpGet]
@@ -99,10 +103,22 @@ public class CalendarEventsController : ActionResponseControllerBase
     [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutEventGuests(
-        Guid calendarEventId,
         [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
-        [FromBody] PutEventGuestsModel model)
+        [FromRoute] Guid calendarEventId,
+        [FromBody] PutEventGuestsModel model,
+        CancellationToken cancellationToken)
     {
-        return NoContent();
+        var calendarEvent = await _calendarEventsReadRepository.GetCalendarEvent(calendarEventId);
+        PutEventGuestsCommand command = new()
+        {
+            AdminMemberId = requestedByMemberId,
+            CalendarEventId = calendarEventId,
+            CalendarEvent = calendarEvent,
+            Guests = model.Guests
+        };
+
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return GetPutResponse(result);
     }
 }

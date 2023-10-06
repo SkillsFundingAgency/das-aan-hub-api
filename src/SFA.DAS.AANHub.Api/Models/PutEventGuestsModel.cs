@@ -2,5 +2,5 @@
 
 namespace SFA.DAS.AANHub.Api.Models;
 
-public record PutEventGuestsModel(List<EventGuestModel> Guests);
+public record PutEventGuestsModel(IEnumerable<EventGuestModel> Guests);
 
