@@ -8,7 +8,7 @@ using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutEventGuestsCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutEventGuests;
 
 public class PutEventGuestsCommandValidatorTests
 {
@@ -164,10 +164,9 @@ public class PutEventGuestsCommandValidatorTests
             IsRegionalChair = true
         };
 
-        var guestlist = command.Guests.ToList();
-
-        guestlist.Add(new EventGuestModel(guestName, guestTitle));
-        command.Guests = guestlist;
+        var guestList = command.Guests.ToList();
+        guestList.Add(new EventGuestModel(guestName, guestTitle));
+        command.Guests = guestList;
 
         membersReadRepository.Setup(x => x.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
 
@@ -180,7 +179,7 @@ public class PutEventGuestsCommandValidatorTests
     }
 
 
-    public PutEventGuestsCommand GetCommand()
+    public static PutEventGuestsCommand GetCommand()
     {
         return new PutEventGuestsCommand()
         {

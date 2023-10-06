@@ -8,7 +8,7 @@ using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutGuestSpeakers;
-internal class PutEventGuestsCommandHandler : IRequestHandler<PutEventGuestsCommand, ValidatedResponse<SuccessCommandResult>>
+public class PutEventGuestsCommandHandler : IRequestHandler<PutEventGuestsCommand, ValidatedResponse<SuccessCommandResult>>
 {
     private readonly IEventGuestsWriteRepository _eventGuestsWriteRepository;
     private readonly IAuditWriteRepository _auditWriteRepository;
