@@ -29,7 +29,7 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
 
         _auditWriteRepository.Create(new Audit
         {
-            Action = "CreateGuests",
+            Action = "Create",
             ActionedBy = request.AdminMemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(request),
