@@ -39,7 +39,7 @@ public class CreateCalendarEventCommandHandlerTests
     [Test]
     public void ThenAddsAuditRecord() =>
         _auditWriteRepoMock.Verify(a => a.Create(It.Is<Audit>(a =>
-            a.Action == "Create" &&
+            a.Action == "CreateGuests" &&
             a.Before == null &&
             a.After != null &&
             a.ActionedBy == _command.AdminMemberId &&

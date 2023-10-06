@@ -10,6 +10,7 @@ using SFA.DAS.AANHub.Api.Controllers;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.CalendarEventsControllerTests;
 
@@ -20,7 +21,7 @@ public class CalendarEventsControllerPostTests
     {
         Mock<IMediator> mediatorMock = new();
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<CreateCalendarEventCommandResult>(new CreateCalendarEventCommandResult(requestedByMemberId)));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object);
+        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
 
         await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
 
@@ -32,7 +33,7 @@ public class CalendarEventsControllerPostTests
     {
         Mock<IMediator> mediatorMock = new();
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<CreateCalendarEventCommandResult>(new CreateCalendarEventCommandResult(calendarEventId)));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object);
+        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
 
         var result = await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
 
@@ -52,7 +53,7 @@ public class CalendarEventsControllerPostTests
         });
         Mock<IMediator> mediatorMock = new();
         mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(errorResponse);
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object);
+        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
 
         var result = await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
 

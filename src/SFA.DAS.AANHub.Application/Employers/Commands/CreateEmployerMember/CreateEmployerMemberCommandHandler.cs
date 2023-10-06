@@ -51,7 +51,7 @@ public class CreateEmployerMemberCommandHandler :
 
         _auditWriteRepository.Create(new Audit
         {
-            Action = "Create",
+            Action = "CreateGuests",
             ActionedBy = command.MemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(member.Employer),

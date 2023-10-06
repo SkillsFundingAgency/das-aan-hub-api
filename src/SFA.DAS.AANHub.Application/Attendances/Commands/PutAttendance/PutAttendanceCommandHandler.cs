@@ -80,7 +80,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
 
         var audit = new Audit()
         {
-            Action = "Create",
+            Action = "CreateGuests",
             After = JsonSerializer.Serialize(newAttendance),
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,

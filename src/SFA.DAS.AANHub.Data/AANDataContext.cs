@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data;
 
@@ -25,6 +25,9 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
     public DbSet<MemberPreference> MemberPreferences => Set<MemberPreference>();
+
+    public DbSet<EventGuest> EventGuests => Set<EventGuest>();
+
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)

@@ -20,7 +20,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .Where(m => m.Id == id)
             .Include(x => x.Attendees.Where(a => a.IsAttending))
             .ThenInclude(x => x.Member)
-            .Include(x => x.EventGuests)
+             .Include(x => x.EventGuests)
             .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
 

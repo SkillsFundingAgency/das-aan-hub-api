@@ -19,5 +19,8 @@ public interface IAanDataContext
     DbSet<NotificationTemplate> NotificationTemplates { get; }
     DbSet<MemberPreference> MemberPreferences { get; }
 
+    DbSet<EventGuest> EventGuests { get; }
+
+
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }

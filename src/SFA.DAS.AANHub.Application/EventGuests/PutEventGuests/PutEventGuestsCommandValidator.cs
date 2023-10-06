@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Application.Models;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -8,6 +9,12 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
 {
     public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
     public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active, admin member or regional chair";
+    public const string CalendarEventDoesNotExist = "Calender Event does not exist";
+    public const string CalendarEventIsNotActive = "Cannot amend a calendar event that has been cancelled";
+    public const string CalendarEVentIsInPast = "Cannot amend a calendar event that is in the past";
+
+    public const string GuestNamesAndJobTitlesMustBePresent =
+        "One or more of the guest speakers has a missing name or job title and organisation";
 
     public PutEventGuestsCommandValidator(IMembersReadRepository membersReadRepository)
     {
@@ -26,10 +33,28 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
         RuleFor(c => c.CalendarEvent)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
-            .WithMessage("does not exist")
+            .WithMessage(CalendarEventDoesNotExist)
             .Must(calendarEvent => calendarEvent!.IsActive)
-            .WithMessage("it is not active")
+            .WithMessage(CalendarEventIsNotActive)
             .Must(calendarEvent => calendarEvent!.StartDate > DateTime.UtcNow)
-            .WithMessage("event is in past");
+            .WithMessage(CalendarEVentIsInPast);
+
+        RuleFor(c => c.Guests)
+            .Must(GuestNamesAndJobTitlesComplete)
+            .WithMessage(GuestNamesAndJobTitlesMustBePresent);
+    }
+
+    private bool GuestNamesAndJobTitlesComplete(PutEventGuestsCommand command, IEnumerable<EventGuestModel> guests)
+    {
+
+        foreach (var guest in command.Guests)
+        {
+            if (string.IsNullOrEmpty(guest.GuestName) || string.IsNullOrEmpty(guest.GuestJobTitle))
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 }
