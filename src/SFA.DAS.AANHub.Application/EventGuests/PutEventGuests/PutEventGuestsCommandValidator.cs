@@ -8,10 +8,10 @@ namespace SFA.DAS.AANHub.Application.EventGuests.PutEventGuests;
 public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCommand>
 {
     public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
-    public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active, admin member or regional chair";
+    public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active admin member or regional chair";
     public const string CalendarEventDoesNotExist = "Calender Event does not exist";
     public const string CalendarEventIsNotActive = "Cannot amend a calendar event that has been cancelled";
-    public const string CalendarEVentIsInPast = "Cannot amend a calendar event that is in the past";
+    public const string CalendarEventIsInPast = "Cannot amend a calendar event that is in the past";
 
     public const string GuestNamesAndJobTitlesMustBePresent =
         "One or more of the guest speakers has a missing name or job title and organisation";
@@ -30,6 +30,7 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
                     (member.UserType == UserType.Admin.ToString() || member.IsRegionalChair.GetValueOrDefault());
             })
             .WithMessage(RequestedByMemberIdMustBeAdmin);
+
         RuleFor(c => c.CalendarEvent)
             .Cascade(CascadeMode.Stop)
             .NotEmpty()
@@ -37,7 +38,7 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
             .Must(calendarEvent => calendarEvent!.IsActive)
             .WithMessage(CalendarEventIsNotActive)
             .Must(calendarEvent => calendarEvent!.StartDate > DateTime.UtcNow)
-            .WithMessage(CalendarEVentIsInPast);
+            .WithMessage(CalendarEventIsInPast);
 
         RuleFor(c => c.Guests)
             .Must(GuestNamesAndJobTitlesComplete)
