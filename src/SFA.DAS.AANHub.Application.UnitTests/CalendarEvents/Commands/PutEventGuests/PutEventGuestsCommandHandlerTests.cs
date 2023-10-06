@@ -14,7 +14,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutEventG
 public class PutEventGuestsCommandHandlerTests
 {
     [Test, RecursiveMoqAutoData]
-    public async Task Handle_A(
+    public async Task Handle_PutEventGuests(
         [Frozen] Mock<IAanDataContext> aanDataContext,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<IEventGuestsWriteRepository> eventGuestsWriteRepository,
