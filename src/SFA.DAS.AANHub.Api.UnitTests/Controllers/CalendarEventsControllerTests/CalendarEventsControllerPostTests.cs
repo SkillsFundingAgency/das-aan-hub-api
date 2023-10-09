@@ -33,6 +33,23 @@ public class CalendarEventsControllerPostTests
     }
 
     [Test, AutoData]
+    public async Task CreateCalendarEvent_WithRegion0_ReturnsCreatedResult2(Guid requestedByMemberId, CreateCalendarEventModel model, Guid calendarEventId, CancellationToken cancellationToken)
+    {
+        model.RegionId = 0;
+        Mock<IMediator> mediatorMock = new();
+        mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<CreateCalendarEventCommandResult>(new CreateCalendarEventCommandResult(calendarEventId)));
+        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
+
+        var result = await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
+        mediatorMock.Verify(m => m.Send(It.Is<CreateCalendarEventCommand>(c => c.AdminMemberId == requestedByMemberId), cancellationToken));
+
+        result.As<CreatedAtActionResult>().Should().NotBeNull();
+        result.As<CreatedAtActionResult>().ControllerName.Should().Be(sut.ControllerName);
+        result.As<CreatedAtActionResult>().ActionName.Should().Be("Get");
+        result.As<CreatedAtActionResult>().Value.As<CreateCalendarEventCommandResult>().CalendarEventId.Should().Be(calendarEventId);
+    }
+
+    [Test, AutoData]
     public async Task CreateCalendarEvent_ReturnsBadRequestResult(Guid requestedByMemberId, CreateCalendarEventModel model, CancellationToken cancellationToken)
     {
         var errorResponse = new ValidatedResponse<CreateCalendarEventCommandResult>

@@ -33,7 +33,7 @@ public class CreateCalendarEventModel
             Title = source.Title,
             Description = source.Description!,
             Summary = source.Summary,
-            RegionId = source.RegionId,
+            RegionId = source.RegionId == 0 ? null : source.RegionId,
             Location = source.Location,
             Postcode = source.Postcode,
             Latitude = source.Latitude,
