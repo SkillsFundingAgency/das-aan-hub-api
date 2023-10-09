@@ -36,7 +36,7 @@ public class CreateCalendarEventCommand : IRequest<ValidatedResponse<CreateCalen
             Title = source.Title!,
             Description = source.Description!,
             Summary = source.Summary!,
-            RegionId = source.RegionId!.Value,
+            RegionId = source.RegionId,
             Location = source.Location,
             Postcode = source.Postcode,
             Latitude = source.Latitude,
@@ -45,6 +45,6 @@ public class CreateCalendarEventCommand : IRequest<ValidatedResponse<CreateCalen
             ContactName = source.ContactName!,
             ContactEmail = source.ContactEmail!,
             PlannedAttendees = source.PlannedAttendees!.Value,
-            Urn = source.Urn!.Value
+            Urn = source.Urn
         };
 }
