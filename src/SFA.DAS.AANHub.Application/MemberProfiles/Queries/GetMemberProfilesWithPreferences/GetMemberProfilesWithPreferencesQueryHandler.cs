@@ -37,13 +37,12 @@ public class GetMemberProfilesWithPreferencesQueryHandler : IRequestHandler<GetM
             }
 
             result.Profiles = profilesResult;
-            result.Preferences = Enumerable.Empty<MemberPreferenceModel>();
         }
         else
         {
             result.Profiles = memberProfiles;
-            result.Preferences = memberPreferences.Select(p => (MemberPreferenceModel)p);
         }
+        result.Preferences = memberPreferences.Select(p => (MemberPreferenceModel)p);
 
         return new ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>(result);
     }

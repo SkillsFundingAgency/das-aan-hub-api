@@ -53,7 +53,7 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     }
 
     [Test]
-    public async Task Handle_PublicViewIsTrue_HasPreferenceToShare_RetrunsProfileAllowedToShare()
+    public async Task Handle_PublicViewIsTrue_HasPreferenceToShare_ReturnsProfileAllowedToShare()
     {
         await InvokeHandler(true);
         _response.Result.Profiles.Select(x => x.ProfileId).Should().Contain(new List<int> { 41, 42, 43 });
@@ -67,13 +67,6 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     }
 
     [Test]
-    public async Task Handle_PublicViewIsTrue_RetrunsEmptyPreferencesList()
-    {
-        await InvokeHandler(true);
-        _response.Result.Preferences.Should().BeEmpty();
-    }
-
-    [Test]
     public async Task Handle_PublicViewIsTrue_HasNoPreferenceToShare_IgnoresProfile()
     {
         await InvokeHandler(true);
@@ -81,15 +74,25 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     }
 
     [Test]
-    public async Task Handle_PubliViewFalse_ReturnsAllProfilesAndPreference()
+    public async Task Handle_PubliViewFalse_ReturnsAllProfiles()
     {
         await InvokeHandler(false);
-        using (new AssertionScope("Public view false should return all profiles and preferences"))
+        using (new AssertionScope("Public view false should return all profiles"))
         {
             _response.Result.Profiles.Count().Should().Be(5);
-            _response.Result.Preferences.Count().Should().Be(3);
-
             _response.Result.Profiles.Select(x => x.ProfileId).Should().Contain(new List<int> { 41, 42, 43, 44, 45 });
+        }
+    }
+
+    [TestCase(true)]
+    [TestCase(false)]
+    [TestCase(null)]
+    public async Task Handle_ReturnsAllPreferences(bool @public = true)
+    {
+        await InvokeHandler(@public);
+        using (new AssertionScope("Handle should return all preferences"))
+        {
+            _response.Result.Preferences.Count().Should().Be(3);
             _response.Result.Preferences.Select(x => x.PreferenceId).Should().Contain(new List<int> { 1, 2, 3 });
         }
     }
