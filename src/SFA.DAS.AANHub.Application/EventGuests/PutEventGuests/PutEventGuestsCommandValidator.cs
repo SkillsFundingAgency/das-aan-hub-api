@@ -9,7 +9,7 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
 {
     public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
     public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active admin member or regional chair";
-    public const string CalendarEventDoesNotExist = "Calender Event does not exist";
+    public const string CalendarEventDoesNotExist = "Calendar event does not exist";
     public const string CalendarEventIsNotActive = "Cannot amend a calendar event that has been cancelled";
     public const string CalendarEventIsInPast = "Cannot amend a calendar event that is in the past";
 

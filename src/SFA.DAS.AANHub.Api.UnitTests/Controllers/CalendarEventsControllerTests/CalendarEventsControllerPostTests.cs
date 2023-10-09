@@ -17,18 +17,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.CalendarEventsControllerTests
 public class CalendarEventsControllerPostTests
 {
     [Test, AutoData]
-    public async Task CreateCalendarEvent_InvokesCommand(Guid requestedByMemberId, CreateCalendarEventModel model, CancellationToken cancellationToken)
-    {
-        Mock<IMediator> mediatorMock = new();
-        mediatorMock.Setup(m => m.Send(It.IsAny<CreateCalendarEventCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<CreateCalendarEventCommandResult>(new CreateCalendarEventCommandResult(requestedByMemberId)));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
-
-        await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
-
-        mediatorMock.Verify(m => m.Send(It.Is<CreateCalendarEventCommand>(c => c.AdminMemberId == requestedByMemberId), cancellationToken));
-    }
-
-    [Test, AutoData]
     public async Task CreateCalendarEvent_ReturnsCreatedResult(Guid requestedByMemberId, CreateCalendarEventModel model, Guid calendarEventId, CancellationToken cancellationToken)
     {
         Mock<IMediator> mediatorMock = new();
@@ -36,6 +24,7 @@ public class CalendarEventsControllerPostTests
         CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
 
         var result = await sut.CreateCalendarEvent(requestedByMemberId, model, cancellationToken);
+        mediatorMock.Verify(m => m.Send(It.Is<CreateCalendarEventCommand>(c => c.AdminMemberId == requestedByMemberId), cancellationToken));
 
         result.As<CreatedAtActionResult>().Should().NotBeNull();
         result.As<CreatedAtActionResult>().ControllerName.Should().Be(sut.ControllerName);

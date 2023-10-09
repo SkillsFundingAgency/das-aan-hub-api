@@ -17,39 +17,39 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.CalendarEventsControllerTests
 
 public class CalendarEventsControllerPutGuestsTests
 {
-    [Test, AutoData]
-    public async Task PutEventGuests_InvokesMediator(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model, CancellationToken cancellationToken)
+    private readonly Mock<IMediator> _mediatorMock = new();
+    private readonly CancellationToken _cancellationToken = new();
+    private CalendarEventsController _sut = new(Mock.Of<ILogger<CalendarEventsController>>(), Mock.Of<IMediator>(), Mock.Of<ICalendarEventsReadRepository>());
+
+    [SetUp]
+    public void Init()
     {
-        Mock<IMediator> mediatorMock = new();
-        mediatorMock.Setup(m => m.Send(It.IsAny<PutEventGuestsCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
-
-        await sut.PutEventGuests(requestedByMemberId, calendarEventId, model, cancellationToken);
-
-        mediatorMock.Verify(m => m.Send(It.Is<PutEventGuestsCommand>(c => c.CalendarEventId == calendarEventId && c.AdminMemberId == requestedByMemberId && c.Guests == model.Guests), cancellationToken));
+        _mediatorMock.Setup(m => m.Send(It.IsAny<PutEventGuestsCommand>(), _cancellationToken)).ReturnsAsync(new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()));
+        _sut = new CalendarEventsController(Mock.Of<ILogger<CalendarEventsController>>(), _mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
     }
 
     [Test, AutoData]
-    public async Task PutEventGuests_OnHandlerSuccess_ReturnsNoContentResponse(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model, CancellationToken cancellationToken)
+    public async Task PutEventGuests_InvokesMediator(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model)
     {
-        Mock<IMediator> mediatorMock = new();
-        mediatorMock.Setup(m => m.Send(It.IsAny<PutEventGuestsCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult()));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
+        await _sut.PutEventGuests(requestedByMemberId, calendarEventId, model, _cancellationToken);
+        _mediatorMock.Verify(m => m.Send(It.Is<PutEventGuestsCommand>(c => c.CalendarEventId == calendarEventId && c.AdminMemberId == requestedByMemberId && c.Guests == model.Guests), _cancellationToken));
+    }
 
-        var result = await sut.PutEventGuests(requestedByMemberId, calendarEventId, model, cancellationToken);
-
+    [Test, AutoData]
+    public async Task PutEventGuests_OnHandlerSuccess_ReturnsNoContentResponse(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model)
+    {
+        var result = await _sut.PutEventGuests(requestedByMemberId, calendarEventId, model, _cancellationToken);
         result.As<NoContentResult>().Should().NotBeNull();
     }
 
     [Test, AutoData]
-    public async Task PutEventGuests_OnValidationErrors_ReturnsBadRequestResponse(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model, List<ValidationFailure> errors, CancellationToken cancellationToken)
+    public async Task PutEventGuests_OnValidationErrors_ReturnsBadRequestResponse(Guid requestedByMemberId, Guid calendarEventId, PutEventGuestsModel model, List<ValidationFailure> errors)
     {
-        Mock<IMediator> mediatorMock = new();
-        mediatorMock.Setup(m => m.Send(It.IsAny<PutEventGuestsCommand>(), cancellationToken)).ReturnsAsync(new ValidatedResponse<SuccessCommandResult>(errors));
-        CalendarEventsController sut = new(Mock.Of<ILogger<CalendarEventsController>>(), mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
+        _sut = new CalendarEventsController(Mock.Of<ILogger<CalendarEventsController>>(), _mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
 
-        var result = await sut.PutEventGuests(requestedByMemberId, calendarEventId, model, cancellationToken);
-
+        _mediatorMock.Setup(m => m.Send(It.IsAny<PutEventGuestsCommand>(), _cancellationToken)).ReturnsAsync(new ValidatedResponse<SuccessCommandResult>(errors));
+        _sut = new(Mock.Of<ILogger<CalendarEventsController>>(), _mediatorMock.Object, Mock.Of<ICalendarEventsReadRepository>());
+        var result = await _sut.PutEventGuests(requestedByMemberId, calendarEventId, model, _cancellationToken);
         result.As<BadRequestObjectResult>().Should().NotBeNull();
     }
 }
