@@ -21,6 +21,7 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
         JoinedDate = command.JoinedDate!.Value,
         RegionId = command.RegionId,
         OrganisationName = command.OrganisationName,
+        IsRegionalChair = false,
         Apprentice = new Apprentice
         {
             MemberId = command.MemberId,

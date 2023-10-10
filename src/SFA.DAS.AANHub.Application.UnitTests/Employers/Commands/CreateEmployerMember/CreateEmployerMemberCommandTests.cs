@@ -23,6 +23,7 @@ public class CreateEmployerMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
+        member.IsRegionalChair.Should().BeFalse();
         member.Employer!.MemberId.Should().Be(sut.MemberId);
         member.Employer!.AccountId.Should().Be(sut.AccountId);
         member.Employer!.UserRef.Should().Be(sut.UserRef);

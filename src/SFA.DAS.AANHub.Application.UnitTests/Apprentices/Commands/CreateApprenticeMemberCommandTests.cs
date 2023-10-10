@@ -24,6 +24,7 @@ public class CreateApprenticeMemberCommandTests
         member.LastName.Should().Be(sut.LastName);
         member.JoinedDate.Should().Be(sut.JoinedDate);
         member.OrganisationName.Should().Be(sut.OrganisationName);
+        member.IsRegionalChair.Should().BeFalse();
         member.Apprentice!.MemberId.Should().Be(sut.MemberId);
         member.Apprentice!.ApprenticeId.Should().Be(sut.ApprenticeId);
         member.MemberProfiles.Should().NotBeEmpty().And.HaveCount(sut.ProfileValues.Count);
