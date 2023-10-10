@@ -1,5 +1,4 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Azure.Core;
+﻿using Azure.Core;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -7,6 +6,7 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Extensions;
 
@@ -74,5 +74,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<INotificationTemplateReadRepository, NotificationTemplateReadRepository>();
         services.AddTransient<IMemberPreferenceWriteRepository, MemberPreferenceWriteRepository>();
         services.AddTransient<ICalendarEventsWriteRepository, CalendarEventsWriteRepository>();
+        services.AddTransient<IEventGuestsWriteRepository, EventGuestsWriteRepository>();
     }
 }

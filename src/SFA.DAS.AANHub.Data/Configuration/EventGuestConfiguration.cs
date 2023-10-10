@@ -6,11 +6,11 @@ using System.Diagnostics.CodeAnalysis;
 namespace SFA.DAS.AANHub.Data.Configuration;
 
 [ExcludeFromCodeCoverage]
-public class AttendanceConfiguration : IEntityTypeConfiguration<Attendance>
+public class EventGuestConfiguration : IEntityTypeConfiguration<EventGuest>
 {
-    public void Configure(EntityTypeBuilder<Attendance> builder)
+    public void Configure(EntityTypeBuilder<EventGuest> builder)
     {
-        builder.ToTable("Attendance");
+        builder.ToTable("EventGuest");
         builder.HasKey(x => x.Id);
     }
 }

@@ -1,9 +1,9 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 
@@ -23,6 +23,8 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
     public async Task<ValidatedResponse<CreateCalendarEventCommandResult>> Handle(CreateCalendarEventCommand request, CancellationToken cancellationToken)
     {
         CalendarEvent calendarEvent = request;
+        calendarEvent.IsActive = true;
+        calendarEvent.CreatedDate = DateTime.UtcNow;
         _calendarEventWriteRepository.Create(calendarEvent);
 
         _auditWriteRepository.Create(new Audit

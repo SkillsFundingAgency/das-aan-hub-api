@@ -17,6 +17,9 @@ public class ValidateEventLink
     [TestCase(EventFormat.Online, 0, null, true, null)]
     [TestCase(EventFormat.Online, 0, "https://www.google.com", true, null)]
     [TestCase(EventFormat.Hybrid, 0, "https://www.google.com", true, null)]
+    [TestCase(EventFormat.Hybrid, 0, "HTTPS://www.google.com", true, null)]
+    [TestCase(EventFormat.Hybrid, 0, "HTTPS://WWW.google.com", true, null)]
+
     public async Task Validate_EventLink_MustBeValidValue(EventFormat eventFormat, int length, string? eventLink, bool isValid, string? errorMessage)
     {
         var sut = CreateCalendarEventCommandValidatorBuilder.Create();
