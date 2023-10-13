@@ -22,6 +22,7 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
         JoinedDate = command.JoinedDate!.Value,
         RegionId = command.RegionId,
         OrganisationName = command.OrganisationName,
+        IsRegionalChair = false,
         Employer = new Employer
         {
             MemberId = command.MemberId,
