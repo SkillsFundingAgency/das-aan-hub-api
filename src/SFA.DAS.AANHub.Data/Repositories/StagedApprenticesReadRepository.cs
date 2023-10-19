@@ -12,9 +12,10 @@ internal class StagedApprenticesReadRepository : IStagedApprenticesReadRepositor
 
     public StagedApprenticesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-    public async Task<StagedApprentice?> GetStagedApprentice(string lastname, DateTime dateofbirth, string email) => await _aanDataContext
+    public async Task<StagedApprentice?> GetStagedApprentice(string lastName, DateTime dateOfBirth, string email)
+        => await _aanDataContext
             .StagedApprentices
-            .Where(a => a.LastName == lastname && a.DateOfBirth == dateofbirth && a.Email == email)
+            .Where(a => a.LastName == lastName && a.DateOfBirth == dateOfBirth && a.Email == email)
             .AsNoTracking()
             .SingleOrDefaultAsync();
 }

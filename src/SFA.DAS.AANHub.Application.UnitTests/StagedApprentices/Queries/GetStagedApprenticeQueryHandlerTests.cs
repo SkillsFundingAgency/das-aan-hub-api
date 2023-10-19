@@ -31,7 +31,7 @@ public class GetStagedApprenticeQueryHandlerTests
         };
 
         stagedApprenticesReadRepositoryMock.Setup(a => a.GetStagedApprentice(lastname, dateofbirth, email)).ReturnsAsync(stagedApprentice);
-        var sut = new GetStagedApprenticeMemberQueryHandler(stagedApprenticesReadRepositoryMock.Object);
+        var sut = new GetStagedApprenticeQueryHandler(stagedApprenticesReadRepositoryMock.Object);
 
         var result = await sut.Handle(new GetStagedApprenticeQuery(lastname, dateofbirth, email), new CancellationToken());
 
@@ -55,7 +55,7 @@ public class GetStagedApprenticeQueryHandlerTests
 
         var stagedApprenticesReadRepositoryMock = new Mock<IStagedApprenticesReadRepository>();
         stagedApprenticesReadRepositoryMock.Setup(a => a.GetStagedApprentice(lastname, dateofbirth, email)).ReturnsAsync((StagedApprentice?)null);
-        var sut = new GetStagedApprenticeMemberQueryHandler(stagedApprenticesReadRepositoryMock.Object);
+        var sut = new GetStagedApprenticeQueryHandler(stagedApprenticesReadRepositoryMock.Object);
 
         var result = await sut.Handle(new GetStagedApprenticeQuery(lastname, dateofbirth, email), new CancellationToken());
 

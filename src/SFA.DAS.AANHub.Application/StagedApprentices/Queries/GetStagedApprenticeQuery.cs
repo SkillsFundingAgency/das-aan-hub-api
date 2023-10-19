@@ -8,10 +8,10 @@ namespace SFA.DAS.AANHub.Application.StagedApprentices.Queries
         public string LastName { get; }
         public DateTime DateOfBirth { get; }
         public string Email { get; }
-        public GetStagedApprenticeQuery(string lastname, DateTime dateofbirth, string email)
+        public GetStagedApprenticeQuery(string lastName, DateTime dateOfBirth, string email)
         {
-            LastName = lastname;
-            DateOfBirth = dateofbirth;
+            LastName = lastName;
+            DateOfBirth = dateOfBirth;
             Email = email;
         }
     }
