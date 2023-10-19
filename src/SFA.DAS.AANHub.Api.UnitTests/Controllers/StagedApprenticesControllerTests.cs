@@ -20,15 +20,14 @@ public class StagedApprenticesControllerTests
     public async Task GetApprentice_InvokesQueryHandler(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] StagedApprenticesController sut,
-        string lastname,
-        DateTime dateofbirth,
-        string email,
-        GetStagedApprenticeQueryResult expectedQueryResult)
+        GetStagedApprenticeQuery query,
+        GetStagedApprenticeQueryResult expectedQueryResult,
+        CancellationToken cancellationToken)
     {
         ValidatedResponse<GetStagedApprenticeQueryResult> expectedResult = new(expectedQueryResult);
         mediatorMock.Setup(m => m.Send(It.IsAny<GetStagedApprenticeQuery>(), It.IsAny<CancellationToken>())).ReturnsAsync(expectedResult);
 
-        var actualResult = await sut.GetStagedApprentice(lastname, dateofbirth, email);
+        var actualResult = await sut.GetStagedApprentice(query, cancellationToken);
 
         actualResult.As<OkObjectResult>().Should().NotBeNull();
     }
@@ -38,20 +37,16 @@ public class StagedApprenticesControllerTests
     public async Task GetApprentice_HandlerReturnsNoData_ReturnsNotFoundResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] StagedApprenticesController sut,
-        string lastname,
-        DateTime dateofbirth,
-        string email)
+        GetStagedApprenticeQuery query,
+        CancellationToken cancellationToken)
     {
         var errorResponse = ValidatedResponse<GetStagedApprenticeQueryResult>.EmptySuccessResponse();
 
         mediatorMock
-            .Setup(m => m.Send(It.Is<GetStagedApprenticeQuery>(q =>
-                q.LastName == lastname
-                && q.DateOfBirth == dateofbirth
-                && q.Email == email), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(query, cancellationToken))
             .ReturnsAsync(errorResponse);
 
-        var result = await sut.GetStagedApprentice(lastname, dateofbirth, email);
+        var result = await sut.GetStagedApprentice(query, cancellationToken);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -61,21 +56,17 @@ public class StagedApprenticesControllerTests
     public async Task GetApprentice_HandlerReturnsData_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] StagedApprenticesController sut,
-        string lastname,
-        DateTime dateofbirth,
-        string email,
-        GetStagedApprenticeQueryResult getStagedApprenticeResult)
+        GetStagedApprenticeQuery query,
+        GetStagedApprenticeQueryResult getStagedApprenticeResult,
+        CancellationToken cancellationToken)
     {
         var response = new ValidatedResponse<GetStagedApprenticeQueryResult>(getStagedApprenticeResult);
 
         mediatorMock
-            .Setup(m => m.Send(It.Is<GetStagedApprenticeQuery>(q =>
-                q.LastName == lastname
-                && q.DateOfBirth == dateofbirth
-                && q.Email == email), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(query, cancellationToken))
             .ReturnsAsync(response);
 
-        var result = await sut.GetStagedApprentice(lastname, dateofbirth, email);
+        var result = await sut.GetStagedApprentice(query, cancellationToken);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getStagedApprenticeResult);
@@ -86,20 +77,16 @@ public class StagedApprenticesControllerTests
     public async Task GetApprentice_InvokesQueryHandler_BadResultGivesBadRequest(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] StagedApprenticesController sut,
-        string lastname,
-        DateTime dateofbirth,
-        string email,
-        List<ValidationFailure> errors)
+        GetStagedApprenticeQuery query,
+        List<ValidationFailure> errors,
+        CancellationToken cancellationToken)
     {
         var errorResponse = new ValidatedResponse<GetStagedApprenticeQueryResult>(errors);
         mediatorMock
-            .Setup(m => m.Send(It.Is<GetStagedApprenticeQuery>(q =>
-                q.LastName == lastname
-                && q.DateOfBirth == dateofbirth
-                && q.Email == email), It.IsAny<CancellationToken>()))
+            .Setup(m => m.Send(query, cancellationToken))
             .ReturnsAsync(errorResponse);
 
-        var result = await sut.GetStagedApprentice(lastname, dateofbirth, email);
+        var result = await sut.GetStagedApprentice(query, cancellationToken);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);
