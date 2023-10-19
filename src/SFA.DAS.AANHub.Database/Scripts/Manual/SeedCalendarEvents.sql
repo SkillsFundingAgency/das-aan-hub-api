@@ -7235,7 +7235,7 @@ Id    CalendarName
     SET @des2 = @line % 4;
 
     INSERT INTO [dbo].[CalendarEvent] 
-    ([CalendarId],[EventFormat],[StartDate],[EndDate],[Title],[Description],[Summary],[RegionId],[Location],[Postcode],[Latitude],[Longitude],[URN],[EventLink],[ContactName],[ContactEmail] )
+    ([CalendarId],[EventFormat],[StartDate],[EndDate],[Title],[Description],[Summary],[RegionId],[Location],[Postcode],[Latitude],[Longitude],[URN],[EventLink],[ContactName],[ContactEmail],[PlannedAttendees] )
     SELECT  
     @calendarid [CalendarId], 
     @eventtype [EventFormat],
@@ -7271,7 +7271,8 @@ Id    CalendarName
     CASE @calendarid WHEN 3 THEN [URN] ELSE null END [URN],
     CASE @format WHEN 2 THEN null ELSE @eventlink+'&id='+CONVERT(varchar,@line) END [EventLink], 
     @contactname [ContactName], 
-    @contactemail [ContactEmail]
+    @contactemail [ContactEmail],
+    1+CONVERT(int,RiGHT(REPLACE(TRANSLATE(NEWID(), 'ABCDEF-', '#######'),'#',''),2)) [PlannedAttendees] -- last 2 digits (add one)
     FROM 
     (
     SELECT CONVERT(int,@line) hit, row_number() over (order by urn) rownumber, sc1.* , mp1.Latitude, mp1.Longitude, por.RegionId, reg.Area
