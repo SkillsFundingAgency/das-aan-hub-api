@@ -39,6 +39,11 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
+    protected IActionResult GetDeleteResponse(ValidatedResponse<SuccessCommandResult> response)
+    {
+        return response.IsValidResponse ? NoContent() : new BadRequestObjectResult(FormatErrors(response.Errors));
+    }
+
     protected IActionResult GetPatchResponse(ValidatedResponse<SuccessCommandResult> response)
     {
         if (response.Result is { IsSuccess: false }) return NotFound();
