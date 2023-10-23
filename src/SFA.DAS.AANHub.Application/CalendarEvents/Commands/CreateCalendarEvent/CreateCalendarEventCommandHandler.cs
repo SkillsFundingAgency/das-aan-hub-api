@@ -25,6 +25,8 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
         CalendarEvent calendarEvent = request;
         calendarEvent.IsActive = true;
         calendarEvent.CreatedDate = DateTime.UtcNow;
+        calendarEvent.LastUpdatedDate = DateTime.UtcNow;
+
         _calendarEventWriteRepository.Create(calendarEvent);
 
         _auditWriteRepository.Create(new Audit

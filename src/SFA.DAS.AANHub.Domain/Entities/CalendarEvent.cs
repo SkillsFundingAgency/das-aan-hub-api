@@ -21,11 +21,10 @@ public class CalendarEvent
     public string ContactName { get; set; } = null!;
     public string ContactEmail { get; set; } = null!;
     public bool IsActive { get; set; }
-    public string? CancelReason { get; set; } = null!;
     public int PlannedAttendees { get; set; }
     public long? Urn { get; set; }
     public DateTime? CreatedDate { get; set; }
-
+    public DateTime? LastUpdatedDate { get; set; }
     [JsonIgnore]
     public List<Attendance> Attendees { get; set; } = new();
 
