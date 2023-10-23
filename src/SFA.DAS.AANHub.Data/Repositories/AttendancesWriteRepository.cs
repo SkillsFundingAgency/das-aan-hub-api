@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -18,4 +18,14 @@ internal class AttendancesWriteRepository : IAttendancesWriteRepository
         await _aanDataContext.Attendances.Where(a => a.CalendarEventId == calendarEventId)
                                          .Where(a => a.MemberId == memberId)
                                          .SingleOrDefaultAsync();
+
+    public async Task<List<Attendance>> GetAttendancesByEventId(Guid calendarEventId, CancellationToken cancellationToken)
+    {
+        var query = _aanDataContext
+            .Attendances
+            .Where(a =>
+                a.IsAttending &&
+                a.CalendarEventId == calendarEventId);
+        return await query.ToListAsync(cancellationToken);
+    }
 }

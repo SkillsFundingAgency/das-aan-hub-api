@@ -15,4 +15,10 @@ public static class Constants
         public const string Withdrawn = "withdrawn";
         public const string Deleted = "deleted";
     }
+
+    public static class NotificationTemplateNames
+    {
+        public const string AANAdminEventUpdate = nameof(AANAdminEventUpdate);
+        public const string AANAdminEventCancel = nameof(AANAdminEventCancel);
+    }
 }
