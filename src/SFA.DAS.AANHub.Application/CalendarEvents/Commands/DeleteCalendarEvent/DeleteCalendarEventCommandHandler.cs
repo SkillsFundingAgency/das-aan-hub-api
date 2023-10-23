@@ -30,8 +30,6 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
         _attendancesWriteRepository = attendancesWriteRepository;
         _notificationsWriteRepository = notificationsWriteRepository;
         _auditWriteRepository = auditWriteRepository;
-
-
     }
     public async Task<ValidatedResponse<SuccessCommandResult>> Handle(DeleteCalendarEventCommand command, CancellationToken cancellationToken)
     {
@@ -39,19 +37,26 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
         var calendarEventBefore = JsonSerializer.Serialize(calendarEvent);
         calendarEvent!.IsActive = false;
         calendarEvent.LastUpdatedDate = DateTime.UtcNow;
-
-
         var calendarEventAfter = JsonSerializer.Serialize(calendarEvent);
-        var existingAttendances = await _attendancesWriteRepository.GetAttendancesByEventId(command.CalendarEventId, cancellationToken);
-        foreach (var attendance in existingAttendances)
-        {
-            attendance.IsAttending = false;
 
-            var member = await _membersReadRepository.GetMember(attendance.MemberId);
-            var templateName = Constants.NotificationTemplateNames.AANAdminEventCancel;
-            var tokens = await GetTokens(calendarEvent, member!);
-            var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), attendance.MemberId, templateName, tokens, command.RequestedByMemberId, true, command.CalendarEventId.ToString());
-            _notificationsWriteRepository.Create(notification);
+        var existingAttendances = await _attendancesWriteRepository.GetAttendancesByEventId(command.CalendarEventId, cancellationToken);
+
+        if (existingAttendances.Any())
+        {
+            var members = await _membersReadRepository.GetMembers(existingAttendances.Select(x => x.MemberId).ToList(),
+                cancellationToken);
+
+            foreach (var attendance in existingAttendances)
+            {
+                attendance.IsAttending = false;
+
+                var member = members.First(x => x.Id == attendance.MemberId);
+                var templateName = Constants.NotificationTemplateNames.AANAdminEventCancel;
+                var tokens = await GetTokens(calendarEvent, member);
+                var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), attendance.MemberId,
+                    templateName, tokens, command.RequestedByMemberId, true, command.CalendarEventId.ToString());
+                _notificationsWriteRepository.Create(notification);
+            }
         }
 
         var audit = new Audit()
@@ -63,6 +68,7 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
             AuditTime = DateTime.UtcNow,
             Resource = nameof(CalendarEvent),
         };
+
         _auditWriteRepository.Create(audit);
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);

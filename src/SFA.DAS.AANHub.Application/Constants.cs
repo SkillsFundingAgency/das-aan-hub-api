@@ -1,7 +1,11 @@
-﻿namespace SFA.DAS.AANHub.Application;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.AANHub.Application;
 
 public static class Constants
 {
+
+    [ExcludeFromCodeCoverage]
     public static class RegularExpressions
     {
         public const string UrlRegex = @"^(?:[Hh][Tt][Tt][Pp]([Ss])?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";

@@ -136,6 +136,6 @@ public class CalendarEventsController : ActionResponseControllerBase
         var command = new DeleteCalendarEventCommand(calendarEventId, requestedByMemberId);
         var response = await _mediator.Send(command);
 
-        return GetPutResponse(response);
+        return GetDeleteResponse(response);
     }
 }
