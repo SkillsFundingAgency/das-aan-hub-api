@@ -86,7 +86,6 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
 
         var tokens = new Dictionary<string, string>
         {
-            { "email address", emailAddress },
             { "contact", fullname },
             { "eventname", eventName },
             { "date", date },
@@ -95,6 +94,4 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
 
         return Task.FromResult(JsonSerializer.Serialize(tokens));
     }
-
-
 }
