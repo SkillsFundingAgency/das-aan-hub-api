@@ -82,9 +82,7 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
         var time = calendarEvent!.StartDate.ToString("HH:mm");
         var fullname = member.FullName;
         var eventName = calendarEvent.Title;
-
         var emailAddress = member.Email;
-        var link = "https://www.google.com";  //MFCMFC to be resolved to manageEvents page
 
         var tokens = new Dictionary<string, string>
         {
@@ -92,8 +90,7 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
             { "contact", fullname },
             { "eventname", eventName },
             { "date", date },
-            { "time", time },
-            {"link", link}
+            { "time", time }
         };
 
         return Task.FromResult(JsonSerializer.Serialize(tokens));
