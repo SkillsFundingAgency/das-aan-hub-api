@@ -16,15 +16,31 @@ public class CreateAdminMemberCommandHandlerTests
     [MoqAutoData]
     public async Task Handle_AddsNewAdmin(
         [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+        [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         CreateAdminMemberCommandHandler sut,
         CreateAdminMemberCommand command)
     {
+        membersReadRepository.Setup(p => p.GetMemberByEmail(command.Email)).ReturnsAsync((Member)null);
+
         var response = await sut.Handle(command, new CancellationToken());
         response.Result.MemberId.Should().Be(command.MemberId);
 
         membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId)));
         membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.UserType == MembershipUserType.Admin)));
         auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
+    }
+
+    [Test]
+    [MoqAutoData]
+    public async Task Handle_ExistingAdmin(
+        [Frozen] Mock<IMembersReadRepository> membersReadRepository,
+        CreateAdminMemberCommandHandler sut,
+        CreateAdminMemberCommand command)
+    {
+        membersReadRepository.Setup(p => p.GetMemberByEmail(command.Email)).ReturnsAsync(command);
+
+        var response = await sut.Handle(command, new CancellationToken());
+        response.Result.MemberId.Should().Be(command.MemberId);
     }
 }

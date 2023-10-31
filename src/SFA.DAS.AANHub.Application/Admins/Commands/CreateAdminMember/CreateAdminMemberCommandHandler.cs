@@ -14,19 +14,28 @@ public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMember
     private readonly IAanDataContext _aanDataContext;
     private readonly IAuditWriteRepository _auditWriteRepository;
     private readonly IMembersWriteRepository _membersWriteRepository;
+    private readonly IMembersReadRepository _membersReadRepository;
 
     public CreateAdminMemberCommandHandler(IMembersWriteRepository membersWriteRepository,
-        IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository)
+        IAanDataContext aanDataContext, IAuditWriteRepository auditWriteRepository,
+        IMembersReadRepository membersReadRepository)
     {
         _membersWriteRepository = membersWriteRepository;
         _aanDataContext = aanDataContext;
         _auditWriteRepository = auditWriteRepository;
+        _membersReadRepository = membersReadRepository;
     }
 
     public async Task<ValidatedResponse<CreateMemberCommandResponse>> Handle(CreateAdminMemberCommand command,
         CancellationToken cancellationToken)
     {
         Member member = command;
+
+        //condition to check if the member already exist in the repo.
+        var user = await _membersReadRepository.GetMemberByEmail(member.Email);
+
+        if (user != null)
+            return new ValidatedResponse<CreateMemberCommandResponse>(new CreateMemberCommandResponse(user.Id));
 
         _membersWriteRepository.Create(member);
 
