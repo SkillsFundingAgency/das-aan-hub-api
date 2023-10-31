@@ -82,7 +82,6 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
         var time = calendarEvent!.StartDate.ToString("HH:mm");
         var fullname = member.FullName;
         var eventName = calendarEvent.Title;
-        var emailAddress = member.Email;
 
         var tokens = new Dictionary<string, string>
         {
