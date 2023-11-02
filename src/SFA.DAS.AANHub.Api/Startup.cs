@@ -17,6 +17,7 @@ using SFA.DAS.Api.Common.AppStart;
 using SFA.DAS.Api.Common.Configuration;
 using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
+using SFA.DAS.Telemetry.Startup;
 using Swashbuckle.AspNetCore.Filters;
 
 namespace SFA.DAS.AANHub.Api
@@ -71,7 +72,9 @@ namespace SFA.DAS.AANHub.Api
 
             services.AddHealthChecks();
 
-            services.AddApplicationInsightsTelemetry();
+            services
+                .AddApplicationInsightsTelemetry()
+                .AddTelemetryUriRedaction("firstName,lastName,dateOfBirth,email");
 
             services.AddApiVersioning(opt =>
             {

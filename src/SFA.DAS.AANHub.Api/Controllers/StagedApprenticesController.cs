@@ -26,7 +26,7 @@ public class StagedApprenticesController : ActionResponseControllerBase
     [ProducesResponseType(typeof(GetStagedApprenticeQueryResult), StatusCodes.Status200OK)]
     public async Task<IActionResult> GetStagedApprentice([FromQuery] string lastName, [FromQuery] DateTime dateOfBirth, [FromQuery] string email)
     {
-        _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice by LastName: {lastname}, DateOfBirth: {dateofbirth} and Email: {email}", lastName, dateOfBirth, email);
+        _logger.LogInformation("AAN Hub API: Received command to get StagedApprentice for Email: {email}", email);
 
         var response = await _mediator.Send(new GetStagedApprenticeQuery(lastName, dateOfBirth, email));
         return GetResponse(response);
