@@ -1,7 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -30,5 +30,4 @@ internal class AttendancesReadRepository : IAttendancesReadRepository
             .OrderBy(a => a.CalendarEvent.StartDate);
         return await query.ToListAsync(cancellationToken);
     }
-
 }

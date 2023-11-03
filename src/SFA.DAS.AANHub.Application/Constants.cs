@@ -1,7 +1,11 @@
-﻿namespace SFA.DAS.AANHub.Application;
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.AANHub.Application;
 
 public static class Constants
 {
+
+    [ExcludeFromCodeCoverage]
     public static class RegularExpressions
     {
         public const string UrlRegex = @"^(?:[Hh][Tt][Tt][Pp]([Ss])?:\/\/)?[\w.-]+(?:\.[\w\.-]+)+[\w\-\._~:/?#[\]@!\$&'\(\)\*\+,;=.]+$";
@@ -14,5 +18,11 @@ public static class Constants
     {
         public const string Withdrawn = "withdrawn";
         public const string Deleted = "deleted";
+    }
+
+    public static class NotificationTemplateNames
+    {
+        public const string AANAdminEventUpdate = nameof(AANAdminEventUpdate);
+        public const string AANAdminEventCancel = nameof(AANAdminEventCancel);
     }
 }

@@ -21,7 +21,7 @@ public class GetCalendarEventByIdQueryResult
     public string ContactName { get; set; } = string.Empty;
     public string ContactEmail { get; set; } = string.Empty;
     public bool IsActive { get; set; }
-    public string? CancelReason { get; set; } = null!;
+    public DateTime? LastUpdatedDate { get; set; }
     public List<AttendeeModel> Attendees { get; set; } = null!;
     public List<EventGuestModel> EventGuests { get; set; } = null!;
 
@@ -45,8 +45,7 @@ public class GetCalendarEventByIdQueryResult
             ContactName = source.ContactName,
             ContactEmail = source.ContactEmail,
             IsActive = source.IsActive,
-            CancelReason = source.CancelReason,
-
+            LastUpdatedDate = source.LastUpdatedDate,
             Attendees = source.Attendees.Select(a => (AttendeeModel)a).ToList(),
             EventGuests = source.EventGuests.Select(e => (EventGuestModel)e).ToList(),
         };

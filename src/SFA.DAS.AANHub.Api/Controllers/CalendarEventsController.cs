@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.DeleteCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
@@ -120,5 +121,21 @@ public class CalendarEventsController : ActionResponseControllerBase
         var result = await _mediator.Send(command, cancellationToken);
 
         return GetPutResponse(result);
+    }
+
+    [HttpDelete("{calendarEventId}")]
+    [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> Delete(
+        Guid calendarEventId,
+        [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId)
+    {
+        _logger.LogInformation("AAN Hub API: Received command from Member Id {requestedByMemberId} to DELETE Calendar Event ID {calendarEventId}",
+            requestedByMemberId, calendarEventId);
+
+        var command = new DeleteCalendarEventCommand(calendarEventId, requestedByMemberId);
+        var response = await _mediator.Send(command);
+
+        return GetDeleteResponse(response);
     }
 }

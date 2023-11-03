@@ -1,0 +1,1 @@
+﻿Update CalendarEvent set LastUpdatedDate = CreatedDate where LastUpdatedDate is null
