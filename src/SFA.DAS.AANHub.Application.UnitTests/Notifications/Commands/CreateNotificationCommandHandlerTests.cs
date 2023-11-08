@@ -43,9 +43,9 @@ public class CreateNotificationCommandHandlerTests
             membersReadRepository.Verify(m => m.GetMember(requestedByMember.Id), Times.Once);
             membersReadRepository.Verify(m => m.GetMember(member.Id), Times.Once);
             notificationTemplateReadRepository.Verify(nt => nt.Get(notificationTemplate.Id, It.IsAny<CancellationToken>()), Times.Once);
+
             notificationsWriteRepository.Verify(n => n.Create(It.Is<Notification>(n => n.Tokens.Equals(mockTokenSerialised) && n.IsSystem.Equals(false) && n.CreatedBy.Equals(requestedByMember.Id) && n.MemberId.Equals(member.Id) && n.ReferenceId!.Equals(requestedByMember.Id.ToString()))), Times.Once);
-            //notificationsWriteRepository.Verify(n => n.Create(It.Is<Notification>(n => n.IsSystem.Equals(false))));
-            //notificationsWriteRepository.Verify(n => n.Create(It.Is<Notification>(n => n.CreatedBy.Equals(requestedByMember))));
+
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         };
     }
