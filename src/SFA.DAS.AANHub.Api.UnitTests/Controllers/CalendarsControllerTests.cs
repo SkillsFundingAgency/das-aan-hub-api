@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
+using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.Calendars.Queries.GetCalendars;
 using SFA.DAS.Testing.AutoFixture;
 

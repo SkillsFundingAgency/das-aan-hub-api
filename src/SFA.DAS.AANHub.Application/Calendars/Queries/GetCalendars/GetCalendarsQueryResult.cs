@@ -11,5 +11,4 @@ public class GetCalendarsQueryResult
         Calendars = calendars.Select(r => new CalendarModel(r.Id, r.CalendarName, r.EffectiveFromDate, r.EffectiveToDate, r.Ordering))
     };
 }
-
 public record CalendarModel(int Id, string CalendarName, DateTime EffectiveFrom, DateTime? EffectiveTo, int Ordering);
