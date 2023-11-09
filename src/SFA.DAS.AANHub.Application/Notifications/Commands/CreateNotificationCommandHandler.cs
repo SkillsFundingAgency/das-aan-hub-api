@@ -44,7 +44,7 @@ public class CreateNotificationCommandHandler : IRequestHandler<CreateNotificati
 
     private static Guid CreateNotification(string tokens, Member contactMember, Member requestedByMember, NotificationTemplate notificationTemplate, INotificationsWriteRepository _notificationsWriteRepository)
     {
-        var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), contactMember.Id, notificationTemplate.TemplateName, tokens, requestedByMember.Id, false, null);
+        var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), contactMember.Id, notificationTemplate.TemplateName, tokens, requestedByMember.Id, false, requestedByMember.Id.ToString());
         _notificationsWriteRepository.Create(notification);
         return notification.Id;
     }
