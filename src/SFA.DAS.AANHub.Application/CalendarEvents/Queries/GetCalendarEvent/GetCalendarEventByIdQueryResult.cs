@@ -25,6 +25,9 @@ public class GetCalendarEventByIdQueryResult
     public List<AttendeeModel> Attendees { get; set; } = null!;
     public List<EventGuestModel> EventGuests { get; set; } = null!;
 
+    public int? RegionId { get; set; }
+    public long? Urn { get; set; }
+
     public static implicit operator GetCalendarEventByIdQueryResult(CalendarEvent source)
     {
         if (source is not null) return new()
@@ -48,6 +51,8 @@ public class GetCalendarEventByIdQueryResult
             LastUpdatedDate = source.LastUpdatedDate,
             Attendees = source.Attendees.Select(a => (AttendeeModel)a).ToList(),
             EventGuests = source.EventGuests.Select(e => (EventGuestModel)e).ToList(),
+            RegionId = source.RegionId,
+            Urn = source.Urn
         };
 
         return null!;
