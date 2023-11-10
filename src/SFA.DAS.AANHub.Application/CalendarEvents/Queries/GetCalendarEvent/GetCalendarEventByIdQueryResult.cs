@@ -26,7 +26,6 @@ public class GetCalendarEventByIdQueryResult
     public List<EventGuestModel> EventGuests { get; set; } = null!;
     public int PlannedAttendees { get; set; }
     public DateTime? CreatedDate { get; set; }
-
     public int? RegionId { get; set; }
     public long? Urn { get; set; }
 
