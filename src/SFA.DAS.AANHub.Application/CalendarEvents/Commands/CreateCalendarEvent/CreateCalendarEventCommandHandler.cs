@@ -34,7 +34,7 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
             Action = "Create",
             ActionedBy = request.AdminMemberId,
             AuditTime = DateTime.UtcNow,
-            After = JsonSerializer.Serialize(request),
+            After = JsonSerializer.Serialize(calendarEvent),
             Resource = nameof(CalendarEvent)
         });
 
