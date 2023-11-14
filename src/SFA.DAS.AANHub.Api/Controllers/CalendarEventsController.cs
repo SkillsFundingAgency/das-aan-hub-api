@@ -5,6 +5,7 @@ using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.DeleteCalendarEvent;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvent;
 using SFA.DAS.AANHub.Application.CalendarEvents.Queries.GetCalendarEvents;
 using SFA.DAS.AANHub.Application.Common;
@@ -99,6 +100,25 @@ public class CalendarEventsController : ActionResponseControllerBase
 
         return GetPostResponse(result, new { result.Result?.CalendarEventId });
     }
+
+    [HttpPut("{calendarEventId}")]
+    [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(StatusCodes.Status204NoContent)]
+    public async Task<IActionResult> UpdateCalendarEvent(
+        [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
+        [FromRoute] Guid calendarEventId,
+        [FromBody] PutCalendarEventModel model,
+        CancellationToken cancellationToken)
+    {
+        PutCalendarEventCommand command = model;
+        command.AdminMemberId = requestedByMemberId;
+        command.CalendarEventId = calendarEventId;
+
+        var result = await _mediator.Send(command, cancellationToken);
+
+        return GetPutResponse(result);
+    }
+
 
     [HttpPut("{calendarEventId}/eventguests")]
     [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]

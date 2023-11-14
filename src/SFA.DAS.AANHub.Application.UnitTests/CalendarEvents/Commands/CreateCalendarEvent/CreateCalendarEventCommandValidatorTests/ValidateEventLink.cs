@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Domain.Common;
-using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidator;
+using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
 
