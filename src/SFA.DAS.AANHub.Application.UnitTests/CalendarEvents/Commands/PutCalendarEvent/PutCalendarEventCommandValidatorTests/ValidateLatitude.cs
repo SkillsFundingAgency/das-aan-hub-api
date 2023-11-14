@@ -1,0 +1,43 @@
+﻿using FluentValidation.TestHelper;
+using NUnit.Framework;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
+using SFA.DAS.AANHub.Domain.Common;
+using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
+
+
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutCalendarEvent.PutCalendarEventCommandValidatorTests;
+
+public class ValidateLatitude
+{
+    [TestCase(EventFormat.InPerson, null, false, ErrorConstants.LatitudeMustNotBeEmpty)]
+    [TestCase(EventFormat.InPerson, -91, false, ErrorConstants.LatitudeMustBeValid)]
+    [TestCase(EventFormat.InPerson, 91, false, ErrorConstants.LatitudeMustBeValid)]
+    [TestCase(EventFormat.Hybrid, null, false, ErrorConstants.LatitudeMustNotBeEmpty)]
+    [TestCase(EventFormat.Hybrid, -91, false, ErrorConstants.LatitudeMustBeValid)]
+    [TestCase(EventFormat.Hybrid, 91, false, ErrorConstants.LatitudeMustBeValid)]
+    [TestCase(EventFormat.Online, 0, false, ErrorConstants.LatitudeMustBeEmpty)]
+    [TestCase(EventFormat.InPerson, 0, true, null)]
+    [TestCase(EventFormat.Hybrid, 0, true, null)]
+    public async Task Validate_Latitude_MustBeValidValue(EventFormat eventFormat, double? latitude, bool isValid, string? errorMessage)
+    {
+        var sut = PutCalendarEventCommandValidatorBuilder.Create();
+
+        PutCalendarEventCommand command = new()
+        {
+            AdminMemberId = PutCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            EventFormat = eventFormat,
+            Latitude = latitude
+        };
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+        {
+            result.ShouldNotHaveValidationErrorFor(c => c.Latitude);
+        }
+        else
+        {
+            result.ShouldHaveValidationErrorFor(c => c.Latitude).WithErrorMessage(errorMessage);
+        }
+    }
+}
