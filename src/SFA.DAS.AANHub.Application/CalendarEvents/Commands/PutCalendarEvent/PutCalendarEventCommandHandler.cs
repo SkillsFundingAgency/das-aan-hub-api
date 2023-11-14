@@ -56,12 +56,12 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
                     existingAttendances.Select(x => x.MemberId).ToList(),
                     cancellationToken);
 
-                foreach (var attendance in existingAttendances)
+                foreach (var memberId in existingAttendances.Select(attendance => attendance.MemberId))
                 {
-                    var member = members.First(x => x.Id == attendance.MemberId);
+                    var member = members.First(x => x.Id == memberId);
                     var templateName = Constants.NotificationTemplateNames.AANAdminEventUpdate;
                     var tokens = await GetTokens(existingEvent, member);
-                    var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), attendance.MemberId,
+                    var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), memberId,
                         templateName, tokens, command.AdminMemberId, true, command.CalendarEventId.ToString());
                     _notificationsWriteRepository.Create(notification);
                 }
