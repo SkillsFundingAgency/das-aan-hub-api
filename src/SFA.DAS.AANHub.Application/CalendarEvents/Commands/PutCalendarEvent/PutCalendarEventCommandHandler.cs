@@ -17,14 +17,20 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
     private readonly IMembersReadRepository _membersReadRepository;
     private readonly IAanDataContext _aanDataContext;
 
-    public PutCalendarEventCommandHandler(ICalendarEventsWriteRepository calendarEventWriteRepository, IAuditWriteRepository auditWriteRepository, IAanDataContext aanDataContext, IAttendancesWriteRepository attendancesWriteRepository, INotificationsWriteRepository notificationsWriteRepository, IMembersReadRepository membersReadRepository)
+    public PutCalendarEventCommandHandler(
+        ICalendarEventsWriteRepository calendarEventWriteRepository,
+        IAuditWriteRepository auditWriteRepository,
+        IAttendancesWriteRepository attendancesWriteRepository,
+        INotificationsWriteRepository notificationsWriteRepository,
+        IMembersReadRepository membersReadRepository,
+        IAanDataContext aanDataContext)
     {
         _calendarEventWriteRepository = calendarEventWriteRepository;
         _auditWriteRepository = auditWriteRepository;
-        _aanDataContext = aanDataContext;
         _attendancesWriteRepository = attendancesWriteRepository;
         _notificationsWriteRepository = notificationsWriteRepository;
         _membersReadRepository = membersReadRepository;
+        _aanDataContext = aanDataContext;
     }
 
     public async Task<ValidatedResponse<SuccessCommandResult>> Handle(PutCalendarEventCommand command, CancellationToken cancellationToken)

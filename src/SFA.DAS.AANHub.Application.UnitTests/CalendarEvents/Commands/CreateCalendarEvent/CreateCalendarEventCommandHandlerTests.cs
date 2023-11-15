@@ -48,5 +48,4 @@ public class CreateCalendarEventCommandHandlerTests
     [Test]
     public void ThenInvokesDataContextSaveChanges() =>
         _dataContextMock.Verify(c => c.SaveChangesAsync(_cancellationToken));
-
 }
