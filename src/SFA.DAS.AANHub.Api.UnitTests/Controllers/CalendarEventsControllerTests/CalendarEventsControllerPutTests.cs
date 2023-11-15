@@ -39,7 +39,6 @@ public class CalendarEventsControllerPutTests
     [Test, MoqAutoData]
     public async Task Put_CalendarEvent_Returns204NoContent(
         [Frozen] Mock<IMediator> mediatorMock,
-        [Greedy] CalendarEventsController sut,
         PutCalendarEventModel model,
         Guid requestedByMemberId,
         Guid calendarEventId)

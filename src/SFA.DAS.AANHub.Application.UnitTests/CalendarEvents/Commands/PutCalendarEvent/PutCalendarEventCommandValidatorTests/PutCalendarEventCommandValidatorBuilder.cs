@@ -23,7 +23,11 @@ public class PutCalendarEventCommandValidatorBuilder
     public const string EmployerRegionalChairInactiveMemberId = "2b8a2fc7-bc2b-4639-877f-8b6971341473";
     public const string AdminInactiveMemberId = "78c047a5-3018-444d-8ac0-e6ed0b92abc8";
 
-    public static PutCalendarEventCommandValidator Create() => new PutCalendarEventCommandValidatorBuilder().AddCalendarData().AddRegionData().AddMembers().Create();
+    public const string EventNotFoundId = "c7be8d81-b811-43f2-bd92-e48a2724d7d3";
+    public const string EventIsNotActiveId = "d19b813b-b5f2-40f1-b9f7-fdaf488283b7";
+    public const string EventIsInPastId = "b09c88f7-01b6-48fe-a755-e9591d0da729";
+
+    public static PutCalendarEventCommandValidator Create() => new PutCalendarEventCommandValidatorBuilder().AddCalendarData().AddRegionData().AddMembers().AddEvents().Create();
 }
 
 public static class PutCalendarEventCommandValidatorBuilderExtensions
@@ -133,6 +137,32 @@ public static class PutCalendarEventCommandValidatorBuilderExtensions
             .With(m => m.IsRegionalChair, false)
             .Create();
         builder.MembersRepoMock.Setup(r => r.GetMember(PutCalendarEventCommandValidatorBuilder.ApprenticeActiveMemberId.ToGuid())).ReturnsAsync(apprenticeMember);
+
+        return builder;
+    }
+
+    public static PutCalendarEventCommandValidatorBuilder AddEvents(this PutCalendarEventCommandValidatorBuilder builder)
+    {
+        Fixture fixture = new();
+        fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
+        builder.CalendarEventsRepoMock.Setup(r => r.GetCalendarEvent(PutCalendarEventCommandValidatorBuilder.EventNotFoundId.ToGuid())).ReturnsAsync((CalendarEvent)null);
+
+        var calendarEventNotActive = fixture
+            .Build<CalendarEvent>()
+            .With(m => m.Id, PutCalendarEventCommandValidatorBuilder.EventIsNotActiveId.ToGuid())
+            .With(m => m.StartDate, DateTime.Today.AddDays(1))
+            .With(m => m.IsActive, false)
+            .Create();
+        builder.CalendarEventsRepoMock.Setup(r => r.GetCalendarEvent(PutCalendarEventCommandValidatorBuilder.EventIsNotActiveId.ToGuid())).ReturnsAsync(calendarEventNotActive);
+
+        var calendarEventInPast = fixture
+           .Build<CalendarEvent>()
+           .With(m => m.Id, PutCalendarEventCommandValidatorBuilder.EventIsNotActiveId.ToGuid())
+           .With(m => m.StartDate, DateTime.Today.AddDays(-1))
+           .With(m => m.IsActive, true)
+           .Create();
+        builder.CalendarEventsRepoMock.Setup(r => r.GetCalendarEvent(PutCalendarEventCommandValidatorBuilder.EventIsInPastId.ToGuid())).ReturnsAsync(calendarEventInPast);
 
         return builder;
     }
