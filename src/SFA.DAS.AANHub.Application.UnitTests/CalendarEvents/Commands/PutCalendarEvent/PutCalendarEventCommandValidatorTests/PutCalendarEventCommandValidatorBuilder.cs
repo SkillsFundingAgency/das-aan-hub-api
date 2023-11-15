@@ -146,7 +146,7 @@ public static class PutCalendarEventCommandValidatorBuilderExtensions
         Fixture fixture = new();
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
 
-        builder.CalendarEventsRepoMock.Setup(r => r.GetCalendarEvent(PutCalendarEventCommandValidatorBuilder.EventNotFoundId.ToGuid())).ReturnsAsync((CalendarEvent)null);
+        builder.CalendarEventsRepoMock.Setup(r => r.GetCalendarEvent(PutCalendarEventCommandValidatorBuilder.EventNotFoundId.ToGuid())).ReturnsAsync((CalendarEvent)null!);
 
         var calendarEventNotActive = fixture
             .Build<CalendarEvent>()
