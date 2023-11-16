@@ -30,4 +30,15 @@ internal class AttendancesReadRepository : IAttendancesReadRepository
             .OrderBy(a => a.CalendarEvent.StartDate);
         return await query.ToListAsync(cancellationToken);
     }
+
+    public async Task<List<Attendance>> GetAttendancesByEventId(Guid calendarEventId, CancellationToken cancellationToken)
+    {
+        var query = _aanDataContext
+            .Attendances
+            .AsNoTracking()
+            .Where(a =>
+                a.IsAttending &&
+                a.CalendarEventId == calendarEventId);
+        return await query.ToListAsync(cancellationToken);
+    }
 }

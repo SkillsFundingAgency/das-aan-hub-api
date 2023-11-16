@@ -43,21 +43,21 @@ public class PutCalendarEventCommandHandlerTests
 
         calendarEventsWriteRepository.Setup(x => x.GetCalendarEvent(calendarEventId)).ReturnsAsync(calendarEvent);
 
-        var attendancesWriteRepository = new Mock<IAttendancesWriteRepository>();
+        var attendancesReadRepository = new Mock<IAttendancesReadRepository>();
 
-        attendancesWriteRepository.Setup(x => x.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()))
+        attendancesReadRepository.Setup(x => x.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()))
             .ReturnsAsync(attendances);
 
         membersReadRepository.Setup(x => x.GetMembers(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync(members);
 
-        var sut = new PutCalendarEventCommandHandler(calendarEventsWriteRepository.Object, auditWriteRepository.Object, attendancesWriteRepository.Object, notificationsWriteRepository.Object, membersReadRepository.Object, aanDataContext.Object);
+        var sut = new PutCalendarEventCommandHandler(calendarEventsWriteRepository.Object, auditWriteRepository.Object, attendancesReadRepository.Object, notificationsWriteRepository.Object, membersReadRepository.Object, aanDataContext.Object);
 
         await sut.Handle(command, new CancellationToken());
 
         using (new AssertionScope())
         {
             calendarEventsWriteRepository.Verify(c => c.GetCalendarEvent(calendarEventId), Times.Once);
-            attendancesWriteRepository.Verify(a => a.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()), Times.Once);
+            attendancesReadRepository.Verify(a => a.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()), Times.Once);
             membersReadRepository.Verify(m => m.GetMembers(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Once);
             notificationsWriteRepository.Verify(n => n.Create(It.IsAny<Notification>()), Times.Exactly(attendances.Count));
             auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Once);
@@ -86,16 +86,16 @@ public class PutCalendarEventCommandHandlerTests
 
         calendarEventsWriteRepository.Setup(x => x.GetCalendarEvent(calendarEventId)).ReturnsAsync(calendarEvent);
 
-        var attendancesWriteRepository = new Mock<IAttendancesWriteRepository>();
+        var attendancesReadRepository = new Mock<IAttendancesReadRepository>();
 
-        var sut = new PutCalendarEventCommandHandler(calendarEventsWriteRepository.Object, auditWriteRepository.Object, attendancesWriteRepository.Object, notificationsWriteRepository.Object, membersReadRepository.Object, aanDataContext.Object);
+        var sut = new PutCalendarEventCommandHandler(calendarEventsWriteRepository.Object, auditWriteRepository.Object, attendancesReadRepository.Object, notificationsWriteRepository.Object, membersReadRepository.Object, aanDataContext.Object);
 
         await sut.Handle(command, new CancellationToken());
 
         using (new AssertionScope())
         {
             calendarEventsWriteRepository.Verify(c => c.GetCalendarEvent(calendarEventId), Times.Once);
-            attendancesWriteRepository.Verify(a => a.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()), Times.Never);
+            attendancesReadRepository.Verify(a => a.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()), Times.Never);
             membersReadRepository.Verify(m => m.GetMembers(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Never);
             notificationsWriteRepository.Verify(n => n.Create(It.IsAny<Notification>()), Times.Never);
             auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Once);

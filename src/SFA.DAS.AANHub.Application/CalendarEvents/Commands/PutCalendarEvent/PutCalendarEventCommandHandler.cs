@@ -12,7 +12,7 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
 {
     private readonly ICalendarEventsWriteRepository _calendarEventWriteRepository;
     private readonly IAuditWriteRepository _auditWriteRepository;
-    private readonly IAttendancesWriteRepository _attendancesWriteRepository;
+    private readonly IAttendancesReadRepository _attendancesReadRepository;
     private readonly INotificationsWriteRepository _notificationsWriteRepository;
     private readonly IMembersReadRepository _membersReadRepository;
     private readonly IAanDataContext _aanDataContext;
@@ -20,14 +20,14 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
     public PutCalendarEventCommandHandler(
         ICalendarEventsWriteRepository calendarEventWriteRepository,
         IAuditWriteRepository auditWriteRepository,
-        IAttendancesWriteRepository attendancesWriteRepository,
+        IAttendancesReadRepository attendancesReadRepository,
         INotificationsWriteRepository notificationsWriteRepository,
         IMembersReadRepository membersReadRepository,
         IAanDataContext aanDataContext)
     {
         _calendarEventWriteRepository = calendarEventWriteRepository;
         _auditWriteRepository = auditWriteRepository;
-        _attendancesWriteRepository = attendancesWriteRepository;
+        _attendancesReadRepository = attendancesReadRepository;
         _notificationsWriteRepository = notificationsWriteRepository;
         _membersReadRepository = membersReadRepository;
         _aanDataContext = aanDataContext;
@@ -54,7 +54,7 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
         if (command.SendUpdateEventNotification)
         {
             var existingAttendances =
-                await _attendancesWriteRepository.GetAttendancesByEventId(command.CalendarEventId, cancellationToken);
+                await _attendancesReadRepository.GetAttendancesByEventId(command.CalendarEventId, cancellationToken);
 
             if (existingAttendances.Any())
             {
