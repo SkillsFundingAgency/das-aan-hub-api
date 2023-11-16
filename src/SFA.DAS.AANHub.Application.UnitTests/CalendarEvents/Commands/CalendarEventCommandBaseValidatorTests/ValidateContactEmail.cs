@@ -1,9 +1,9 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutCalendarEvent.PutCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateContactEmail
 {
@@ -15,11 +15,11 @@ public class ValidateContactEmail
     [TestCase(0, "abc@mail.com", true, null)]
     public async Task Validate_ContactEmail_ShouldHaveValidValue(int length, string? contactEmail, bool isValid, string? errorMessage)
     {
-        var sut = PutCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
 
-        PutCalendarEventCommand command = new()
+        CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = PutCalendarEventCommandValidatorBuilderExtensions.ToGuid(PutCalendarEventCommandValidatorBuilder.AdminActiveMemberId),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             ContactEmail = length == 0 ? contactEmail : new string('a', 250) + "@mail.com"
         };
 

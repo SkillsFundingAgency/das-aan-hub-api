@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateEventEndDate
 {
@@ -13,10 +13,10 @@ public class ValidateEventEndDate
     [TestCase(1, true, null)]
     public async Task Validate_EventEndDate_ShouldBeValidValue(int? mins, bool isValid, string? errorMessage)
     {
-        var sut = CreateCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
         CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             StartDate = DateTime.UtcNow.AddDays(-1),
             EndDate = mins switch
             {
@@ -43,11 +43,11 @@ public class ValidateEventEndDate
     [TestCase(1, false)]
     public async Task ShouldBeGreaterThanEqualToStartDate(int addMinsToStartDate, bool isValid)
     {
-        var sut = CreateCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
         var date = DateTime.UtcNow;
         CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             StartDate = date.AddMinutes(addMinsToStartDate),
             EndDate = date
         };

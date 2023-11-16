@@ -3,7 +3,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateCalendarType
 {
@@ -13,9 +13,9 @@ public class ValidateCalendarType
     [TestCase(6, false, ErrorConstants.CalendarTypeIdMustBeValid)]
     public async Task EventCalendarShouldBeValidValue(int calendarId, bool isValid, string? error)
     {
-        CreateCalendarEventCommand command = new() { AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(), CalendarId = calendarId };
+        CreateCalendarEventCommand command = new() { AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(), CalendarId = calendarId };
 
-        var sut = CreateCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
 
         var result = await sut.TestValidateAsync(command);
         if (isValid)

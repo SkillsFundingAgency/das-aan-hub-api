@@ -2,9 +2,9 @@
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
-public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalendarEventCommand>
+public class CalendarEventCommandBaseValidator : AbstractValidator<CreateCalendarEventCommand>
 {
-    public CreateCalendarEventCommandValidator(
+    public CalendarEventCommandBaseValidator(
         ICalendarsReadRepository calendarsReadRepository,
         IRegionsReadRepository regionsReadRepository,
         IMembersReadRepository membersReadRepository)

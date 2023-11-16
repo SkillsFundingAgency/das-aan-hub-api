@@ -1,10 +1,10 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
+using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Domain.Common;
 using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutCalendarEvent.PutCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateEventLink
 {
@@ -22,11 +22,11 @@ public class ValidateEventLink
 
     public async Task Validate_EventLink_MustBeValidValue(EventFormat eventFormat, int length, string? eventLink, bool isValid, string? errorMessage)
     {
-        var sut = PutCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
 
-        PutCalendarEventCommand command = new()
+        CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = PutCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             EventLink = length == 0 ? eventLink : new string('a', length)
         };
