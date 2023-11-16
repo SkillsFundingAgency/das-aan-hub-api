@@ -32,7 +32,6 @@ public class ValidateCalendarEventId
             result
                 .ShouldHaveValidationErrorFor(c => c.CalendarEventId)
                 .WithErrorMessage(errorMessage);
-            // result.ShouldNotHaveValidationErrorFor(c => c.CalendarId);
         }
     }
 }

@@ -22,8 +22,7 @@ public class PutCalendarEventCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] PutCalendarEventModel model,
         [Frozen] List<Member> members,
-        Guid calendarEventId,
-        Guid memberId)
+        Guid calendarEventId)
     {
         var command = (PutCalendarEventCommand)model;
         command.CalendarEventId = calendarEventId;
@@ -67,20 +66,17 @@ public class PutCalendarEventCommandHandlerTests
 
     [Test, RecursiveMoqAutoData]
     public async Task Handle_PutCalendarEvent_SendNotificationFalse(
-    [Frozen] Mock<IAanDataContext> aanDataContext,
-    [Frozen] Mock<ICalendarEventsWriteRepository> calendarEventsWriteRepository,
-    [Frozen] Mock<IMembersReadRepository> membersReadRepository,
-    [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
-    [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-    [Frozen] PutCalendarEventModel model,
-    [Frozen] List<Member> members,
-    Guid calendarEventId,
-    Guid memberId)
+        [Frozen] Mock<IAanDataContext> aanDataContext,
+        [Frozen] Mock<ICalendarEventsWriteRepository> calendarEventsWriteRepository,
+        [Frozen] Mock<IMembersReadRepository> membersReadRepository,
+        [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
+        [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
+        [Frozen] PutCalendarEventModel model,
+        Guid calendarEventId)
     {
         var command = (PutCalendarEventCommand)model;
         command.CalendarEventId = calendarEventId;
         command.SendUpdateEventNotification = false;
-        var singleMemberId = members.First().Id;
 
         var calendarEvent = new CalendarEvent { Id = calendarEventId };
 
