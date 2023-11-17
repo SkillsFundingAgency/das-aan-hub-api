@@ -1,7 +1,7 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data;
 
@@ -21,7 +21,7 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<CalendarEvent> CalendarEvents => Set<CalendarEvent>();
     public DbSet<CalendarEventSummary>? CalendarEventSummaries { get; set; }
     public DbSet<Attendance> Attendances => Set<Attendance>();
-    public DbSet<MembersSummary> MembersSummaries => Set<MembersSummary>();
+    public DbSet<MemberSummary> MembersSummaries => Set<MemberSummary>();
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
     public DbSet<MemberPreference> MemberPreferences => Set<MemberPreference>();

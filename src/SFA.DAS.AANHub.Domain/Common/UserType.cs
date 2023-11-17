@@ -1,3 +1,3 @@
 ﻿namespace SFA.DAS.AANHub.Domain.Common;
 
-public enum UserType { None, Apprentice, Employer, Admin }
+public enum UserType { Apprentice, Employer, Admin }

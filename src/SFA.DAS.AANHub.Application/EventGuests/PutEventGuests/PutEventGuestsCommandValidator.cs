@@ -27,7 +27,7 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
                 return
                     member != null &&
                     member!.Status == MembershipStatusType.Live.ToString() &&
-                    (member.UserType == UserType.Admin.ToString() || member.IsRegionalChair.GetValueOrDefault());
+                    (member.UserType == UserType.Admin || member.IsRegionalChair.GetValueOrDefault());
             })
             .WithMessage(RequestedByMemberIdMustBeAdmin);
 

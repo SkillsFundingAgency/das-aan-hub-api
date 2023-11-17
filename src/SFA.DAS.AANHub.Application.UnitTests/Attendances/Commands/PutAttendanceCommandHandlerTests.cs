@@ -4,6 +4,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -48,10 +49,10 @@ public class PutAttendanceCommandHandlerTests
     }
 
     [Test]
-    [RecursiveMoqInlineAutoData("Employer")]
-    [RecursiveMoqInlineAutoData("Apprentice")]
+    [RecursiveMoqInlineAutoData(UserType.Employer)]
+    [RecursiveMoqInlineAutoData(UserType.Apprentice)]
     public async Task Handle_AttendanceExists_RequestedAttendingStatusIsDifferent_UpdatesStatusAndAddsAudit(
-        string userType,
+        UserType userType,
         [Frozen] Mock<IAanDataContext> aanDataContext,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -101,10 +102,10 @@ public class PutAttendanceCommandHandlerTests
     }
 
     [Test]
-    [RecursiveMoqInlineAutoData("Employer")]
-    [RecursiveMoqInlineAutoData("Apprentice")]
+    [RecursiveMoqInlineAutoData(UserType.Employer)]
+    [RecursiveMoqInlineAutoData(UserType.Apprentice)]
     public async Task Handle_NoMatchingAttendance_RequestedAttendingStatusIsTrue_CreatesAttendanceAndAudit(
-        string userType,
+        UserType userType,
         [Frozen] Mock<IAanDataContext> aanDataContext,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
@@ -185,11 +186,11 @@ public class PutAttendanceCommandHandlerTests
     }
 
     [Test]
-    [RecursiveMoqInlineAutoData(EmailTemplateName.ApprenticeEventSignUpTemplate, "Apprentice")]
-    [RecursiveMoqInlineAutoData(EmailTemplateName.EmployerEventSignUpTemplate, "Employer")]
+    [RecursiveMoqInlineAutoData(EmailTemplateName.ApprenticeEventSignUpTemplate, UserType.Apprentice)]
+    [RecursiveMoqInlineAutoData(EmailTemplateName.EmployerEventSignUpTemplate, UserType.Employer)]
     public async Task Handle_NoMatchingAttendance_RequestedAttendingIsTrue_GetCorrectEmailTemplate(
         string templateName,
-        string userType,
+        UserType userType,
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepository,
@@ -219,12 +220,11 @@ public class PutAttendanceCommandHandlerTests
     }
 
     [Test]
-    [RecursiveMoqInlineAutoData(EmailTemplateName.ApprenticeEventCancelTemplate, "Apprentice")]
-    [RecursiveMoqInlineAutoData(EmailTemplateName.EmployerEventCancelTemplate, "Employer")]
-
+    [RecursiveMoqInlineAutoData(EmailTemplateName.ApprenticeEventCancelTemplate, UserType.Apprentice)]
+    [RecursiveMoqInlineAutoData(EmailTemplateName.EmployerEventCancelTemplate, UserType.Employer)]
     public async Task Handle_MatchingAttendanceFound_RequestedAttendingIsFalse_GetCorrectEmailTemplate(
         string templateName,
-        string userType,
+        UserType userType,
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepository,
@@ -254,9 +254,9 @@ public class PutAttendanceCommandHandlerTests
     }
 
     [Test]
-    [RecursiveMoqInlineAutoData("testValue 1")]
+    [RecursiveMoqInlineAutoData(UserType.Admin)]
     public async Task Handle_WhenUserTypeIsInvalid_GetNotImplementedException(
-        string userType,
+        UserType userType,
         [Frozen] Mock<IAanDataContext> aanDataContext,
         [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,

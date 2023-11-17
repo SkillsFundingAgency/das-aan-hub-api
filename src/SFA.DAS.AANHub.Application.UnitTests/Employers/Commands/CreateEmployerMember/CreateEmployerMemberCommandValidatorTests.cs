@@ -2,9 +2,9 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Employers.Commands.CreateEmployerMember;
 
@@ -20,7 +20,7 @@ public class CreateEmployerMemberCommandValidatorTests
         employersReadRepository = new();
         profilesReadRepository = new();
 
-        profilesReadRepository.Setup(r => r.GetProfilesByUserType(MembershipUserType.Employer)).ReturnsAsync(new List<Profile>
+        profilesReadRepository.Setup(r => r.GetProfilesByUserType(UserType.Employer)).ReturnsAsync(new List<Profile>
         {
             new Profile{ Id = 1 },
             new Profile{ Id = 2 }

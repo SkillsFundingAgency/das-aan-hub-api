@@ -5,6 +5,7 @@ using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
 using SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
 using SFA.DAS.AANHub.Application.Notifications.Commands;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
@@ -14,10 +15,10 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Notifications.Commands;
 public class CreateNotificationCommandValidatorTests
 {
     [Test]
-    [RecursiveMoqInlineAutoData("Apprentice")]
-    [RecursiveMoqInlineAutoData("Employer")]
+    [RecursiveMoqInlineAutoData(UserType.Apprentice)]
+    [RecursiveMoqInlineAutoData(UserType.Employer)]
     public async Task ValidateCreateNotification_IsValid(
-        string userType,
+        UserType userType,
         [Frozen] Mock<IMembersReadRepository> membersReadRepository,
         [Frozen] Mock<INotificationTemplateReadRepository> notificationTemplateReadRepository,
         Member member,
@@ -39,7 +40,7 @@ public class CreateNotificationCommandValidatorTests
     }
 
     [Test, RecursiveMoqAutoData]
-    public async Task ValidateNotificationTemplateId_DoesNotExist_FailsVaidation(Member member)
+    public async Task ValidateNotificationTemplateId_DoesNotExist_FailsValidation(Member member)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id))
@@ -55,7 +56,7 @@ public class CreateNotificationCommandValidatorTests
     }
 
     [Test, RecursiveMoqAutoData]
-    public async Task ValidateNotificationTemplateId_Empty_FailsVaidation(Member member)
+    public async Task ValidateNotificationTemplateId_Empty_FailsValidation(Member member)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(m => m.GetMember(member.Id)).ReturnsAsync(member);

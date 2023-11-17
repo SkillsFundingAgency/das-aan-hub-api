@@ -20,7 +20,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = "NotAdmin",
+            UserType = UserType.Apprentice,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };
@@ -40,7 +40,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = UserType.Admin.ToString(),
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Cancelled.ToString(),
             IsRegionalChair = false
         };
@@ -62,7 +62,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = "NotAdmin",
+            UserType = UserType.Apprentice,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = false
         };
@@ -84,7 +84,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = UserType.Admin.ToString(),
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };
@@ -108,7 +108,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = UserType.Admin.ToString(),
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };
@@ -132,7 +132,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = UserType.Admin.ToString(),
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };
@@ -159,7 +159,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var member = new Member
         {
-            UserType = UserType.Admin.ToString(),
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };

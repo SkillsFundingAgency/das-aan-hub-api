@@ -43,7 +43,7 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, GetMember
 
         var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
 
-        var responseProcessed = response.Select(summary => (MembersSummaryModel)summary).ToList();
+        var responseProcessed = response.Select(summary => (MembersSummaryModel)summary);
 
         var result = new GetMembersQueryResult
         {

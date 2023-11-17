@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Notifications.Queries;
@@ -31,7 +32,7 @@ public class GetNotificationQueryHandler : IRequestHandler<GetNotificationQuery,
     {
         var member = await _membersReadRepository.GetMember(requestedByMemberId);
         long? employerAccountId = null;
-        if (member!.UserType == "Employer") { employerAccountId = await GetEmployerAccountId(requestedByMemberId, cancellationToken); }
+        if (member!.UserType == UserType.Employer) { employerAccountId = await GetEmployerAccountId(requestedByMemberId, cancellationToken); }
         return employerAccountId;
     }
 

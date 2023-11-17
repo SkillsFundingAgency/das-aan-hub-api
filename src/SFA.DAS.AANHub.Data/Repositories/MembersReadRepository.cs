@@ -30,7 +30,7 @@ internal class MembersReadRepository : IMembersReadRepository
         .Include(x => x.Employer)
         .SingleOrDefaultAsync();
 
-    public async Task<List<MembersSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
+    public async Task<List<MemberSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
     {
         var regions = GenerateRegionsSql(options.RegionIds);
         var userType = GenerateUserTypeSql(options.UserType, options.IsRegionalChair);

@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
 
@@ -30,7 +30,7 @@ public class CreateApprenticeMemberCommandValidator : AbstractValidator<CreateAp
             .ForEach(x => x.SetValidator(new ProfileValueValidator()))
             .MustAsync(async (profileValues, _) =>
             {
-                var profiles = await profilesReadRepository.GetProfilesByUserType(MembershipUserType.Apprentice);
+                var profiles = await profilesReadRepository.GetProfilesByUserType(UserType.Apprentice);
                 var profileIds = profiles.Select(profile => profile.Id);
                 var b = profileValues.Select(v => v.Id).All(i => profileIds.Contains(i));
                 return b;

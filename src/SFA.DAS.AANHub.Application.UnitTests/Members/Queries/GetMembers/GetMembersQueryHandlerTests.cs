@@ -25,7 +25,7 @@ public class GetMembersQueryHandlerTests
 
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), cancellationToken))
-        .ReturnsAsync(() => new List<MembersSummary>());
+        .ReturnsAsync(() => new List<MemberSummary>());
 
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
 
@@ -41,7 +41,7 @@ public class GetMembersQueryHandlerTests
 
         var result = await sut.Handle(query, cancellationToken);
 
-        result.Members.Count.Should().Be(0);
+        result.Members.Count().Should().Be(0);
         result.TotalCount.Should().Be(0);
     }
 
@@ -55,10 +55,10 @@ public class GetMembersQueryHandlerTests
         var keyword = "test";
         var userType = new List<MemberUserType> { MemberUserType.Employer };
         var status = new List<MembershipStatusType> { MembershipStatusType.Live };
-        var membersSummary = new MembersSummary();
+        var membersSummary = new MemberSummary();
         var isRegionalChair = false;
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
 
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
         var query = new GetMembersQuery
@@ -75,7 +75,7 @@ public class GetMembersQueryHandlerTests
 
         using (new AssertionScope())
         {
-            result.Members.Count.Should().Be(1);
+            result.Members.Count().Should().Be(1);
             result.TotalCount.Should().Be(0);
             var members = result.Members;
             members.First().Should().BeEquivalentTo(membersSummary, options => options.Excluding(c => c.MemberId).Excluding(c => c.RegionId).Excluding(c => c.TotalCount));
@@ -93,14 +93,14 @@ public class GetMembersQueryHandlerTests
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
-        var membersSummary = new MembersSummary();
+        var membersSummary = new MemberSummary();
         var regionIds = new List<int>();
         var userType = new List<MemberUserType>();
         var status = new List<MembershipStatusType>();
         var isRegionalChair = false;
 
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
 
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
         var query = new GetMembersQuery
@@ -125,14 +125,14 @@ public class GetMembersQueryHandlerTests
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
-        var membersSummary = new MembersSummary();
+        var membersSummary = new MemberSummary();
         var regionIds = new List<int>();
         var userType = new List<MemberUserType>();
         var status = new List<MembershipStatusType>();
         var keyword = "test";
 
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
 
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
         var query = new GetMembersQuery
@@ -155,13 +155,13 @@ public class GetMembersQueryHandlerTests
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
-        var membersSummary = new MembersSummary();
+        var membersSummary = new MemberSummary();
         var regionIds = new List<int>();
         var keyword = "test";
         var isRegionalChair = false;
 
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
 
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
         var query = new GetMembersQuery
@@ -186,10 +186,12 @@ public class GetMembersQueryHandlerTests
     {
         // arrange
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
-        var membersSummary = new MembersSummary();
-        membersSummary.UserType = UserType.Employer.ToString();
+        var membersSummary = new MemberSummary
+        {
+            UserType = UserType.Employer
+        };
         membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new List<MembersSummary> { membersSummary });
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
         var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
         var query = new GetMembersQuery
         {
@@ -200,7 +202,8 @@ public class GetMembersQueryHandlerTests
             Page = 1,
             PageSize = 5
         };
-        List<string> allowableUserType = new List<string>() { UserType.Apprentice.ToString(), UserType.Employer.ToString() };
+
+        List<UserType> allowableUserType = new() { UserType.Apprentice, UserType.Employer };
 
         // act
         var result = await sut.Handle(query, cancellationToken);
@@ -209,7 +212,7 @@ public class GetMembersQueryHandlerTests
         // assert
         using (new AssertionScope())
         {
-            result.Members.Count.Should().BeGreaterThanOrEqualTo(1);
+            result.Members.Count().Should().BeGreaterThanOrEqualTo(1);
             Assert.IsEmpty(membersWithOtherUserRole);
         }
     }

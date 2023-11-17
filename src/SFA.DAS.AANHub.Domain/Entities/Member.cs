@@ -1,11 +1,12 @@
 ﻿using System.Text.Json.Serialization;
+using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Domain.Entities;
 
 public class Member
 {
     public Guid Id { get; set; }
-    public string UserType { get; set; } = null!;
+    public UserType UserType { get; set; }
     public string Email { get; set; } = null!;
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;

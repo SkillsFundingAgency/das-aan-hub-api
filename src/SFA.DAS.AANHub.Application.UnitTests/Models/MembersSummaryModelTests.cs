@@ -7,7 +7,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Models;
 public class MembersSummaryModelTests
 {
     [Test, RecursiveMoqAutoData]
-    public void MembersSummary_IsConvertedTo_MembersSummaryModel_WithPropertiesFromMembersSummary(MembersSummary source)
+    public void MembersSummary_IsConvertedTo_MembersSummaryModel_WithPropertiesFromMembersSummary(MemberSummary source)
     {
         MembersSummaryModel sut = source;
 

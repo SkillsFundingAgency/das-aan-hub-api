@@ -187,7 +187,7 @@ public class DeleteCalendarEventCommandValidatorTests
     {
         return new Member
         {
-            UserType = "Admin",
+            UserType = UserType.Admin,
             Status = MembershipStatusType.Live.ToString(),
             IsRegionalChair = true
         };

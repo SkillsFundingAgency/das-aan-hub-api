@@ -2,6 +2,7 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Application.Profiles.Queries.GetProfiles;
+using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -27,14 +28,14 @@ public class ProfilesController : ActionResponseControllerBase
     /// <returns></returns>
     [HttpGet]
     [Route("{userType}")]
-    [ProducesResponseType(typeof(List<ProfileModel>), StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetProfilesByUserType([FromRoute] string userType)
+    [ProducesResponseType(typeof(GetProfilesByUserTypeQueryResult), StatusCodes.Status200OK)]
+    public async Task<IActionResult> GetProfilesByUserType([FromRoute] UserType userType)
     {
         _logger.LogInformation("AAN Hub API: Received command to get profiles");
 
         var result = await _mediator.Send(new GetProfilesByUserTypeQuery(userType));
 
-        return GetResponse(result);
+        return Ok(result);
     }
 
 }

@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.Testing.AutoFixture;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
@@ -16,7 +17,7 @@ public class CreateEmployerMemberCommandTests
 
         member.Employer.Should().NotBeNull();
         member.Id.Should().Be(sut.MemberId);
-        member.UserType.Should().Be(MembershipUserType.Employer);
+        member.UserType.Should().Be(UserType.Employer);
         member.Status.Should().Be(MembershipStatus.Live);
         member.Email.Should().Be(sut.Email);
         member.FirstName.Should().Be(sut.FirstName);

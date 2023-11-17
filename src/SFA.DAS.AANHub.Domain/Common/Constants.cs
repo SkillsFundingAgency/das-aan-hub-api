@@ -14,13 +14,6 @@ public static class Constants
         public const string Deleted = nameof(Deleted);
     }
 
-    public static class MembershipUserType
-    {
-        public static readonly string Apprentice = UserType.Apprentice.ToString();
-        public static readonly string Employer = UserType.Employer.ToString();
-        public static readonly string Admin = UserType.Admin.ToString();
-    }
-
     public static class CalendarEvents
     {
         public static readonly int PageSize = 5;
@@ -36,7 +29,7 @@ public static class Constants
     {
         public static readonly int PageSize = 30;
     }
-  
+
     public static class EmailTemplateName
     {
         public const string ApprenticeOnboardingTemplate = "AANApprenticeOnboarding";

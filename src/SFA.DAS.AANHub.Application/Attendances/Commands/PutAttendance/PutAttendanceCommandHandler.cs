@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
@@ -6,7 +7,6 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
-using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
@@ -111,10 +111,10 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     {
         return (command.IsAttending, member.UserType) switch
         {
-            (true, "Apprentice") => EmailTemplateName.ApprenticeEventSignUpTemplate,
-            (false, "Apprentice") => EmailTemplateName.ApprenticeEventCancelTemplate,
-            (true, "Employer") => EmailTemplateName.EmployerEventSignUpTemplate,
-            (false, "Employer") => EmailTemplateName.EmployerEventCancelTemplate,
+            (true, UserType.Apprentice) => EmailTemplateName.ApprenticeEventSignUpTemplate,
+            (false, UserType.Apprentice) => EmailTemplateName.ApprenticeEventCancelTemplate,
+            (true, UserType.Employer) => EmailTemplateName.EmployerEventSignUpTemplate,
+            (false, UserType.Employer) => EmailTemplateName.EmployerEventCancelTemplate,
             _ => throw new NotImplementedException()
         };
     }

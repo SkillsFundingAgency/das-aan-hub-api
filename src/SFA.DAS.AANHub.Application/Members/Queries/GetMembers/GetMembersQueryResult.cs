@@ -5,5 +5,5 @@ public class GetMembersQueryResult
     public int PageSize { get; set; }
     public int TotalPages { get; set; }
     public int TotalCount { get; set; }
-    public List<MembersSummaryModel> Members { get; set; } = new List<MembersSummaryModel>();
+    public IEnumerable<MembersSummaryModel> Members { get; set; } = Enumerable.Empty<MembersSummaryModel>();
 }

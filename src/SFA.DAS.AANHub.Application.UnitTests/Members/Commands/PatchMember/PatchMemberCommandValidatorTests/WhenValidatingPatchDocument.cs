@@ -1,7 +1,9 @@
-﻿using FluentValidation.TestHelper;
+﻿using AutoFixture.NUnit3;
+using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Members.Commands.PatchMember.PatchMemberCommandValidatorTests;
@@ -68,13 +70,13 @@ public class WhenValidatingPatchDocument
         }
     }
 
-    [Test]
-    public async Task ThenOnlyAllowableFieldsCanHaveOperation()
+    [Test, AutoData]
+    public async Task ThenOnlyAllowableFieldsCanHaveOperation(UserType userType)
     {
         Mock<IMembersReadRepository> repositoryMock = new();
         PatchMemberCommandValidator sut = new(repositoryMock.Object);
         PatchMemberCommand target = new();
-        for (int i = 0; i < 10; i++) target.PatchDoc.Replace(f => f.UserType, i.ToString());
+        target.PatchDoc.Replace(f => f.UserType, userType);
 
         var result = await sut.TestValidateAsync(target);
 

@@ -2,9 +2,9 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Commands;
 
@@ -20,7 +20,7 @@ public class CreateApprenticeMemberCommandValidatorTests
         apprenticesReadRepository = new();
 
         profilesReadRepository = new();
-        profilesReadRepository.Setup(r => r.GetProfilesByUserType(MembershipUserType.Apprentice)).ReturnsAsync(new List<Profile>
+        profilesReadRepository.Setup(r => r.GetProfilesByUserType(UserType.Apprentice)).ReturnsAsync(new List<Profile>
         {
             new Profile{ Id = 1 },
             new Profile{ Id = 2 }

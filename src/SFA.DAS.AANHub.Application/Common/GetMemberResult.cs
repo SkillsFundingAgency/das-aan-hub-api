@@ -1,4 +1,5 @@
-﻿using SFA.DAS.AANHub.Domain.Entities;
+﻿using SFA.DAS.AANHub.Domain.Common;
+using SFA.DAS.AANHub.Domain.Entities;
 
 namespace SFA.DAS.AANHub.Application.Common;
 
@@ -11,7 +12,7 @@ public class GetMemberResult
     public string Status { get; set; } = null!;
     public string? OrganisationName { get; set; }
     public int? RegionId { get; set; }
-    public string UserType { get; set; } = null!;
+    public UserType UserType { get; set; }
     public DateTime JoinedDate { get; set; }
     public DateTime? EndDate { get; set; }
     public DateTime LastUpdatedDate { get; set; }
