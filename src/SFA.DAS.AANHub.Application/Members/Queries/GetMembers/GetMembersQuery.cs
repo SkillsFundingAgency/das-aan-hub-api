@@ -5,9 +5,9 @@ namespace SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 
 public class GetMembersQuery : IRequest<GetMembersQueryResult>
 {
-    public List<MemberUserType> UserType { get; set; } = new List<MemberUserType>();
+    public List<UserType> UserTypes { get; set; } = new();
     public bool? IsRegionalChair { get; set; }
-    public List<int> RegionIds { get; set; } = new List<int>();
+    public List<int> RegionIds { get; set; } = new();
     public string? Keyword { get; set; }
     public int Page { get; set; } = 1;
 

@@ -24,7 +24,7 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, GetMember
         var options = new GetMembersOptions
         {
             Keyword = ProcessedKeyword(query.Keyword),
-            UserType = query.UserType,
+            UserTypes = query.UserTypes,
             IsRegionalChair = query.IsRegionalChair,
             RegionIds = query.RegionIds,
             Page = page,

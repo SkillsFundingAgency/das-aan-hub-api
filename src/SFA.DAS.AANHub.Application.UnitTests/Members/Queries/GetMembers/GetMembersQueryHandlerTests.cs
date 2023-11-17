@@ -18,7 +18,7 @@ public class GetMembersQueryHandlerTests
     public async Task Handle_MembersNotFound_ReturnsEmptyList(
         List<int> regionIds,
         string keyword,
-        List<MemberUserType> userType,
+        List<UserType> userTypes,
         CancellationToken cancellationToken
      )
     {
@@ -32,7 +32,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = keyword,
-            UserType = userType,
+            UserTypes = userTypes,
             IsRegionalChair = null,
             RegionIds = regionIds,
             Page = 1,
@@ -53,7 +53,7 @@ public class GetMembersQueryHandlerTests
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var regionIds = new List<int> { 1 };
         var keyword = "test";
-        var userType = new List<MemberUserType> { MemberUserType.Employer };
+        var userType = new List<UserType> { UserType.Employer };
         var status = new List<MembershipStatusType> { MembershipStatusType.Live };
         var membersSummary = new MemberSummary();
         var isRegionalChair = false;
@@ -64,7 +64,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = keyword,
-            UserType = userType,
+            UserTypes = userType,
             IsRegionalChair = isRegionalChair,
             RegionIds = regionIds,
             Page = 1,
@@ -95,7 +95,7 @@ public class GetMembersQueryHandlerTests
         var cancellationToken = new CancellationToken();
         var membersSummary = new MemberSummary();
         var regionIds = new List<int>();
-        var userType = new List<MemberUserType>();
+        var userTypes = new List<UserType>();
         var status = new List<MembershipStatusType>();
         var isRegionalChair = false;
 
@@ -106,7 +106,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = keyword,
-            UserType = userType,
+            UserTypes = userTypes,
             IsRegionalChair = isRegionalChair,
             RegionIds = regionIds,
             Page = 1,
@@ -127,7 +127,7 @@ public class GetMembersQueryHandlerTests
         var cancellationToken = new CancellationToken();
         var membersSummary = new MemberSummary();
         var regionIds = new List<int>();
-        var userType = new List<MemberUserType>();
+        var userTypes = new List<UserType>();
         var status = new List<MembershipStatusType>();
         var keyword = "test";
 
@@ -138,7 +138,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = keyword,
-            UserType = userType,
+            UserTypes = userTypes,
             IsRegionalChair = isRegionalChair,
             RegionIds = regionIds,
             Page = 1,
@@ -151,7 +151,7 @@ public class GetMembersQueryHandlerTests
     }
 
     [Test, TestCaseSource(nameof(_Data))]
-    public async Task Handle_UserType_CheckUserTypeExpected(List<MemberUserType> userType)
+    public async Task Handle_UserType_CheckUserTypeExpected(List<UserType> userTypes)
     {
         var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
         var cancellationToken = new CancellationToken();
@@ -167,7 +167,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = keyword,
-            UserType = userType,
+            UserTypes = userTypes,
             IsRegionalChair = isRegionalChair,
             RegionIds = regionIds,
             Page = 1,
@@ -176,7 +176,7 @@ public class GetMembersQueryHandlerTests
 
         await sut.Handle(query, cancellationToken);
         membersReadRepositoryMock.Verify(x => x.GetMembers(
-            It.Is<GetMembersOptions>(c => c.UserType == userType), cancellationToken), Times.Once);
+            It.Is<GetMembersOptions>(c => c.UserTypes == userTypes), cancellationToken), Times.Once);
     }
 
     [Test, RecursiveMoqAutoData]
@@ -196,7 +196,7 @@ public class GetMembersQueryHandlerTests
         var query = new GetMembersQuery
         {
             Keyword = string.Empty,
-            UserType = new List<MemberUserType>(),
+            UserTypes = new List<UserType>(),
             IsRegionalChair = null,
             RegionIds = new List<int>(),
             Page = 1,
@@ -220,6 +220,6 @@ public class GetMembersQueryHandlerTests
     private static readonly object?[] _Data =
     {
       null,
-      new object[] {new List<MemberUserType> { MemberUserType.Employer} }
+      new object[] {new List<UserType> { UserType.Employer} }
     };
 }

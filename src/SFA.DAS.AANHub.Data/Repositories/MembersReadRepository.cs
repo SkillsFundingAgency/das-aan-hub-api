@@ -33,7 +33,7 @@ internal class MembersReadRepository : IMembersReadRepository
     public async Task<List<MemberSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
     {
         var regions = GenerateRegionsSql(options.RegionIds);
-        var userType = GenerateUserTypeSql(options.UserType, options.IsRegionalChair);
+        var userType = GenerateUserTypeSql(options.UserTypes, options.IsRegionalChair);
         var keywordSql = GenerateKeywordSql(options.Keyword?.Trim());
 
         var sql = $@"SELECT Mem.[Id] AS MemberId
@@ -101,20 +101,20 @@ internal class MembersReadRepository : IMembersReadRepository
         }
     }
 
-    private static string GenerateUserTypeSql(List<MemberUserType> userType, bool? isRegionalChair)
+    private static string GenerateUserTypeSql(List<UserType> userTypes, bool? isRegionalChair)
     {
         string subSqlQuery = string.Empty;
-        if (userType != null && userType.Count > 0)
+        if (userTypes != null && userTypes.Count > 0)
         {
             string isRegionalQuery = (isRegionalChair is not null && isRegionalChair.Value) ? " OR Mem.[IsRegionalChair] = 1 " : string.Empty;
-            switch (userType.Count)
+            switch (userTypes.Count)
             {
                 case 1:
-                    subSqlQuery = $" (Mem.[UserType] = '{userType[0]}' {isRegionalQuery} )";
+                    subSqlQuery = $" (Mem.[UserType] = '{userTypes[0]}' {isRegionalQuery} )";
                     break;
                 default:
                     subSqlQuery = " (Mem.[UserType] IN ('";
-                    subSqlQuery += string.Join("','", userType.ToList());
+                    subSqlQuery += string.Join("','", userTypes.ToList());
                     subSqlQuery += "')  " + isRegionalQuery + " )";
                     break;
             }

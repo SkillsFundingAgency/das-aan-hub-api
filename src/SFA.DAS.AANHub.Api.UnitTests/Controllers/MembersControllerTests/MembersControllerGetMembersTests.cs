@@ -18,7 +18,7 @@ public class MembersControllerGetMembersTests
     public async Task Get_InvokesQueryHandler(
        [Frozen] Mock<IMediator> mediatorMock,
        [Greedy] MembersController sut,
-       List<MemberUserType> userType,
+       List<UserType> userType,
        bool? isRegionalChair,
        List<int> regionIds,
        string keyword,
@@ -42,19 +42,19 @@ public class MembersControllerGetMembersTests
     public async Task Get_HandlerReturnsNullResult_ReturnsEmptyResultResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,
-        List<MemberUserType> userType,
+        List<UserType> userTypes,
         bool? isRegionalChair,
         List<int> regionIds,
         string keyword,
         CancellationToken cancellationToken)
     {
         var emptyResponse = (GetMembersQueryResult?)null;
-        mediatorMock.Setup(m => m.Send(It.Is<GetMembersQuery>(q => q.UserType == userType), It.IsAny<CancellationToken>()))!
+        mediatorMock.Setup(m => m.Send(It.Is<GetMembersQuery>(q => q.UserTypes == userTypes), It.IsAny<CancellationToken>()))!
                     .ReturnsAsync(emptyResponse);
 
         var getMembersModel = new GetMembersModel
         {
-            UserType = userType,
+            UserType = userTypes,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -69,7 +69,7 @@ public class MembersControllerGetMembersTests
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] MembersController sut,
         GetMembersQueryResult queryResult,
-        List<MemberUserType> userType,
+        List<UserType> userTypes,
         bool? isRegionalChair,
         List<int> regionIds,
         string keyword,
@@ -81,7 +81,7 @@ public class MembersControllerGetMembersTests
 
         var getMembersModel = new GetMembersModel
         {
-            UserType = userType,
+            UserType = userTypes,
             IsRegionalChair = isRegionalChair,
             RegionId = regionIds,
             Keyword = keyword
@@ -113,7 +113,7 @@ public class MembersControllerGetMembersTests
 
         var getMembersModel = new GetMembersModel
         {
-            UserType = new List<MemberUserType>(),
+            UserType = new List<UserType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,
@@ -141,7 +141,7 @@ public class MembersControllerGetMembersTests
 
         var getMembersModel = new GetMembersModel
         {
-            UserType = new List<MemberUserType>(),
+            UserType = new List<UserType>(),
             IsRegionalChair = null,
             RegionId = new List<int>(),
             Keyword = string.Empty,
