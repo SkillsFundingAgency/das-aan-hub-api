@@ -8,9 +8,9 @@ namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutCalend
 public class ValidateCalendarEventId
 {
     [TestCase("00000000-0000-0000-0000-000000000000", false, ErrorConstants.EventIdNotSuppliedMessage)]
-    [TestCase("c7be8d81-b811-43f2-bd92-e48a2724d7d3", false, ErrorConstants.EventNotFoundMessage)]
-    [TestCase("d19b813b-b5f2-40f1-b9f7-fdaf488283b7", false, ErrorConstants.EventNotActiveMessage)]
-    [TestCase("b09c88f7-01b6-48fe-a755-e9591d0da729", false, ErrorConstants.EventInPastMessage)]
+    [TestCase(PutCalendarEventCommandValidatorBuilder.EventNotFoundId, false, ErrorConstants.EventNotFoundMessage)]
+    [TestCase(PutCalendarEventCommandValidatorBuilder.EventIsNotActiveId, false, ErrorConstants.EventNotActiveMessage)]
+    [TestCase(PutCalendarEventCommandValidatorBuilder.EventIsInPastId, false, ErrorConstants.EventInPastMessage)]
     public async Task Validate_CalendarEventId_ShouldBeValidValue(string calendarEventId, bool isValid, string? errorMessage)
     {
         PutCalendarEventCommand command = new()
