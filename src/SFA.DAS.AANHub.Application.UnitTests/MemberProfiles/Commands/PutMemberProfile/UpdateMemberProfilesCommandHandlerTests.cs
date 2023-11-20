@@ -12,25 +12,6 @@ namespace SFA.DAS.AANHub.Application.UnitTests.MemberProfiles.Commands.PutMember
 public class UpdateMemberProfilesCommandHandlerTests
 {
     [Test, MoqAutoData]
-    public async Task Handle_NoMatchingMemberUpdatesNothing(
-        [Frozen] Mock<IAanDataContext> aanDataContext,
-        [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
-        [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
-        UpdateMemberProfilesCommandHandler sut)
-    {
-        Member existingMember = new();
-        existingMember.Id = Guid.NewGuid();
-        UpdateMemberProfilesCommand command = new(existingMember.Id, existingMember.Id, new List<UpdateProfileModel>(), new List<UpdatePreferenceModel>());
-        membersWriteRepository.Setup(x => x.Get(existingMember.Id)).ReturnsAsync(() => null);
-
-        await sut.Handle(command, new CancellationToken());
-
-        membersWriteRepository.Verify(p => p.Create(It.IsAny<Member>()), Times.Never);
-        auditWriteRepository.Verify(p => p.Create(It.IsAny<Audit>()), Times.Never);
-        aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
-    }
-
-    [Test, MoqAutoData]
     public async Task Handle_MatchingMemberUpdatesProfilesAndPreferences(
         [Frozen] Mock<IAanDataContext> aanDataContext,
         [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
@@ -48,9 +29,9 @@ public class UpdateMemberProfilesCommandHandlerTests
 
         var updateProfileModel = new List<UpdateProfileModel>()
         {
-            new UpdateProfileModel { ProfileId = 41, Value = "UpdatedValue" },
-            new UpdateProfileModel { ProfileId = 43, Value = "ToBeInsertedValue" },
-            new UpdateProfileModel { ProfileId = 44, Value = null }
+            new UpdateProfileModel { Id = 41, Value = "UpdatedValue" },
+            new UpdateProfileModel { Id = 42, Value = "ToBeInsertedValue" },
+            new UpdateProfileModel { Id = 44, Value = null }
         };
 
         existingMember.MemberPreferences = new List<MemberPreference>()
@@ -61,11 +42,11 @@ public class UpdateMemberProfilesCommandHandlerTests
 
         var updatePreferenceModel = new List<UpdatePreferenceModel>()
         {
-            new UpdatePreferenceModel { PreferenceId = 1, Value = false },
-            new UpdatePreferenceModel { PreferenceId = 2, Value = true }
+            new UpdatePreferenceModel { Id = 1, Value = false },
+            new UpdatePreferenceModel { Id = 2, Value = true }
         };
 
-        UpdateMemberProfilesCommand command = new(existingMember.Id, existingMember.Id, updateProfileModel, updatePreferenceModel);
+        UpdateMemberProfilesCommand command = new(existingMember.Id, updateProfileModel, updatePreferenceModel);
 
         membersWriteRepository.Setup(x => x.Get(existingMember.Id)).ReturnsAsync(() => existingMember);
 
@@ -73,14 +54,17 @@ public class UpdateMemberProfilesCommandHandlerTests
 
         membersWriteRepository.Verify(p => p.Create(It.IsAny<Member>()), Times.Never);
         aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
-
-        var serializedExistingMember = JsonSerializer.Serialize(existingMember);
+        var serializedExistingMemberProfile = JsonSerializer.Serialize(new List<MemberProfile>()
+        {   new MemberProfile { ProfileId = 41, ProfileValue = "ToBeUpdated" },
+            new MemberProfile { ProfileId = 42, ProfileValue = "NotToBeUpdated" },
+            new MemberProfile { ProfileId = 44, ProfileValue = "ToBeSetToNull" }
+        });
         auditWriteRepository.Verify(a => a.Create(
                 It.Is<Audit>(
                     a => a.Action == "Put"
-                    && a.After == serializedExistingMember
-                    && a.ActionedBy == command.RequestedByMemberId
-                    && a.Resource == nameof(Member))),
+                    && a.Before == serializedExistingMemberProfile
+                    && a.ActionedBy == existingMember.Id
+                    && a.Resource == nameof(MemberProfile))),
                 Times.Once);
     }
 }

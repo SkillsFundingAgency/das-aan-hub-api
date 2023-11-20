@@ -42,11 +42,11 @@ public class MemberProfilesController : ActionResponseControllerBase
     [ProducesResponseType(typeof(SuccessCommandResult), StatusCodes.Status400BadRequest)]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     public async Task<IActionResult> PutMemberProfile(
-            [FromRoute] Guid memberId,
-            [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
-            [FromBody] UpdateMemberProfileModel model, CancellationToken cancellationToken)
+        [FromRoute] Guid memberId,
+        [FromBody] UpdateMemberProfileModel model,
+        CancellationToken cancellationToken)
     {
-        UpdateMemberProfilesCommand command = new(memberId, requestedByMemberId, model.Profiles, model.Preferences);
+        UpdateMemberProfilesCommand command = new(memberId, model.Profiles, model.Preferences);
         var response = await _mediator.Send(command, cancellationToken);
 
         return GetPutResponse(response);

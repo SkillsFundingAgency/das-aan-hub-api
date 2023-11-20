@@ -31,55 +31,66 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
     {
         var existingMember = await _membersWriteRepository.Get(command.MemberId);
 
-        if (existingMember != null) return await UpdateMemberProfile(existingMember, command, cancellationToken);
-        else return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult(false));
-    }
+        if (command.MemberPreferences.Any()) UpdatePreferences(command.MemberPreferences, existingMember!);
 
-    private async Task<ValidatedResponse<SuccessCommandResult>> UpdateMemberProfile(
-        Member existingMember,
-        UpdateMemberProfilesCommand command,
-        CancellationToken token)
-    {
-        var audit = new Audit()
-        {
-            Action = "Put",
-            Before = JsonSerializer.Serialize(existingMember),
-            ActionedBy = command.RequestedByMemberId,
-            AuditTime = _dateTimeProvider.Now,
-            Resource = nameof(Member),
-        };
+        if (command.MemberProfiles.Any()) UpdateMemberProfile(command.MemberProfiles, existingMember!);
 
-        command.Profiles.ToList().ForEach(p =>
-        {
-            var memberProfile = existingMember.MemberProfiles.Find(x => x.ProfileId == p.ProfileId);
-            if (memberProfile != null) memberProfile.ProfileValue = p.Value!;
-            else InsertMemberProfile(existingMember, p.ProfileId, p.Value);
-
-        });
-
-        command.Preferences.ToList().ForEach(p =>
-        {
-            var preference = existingMember.MemberPreferences.Find(x => x.PreferenceId == p.PreferenceId);
-            if (preference != null) preference.AllowSharing = p.Value;
-            else InsertMemberPreference(existingMember, p.PreferenceId, p.Value);
-
-        });
-
-        audit.After = JsonSerializer.Serialize(existingMember);
-        _auditWriteRepository.Create(audit);
-
-        await _aanDataContext.SaveChangesAsync(token);
+        await _aanDataContext.SaveChangesAsync(cancellationToken);
 
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
     }
 
-    private static void InsertMemberProfile(Member existingMember, int profileId, string? profileValue)
+    private void UpdateMemberProfile(IEnumerable<UpdateProfileModel> profiles, Member existingMember)
     {
-        existingMember.MemberProfiles.Add(new MemberProfile() { Member = existingMember, ProfileId = profileId, ProfileValue = profileValue! });
+        var audit = new Audit()
+        {
+            Action = "Put",
+            Before = JsonSerializer.Serialize(existingMember.MemberProfiles),
+            ActionedBy = existingMember.Id,
+            AuditTime = _dateTimeProvider.Now,
+            Resource = nameof(MemberProfile),
+        };
+
+        foreach (var profile in profiles)
+        {
+            var memberProfile = existingMember.MemberProfiles.FirstOrDefault(x => x.ProfileId == profile.Id);
+            if (string.IsNullOrWhiteSpace(profile.Value) && memberProfile != null)
+            {
+                existingMember.MemberProfiles.Remove(memberProfile);
+            }
+            else if (!string.IsNullOrWhiteSpace(profile.Value) && memberProfile != null)
+            {
+                memberProfile.ProfileValue = profile.Value;
+            }
+            else if (!string.IsNullOrWhiteSpace(profile.Value) && memberProfile == null)
+            {
+                var newProfile = new MemberProfile() { Member = existingMember, ProfileId = profile.Id, ProfileValue = profile.Value! };
+                existingMember.MemberProfiles.Add(newProfile);
+            }
+        }
+
+        audit.After = JsonSerializer.Serialize(existingMember.MemberProfiles);
+        _auditWriteRepository.Create(audit);
     }
 
-    private static void InsertMemberPreference(Member existingMember, int preferenceId, bool profileValue)
+    public void UpdatePreferences(IEnumerable<UpdatePreferenceModel> preferences, Member member)
     {
-        existingMember.MemberPreferences.Add(new MemberPreference() { Member = existingMember, PreferenceId = preferenceId, AllowSharing = profileValue });
+        var audit = new Audit()
+        {
+            Action = "Put",
+            Before = JsonSerializer.Serialize(member.MemberPreferences),
+            ActionedBy = member.Id,
+            AuditTime = _dateTimeProvider.Now,
+            Resource = nameof(MemberPreference),
+        };
+
+        foreach (var preference in preferences)
+        {
+            var existingPreference = member.MemberPreferences.Single(x => x.PreferenceId == preference.Id);
+            existingPreference.AllowSharing = preference.Value;
+        }
+
+        audit.After = JsonSerializer.Serialize(member.MemberPreferences);
+        _auditWriteRepository.Create(audit);
     }
 }

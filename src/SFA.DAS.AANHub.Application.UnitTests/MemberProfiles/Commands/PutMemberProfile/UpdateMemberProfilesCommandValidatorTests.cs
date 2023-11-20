@@ -1,7 +1,9 @@
 ﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
 using SFA.DAS.AANHub.Application.MemberProfiles.Commands.PutMemberProfile;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
@@ -37,7 +39,7 @@ public class UpdateMemberProfilesCommandValidatorTests
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(UpdateMemberProfilesCommandValidator.MemberIdNotRecognisedErrorMessage);
+        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
     }
 
     [Test, MoqAutoData]
@@ -46,7 +48,7 @@ public class UpdateMemberProfilesCommandValidatorTests
         UpdateMemberProfilesCommand command)
     {
         membersReadRepository.Setup(m => m.GetMember(command.MemberId))
-                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = MembershipStatus.Live });
+                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = MembershipStatus.Live, UserType = MemberUserType.Apprentice.ToString() });
 
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
@@ -61,16 +63,17 @@ public class UpdateMemberProfilesCommandValidatorTests
     [MoqInlineAutoData(MembershipStatus.Deleted)]
     public async Task Validate_ExistingMemberStatus_ErrorNoError(
         string membershipStatus,
+        MemberUserType memberUserType,
         Mock<IMembersReadRepository> membersReadRepository,
         UpdateMemberProfilesCommand command)
     {
         membersReadRepository.Setup(m => m.GetMember(It.IsAny<Guid>()))
-                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = membershipStatus });
+                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = membershipStatus, UserType = memberUserType.ToString() });
 
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
 
         if (membershipStatus == MembershipStatus.Live) result.ShouldNotHaveValidationErrorFor(c => c.MemberId);
-        else result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(UpdateMemberProfilesCommandValidator.MemberStatusIsNotLIVE);
+        else result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
     }
 }

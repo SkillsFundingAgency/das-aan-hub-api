@@ -28,7 +28,7 @@ public class MemberProfilesControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<UpdateMemberProfilesCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutMemberProfile(Guid.NewGuid(), Guid.NewGuid(), new UpdateMemberProfileModel(), cancellationToken) as BadRequestObjectResult;
+        var result = await sut.PutMemberProfile(Guid.NewGuid(), new UpdateMemberProfileModel(), cancellationToken) as BadRequestObjectResult;
 
         result!.StatusCode.Should().Be(StatusCodes.Status400BadRequest);
 
@@ -46,7 +46,7 @@ public class MemberProfilesControllerPutTests
         mediatorMock.Setup(m => m.Send(It.IsAny<UpdateMemberProfilesCommand>(),
             It.IsAny<CancellationToken>())).ReturnsAsync(response);
 
-        var result = await sut.PutMemberProfile(Guid.NewGuid(), Guid.NewGuid(), new UpdateMemberProfileModel(), cancellationToken) as NoContentResult;
+        var result = await sut.PutMemberProfile(Guid.NewGuid(), new UpdateMemberProfileModel(), cancellationToken) as NoContentResult;
 
         result?.StatusCode.Should().Be(StatusCodes.Status204NoContent);
     }
