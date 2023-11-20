@@ -109,9 +109,9 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
             case 0:
                 return "";
             case 1:
-                return $"AND CE.RegionId = {regions.First()}";
+                return $"AND ISNULL(CE.RegionId,0) = {regions.First()}";
             default:
-                var eventTypes = "AND CE.RegionId IN (";
+                var eventTypes = "AND ISNULL(CE.RegionId,0) IN (";
                 eventTypes += string.Join(",", regions.ToList());
                 eventTypes += ")";
                 return eventTypes;
