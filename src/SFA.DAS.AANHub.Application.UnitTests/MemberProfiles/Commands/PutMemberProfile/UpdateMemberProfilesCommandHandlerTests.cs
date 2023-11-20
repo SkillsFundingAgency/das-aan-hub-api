@@ -31,7 +31,8 @@ public class UpdateMemberProfilesCommandHandlerTests
         {
             new UpdateProfileModel { Id = 41, Value = "UpdatedValue" },
             new UpdateProfileModel { Id = 42, Value = "ToBeInsertedValue" },
-            new UpdateProfileModel { Id = 44, Value = null }
+            new UpdateProfileModel { Id = 44, Value = null },
+            new UpdateProfileModel { Id = 45, Value = "ToBeNotNull" }
         };
 
         existingMember.MemberPreferences = new List<MemberPreference>()

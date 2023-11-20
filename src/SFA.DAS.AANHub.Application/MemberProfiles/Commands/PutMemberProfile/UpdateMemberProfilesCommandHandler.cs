@@ -53,19 +53,22 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
 
         foreach (var profile in profiles)
         {
-            var memberProfile = existingMember.MemberProfiles.FirstOrDefault(x => x.ProfileId == profile.Id);
+            var memberProfile = existingMember.MemberProfiles.Find(x => x.ProfileId == profile.Id);
             if (string.IsNullOrWhiteSpace(profile.Value) && memberProfile != null)
             {
                 existingMember.MemberProfiles.Remove(memberProfile);
             }
-            else if (!string.IsNullOrWhiteSpace(profile.Value) && memberProfile != null)
+            else if (!string.IsNullOrWhiteSpace(profile.Value))
             {
-                memberProfile.ProfileValue = profile.Value;
-            }
-            else if (!string.IsNullOrWhiteSpace(profile.Value) && memberProfile == null)
-            {
-                var newProfile = new MemberProfile() { Member = existingMember, ProfileId = profile.Id, ProfileValue = profile.Value! };
-                existingMember.MemberProfiles.Add(newProfile);
+                if (memberProfile != null)
+                {
+                    memberProfile.ProfileValue = profile.Value;
+                }
+                else
+                {
+                    var newProfile = new MemberProfile() { Member = existingMember, ProfileId = profile.Id, ProfileValue = profile.Value! };
+                    existingMember.MemberProfiles.Add(newProfile);
+                }
             }
         }
 
