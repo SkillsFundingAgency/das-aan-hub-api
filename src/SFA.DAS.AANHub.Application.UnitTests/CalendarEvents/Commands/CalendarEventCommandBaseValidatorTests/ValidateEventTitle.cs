@@ -1,9 +1,9 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
-using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidator;
+using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateEventTitle
 {
@@ -25,11 +25,11 @@ public class ValidateEventTitle
     [TestCase(201, null, false, ErrorConstants.TitleMustNotExceedLength)]
     public async Task Validate_EventTitle_ShouldHaveValidValue(int length, string? title, bool isValid, string? errorMessage)
     {
-        var sut = CreateCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
 
         CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             Title = length == 0 ? title : new string('a', length)
         };
 

@@ -2,9 +2,9 @@
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
 using SFA.DAS.AANHub.Domain.Common;
-using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidator;
+using ErrorConstants = SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase.CalendarEventCommandBaseValidator;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
 public class ValidateEventLocation
 {
@@ -22,11 +22,11 @@ public class ValidateEventLocation
     [TestCase(EventFormat.Online, 0, "valid Location", false, ErrorConstants.LocationMustBeEmpty)]
     public async Task Validate_EventLocation_ShouldBeValidValue(EventFormat eventFormat, int length, string? Location, bool isValid, string? errorMessage)
     {
-        var sut = CreateCalendarEventCommandValidatorBuilder.Create();
+        var sut = CalendarEventCommandBaseValidatorBuilder.Create();
 
         CreateCalendarEventCommand command = new()
         {
-            AdminMemberId = CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid(),
+            AdminMemberId = CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid(),
             EventFormat = eventFormat,
             Location = length == 0 ? Location : new string('a', length)
         };

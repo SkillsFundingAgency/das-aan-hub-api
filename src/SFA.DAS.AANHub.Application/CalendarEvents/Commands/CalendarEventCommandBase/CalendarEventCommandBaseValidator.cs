@@ -2,9 +2,9 @@
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
+namespace SFA.DAS.AANHub.Application.CalendarEvents.Commands.CalendarEventCommandBase;
 
-public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalendarEventCommand>
+public class CalendarEventCommandBaseValidator : AbstractValidator<CalendarEventCommandBase>
 {
     public const string CalendarTypeIdMustNotBeEmpty = "calendarId must have a value";
     public const string CalendarTypeIdMustBeValid = "calendarId must have a valid value";
@@ -47,7 +47,7 @@ public class CreateCalendarEventCommandValidator : AbstractValidator<CreateCalen
     public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
     public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active, admin member or regional chair";
 
-    public CreateCalendarEventCommandValidator(
+    public CalendarEventCommandBaseValidator(
         ICalendarsReadRepository calendarsReadRepository,
         IRegionsReadRepository regionsReadRepository,
         IMembersReadRepository membersReadRepository)

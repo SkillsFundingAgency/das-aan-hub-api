@@ -1,9 +1,9 @@
-﻿using SFA.DAS.AANHub.Application.CalendarEvents.Commands.CreateCalendarEvent;
+﻿using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
 using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Api.Models;
 
-public class CreateCalendarEventModel
+public class PutCalendarEventModel
 {
     public int? CalendarId { get; set; }
     public EventFormat? EventFormat { get; set; }
@@ -22,8 +22,9 @@ public class CreateCalendarEventModel
     public string? ContactEmail { get; set; }
     public int? PlannedAttendees { get; set; }
     public long? Urn { get; set; }
+    public bool SendUpdateEventNotification { get; set; } = true;
 
-    public static implicit operator CreateCalendarEventCommand(CreateCalendarEventModel source) =>
+    public static implicit operator PutCalendarEventCommand(PutCalendarEventModel source) =>
         new()
         {
             CalendarId = source.CalendarId,
@@ -42,6 +43,7 @@ public class CreateCalendarEventModel
             ContactName = source.ContactName,
             ContactEmail = source.ContactEmail,
             PlannedAttendees = source.PlannedAttendees,
-            Urn = source.Urn
+            Urn = source.Urn,
+            SendUpdateEventNotification = source.SendUpdateEventNotification
         };
 }

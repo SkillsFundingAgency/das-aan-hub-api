@@ -5,9 +5,9 @@ using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CreateCalendarEvent.CreateCalendarEventCommandValidatorTests;
+namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.CalendarEventCommandBaseValidatorTests;
 
-public class CreateCalendarEventCommandValidatorBuilder
+public class CalendarEventCommandBaseValidatorBuilder
 {
     public Mock<ICalendarsReadRepository> CalendarRepoMock { get; set; } = new();
     public Mock<IRegionsReadRepository> RegionRepoMock { get; set; } = new();
@@ -22,13 +22,13 @@ public class CreateCalendarEventCommandValidatorBuilder
     public const string EmployerRegionalChairInactiveMemberId = "2b8a2fc7-bc2b-4639-877f-8b6971341473";
     public const string AdminInactiveMemberId = "78c047a5-3018-444d-8ac0-e6ed0b92abc8";
 
-    public static CreateCalendarEventCommandValidator Create() => new CreateCalendarEventCommandValidatorBuilder().AddCalendarData().AddRegionData().AddMembers().Create();
+    public static CalendarEventCommandBaseValidator Create() => new CalendarEventCommandBaseValidatorBuilder().AddCalendarData().AddRegionData().AddMembers().Create();
 }
 
-public static class CreateCalendarEventCommandValidatorBuilderExtensions
+public static class CalendarEventCommandBaseValidatorBuilderExtensions
 {
     public static Guid ToGuid(this string validGuid) => Guid.Parse(validGuid);
-    public static CreateCalendarEventCommandValidatorBuilder AddCalendarData(this CreateCalendarEventCommandValidatorBuilder builder)
+    public static CalendarEventCommandBaseValidatorBuilder AddCalendarData(this CalendarEventCommandBaseValidatorBuilder builder)
     {
         Fixture fixture = new();
         var i = 1;
@@ -42,7 +42,7 @@ public static class CreateCalendarEventCommandValidatorBuilderExtensions
         return builder;
     }
 
-    public static CreateCalendarEventCommandValidatorBuilder AddRegionData(this CreateCalendarEventCommandValidatorBuilder builder)
+    public static CalendarEventCommandBaseValidatorBuilder AddRegionData(this CalendarEventCommandBaseValidatorBuilder builder)
     {
         Fixture fixture = new();
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
@@ -57,86 +57,86 @@ public static class CreateCalendarEventCommandValidatorBuilderExtensions
         return builder;
     }
 
-    public static CreateCalendarEventCommandValidatorBuilder AddMembers(this CreateCalendarEventCommandValidatorBuilder builder)
+    public static CalendarEventCommandBaseValidatorBuilder AddMembers(this CalendarEventCommandBaseValidatorBuilder builder)
     {
         Fixture fixture = new();
         fixture.Behaviors.Add(new OmitOnRecursionBehavior());
         var adminMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Admin.ToString())
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, (bool?)null)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.AdminActiveMemberId.ToGuid())).ReturnsAsync(adminMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid())).ReturnsAsync(adminMember);
 
         var adminInactiveMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.AdminInactiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.AdminInactiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Admin.ToString())
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, (bool?)null)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.AdminInactiveMemberId.ToGuid())).ReturnsAsync(adminInactiveMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.AdminInactiveMemberId.ToGuid())).ReturnsAsync(adminInactiveMember);
 
         var employerRegionalChairMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.EmployerRegionalChairActiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairActiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Employer.ToString())
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.EmployerRegionalChairActiveMemberId.ToGuid())).ReturnsAsync(employerRegionalChairMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairActiveMemberId.ToGuid())).ReturnsAsync(employerRegionalChairMember);
 
         var employerRegionalChairInactiveMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.EmployerRegionalChairInactiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairInactiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Employer.ToString())
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.EmployerRegionalChairInactiveMemberId.ToGuid())).ReturnsAsync(employerRegionalChairInactiveMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairInactiveMemberId.ToGuid())).ReturnsAsync(employerRegionalChairInactiveMember);
 
         var apprenticeRegionalChairMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.ApprenticeRegionalChairActiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairActiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Apprentice.ToString())
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.ApprenticeRegionalChairActiveMemberId.ToGuid())).ReturnsAsync(apprenticeRegionalChairMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairActiveMemberId.ToGuid())).ReturnsAsync(apprenticeRegionalChairMember);
 
         var apprenticeRegionalChairInactiveMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.ApprenticeRegionalChairInactiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairInactiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Apprentice.ToString())
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.ApprenticeRegionalChairInactiveMemberId.ToGuid())).ReturnsAsync(apprenticeRegionalChairInactiveMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairInactiveMemberId.ToGuid())).ReturnsAsync(apprenticeRegionalChairInactiveMember);
 
         var employerMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.EmployerActiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerActiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Employer.ToString())
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, false)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.EmployerActiveMemberId.ToGuid())).ReturnsAsync(employerMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.EmployerActiveMemberId.ToGuid())).ReturnsAsync(employerMember);
 
         var apprenticeMember = fixture
             .Build<Member>()
-            .With(m => m.Id, CreateCalendarEventCommandValidatorBuilder.ApprenticeActiveMemberId.ToGuid())
+            .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeActiveMemberId.ToGuid())
             .With(m => m.UserType, UserType.Apprentice.ToString())
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, false)
             .Create();
-        builder.MembersRepoMock.Setup(r => r.GetMember(CreateCalendarEventCommandValidatorBuilder.ApprenticeActiveMemberId.ToGuid())).ReturnsAsync(apprenticeMember);
+        builder.MembersRepoMock.Setup(r => r.GetMember(CalendarEventCommandBaseValidatorBuilder.ApprenticeActiveMemberId.ToGuid())).ReturnsAsync(apprenticeMember);
 
         return builder;
     }
 
-    public static CreateCalendarEventCommandValidator Create(this CreateCalendarEventCommandValidatorBuilder builder) =>
-        new CreateCalendarEventCommandValidator(builder.CalendarRepoMock.Object, builder.RegionRepoMock.Object, builder.MembersRepoMock.Object);
+    public static CalendarEventCommandBaseValidator Create(this CalendarEventCommandBaseValidatorBuilder builder) =>
+        new CalendarEventCommandBaseValidator(builder.CalendarRepoMock.Object, builder.RegionRepoMock.Object, builder.MembersRepoMock.Object);
 
 }
