@@ -29,10 +29,10 @@ public class UpdateMemberProfilesCommandHandlerTests
 
         var updateProfileModel = new List<UpdateProfileModel>()
         {
-            new UpdateProfileModel { Id = 41, Value = "UpdatedValue" },
-            new UpdateProfileModel { Id = 42, Value = "ToBeInsertedValue" },
-            new UpdateProfileModel { Id = 44, Value = null },
-            new UpdateProfileModel { Id = 45, Value = "ToBeNotNull" }
+            new UpdateProfileModel { MemberProfileId = 41, Value = "UpdatedValue" },
+            new UpdateProfileModel { MemberProfileId = 42, Value = "ToBeInsertedValue" },
+            new UpdateProfileModel { MemberProfileId = 44, Value = null },
+            new UpdateProfileModel { MemberProfileId = 45, Value = "ToBeNotNull" }
         };
 
         existingMember.MemberPreferences = new List<MemberPreference>()
@@ -43,8 +43,8 @@ public class UpdateMemberProfilesCommandHandlerTests
 
         var updatePreferenceModel = new List<UpdatePreferenceModel>()
         {
-            new UpdatePreferenceModel { Id = 1, Value = false },
-            new UpdatePreferenceModel { Id = 2, Value = true }
+            new UpdatePreferenceModel { PreferenceId = 1, Value = false },
+            new UpdatePreferenceModel { PreferenceId = 2, Value = true }
         };
 
         UpdateMemberProfilesCommand command = new(existingMember.Id, updateProfileModel, updatePreferenceModel);

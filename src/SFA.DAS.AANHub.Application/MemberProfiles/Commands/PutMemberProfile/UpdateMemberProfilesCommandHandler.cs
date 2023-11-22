@@ -53,7 +53,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
 
         foreach (var profile in profiles)
         {
-            var memberProfile = existingMember.MemberProfiles.Find(x => x.ProfileId == profile.Id);
+            var memberProfile = existingMember.MemberProfiles.Find(x => x.ProfileId == profile.MemberProfileId);
             if (string.IsNullOrWhiteSpace(profile.Value) && memberProfile != null)
             {
                 existingMember.MemberProfiles.Remove(memberProfile);
@@ -66,7 +66,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
                 }
                 else
                 {
-                    var newProfile = new MemberProfile() { Member = existingMember, ProfileId = profile.Id, ProfileValue = profile.Value! };
+                    var newProfile = new MemberProfile() { Member = existingMember, ProfileId = profile.MemberProfileId, ProfileValue = profile.Value! };
                     existingMember.MemberProfiles.Add(newProfile);
                 }
             }
@@ -89,7 +89,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
 
         foreach (var preference in preferences)
         {
-            var existingPreference = member.MemberPreferences.Single(x => x.PreferenceId == preference.Id);
+            var existingPreference = member.MemberPreferences.Single(x => x.PreferenceId == preference.PreferenceId);
             existingPreference.AllowSharing = preference.Value;
         }
 
