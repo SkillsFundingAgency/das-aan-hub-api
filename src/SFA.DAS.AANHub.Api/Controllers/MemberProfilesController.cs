@@ -46,7 +46,7 @@ public class MemberProfilesController : ActionResponseControllerBase
         [FromBody] UpdateMemberProfileModel model,
         CancellationToken cancellationToken)
     {
-        UpdateMemberProfilesCommand command = new(memberId, model.Profiles, model.Preferences);
+        UpdateMemberProfilesCommand command = new(memberId, model.MemberProfiles, model.MemberPreferences);
         var response = await _mediator.Send(command, cancellationToken);
 
         return GetPutResponse(response);
