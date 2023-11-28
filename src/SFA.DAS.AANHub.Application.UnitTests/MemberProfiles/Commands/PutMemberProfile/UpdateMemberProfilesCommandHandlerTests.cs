@@ -59,7 +59,7 @@ public class UpdateMemberProfilesCommandHandlerTests
         aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
     }
 
-    public async Task Handle_ShouldInvokeGet(
+    public static async Task Handle_ShouldInvokeGet(
       [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
       UpdateMemberProfilesCommandHandler sut)
     {
