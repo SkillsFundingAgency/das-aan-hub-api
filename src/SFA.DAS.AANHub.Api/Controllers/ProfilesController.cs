@@ -12,7 +12,7 @@ public class ProfilesController : ActionResponseControllerBase
     private readonly ILogger<ProfilesController> _logger;
     private readonly IMediator _mediator;
 
-    public override string ControllerName => "MemberProfiles";
+    public override string ControllerName => "Profiles";
 
     public ProfilesController(ILogger<ProfilesController> logger, IMediator mediator)
     {
