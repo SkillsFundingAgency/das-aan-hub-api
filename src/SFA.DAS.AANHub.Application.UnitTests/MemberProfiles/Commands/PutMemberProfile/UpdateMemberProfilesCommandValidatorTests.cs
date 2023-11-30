@@ -48,7 +48,7 @@ public class UpdateMemberProfilesCommandValidatorTests
         UpdateMemberProfilesCommand command)
     {
         membersReadRepository.Setup(m => m.GetMember(command.MemberId))
-                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = MembershipStatus.Live, UserType = MemberUserType.Apprentice.ToString() });
+                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = MembershipStatus.Live, UserType = UserType.Apprentice });
 
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
@@ -63,12 +63,12 @@ public class UpdateMemberProfilesCommandValidatorTests
     [MoqInlineAutoData(MembershipStatus.Deleted)]
     public async Task Validate_ExistingMemberStatus_ErrorNoError(
         string membershipStatus,
-        MemberUserType memberUserType,
+        UserType UserType,
         Mock<IMembersReadRepository> membersReadRepository,
         UpdateMemberProfilesCommand command)
     {
         membersReadRepository.Setup(m => m.GetMember(It.IsAny<Guid>()))
-                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = membershipStatus, UserType = memberUserType.ToString() });
+                             .ReturnsAsync(new Member() { Id = command.MemberId, Status = membershipStatus, UserType = UserType });
 
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
