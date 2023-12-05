@@ -1,4 +1,5 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
@@ -6,7 +7,6 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
-using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
@@ -63,8 +63,8 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
     {
         var emailTemplate = member.UserType switch
         {
-            "Apprentice" => EmailTemplateName.ApprenticeWithdrawal,
-            "Employer" => EmailTemplateName.EmployerWithdrawal,
+            UserType.Apprentice => EmailTemplateName.ApprenticeWithdrawal,
+            UserType.Employer => EmailTemplateName.EmployerWithdrawal,
             _ => throw new NotImplementedException()
         };
 

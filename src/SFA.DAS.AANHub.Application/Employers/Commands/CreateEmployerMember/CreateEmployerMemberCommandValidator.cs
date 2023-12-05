@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 
@@ -35,7 +35,7 @@ public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmpl
             .ForEach(x => x.SetValidator(new ProfileValueValidator()))
             .MustAsync(async (profileValues, _) =>
             {
-                var profiles = await _profilesReadRepository.GetProfilesByUserType(MembershipUserType.Employer);
+                var profiles = await _profilesReadRepository.GetProfilesByUserType(UserType.Employer);
                 var profileIds = profiles.Select(profile => profile.Id);
                 var b = profileValues.All(p => profileIds.Contains(p.Id));
                 return b;

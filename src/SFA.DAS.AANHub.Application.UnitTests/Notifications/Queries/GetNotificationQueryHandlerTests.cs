@@ -4,6 +4,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Notifications.Queries;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
@@ -94,7 +95,7 @@ public class GetNotificationQueryHandlerTests
         notification.Id = query.NotificationId;
         member.Id = query.RequestedByMemberId;
         notification.MemberId = member.Id;
-        member.UserType = "Employer";
+        member.UserType = UserType.Employer;
         employer.MemberId = member.Id;
         membersReadRepository.Setup(m => m.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
         notificationsReadRepository.Setup(n => n.GetNotificationById(It.IsAny<Guid>(), CancellationToken.None)).ReturnsAsync(notification);
@@ -126,7 +127,7 @@ public class GetNotificationQueryHandlerTests
         notification.Id = query.NotificationId;
         member.Id = query.RequestedByMemberId;
         notification.MemberId = member.Id;
-        member.UserType = "Apprentice";
+        member.UserType = UserType.Apprentice;
         membersReadRepository.Setup(m => m.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
         notificationsReadRepository.Setup(n => n.GetNotificationById(It.IsAny<Guid>(), CancellationToken.None)).ReturnsAsync(notification);
 

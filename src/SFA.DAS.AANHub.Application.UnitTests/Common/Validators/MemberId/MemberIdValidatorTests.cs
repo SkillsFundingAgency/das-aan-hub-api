@@ -3,6 +3,7 @@ using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
@@ -11,13 +12,13 @@ using static SFA.DAS.AANHub.Domain.Common.Constants;
 namespace SFA.DAS.AANHub.Application.UnitTests.Common.Validators.MemberId;
 public class MemberIdValidatorTests
 {
-    [TestCase("00000000-0000-0000-0000-000000000000", "Admin", false)]
-    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", "Admin", false)]
-    [TestCase("00000000-0000-0000-0000-000000000000", "Apprentice", false)]
-    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", "Apprentice", true)]
-    [TestCase("00000000-0000-0000-0000-000000000000", "Employer", false)]
-    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", "Employer", true)]
-    public async Task Validate_MemberIdExists_And_MemberIsNotAdmin(string memberId, string userType, bool isValid)
+    [TestCase("00000000-0000-0000-0000-000000000000", UserType.Admin, false)]
+    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", UserType.Admin, false)]
+    [TestCase("00000000-0000-0000-0000-000000000000", UserType.Apprentice, false)]
+    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", UserType.Apprentice, true)]
+    [TestCase("00000000-0000-0000-0000-000000000000", UserType.Employer, false)]
+    [TestCase("B46C2A2A-E35C-4788-B4B7-1F7E84081846", UserType.Employer, true)]
+    public async Task Validate_MemberIdExists_And_MemberIsNotAdmin(string memberId, UserType userType, bool isValid)
     {
         var guid = Guid.Parse(memberId);
         var command = new MemberIdCommandTest

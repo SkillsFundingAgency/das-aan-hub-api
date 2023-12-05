@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.JsonPatch;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -66,7 +67,7 @@ public class PatchMemberCommandHandlerTests
     Member member,
     CancellationToken cancellationToken)
     {
-        member.UserType = "Admin";
+        member.UserType = UserType.Admin;
         memberWriteRepoMock.Setup(r => r.Get(command.MemberId)).ReturnsAsync(member);
 
         var patchDoc = new JsonPatchDocument<Member>();
@@ -93,7 +94,7 @@ public class PatchMemberCommandHandlerTests
         Member member,
         CancellationToken cancellationToken)
     {
-        member.UserType = "Employer";
+        member.UserType = UserType.Employer;
         memberWriteRepoMock.Setup(r => r.Get(command.MemberId)).ReturnsAsync(member);
 
         var patchDoc = new JsonPatchDocument<Member>();
@@ -124,7 +125,7 @@ public class PatchMemberCommandHandlerTests
         Member member,
         CancellationToken cancellationToken)
     {
-        member.UserType = "Apprentice";
+        member.UserType = UserType.Apprentice;
         memberWriteRepoMock.Setup(r => r.Get(command.MemberId)).ReturnsAsync(member);
 
         var patchDoc = new JsonPatchDocument<Member>();
@@ -144,10 +145,10 @@ public class PatchMemberCommandHandlerTests
         }
     }
 
-    [Test, RecursiveMoqInlineAutoData("Apprentice")]
-    [RecursiveMoqInlineAutoData("Employer")]
+    [Test, RecursiveMoqInlineAutoData(UserType.Apprentice)]
+    [RecursiveMoqInlineAutoData(UserType.Employer)]
     public async Task Handle_StatusIsWithdrawnAndMemberIsFound_NotificationIsCreated(
-        string userType,
+        UserType userType,
         [Frozen] Mock<IMembersWriteRepository> memberWriteRepoMock,
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] Mock<INotificationsWriteRepository> notificationWriteRepositoryMock,

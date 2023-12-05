@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Text.Json;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
 
@@ -36,7 +36,7 @@ public class CreateAdminMemberCommandHandler : IRequestHandler<CreateAdminMember
             ActionedBy = command.MemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(member),
-            Resource = MembershipUserType.Admin
+            Resource = nameof(UserType.Admin)
         });
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);

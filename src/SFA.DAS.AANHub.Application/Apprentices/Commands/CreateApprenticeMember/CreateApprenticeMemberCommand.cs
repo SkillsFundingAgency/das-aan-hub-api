@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
@@ -13,7 +14,7 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
     public static implicit operator Member(CreateApprenticeMemberCommand command) => new()
     {
         Id = command.MemberId,
-        UserType = MembershipUserType.Apprentice,
+        UserType = UserType.Apprentice,
         Status = MembershipStatus.Live,
         Email = command.Email!,
         FirstName = command.FirstName!,

@@ -3,10 +3,10 @@ using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember;
 
@@ -24,7 +24,7 @@ public class CreateAdminMemberCommandHandlerTests
         response.Result.MemberId.Should().Be(command.MemberId);
 
         membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId)));
-        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.UserType == MembershipUserType.Admin)));
+        membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.UserType == UserType.Admin)));
         auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.ActionedBy == command.MemberId)));
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using Microsoft.EntityFrameworkCore;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -12,7 +13,7 @@ internal class ProfilesReadRepository : IProfilesReadRepository
 
     public ProfilesReadRepository(AanDataContext aanDataContext) => _aanDataContext = aanDataContext;
 
-    public async Task<List<Profile>> GetProfilesByUserType(string userType) => await _aanDataContext
+    public async Task<List<Profile>> GetProfilesByUserType(UserType userType) => await _aanDataContext
         .Profiles
         .AsNoTracking()
         .Where(x => x.UserType.Equals(userType))

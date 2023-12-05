@@ -64,7 +64,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var adminMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.AdminActiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Admin.ToString())
+            .With(m => m.UserType, UserType.Admin)
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, (bool?)null)
             .Create();
@@ -73,7 +73,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var adminInactiveMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.AdminInactiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Admin.ToString())
+            .With(m => m.UserType, UserType.Admin)
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, (bool?)null)
             .Create();
@@ -82,7 +82,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var employerRegionalChairMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairActiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Employer.ToString())
+            .With(m => m.UserType, UserType.Employer)
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
@@ -91,7 +91,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var employerRegionalChairInactiveMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerRegionalChairInactiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Employer.ToString())
+            .With(m => m.UserType, UserType.Employer)
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
@@ -100,7 +100,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var apprenticeRegionalChairMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairActiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Apprentice.ToString())
+            .With(m => m.UserType, UserType.Apprentice)
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
@@ -109,7 +109,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var apprenticeRegionalChairInactiveMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeRegionalChairInactiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Apprentice.ToString())
+            .With(m => m.UserType, UserType.Apprentice)
             .With(m => m.Status, MembershipStatusType.Deleted.ToString())
             .With(m => m.IsRegionalChair, true)
             .Create();
@@ -118,7 +118,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var employerMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.EmployerActiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Employer.ToString())
+            .With(m => m.UserType, UserType.Employer)
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, false)
             .Create();
@@ -127,7 +127,7 @@ public static class CalendarEventCommandBaseValidatorBuilderExtensions
         var apprenticeMember = fixture
             .Build<Member>()
             .With(m => m.Id, CalendarEventCommandBaseValidatorBuilder.ApprenticeActiveMemberId.ToGuid())
-            .With(m => m.UserType, UserType.Apprentice.ToString())
+            .With(m => m.UserType, UserType.Apprentice)
             .With(m => m.Status, MembershipStatusType.Live.ToString())
             .With(m => m.IsRegionalChair, false)
             .Create();
