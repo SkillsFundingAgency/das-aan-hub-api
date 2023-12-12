@@ -45,7 +45,10 @@ INSERT INTO #TempProfile VALUES
 (53,'Getting started with apprenticeships','Support',3, 'Employer',1),
 (54,'Understanding training providers and resources others are using','Support',4, 'Employer',1),
 (55,'Using the network to best benefit my organisation','Support',5, 'Employer',1),
-(61,'Engaged with a previous ambassador in the network','Personal',1, 'Employer',null)
+(61,'Engaged with a previous ambassador in the network','Personal',1, 'Employer',null),
+(62,'Job title','Personal',1, 'Employer',1),
+(63,'Biography','Profile',1, 'Employer',2),
+(66,'LinkedIn','Profile',1, 'Employer',4)
 
 MERGE [Profile] TARGET
 USING #TempProfile SOURCE ON TARGET.Id=SOURCE.Id
