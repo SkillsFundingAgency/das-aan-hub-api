@@ -1,10 +1,10 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.MemberProfiles.Commands.PutMemberProfile;
 public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberProfilesCommand, ValidatedResponse<SuccessCommandResult>>
@@ -49,6 +49,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
             ActionedBy = existingMember.Id,
             AuditTime = _dateTimeProvider.Now,
             Resource = nameof(MemberProfile),
+            EntityId = existingMember.Id
         };
 
         foreach (var profile in profiles)
@@ -85,6 +86,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
             ActionedBy = member.Id,
             AuditTime = _dateTimeProvider.Now,
             Resource = nameof(MemberPreference),
+            EntityId = member.Id
         };
 
         foreach (var preference in preferences)

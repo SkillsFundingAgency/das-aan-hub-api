@@ -6,5 +6,11 @@
     [Action] NVARCHAR(50) NOT NULL, 
     [Resource] NVARCHAR(256) NOT NULL, 
     [Before] NVARCHAR(MAX) NULL, 
-    [After] NVARCHAR(MAX) NULL
+    [After] NVARCHAR(MAX) NULL,
+    [EntityId] UniqueIdentifier NULL
 )
+
+GO 
+
+CREATE INDEX IX_AuditResourceActionedByEntityId ON [Audit] ([Resource],[ActionedBy], [EntityId])
+GO

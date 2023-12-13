@@ -35,7 +35,8 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
             ActionedBy = request.AdminMemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(calendarEvent),
-            Resource = nameof(CalendarEvent)
+            Resource = nameof(CalendarEvent),
+            EntityId = calendarEvent.Id
         });
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);

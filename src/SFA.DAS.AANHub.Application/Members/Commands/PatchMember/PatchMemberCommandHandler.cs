@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
@@ -7,6 +6,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
@@ -43,6 +43,7 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
             AuditTime = _dateTimeProvider.Now,
             Before = JsonSerializer.Serialize(member),
             Resource = nameof(Member),
+            EntityId = member.Id
         };
 
         member.LastUpdatedDate = _dateTimeProvider.Now;

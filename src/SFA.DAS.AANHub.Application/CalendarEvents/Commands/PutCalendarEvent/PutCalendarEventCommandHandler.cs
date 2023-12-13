@@ -44,6 +44,7 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
             ActionedBy = command.AdminMemberId,
             AuditTime = DateTime.UtcNow,
             Resource = nameof(CalendarEvent),
+            EntityId = existingEvent.Id
         };
 
         UpdateCalendarEventToNewValues(command, existingEvent);
