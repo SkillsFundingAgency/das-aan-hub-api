@@ -16,5 +16,6 @@ public class GetCalendarEventsOptions
     public bool? IsActive { get; set; }
     public int Page { get; set; }
     public int PageSize { get; set; }
+    public bool ShowUserEventsOnly { get; set; }
 
 }

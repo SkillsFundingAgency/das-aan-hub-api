@@ -28,6 +28,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
        List<int> regionIds,
        string keyword,
        bool? isActive,
+       bool showUserEventsOnly,
        CancellationToken cancellationToken)
     {
         var getCalendarEventsModel = new GetCalendarEventsModel
@@ -39,7 +40,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             CalendarId = calendarIds,
             RegionId = regionIds,
             Keyword = keyword,
-            IsActive = isActive
+            IsActive = isActive,
+            ShowUserEventsOnly = showUserEventsOnly
         };
 
         await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -62,6 +64,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<int> regionIds,
         string keyword,
         bool? isActive,
+        bool showUserEventsOnly,
         CancellationToken cancellationToken)
     {
         var emptyResponse = (GetCalendarEventsQueryResult?)null;
@@ -77,7 +80,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             CalendarId = calendarIds,
             RegionId = regionIds,
             Keyword = keyword,
-            IsActive = isActive
+            IsActive = isActive,
+            ShowUserEventsOnly = showUserEventsOnly
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -98,6 +102,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
         List<int> regionIds,
         string keyword,
         bool? isActive,
+        bool showUserEventsOnly,
         CancellationToken cancellationToken)
     {
 
@@ -113,7 +118,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             CalendarId = calendarIds,
             RegionId = regionIds,
             Keyword = keyword,
-            IsActive = isActive
+            IsActive = isActive,
+            ShowUserEventsOnly = showUserEventsOnly
         };
 
         var result = await sut.GetCalendarEvents(getCalendarEventsModel, cancellationToken);
@@ -150,6 +156,7 @@ public class CalendarEventsControllerGetCalendarEventsTests
             RegionId = new List<int>(),
             Keyword = string.Empty,
             IsActive = null,
+            ShowUserEventsOnly = false,
             Page = page,
             PageSize = pageSize
         };
@@ -181,7 +188,8 @@ public class CalendarEventsControllerGetCalendarEventsTests
             CalendarId = new List<int>(),
             RegionId = new List<int>(),
             Keyword = string.Empty,
-            IsActive = null
+            IsActive = null,
+            ShowUserEventsOnly = false
         };
 
         await sut.GetCalendarEvents(getCalendarEventsModel, new CancellationToken());
