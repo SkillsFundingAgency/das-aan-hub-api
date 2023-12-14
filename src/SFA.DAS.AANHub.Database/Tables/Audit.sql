@@ -12,5 +12,5 @@
 
 GO 
 
-CREATE INDEX IX_AuditResourceActionedByEntityId ON [Audit] ([Resource],[ActionedBy], [EntityId])
+CREATE INDEX IX_AuditResourceActionedByEntityId ON [dbo].[Audit] ( [Resource], [ActionedBy], [EntityId]) INCLUDE ( [Id] , [AuditTime] , [Action])
 GO
