@@ -8,18 +8,21 @@ namespace SFA.DAS.AANHub.Application.UnitTests.Models;
 
 public class GetCalendarEventsModelTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public void Operator_ConvertModelToQuery(GetCalendarEventsModel source)
     {
         GetCalendarEventsQuery sut = source;
 
         sut.Should().BeEquivalentTo(source, s => s.ExcludingMissingMembers());
+    }
 
-        //
-        // Expectation has property sut.EventFormat that the other object does not have.
-        //     Expectation has property sut.CalendarId that the other object does not have.
-        //     Expectation has property sut.RegionId that the other object does not have.
+    [Test, RecursiveMoqAutoData]
+    public void Operator_ConvertModelToQuery_CheckRenamedFields(GetCalendarEventsModel source)
+    {
+        GetCalendarEventsQuery sut = source;
 
+        sut.RegionIds.Should().BeEquivalentTo(source.RegionId);
+        sut.EventFormats.Should().BeEquivalentTo(source.EventFormat);
+        sut.CalendarIds.Should().BeEquivalentTo(source.CalendarId);
     }
 }
