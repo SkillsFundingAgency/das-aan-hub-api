@@ -91,7 +91,7 @@
     <None Include="Scripts\AddNotificationTemplateData.sql" />
     <None Include="Scripts\AddLeavingReasonData.sql" />
     <None Include="Scripts\UpdateCalendarEventLastUpdatedDate.sql" />
-    <None Include="Scripts\UpdateEntityIdInAuditForCalendarEvents.sql" />
+    <None Include="Scripts\UpdateEntityIdInAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
