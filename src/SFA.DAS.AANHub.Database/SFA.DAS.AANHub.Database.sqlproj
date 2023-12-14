@@ -59,6 +59,7 @@
     <Folder Include="Tables" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Manual\" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Member.sql" />
@@ -81,6 +82,7 @@
     <Build Include="Tables\MemberPreference.sql" />
     <Build Include="Tables\LeavingReason.sql" />
     <Build Include="Tables\MemberLeavingReason.sql" />
+    <Build Include="Views\vAuditCalendarEvent.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
