@@ -9,9 +9,3 @@
                SELECT * FROM [$(TableName)]					
 --------------------------------------------------------------------------------------
 */
-
-:r .\PreDeploymentClearDown.sql
-:r .\DropFeedbackTable.sql
-:r .\DropFeedbackAttributeTable.sql
-:r .\DropPartnerTable.sql
-:r .\RemoveOtherFromCalendar.sql -- CSP-1023

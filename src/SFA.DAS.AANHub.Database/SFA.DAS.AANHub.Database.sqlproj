@@ -76,7 +76,6 @@
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\EventGuest.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
-    <None Include="Scripts\PreDeploymentClearDown.sql" />
     <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
@@ -91,15 +90,11 @@
     <None Include="SFA.DAS.AANHub.Database.publish.xml" />
     <None Include="Scripts\AddNotificationTemplateData.sql" />
     <None Include="Scripts\AddLeavingReasonData.sql" />
-    <None Include="Scripts\RemoveOtherFromCalendar.sql" />
     <None Include="Scripts\UpdateCalendarEventLastUpdatedDate.sql" />
     <None Include="Scripts\UpdateEntityIdInAuditForCalendarEvents.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
-    <None Include="Scripts\DropFeedbackTable.sql" />
-    <None Include="Scripts\DropFeedbackAttributeTable.sql" />
-    <None Include="Scripts\DropPartnerTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />
