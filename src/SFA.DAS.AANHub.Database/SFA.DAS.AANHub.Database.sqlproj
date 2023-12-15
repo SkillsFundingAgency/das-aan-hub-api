@@ -83,6 +83,13 @@
     <Build Include="Tables\LeavingReason.sql" />
     <Build Include="Tables\MemberLeavingReason.sql" />
     <Build Include="Views\vAuditCalendarEvent.sql" />
+    <Build Include="Views\vAuditMember.sql" />
+    <Build Include="Views\vAuditMemberProfile.sql" />
+    <Build Include="Views\vAuditMemberPreference.sql" />
+    <Build Include="Views\vAuditApprentice.sql" />
+    <Build Include="Views\vAuditEmployer.sql" />
+    <Build Include="Views\vAuditAdmin.sql" />
+    <Build Include="Views\vAuditAttendance.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
