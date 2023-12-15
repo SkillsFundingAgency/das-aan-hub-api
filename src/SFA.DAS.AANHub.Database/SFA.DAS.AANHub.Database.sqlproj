@@ -59,6 +59,7 @@
     <Folder Include="Tables" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Manual\" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Member.sql" />
@@ -81,6 +82,14 @@
     <Build Include="Tables\MemberPreference.sql" />
     <Build Include="Tables\LeavingReason.sql" />
     <Build Include="Tables\MemberLeavingReason.sql" />
+    <Build Include="Views\vAuditCalendarEvent.sql" />
+    <Build Include="Views\vAuditMember.sql" />
+    <Build Include="Views\vAuditMemberProfile.sql" />
+    <Build Include="Views\vAuditMemberPreference.sql" />
+    <Build Include="Views\vAuditApprentice.sql" />
+    <Build Include="Views\vAuditEmployer.sql" />
+    <Build Include="Views\vAuditAdmin.sql" />
+    <Build Include="Views\vAuditAttendance.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
