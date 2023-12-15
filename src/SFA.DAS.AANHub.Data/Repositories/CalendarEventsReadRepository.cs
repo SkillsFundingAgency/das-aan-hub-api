@@ -47,11 +47,12 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
 
         if (options.ShowUserEventsOnly)
         {
-            showUserEventsOnly =
-                $" inner join Audit on Audit.ActionedBy = '{options.MemberId}' and Audit.EntityId = CE.Id and Audit.Resource='CalendarEvent' ";
+            showUserEventsOnly = " inner join (select distinct EntityId from Audit " +
+                                 $" where Audit.ActionedBy = '{options.MemberId}' " +
+                                 " and Audit.Resource='CalendarEvent') as Aud on Aud.EntityId = CE.Id  ";
         }
 
-        var sql = $@"select distinct
+        var sql = $@"select
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
  C.CalendarName,
