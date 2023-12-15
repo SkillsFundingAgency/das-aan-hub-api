@@ -12,4 +12,5 @@ public class Audit
     public string Resource { get; set; } = null!;
     public string? Before { get; set; }
     public string? After { get; set; }
+    public Guid EntityId { get; set; }
 }

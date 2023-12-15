@@ -34,7 +34,8 @@ public class PutEventGuestsCommandHandler : IRequestHandler<PutEventGuestsComman
             AuditTime = DateTime.UtcNow,
             Before = JsonSerializer.Serialize(request.CalendarEvent?.EventGuests),
             After = JsonSerializer.Serialize(guests),
-            Resource = nameof(EventGuest)
+            Resource = nameof(EventGuest),
+            EntityId = request.CalendarEventId
         });
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);

@@ -59,6 +59,7 @@
     <Folder Include="Tables" />
     <Folder Include="Scripts" />
     <Folder Include="Scripts\Manual\" />
+    <Folder Include="Views" />
   </ItemGroup>
   <ItemGroup>
     <Build Include="Tables\Member.sql" />
@@ -76,12 +77,19 @@
     <Build Include="Tables\Audit.sql" />
     <Build Include="Tables\EventGuest.sql" />
     <Build Include="Tables\StagedApprentice.sql" />
-    <None Include="Scripts\PreDeploymentClearDown.sql" />
     <None Include="Scripts\Manual\SeedCalendarEvents.sql" />
     <Build Include="Tables\Preference.sql" />
     <Build Include="Tables\MemberPreference.sql" />
     <Build Include="Tables\LeavingReason.sql" />
     <Build Include="Tables\MemberLeavingReason.sql" />
+    <Build Include="Views\vAuditCalendarEvent.sql" />
+    <Build Include="Views\vAuditMember.sql" />
+    <Build Include="Views\vAuditMemberProfile.sql" />
+    <Build Include="Views\vAuditMemberPreference.sql" />
+    <Build Include="Views\vAuditApprentice.sql" />
+    <Build Include="Views\vAuditEmployer.sql" />
+    <Build Include="Views\vAuditAdmin.sql" />
+    <Build Include="Views\vAuditAttendance.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
@@ -91,14 +99,11 @@
     <None Include="SFA.DAS.AANHub.Database.publish.xml" />
     <None Include="Scripts\AddNotificationTemplateData.sql" />
     <None Include="Scripts\AddLeavingReasonData.sql" />
-    <None Include="Scripts\RemoveOtherFromCalendar.sql" />
     <None Include="Scripts\UpdateCalendarEventLastUpdatedDate.sql" />
+    <None Include="Scripts\UpdateEntityIdInAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
-    <None Include="Scripts\DropFeedbackTable.sql" />
-    <None Include="Scripts\DropFeedbackAttributeTable.sql" />
-    <None Include="Scripts\DropPartnerTable.sql" />
   </ItemGroup>
   <ItemGroup>
     <PreDeploy Include="Scripts\Script.PreDeployment1.sql" />

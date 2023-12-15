@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
@@ -7,6 +6,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
@@ -60,6 +60,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,
             Resource = nameof(Attendance),
+            EntityId = existingAttendance.Id
         };
 
         existingAttendance.IsAttending = command.IsAttending;
@@ -86,10 +87,12 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             AuditTime = DateTime.UtcNow,
             Resource = nameof(Attendance),
         };
-        _auditWriteRepository.Create(audit);
+
 
         _attendancesWriteRepository.Create(newAttendance);
+        audit.EntityId = newAttendance.Id;
 
+        _auditWriteRepository.Create(audit);
         await CreateNotification(command);
 
         await _aanDataContext.SaveChangesAsync(token);

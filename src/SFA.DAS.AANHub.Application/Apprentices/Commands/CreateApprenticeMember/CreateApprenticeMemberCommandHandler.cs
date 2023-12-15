@@ -1,5 +1,4 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Application.Services;
@@ -8,6 +7,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
@@ -55,7 +55,8 @@ public class CreateApprenticeMemberCommandHandler : IRequestHandler<CreateAppren
             ActionedBy = command.MemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(member.Apprentice),
-            Resource = nameof(UserType.Apprentice)
+            Resource = nameof(UserType.Apprentice),
+            EntityId = member.Id
         });
 
         var tokens = await GetTokens(command, cancellationToken);

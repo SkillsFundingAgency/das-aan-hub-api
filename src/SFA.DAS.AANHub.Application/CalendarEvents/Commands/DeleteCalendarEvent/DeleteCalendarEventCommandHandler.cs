@@ -67,6 +67,7 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,
             Resource = nameof(CalendarEvent),
+            EntityId = calendarEvent.Id
         };
 
         _auditWriteRepository.Create(audit);
