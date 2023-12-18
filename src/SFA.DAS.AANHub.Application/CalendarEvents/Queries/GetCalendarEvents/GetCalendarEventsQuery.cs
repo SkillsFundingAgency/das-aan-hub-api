@@ -18,4 +18,5 @@ public class GetCalendarEventsQuery : IRequest<GetCalendarEventsQueryResult>, IR
     public int Page { get; set; } = 1;
 
     public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
+    public bool ShowUserEventsOnly { get; set; }
 }

@@ -43,7 +43,16 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             isActiveSql = options.IsActive.Value ? " AND CE.IsActive = 1 " : " AND CE.IsActive = 0 ";
         }
 
-        var sql = $@"select	               
+        var showUserEventsOnly = string.Empty;
+
+        if (options.ShowUserEventsOnly)
+        {
+            showUserEventsOnly = " inner join (select distinct EntityId from Audit " +
+                                 $" where Audit.ActionedBy = '{options.MemberId}' " +
+                                 " and Audit.Resource='CalendarEvent') as Aud on Aud.EntityId = CE.Id  ";
+        }
+
+        var sql = $@"select
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
  C.CalendarName,
@@ -84,6 +93,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
           ,SUM(CASE WHEN IsAttending = 1 THEN 1 ELSE 0 END) Attendees 
    FROM Attendance
    GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
+{showUserEventsOnly}
  WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
  {isActiveSql}
@@ -94,7 +104,6 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
  Order by CE.StartDate
  OFFSET {(options.Page - 1) * options.PageSize} ROWS 
  FETCH NEXT {options.PageSize} ROWS ONLY";
-
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlRaw(sql)

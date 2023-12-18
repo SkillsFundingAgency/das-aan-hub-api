@@ -48,7 +48,8 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             RegionIds = query.RegionIds,
             IsActive = query.IsActive,
             Page = page,
-            PageSize = pageSize
+            PageSize = pageSize,
+            ShowUserEventsOnly = query.ShowUserEventsOnly
         };
 
         var response =

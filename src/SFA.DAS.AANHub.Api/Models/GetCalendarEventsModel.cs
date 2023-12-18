@@ -32,6 +32,9 @@ public class GetCalendarEventsModel
     public bool? IsActive { get; set; }
 
     [FromQuery]
+    public bool ShowUserEventsOnly { get; set; }
+
+    [FromQuery]
     public int Page { get; set; } = 1;
 
     [FromQuery] public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
@@ -47,6 +50,7 @@ public class GetCalendarEventsModel
         CalendarIds = model.CalendarId,
         IsActive = model.IsActive,
         Page = model.Page,
-        PageSize = model.PageSize
+        PageSize = model.PageSize,
+        ShowUserEventsOnly = model.ShowUserEventsOnly
     };
 }
