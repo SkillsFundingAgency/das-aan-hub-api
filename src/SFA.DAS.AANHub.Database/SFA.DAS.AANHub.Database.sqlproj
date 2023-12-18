@@ -90,6 +90,7 @@
     <Build Include="Views\vAuditEmployer.sql" />
     <Build Include="Views\vAuditAdmin.sql" />
     <Build Include="Views\vAuditAttendance.sql" />
+    <None Include="Scripts\Manual\UpdateEntityIdInAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
@@ -100,7 +101,6 @@
     <None Include="Scripts\AddNotificationTemplateData.sql" />
     <None Include="Scripts\AddLeavingReasonData.sql" />
     <None Include="Scripts\UpdateCalendarEventLastUpdatedDate.sql" />
-    <None Include="Scripts\UpdateEntityIdInAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <PostDeploy Include="Scripts\Script.PostDeployment1.sql" />
