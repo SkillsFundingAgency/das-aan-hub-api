@@ -12,6 +12,7 @@ public static class Constants
         public const string Live = nameof(Live);
         public const string Withdrawn = nameof(Withdrawn);
         public const string Deleted = nameof(Deleted);
+        public const string Removed = nameof(Removed);
     }
 
     public static class CalendarEvents
@@ -40,5 +41,6 @@ public static class Constants
         public const string ApprenticeEventCancelTemplate = "AANApprenticeEventCancel";
         public const string ApprenticeWithdrawal = "AANApprenticeWithdrawal";
         public const string EmployerWithdrawal = "AANEmployerWithdrawal";
+        public const string AANMemberRemoved = "AANMemberRemoved";
     }
 }

@@ -1,14 +1,12 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Application.Common.Validators.AdminMemberId;
 using SFA.DAS.AANHub.Application.Models;
-using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.EventGuests.PutEventGuests;
 
 public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCommand>
 {
-    public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
-    public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active admin member or regional chair";
     public const string CalendarEventDoesNotExist = "Calendar event does not exist";
     public const string CalendarEventIsNotActive = "Cannot amend a calendar event that has been cancelled";
     public const string CalendarEventIsInPast = "Cannot amend a calendar event that is in the past";
@@ -18,18 +16,7 @@ public class PutEventGuestsCommandValidator : AbstractValidator<PutEventGuestsCo
 
     public PutEventGuestsCommandValidator(IMembersReadRepository membersReadRepository)
     {
-        RuleFor(c => c.AdminMemberId)
-            .NotEmpty()
-            .WithMessage(RequestedByMemberIdMustNotBeEmpty)
-            .MustAsync(async (memberId, cancellationToken) =>
-            {
-                var member = await membersReadRepository.GetMember(memberId);
-                return
-                    member != null &&
-                    member!.Status == MembershipStatusType.Live.ToString() &&
-                    (member.UserType == UserType.Admin || member.IsRegionalChair.GetValueOrDefault());
-            })
-            .WithMessage(RequestedByMemberIdMustBeAdmin);
+        Include(new AdminMemberIdValidator(membersReadRepository));
 
         RuleFor(c => c.CalendarEvent)
             .Cascade(CascadeMode.Stop)

@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -31,7 +32,7 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
 
         _auditWriteRepository.Create(new Audit
         {
-            Action = "Create",
+            Action = AuditAction.Create,
             ActionedBy = request.AdminMemberId,
             AuditTime = DateTime.UtcNow,
             After = JsonSerializer.Serialize(calendarEvent),

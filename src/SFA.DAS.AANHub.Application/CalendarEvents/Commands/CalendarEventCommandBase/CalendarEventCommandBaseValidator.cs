@@ -17,7 +17,8 @@ public class CalendarEventCommandBaseValidator : AbstractValidator<CalendarEvent
     public const string EndDateMustBeLessThanStartDate = "endDate must be greater than or equal to startDate";
     public const string TitleMustNotBeEmpty = "title must have a value";
     public const string TitleMustNotExceedLength = "title must not be greater than 200 characters long";
-    public const string TitleMustExcludeSpecialCharacters = "title must not include any special characters: @, #, $, ^, =, +, \\, /, <, >, %";
+    public const string TitleMustExcludeSpecialCharacters =
+        "title must not include any special characters: @, #, $, ^, =, +, \\, /, <, >, %";
     public const string SummaryMustNotBeEmpty = "summary must have a value";
     public const string SummaryMustNotExceedLength = "summary must not be greater than 200 characters long";
     public const string DescriptionMustNotBeEmpty = "description must have a value";
@@ -45,7 +46,10 @@ public class CalendarEventCommandBaseValidator : AbstractValidator<CalendarEvent
     public const string PlannedAttendeesMustNotBeEmpty = "plannedAttendees must have a value";
     public const string PlannedAttendeesMustBeValid = "plannedAttendees must be  between 1 to 1000000";
     public const string RequestedByMemberIdMustNotBeEmpty = "requestedByMemberId must have a value";
-    public const string RequestedByMemberIdMustBeAdmin = "requestedByMemberId must be an active, admin member or regional chair";
+
+
+    public const string RequestedByMemberIdMustBeAdmin =
+        "requestedByMemberId must be an active, admin member or regional chair";
 
     public CalendarEventCommandBaseValidator(
         ICalendarsReadRepository calendarsReadRepository,

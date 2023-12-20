@@ -1,7 +1,6 @@
-﻿namespace SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId
+﻿namespace SFA.DAS.AANHub.Application.Common.Validators.RequestedByMemberId;
+
+public interface IRequestedByMemberId
 {
-    public interface IRequestedByMemberId
-    {
-        Guid RequestedByMemberId { get; }
-    }
+    Guid RequestedByMemberId { get; }
 }

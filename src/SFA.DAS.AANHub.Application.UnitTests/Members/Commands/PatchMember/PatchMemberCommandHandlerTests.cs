@@ -39,7 +39,7 @@ public class PatchMemberCommandHandlerTests
             response.Should().NotBeNull();
             response.Result.IsSuccess.Should().BeTrue();
             response.IsValidResponse.Should().BeTrue();
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "PatchMember" && x.ActionedBy == command.MemberId && x.Resource == "Member")));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == AuditAction.PatchMember && x.ActionedBy == command.MemberId && x.Resource == "Member")));
             dataContextMock.Verify(d => d.SaveChangesAsync(cancellationToken), Times.Once);
         }
     }
@@ -110,7 +110,7 @@ public class PatchMemberCommandHandlerTests
             Assert.NotNull(response);
             response.Result.IsSuccess.Should().BeTrue();
             response.IsValidResponse.Should().BeTrue();
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "PatchMember" && x.ActionedBy == command.MemberId && x.Resource == "Member")));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == AuditAction.PatchMember && x.ActionedBy == command.MemberId && x.Resource == "Member")));
         }
     }
 
@@ -141,7 +141,7 @@ public class PatchMemberCommandHandlerTests
             Assert.NotNull(response);
             response.Result.IsSuccess.Should().BeTrue();
             response.IsValidResponse.Should().BeTrue();
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "PatchMember" && x.ActionedBy == command.MemberId && x.Resource == "Member")));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == AuditAction.PatchMember && x.ActionedBy == command.MemberId && x.Resource == "Member")));
         }
     }
 
@@ -174,7 +174,7 @@ public class PatchMemberCommandHandlerTests
             Assert.NotNull(response);
             response.Result.IsSuccess.Should().BeTrue();
             response.IsValidResponse.Should().BeTrue();
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "PatchMember" && x.ActionedBy == command.MemberId && x.Resource == "Member")));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == AuditAction.PatchMember && x.ActionedBy == command.MemberId && x.Resource == "Member")));
         }
     }
 
@@ -204,7 +204,7 @@ public class PatchMemberCommandHandlerTests
             Assert.NotNull(response);
             response.Result.IsSuccess.Should().BeTrue();
             response.IsValidResponse.Should().BeTrue();
-            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == "PatchMember" && x.ActionedBy == command.MemberId && x.Resource == "Member")));
+            auditWriteRepository.Verify(p => p.Create(It.Is<Audit>(x => x.Action == AuditAction.PatchMember && x.ActionedBy == command.MemberId && x.Resource == "Member")));
         }
     }
 }

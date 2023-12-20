@@ -39,7 +39,7 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
 
         var audit = new Audit()
         {
-            Action = "Put",
+            Action = AuditAction.Put,
             Before = JsonSerializer.Serialize(existingEvent),
             ActionedBy = command.AdminMemberId,
             AuditTime = DateTime.UtcNow,

@@ -2,6 +2,7 @@
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.EventGuests.PutEventGuests;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -29,7 +30,7 @@ public class PutEventGuestsCommandHandler : IRequestHandler<PutEventGuestsComman
 
         _auditWriteRepository.Create(new Audit
         {
-            Action = "Put",
+            Action = AuditAction.Put,
             ActionedBy = request.AdminMemberId,
             AuditTime = DateTime.UtcNow,
             Before = JsonSerializer.Serialize(request.CalendarEvent?.EventGuests),

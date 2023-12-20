@@ -61,7 +61,7 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
 
         var audit = new Audit()
         {
-            Action = "Cancelled",
+            Action = AuditAction.Cancelled,
             Before = calendarEventBefore,
             After = calendarEventAfter,
             ActionedBy = command.RequestedByMemberId,
