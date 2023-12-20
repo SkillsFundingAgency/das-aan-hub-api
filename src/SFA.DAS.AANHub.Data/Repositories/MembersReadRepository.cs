@@ -45,7 +45,6 @@ internal class MembersReadRepository : IMembersReadRepository
                       ,Mem.[UserType]
                       ,Mem.[IsRegionalChair]
                       ,Mem.[JoinedDate]
-                      ,(CASE WHEN DATEADD(day,90,[JoinedDate]) > GETUTCDATE() THEN CONVERT([BIT], (1)) ELSE CONVERT([BIT], (0)) END) AS IsNew
                     FROM [Member] AS Mem
                       LEFT JOIN [Region] AS Reg ON Mem.RegionId = Reg.Id
                     WHERE  (Mem.[Status] = '{MembershipStatusType.Live}' AND (Mem.[UserType] IN ('{UserType.Employer}','{UserType.Apprentice}')))
@@ -72,8 +71,8 @@ internal class MembersReadRepository : IMembersReadRepository
     {
         return isNew switch
         {
-            true => " AND DATEADD(day,90,[JoinedDate]) >= GETUTCDATE()",
-            false => " AND DATEADD(day,90,[JoinedDate]) < GETUTCDATE()",
+            true => " AND CONVERT(date, DATEADD(day,90,[JoinedDate])) >= CONVERT(date, GETUTCDATE())",
+            false => " AND CONVERT(date, DATEADD(day,90,[JoinedDate])) < CONVERT(date, GETUTCDATE())",
             _ => string.Empty
         };
     }
