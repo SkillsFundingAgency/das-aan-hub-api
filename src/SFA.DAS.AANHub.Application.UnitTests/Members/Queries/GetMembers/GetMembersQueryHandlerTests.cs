@@ -179,6 +179,37 @@ public class GetMembersQueryHandlerTests
             It.Is<GetMembersOptions>(c => c.UserTypes == userTypes), cancellationToken), Times.Once);
     }
 
+    [TestCase(true)]
+    [TestCase(false)]
+    [TestCase(null)]
+    public async Task Handler_IsNew_CheckUserTypeExpected(bool? isNew)
+    {
+        var membersReadRepositoryMock = new Mock<IMembersReadRepository>();
+        var cancellationToken = new CancellationToken();
+        var membersSummary = new MemberSummary();
+        var regionIds = new List<int>();
+        var keyword = "test";
+        var isRegionalChair = false;
+
+        membersReadRepositoryMock.Setup(c => c.GetMembers(It.IsAny<GetMembersOptions>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<MemberSummary> { membersSummary });
+
+        var sut = new GetMembersQueryHandler(membersReadRepositoryMock.Object);
+        var query = new GetMembersQuery
+        {
+            Keyword = keyword,
+            IsNew = isNew,
+            IsRegionalChair = isRegionalChair,
+            RegionIds = regionIds,
+            Page = 1,
+            PageSize = 5
+        };
+
+        await sut.Handle(query, cancellationToken);
+        membersReadRepositoryMock.Verify(x => x.GetMembers(
+            It.Is<GetMembersOptions>(c => c.IsNew == isNew), cancellationToken), Times.Once);
+    }
+
     [Test, RecursiveMoqAutoData]
     public async Task Handle_UserType_ShouldNotReturnMemberWithAnyUserTypeExceptEmployerAndApprentice(
         CancellationToken cancellationToken

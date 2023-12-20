@@ -23,12 +23,15 @@ public class GetMembersModel
 
     [FromQuery] public int PageSize { get; set; } = Domain.Common.Constants.Members.PageSize;
 
+    [FromQuery] public bool? IsNew { get; set; }
+
     public static implicit operator GetMembersQuery(GetMembersModel model) => new()
     {
         Keyword = model.Keyword,
         RegionIds = model.RegionId,
         UserTypes = model.UserType,
         IsRegionalChair = model.IsRegionalChair,
+        IsNew = model.IsNew,
         Page = model.Page,
         PageSize = model.PageSize
     };
