@@ -7,6 +7,7 @@ public class GetMembersOptions
     public List<UserType> UserTypes { get; set; } = new();
     public bool? IsRegionalChair { get; set; }
     public List<int> RegionIds { get; set; } = new();
+    public bool? IsNew { get; set; }
     public int Page { get; set; } = 1;
     public int PageSize { get; set; } = Domain.Common.Constants.Members.PageSize;
 

@@ -32,27 +32,29 @@ internal class MembersReadRepository : IMembersReadRepository
 
     public async Task<List<MemberSummary>> GetMembers(GetMembersOptions options, CancellationToken cancellationToken)
     {
-        var regions = GenerateRegionsSql(options.RegionIds);
-        var userType = GenerateUserTypeSql(options.UserTypes, options.IsRegionalChair);
+        var regionsSql = GenerateRegionsSql(options.RegionIds);
+        var userTypeSql = GenerateUserTypeSql(options.UserTypes, options.IsRegionalChair);
         var keywordSql = GenerateKeywordSql(options.Keyword?.Trim());
+        var maturitySql = GenerateMaturitySql(options.IsNew);
 
         var sql = $@"SELECT Mem.[Id] AS MemberId
                       ,COUNT(*) OVER () TotalCount
                       ,Mem.[FullName]
-	                  ,Mem.[RegionId]
-	                  ,Reg.[Area] AS RegionName
-	                  ,Mem.[UserType]
-	                  ,Mem.[IsRegionalChair]
+                      ,Mem.[RegionId]
+                      ,Reg.[Area] AS RegionName
+                      ,Mem.[UserType]
+                      ,Mem.[IsRegionalChair]
                       ,Mem.[JoinedDate]
-                      FROM [Member] AS Mem
+                    FROM [Member] AS Mem
                       LEFT JOIN [Region] AS Reg ON Mem.RegionId = Reg.Id
-                      WHERE  (Mem.[Status] = '{MembershipStatusType.Live}' AND (Mem.[UserType] IN ('{UserType.Employer}','{UserType.Apprentice}')))
+                    WHERE  (Mem.[Status] = '{MembershipStatusType.Live}' AND (Mem.[UserType] IN ('{UserType.Employer}','{UserType.Apprentice}')))
                       {keywordSql}
-                      {((!string.IsNullOrEmpty(regions)) ? " AND " : string.Empty) + regions}
-                      {((!string.IsNullOrEmpty(userType)) ? " AND " : string.Empty) + userType}
-                      ORDER BY Mem.[FullName]  
-                      OFFSET {(options.Page - 1) * options.PageSize} ROWS 
-                      FETCH NEXT {options.PageSize} ROWS ONLY";
+                      {regionsSql}
+                      {userTypeSql}
+                      {maturitySql}
+                    ORDER BY Mem.[FullName]  
+                    OFFSET {(options.Page - 1) * options.PageSize} ROWS 
+                    FETCH NEXT {options.PageSize} ROWS ONLY";
 
         var members = await _aanDataContext.MembersSummaries!
             .FromSqlRaw(sql)
@@ -60,10 +62,20 @@ internal class MembersReadRepository : IMembersReadRepository
         return members;
     }
     public async Task<List<Member>> GetMembers(List<Guid> memberIds, CancellationToken cancellationToken) => await _aanDataContext
-    .Members
-    .AsNoTracking()
-    .Where(m => memberIds.Contains(m.Id))
-    .ToListAsync(cancellationToken);
+        .Members
+        .AsNoTracking()
+        .Where(m => memberIds.Contains(m.Id))
+        .ToListAsync(cancellationToken);
+
+    private static string GenerateMaturitySql(bool? isNew)
+    {
+        return isNew switch
+        {
+            true => " AND CONVERT(date, DATEADD(day,90,[JoinedDate])) >= CONVERT(date, GETUTCDATE())",
+            false => " AND CONVERT(date, DATEADD(day,90,[JoinedDate])) < CONVERT(date, GETUTCDATE())",
+            _ => string.Empty
+        };
+    }
 
     private static string GenerateKeywordSql(string? keyword)
     {
@@ -83,14 +95,14 @@ internal class MembersReadRepository : IMembersReadRepository
             case 1:
                 if (regions.Any(region => region == 0))
                 {
-                    return $" Reg.Id IS NULL";
+                    return $" AND Reg.Id IS NULL";
                 }
                 else
                 {
-                    return $" Reg.Id = {regions.First()}";
+                    return $" AND Reg.Id = {regions.First()}";
                 }
             default:
-                var eventTypes = " Reg.Id IN (";
+                var eventTypes = " AND Reg.Id IN (";
                 eventTypes += string.Join(",", regions.Where(region => region != 0).ToList());
                 eventTypes += ")";
                 if (regions.Any(region => region == 0))
@@ -110,10 +122,10 @@ internal class MembersReadRepository : IMembersReadRepository
             switch (userTypes.Count)
             {
                 case 1:
-                    subSqlQuery = $" (Mem.[UserType] = '{userTypes[0]}' {isRegionalQuery} )";
+                    subSqlQuery = $" AND (Mem.[UserType] = '{userTypes[0]}' {isRegionalQuery} )";
                     break;
                 default:
-                    subSqlQuery = " (Mem.[UserType] IN ('";
+                    subSqlQuery = " AND (Mem.[UserType] IN ('";
                     subSqlQuery += string.Join("','", userTypes.ToList());
                     subSqlQuery += "')  " + isRegionalQuery + " )";
                     break;
@@ -121,7 +133,7 @@ internal class MembersReadRepository : IMembersReadRepository
         }
         else if (isRegionalChair is not null)
         {
-            subSqlQuery = $" ( Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : (0 + " OR Mem.[IsRegionalChair] IS NULL "))} ) ";
+            subSqlQuery = $" AND ( Mem.[IsRegionalChair] = {(isRegionalChair.Value ? 1 : (0 + " OR Mem.[IsRegionalChair] IS NULL "))} ) ";
         }
         return subSqlQuery;
     }

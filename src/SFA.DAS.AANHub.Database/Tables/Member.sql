@@ -18,8 +18,8 @@
 )
 GO
 
-CREATE INDEX [IX_Member_Search] ON [Member] ([UserType], [Status], [FullName], [RegionId]) 
-INCLUDE ([Id], [Email], [JoinedDate], [EndDate], [OrganisationName], [LastUpdatedDate])
+CREATE INDEX [IX_Member_Search] ON [Member] ([UserType], [Status], [FullName], [RegionId], [JoinedDate]) 
+INCLUDE ([Id], [Email], [EndDate], [OrganisationName], [LastUpdatedDate])
 GO
 
 CREATE UNIQUE INDEX [IX_Member_Email] ON [Member] ([Email]) INCLUDE ([Id], [FullName], [UserType], [Status])

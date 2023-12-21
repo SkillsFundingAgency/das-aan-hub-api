@@ -27,6 +27,7 @@ public class GetMembersQueryHandler : IRequestHandler<GetMembersQuery, GetMember
             UserTypes = query.UserTypes,
             IsRegionalChair = query.IsRegionalChair,
             RegionIds = query.RegionIds,
+            IsNew = query.IsNew,
             Page = page,
             PageSize = pageSize
         };
