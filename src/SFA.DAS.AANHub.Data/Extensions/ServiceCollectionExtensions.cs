@@ -75,5 +75,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IMemberPreferenceWriteRepository, MemberPreferenceWriteRepository>();
         services.AddTransient<ICalendarEventsWriteRepository, CalendarEventsWriteRepository>();
         services.AddTransient<IEventGuestsWriteRepository, EventGuestsWriteRepository>();
+        services.AddTransient<ILeavingReasonsReadRepository, LeavingReasonsReadRepository>();
     }
 }
