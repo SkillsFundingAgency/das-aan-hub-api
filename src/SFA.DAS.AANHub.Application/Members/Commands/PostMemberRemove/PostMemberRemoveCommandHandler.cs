@@ -60,7 +60,7 @@ public class PostMemberRemoveCommandHandler : IRequestHandler<PostMemberRemoveCo
     {
         const string templateName = Domain.Common.Constants.EmailTemplateName.AANMemberRemoved;
         var tokens = GetTokens(member.FullName);
-        var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), command.AdminMemberId, templateName, tokens, command.AdminMemberId, true, command.MemberId.ToString());
+        var notification = NotificationHelper.CreateNotification(Guid.NewGuid(), command.MemberId, templateName, tokens, command.AdminMemberId, true, command.MemberId.ToString());
         _notificationsWriteRepository.Create(notification);
     }
 

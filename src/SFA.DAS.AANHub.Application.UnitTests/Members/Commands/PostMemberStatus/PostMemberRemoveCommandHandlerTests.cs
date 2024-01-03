@@ -81,7 +81,7 @@ public class PostMemberRemoveCommandHandlerTests
 
         notificationsWriteRepository.Verify(p =>
             p.Create(It.Is<Notification>(x =>
-                x.MemberId == command.AdminMemberId && x.ReferenceId == command.MemberId.ToString() &&
+                x.MemberId == command.MemberId && x.ReferenceId == command.MemberId.ToString() &&
                 x.Tokens == tokens)), Times.Once);
     }
 
