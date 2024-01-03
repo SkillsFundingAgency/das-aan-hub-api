@@ -45,7 +45,7 @@ public class GetAllLeavingReasonsQueryHandlerTests
          CancellationToken cancellationToken)
     {
         var result = await _handler.Handle(query, cancellationToken);
-        result.Count.Should().Be(3);
+        result.Count().Should().Be(3);
     }
 
     [Test, RecursiveMoqAutoData]
@@ -57,7 +57,7 @@ public class GetAllLeavingReasonsQueryHandlerTests
 
         var category1 = result.First();
 
-        category1.LeavingReasons.Count.Should().Be(1);
+        category1.LeavingReasons.Count().Should().Be(1);
 
         category1.LeavingReasons.First().Description.Should().BeEquivalentTo(_leavingReasonCategory1Reason1.Description);
         category1.LeavingReasons.First().Id.Should().Be(_leavingReasonCategory1Reason1.Id);
@@ -74,7 +74,7 @@ public class GetAllLeavingReasonsQueryHandlerTests
 
         var category3 = result.Skip(2).First();
 
-        category3.LeavingReasons.Count.Should().Be(1);
+        category3.LeavingReasons.Count().Should().Be(1);
 
         category3.LeavingReasons.First().Description.Should().BeEquivalentTo(_leavingReasonCategory3Reason1.Description);
         category3.LeavingReasons.First().Id.Should().Be(_leavingReasonCategory3Reason1.Id);
@@ -102,7 +102,7 @@ public class GetAllLeavingReasonsQueryHandlerTests
 
         var category2 = result.Skip(1).First();
 
-        category2.LeavingReasons.Count.Should().Be(3);
+        category2.LeavingReasons.Count().Should().Be(3);
 
         category2.LeavingReasons.First().Description.Should().BeEquivalentTo(_leavingReasonCategory2Reason3.Description);
         category2.LeavingReasons.First().Id.Should().Be(_leavingReasonCategory2Reason3.Id);
