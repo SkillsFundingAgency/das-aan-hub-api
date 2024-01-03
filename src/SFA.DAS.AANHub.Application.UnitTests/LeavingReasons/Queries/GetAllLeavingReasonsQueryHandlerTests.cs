@@ -8,7 +8,7 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.LeavingReasons.Queries;
 
-public class WhenRequestingGetLeavingReasons
+public class GetAllLeavingReasonsQueryHandlerTests
 {
     public readonly List<LeavingReason> LeavingReasons = new();
 
@@ -45,7 +45,6 @@ public class WhenRequestingGetLeavingReasons
          CancellationToken cancellationToken)
     {
         var result = await _handler.Handle(query, cancellationToken);
-
         result.Count.Should().Be(3);
     }
 
