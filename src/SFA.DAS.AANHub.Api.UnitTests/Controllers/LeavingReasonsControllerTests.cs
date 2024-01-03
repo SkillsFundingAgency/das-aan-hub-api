@@ -17,7 +17,7 @@ public class LeavingReasonsControllerTests
     public async Task GetRegions_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] LeavingReasonsController sut,
-        GetLeavingReasonsQueryResult response,
+        List<LeavingCategory> response,
         CancellationToken cancellationToken)
     {
 
@@ -27,6 +27,6 @@ public class LeavingReasonsControllerTests
 
         result.As<OkObjectResult>().Should().NotBeNull();
 
-        result.As<OkObjectResult>()?.Value.Should().BeEquivalentTo(response.ProcessedResult);
+        result.As<OkObjectResult>()?.Value.Should().BeEquivalentTo(response);
     }
 }

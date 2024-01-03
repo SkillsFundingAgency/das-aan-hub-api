@@ -26,6 +26,6 @@ public class LeavingReasonsController
 
         var result = await _mediator.Send(new GetLeavingReasonsQuery(), cancellationToken);
 
-        return new OkObjectResult(result.ProcessedResult);
+        return new OkObjectResult(result);
     }
 }

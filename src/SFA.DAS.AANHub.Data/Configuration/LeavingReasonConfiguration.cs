@@ -10,7 +10,7 @@ public class LeavingReasonConfiguration : IEntityTypeConfiguration<LeavingReason
 {
     public void Configure(EntityTypeBuilder<LeavingReason> builder)
     {
-        builder.ToTable("LeavingReason");
+        builder.ToTable(nameof(LeavingReason));
         builder.HasKey(x => x.Id);
     }
 }

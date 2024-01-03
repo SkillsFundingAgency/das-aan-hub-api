@@ -6,7 +6,7 @@ namespace SFA.DAS.AANHub.Domain.Entities;
 public class LeavingReason
 {
     public int Id { get; set; }
-    public string Category { get; set; } = string.Empty;
-    public string Description { get; set; } = string.Empty;
+    public string Category { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public int Ordering { get; set; }
 }
