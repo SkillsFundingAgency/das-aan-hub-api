@@ -1,6 +1,6 @@
 ﻿namespace SFA.DAS.AANHub.Application.LeavingReasons.Queries.GetLeavingReasons;
 
-public class LeavingReasonProcessed
+public class LeavingReasonModel
 {
     public int Id { get; set; }
     public string Description { get; set; } = string.Empty;
