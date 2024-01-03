@@ -5,5 +5,5 @@ public record LeavingCategory
 {
     public string Category { get; set; } = null!;
 
-    public List<LeavingReasonProcessed> LeavingReasons { get; set; } = null!;
+    public List<LeavingReasonModel> LeavingReasons { get; set; } = null!;
 }
