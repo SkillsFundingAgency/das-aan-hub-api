@@ -29,10 +29,10 @@ public class GetAllLeavingReasonsQueryHandlerTests
         LeavingReasons.Clear();
 
         LeavingReasons.Add(_leavingReasonCategory1Reason1);
-        LeavingReasons.Add(_leavingReasonCategory3Reason1);
         LeavingReasons.Add(_leavingReasonCategory2Reason3);
         LeavingReasons.Add(_leavingReasonCategory2Reason1);
         LeavingReasons.Add(_leavingReasonCategory2Reason2);
+        LeavingReasons.Add(_leavingReasonCategory3Reason1);
 
         _readRepositoryMock.Setup(r => r.GetAllLeavingReasons(It.IsAny<CancellationToken>())).ReturnsAsync(LeavingReasons);
         _handler = new GetLeavingReasonsQueryHandler(_readRepositoryMock.Object);

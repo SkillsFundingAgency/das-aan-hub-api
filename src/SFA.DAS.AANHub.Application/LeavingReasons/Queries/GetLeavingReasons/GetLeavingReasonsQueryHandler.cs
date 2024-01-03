@@ -13,6 +13,7 @@ public class GetLeavingReasonsQueryHandler : IRequestHandler<GetLeavingReasonsQu
     {
         var allLeavingReasons = await _leavingReasonsReadRepository.GetAllLeavingReasons(cancellationToken);
 
-        return allLeavingReasons.GroupBy(r => r.Category).Select(g => new LeavingCategory(g.Key, g.Select(x => (LeavingReasonModel)x)));
+        return allLeavingReasons.GroupBy(r => r.Category)
+            .Select(g => new LeavingCategory(g.Key, g.Select(x => (LeavingReasonModel)x)));
     }
 }
