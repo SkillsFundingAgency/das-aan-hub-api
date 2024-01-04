@@ -20,7 +20,7 @@ public interface IAanDataContext
     DbSet<MemberPreference> MemberPreferences { get; }
 
     DbSet<EventGuest> EventGuests { get; }
-
+    DbSet<LeavingReason> LeavingReasons { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
