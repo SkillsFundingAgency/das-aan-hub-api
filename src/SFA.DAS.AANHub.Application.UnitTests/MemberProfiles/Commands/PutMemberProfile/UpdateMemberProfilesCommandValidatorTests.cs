@@ -39,7 +39,7 @@ public class UpdateMemberProfilesCommandValidatorTests
         var sut = new UpdateMemberProfilesCommandValidator(membersReadRepository.Object);
         var result = await sut.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdMustBeLive);
     }
 
     [Test, MoqAutoData]
@@ -74,6 +74,6 @@ public class UpdateMemberProfilesCommandValidatorTests
         var result = await sut.TestValidateAsync(command);
 
         if (membershipStatus == MembershipStatus.Live) result.ShouldNotHaveValidationErrorFor(c => c.MemberId);
-        else result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+        else result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdMustBeLive);
     }
 }

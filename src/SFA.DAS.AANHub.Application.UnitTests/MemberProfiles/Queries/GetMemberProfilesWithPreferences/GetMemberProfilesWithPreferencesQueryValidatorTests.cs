@@ -31,7 +31,7 @@ public class GetMemberProfilesWithPreferencesQueryValidatorTests
         var sut = new GetMemberProfilesWithPreferencesQueryValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(mockQuery);
 
-        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdMustBeLive);
     }
 
     [Test, MoqAutoData]

@@ -93,7 +93,7 @@ public class CreateNotificationCommandValidatorTests
         var sut = new CreateNotificationCommandValidator(membersReadRepositoryMock.Object, notificationTemplateReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(mockCommand);
 
-        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+        result.ShouldHaveValidationErrorFor(nt => nt.MemberId).WithErrorMessage(MemberIdValidator.MemberIdMustBeLive);
     }
 
     [Test, MoqAutoData]

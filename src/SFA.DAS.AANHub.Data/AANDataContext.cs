@@ -28,6 +28,7 @@ public class AanDataContext : DbContext, IAanDataContext
 
     public DbSet<EventGuest> EventGuests => Set<EventGuest>();
     public DbSet<LeavingReason> LeavingReasons => Set<LeavingReason>();
+    public DbSet<MemberLeavingReason> MemberLeavingReasons => Set<MemberLeavingReason>();
 
     public AanDataContext(DbContextOptions<AanDataContext> options) : base(options) { }
 

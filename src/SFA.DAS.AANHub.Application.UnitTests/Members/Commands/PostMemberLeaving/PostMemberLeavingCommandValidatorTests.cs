@@ -2,15 +2,13 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common.Validators.MemberId;
-using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
+using SFA.DAS.AANHub.Application.Members.Commands.PostMemberLeaving;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using static SFA.DAS.AANHub.Domain.Common.Constants;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Members.Commands.PatchMember.PatchMemberCommandValidatorTests;
-
-public class WhenValidatingMemberId
+namespace SFA.DAS.AANHub.Application.UnitTests.Members.Commands.PostMemberLeaving;
+public class PostMemberLeavingCommandValidatorTests
 {
     [TestCase(null, UserType.Apprentice, false)]
     [TestCase("00000000-0000-0000-0000-000000000000", UserType.Apprentice, false)]
@@ -18,12 +16,12 @@ public class WhenValidatingMemberId
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Apprentice, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Employer, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, false, MemberIdValidator.MemberIdMustBeApprenticeOrEmployer)]
-    public async Task ThenMemberIdShouldHaveAValidValue(string memberId, UserType userType, bool isValid, string? errorMessage = null)
+    public async Task ValidateMemberId(string memberId, UserType userType, bool isValid, string? errorMessage = null)
     {
         Mock<IMembersReadRepository> repositoryMock = new();
-        repositoryMock.Setup(r => r.GetMember(Guid.Parse("f5521677-7733-4416-b5a7-4c7a231fe469"))).ReturnsAsync(new Member() { Status = MembershipStatus.Live, UserType = userType });
-        PatchMemberCommandValidator sut = new(repositoryMock.Object);
-        PatchMemberCommand target = new();
+        repositoryMock.Setup(r => r.GetMember(Guid.Parse("f5521677-7733-4416-b5a7-4c7a231fe469"))).ReturnsAsync(new Member() { Status = Domain.Common.Constants.MembershipStatus.Live, UserType = userType });
+        PostMemberLeavingCommandValidator sut = new(repositoryMock.Object);
+        PostMemberLeavingCommand target = new();
         if (memberId != null) target.MemberId = Guid.Parse(memberId);
 
         var result = await sut.TestValidateAsync(target);
@@ -40,7 +38,7 @@ public class WhenValidatingMemberId
                 .ShouldHaveValidationErrorFor(s => s.MemberId)
                 .WithErrorMessage(
                     string.IsNullOrWhiteSpace(errorMessage)
-                    ? string.Format(MemberIdValidator.MemberIdEmptyErrorMessage, nameof(PatchMemberCommand.MemberId))
+                    ? MemberIdValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
             }
             else
@@ -49,7 +47,7 @@ public class WhenValidatingMemberId
                 .ShouldHaveValidationErrorFor(s => s.MemberId)
                 .WithErrorMessage(
                     string.IsNullOrWhiteSpace(errorMessage)
-                    ? string.Format(MemberIdValidator.MemberIdEmptyErrorMessage, nameof(PatchMemberCommand.MemberId))
+                    ? MemberIdValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
             }
         }
