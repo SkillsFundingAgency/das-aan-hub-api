@@ -87,7 +87,7 @@ public class PutAttendanceCommandHandlerTests
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             auditWriteRepository.Verify(a => a.Create(
                 It.Is<Audit>(
-                    a => a.Action == "Put"
+                    a => a.Action == AuditAction.Put
                     && !string.IsNullOrWhiteSpace(a.Before)
                     && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId
@@ -138,7 +138,7 @@ public class PutAttendanceCommandHandlerTests
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
             auditWriteRepository.Verify(a => a.Create(
                 It.Is<Audit>(
-                    a => a.Action == "Create"
+                    a => a.Action == AuditAction.Create
                     && a.Before == null
                     && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId

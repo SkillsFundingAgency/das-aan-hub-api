@@ -53,7 +53,7 @@ public abstract class ActionResponseControllerBase : ControllerBase
         return new BadRequestObjectResult(FormatErrors(response.Errors));
     }
 
-    private static List<ValidationError> FormatErrors(IEnumerable<ValidationFailure> errors)
+    protected static List<ValidationError> FormatErrors(IEnumerable<ValidationFailure> errors)
     {
         return errors.Select(err => new ValidationError
         {

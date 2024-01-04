@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -44,7 +45,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
     {
         var audit = new Audit()
         {
-            Action = "Put",
+            Action = AuditAction.Put,
             Before = JsonSerializer.Serialize(existingMember.MemberProfiles),
             ActionedBy = existingMember.Id,
             AuditTime = _dateTimeProvider.Now,
@@ -81,7 +82,7 @@ public class UpdateMemberProfilesCommandHandler : IRequestHandler<UpdateMemberPr
     {
         var audit = new Audit()
         {
-            Action = "Put",
+            Action = AuditAction.Put,
             Before = JsonSerializer.Serialize(member.MemberPreferences),
             ActionedBy = member.Id,
             AuditTime = _dateTimeProvider.Now,

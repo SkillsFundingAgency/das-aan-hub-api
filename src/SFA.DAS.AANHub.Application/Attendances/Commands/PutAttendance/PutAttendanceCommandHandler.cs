@@ -55,7 +55,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     {
         var audit = new Audit()
         {
-            Action = "Put",
+            Action = AuditAction.Put,
             Before = JsonSerializer.Serialize(existingAttendance),
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,
@@ -81,7 +81,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
 
         var audit = new Audit()
         {
-            Action = "Create",
+            Action = AuditAction.Create,
             After = JsonSerializer.Serialize(newAttendance),
             ActionedBy = command.RequestedByMemberId,
             AuditTime = DateTime.UtcNow,

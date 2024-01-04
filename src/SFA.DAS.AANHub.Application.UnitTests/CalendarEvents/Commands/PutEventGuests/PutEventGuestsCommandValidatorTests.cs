@@ -2,6 +2,7 @@
 using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Common.Validators.AdminMemberId;
 using SFA.DAS.AANHub.Application.EventGuests.PutEventGuests;
 using SFA.DAS.AANHub.Application.Models;
 using SFA.DAS.AANHub.Domain.Common;
@@ -41,7 +42,7 @@ public class PutEventGuestsCommandValidatorTests
         var member = new Member
         {
             UserType = UserType.Admin,
-            Status = MembershipStatusType.Cancelled.ToString(),
+            Status = MembershipStatusType.Removed.ToString(),
             IsRegionalChair = false
         };
 
@@ -50,7 +51,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var result = await sut.TestValidateAsync(command);
         result.ShouldHaveValidationErrorFor(c => c.AdminMemberId)
-            .WithErrorMessage(PutEventGuestsCommandValidator.RequestedByMemberIdMustBeAdmin);
+            .WithErrorMessage(AdminMemberIdValidator.RequestedByMemberIdMustBeLive);
         result.Errors.Count.Should().Be(1);
     }
 
@@ -72,7 +73,7 @@ public class PutEventGuestsCommandValidatorTests
 
         var result = await sut.TestValidateAsync(command);
         result.ShouldHaveValidationErrorFor(c => c.AdminMemberId)
-            .WithErrorMessage(PutEventGuestsCommandValidator.RequestedByMemberIdMustBeAdmin);
+            .WithErrorMessage(AdminMemberIdValidator.RequestedByMemberIdMustBeAdmin);
         result.Errors.Count.Should().Be(1);
     }
 

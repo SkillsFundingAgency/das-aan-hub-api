@@ -3,6 +3,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.MemberProfiles.Commands.PutMemberProfile;
+using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -98,13 +99,11 @@ public class UpdateMemberProfilesCommandHandlerTests
         // Assert
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberPreference))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberPreference))),
         Times.Never);
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberProfile))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberProfile))),
         Times.Once);
     }
 
@@ -129,13 +128,11 @@ public class UpdateMemberProfilesCommandHandlerTests
         // Assert
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberProfile))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberProfile))),
         Times.Never);
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberPreference))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberPreference))),
         Times.Once);
     }
 
@@ -160,13 +157,11 @@ public class UpdateMemberProfilesCommandHandlerTests
         // Assert
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberProfile))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberProfile))),
         Times.Never);
         auditWriteRepository.Verify(a => a.Create(
         It.Is<Audit>(
-            a => a.Action == "Put"
-            && a.Resource == nameof(MemberPreference))),
+            a => a.Action == AuditAction.Put && a.Resource == nameof(MemberPreference))),
         Times.Never);
     }
 

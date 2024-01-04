@@ -38,7 +38,7 @@ public class PatchMemberCommandHandler : IRequestHandler<PatchMemberCommand, Val
 
         var audit = new Audit()
         {
-            Action = "PatchMember",
+            Action = AuditAction.PatchMember,
             ActionedBy = command.MemberId,
             AuditTime = _dateTimeProvider.Now,
             Before = JsonSerializer.Serialize(member),
