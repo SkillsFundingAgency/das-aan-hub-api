@@ -1,5 +1,5 @@
-﻿using SFA.DAS.AANHub.Domain.Common;
-using System.Text.Json.Serialization;
+﻿using System.Text.Json.Serialization;
+using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Domain.Entities;
 

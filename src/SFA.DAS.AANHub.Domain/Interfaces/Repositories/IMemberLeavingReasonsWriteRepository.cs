@@ -3,5 +3,5 @@
 namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 public interface IMemberLeavingReasonsWriteRepository
 {
-    void Create(MemberLeavingReason memberLeavingReason);
+    void CreateMemberLeavingReasons(List<MemberLeavingReason> memberLeavingReasons);
 }

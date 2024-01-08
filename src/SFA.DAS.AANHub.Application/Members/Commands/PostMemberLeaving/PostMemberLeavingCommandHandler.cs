@@ -1,11 +1,11 @@
-﻿using MediatR;
+﻿using System.Text.Json;
+using MediatR;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.Members.Commands.PostMemberLeaving;
 
@@ -51,9 +51,14 @@ public class PostMemberLeavingCommandHandler : IRequestHandler<PostMemberLeaving
 
         var validLeavingReasonIds = await _leavingReasonsReadRepository.GetAllLeavingReasons(cancellationToken);
 
-        foreach (var leavingReasonId in command.LeavingReasons.Distinct().Where(leavingReasonId => validLeavingReasonIds.Exists(x => x.Id == leavingReasonId)))
+        if (validLeavingReasonIds.Any())
         {
-            _memberLeavingReasonsWriteRepository.Create(new MemberLeavingReason { Id = Guid.NewGuid(), LeavingReasonId = leavingReasonId, MemberId = member.Id });
+            _memberLeavingReasonsWriteRepository.CreateMemberLeavingReasons(
+                command.LeavingReasons.Distinct().Where(leavingReasonId => validLeavingReasonIds
+                        .Exists(x => x.Id == leavingReasonId))
+                    .Select(leavingReasonId => new MemberLeavingReason
+                    { Id = Guid.NewGuid(), LeavingReasonId = leavingReasonId, MemberId = member.Id })
+                    .ToList());
         }
 
         _auditWriteRepository.Create(audit);

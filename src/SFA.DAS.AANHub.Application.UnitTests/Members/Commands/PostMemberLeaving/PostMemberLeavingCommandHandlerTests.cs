@@ -1,4 +1,5 @@
-﻿using AutoFixture.NUnit3;
+﻿using System.Text.Json;
+using AutoFixture.NUnit3;
 using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
@@ -9,7 +10,6 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
-using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Members.Commands.PostMemberLeaving;
 public class PostMemberLeavingCommandHandlerTests
@@ -90,15 +90,9 @@ public class PostMemberLeavingCommandHandlerTests
 
         await sut.Handle(command, new CancellationToken());
 
-        memberLeavingReasonsWriteRepository.Verify(x => x.Create(It.IsAny<MemberLeavingReason>()),
-                Times.Exactly(leavingReasons.Count));
-
-        foreach (var leavingReasonId in leavingReasonIds.Distinct())
-        {
-            memberLeavingReasonsWriteRepository.Verify(x => x.Create(
-                    It.Is<MemberLeavingReason>(m => m.MemberId == member.Id && m.LeavingReasonId == leavingReasonId)),
+        memberLeavingReasonsWriteRepository.Verify(x => x.CreateMemberLeavingReasons(
+                    It.IsAny<List<MemberLeavingReason>>()),
                 Times.Once);
-        }
     }
 
     [Test, RecursiveMoqAutoData]
