@@ -10,4 +10,5 @@ public static class AuditAction
     public const string Put = nameof(Put);
     public const string Cancelled = nameof(Cancelled);
     public const string PatchMember = nameof(PatchMember);
+    public const string Withdrawn = nameof(Withdrawn);
 }

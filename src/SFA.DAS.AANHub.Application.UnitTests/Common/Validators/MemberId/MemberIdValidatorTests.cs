@@ -55,7 +55,7 @@ public class MemberIdValidatorTests
         var sut = new MemberIdValidator(membersReadRepositoryMock.Object);
         var result = await sut.TestValidateAsync(command);
 
-        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdNotFoundErrorMessage);
+        result.ShouldHaveValidationErrorFor(c => c.MemberId).WithErrorMessage(MemberIdValidator.MemberIdMustBeLive);
     }
 
     private class MemberIdCommandTest : IMemberId

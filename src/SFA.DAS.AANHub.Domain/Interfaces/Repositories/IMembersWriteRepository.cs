@@ -1,12 +1,11 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories
+namespace SFA.DAS.AANHub.Domain.Interfaces.Repositories;
+
+public interface IMembersWriteRepository
 {
-    public interface IMembersWriteRepository
-    {
-        void Create(Member member);
+    void Create(Member member);
 
-        Task<Member?> Get(Guid id);
+    Task<Member?> Get(Guid id);
 
-    }
 }

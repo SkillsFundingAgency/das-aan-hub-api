@@ -14,7 +14,7 @@ using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.MembersControllerTests;
-public class MembersControllerPostTests
+public class MembersControllerPostStatusTests
 {
     [Test]
     [MoqAutoData]

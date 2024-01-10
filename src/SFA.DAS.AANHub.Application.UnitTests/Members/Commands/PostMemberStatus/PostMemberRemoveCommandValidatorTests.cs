@@ -14,10 +14,10 @@ public class PostMemberRemoveCommandValidatorTests
 {
     [TestCase(null, UserType.Apprentice, false)]
     [TestCase("00000000-0000-0000-0000-000000000000", UserType.Apprentice, false)]
-    [TestCase("ac44a17b-f843-4e1f-979b-aa95c0fe44f2", UserType.Apprentice, false, MemberIdValidator.MemberIdNotFoundErrorMessage)]
+    [TestCase("ac44a17b-f843-4e1f-979b-aa95c0fe44f2", UserType.Apprentice, false, MemberIdValidator.MemberIdMustBeLive)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Apprentice, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Employer, true)]
-    [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, false, MemberIdValidator.MemberIdNotFoundErrorMessage)]
+    [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, false, MemberIdValidator.MemberIdMustBeApprenticeOrEmployer)]
     public async Task ValidateMemberId(string memberId, UserType userType, bool isValid, string? errorMessage = null)
     {
         Mock<IMembersReadRepository> repositoryMock = new();
@@ -40,7 +40,7 @@ public class PostMemberRemoveCommandValidatorTests
                 .ShouldHaveValidationErrorFor(s => s.MemberId)
                 .WithErrorMessage(
                     string.IsNullOrWhiteSpace(errorMessage)
-                    ? MemberIdValidator.MemberIdNotFoundErrorMessage
+                    ? MemberIdValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
             }
             else

@@ -21,6 +21,7 @@ public interface IAanDataContext
 
     DbSet<EventGuest> EventGuests { get; }
     DbSet<LeavingReason> LeavingReasons { get; }
+    DbSet<MemberLeavingReason> MemberLeavingReasons { get; }
 
     Task<int> SaveChangesAsync(CancellationToken cancellationToken);
 }
