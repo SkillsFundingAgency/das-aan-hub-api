@@ -18,10 +18,11 @@ public class Member
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
-    public List<MemberProfile> MemberProfiles { get; set; } = new();
-    public List<MemberPreference> MemberPreferences { get; set; } = new();
-    public List<MemberLeavingReason> MemberLeavingReasons { get; set; } = new();
-    public List<Attendance> Attendances { get; set; } = new();
+    public virtual List<MemberProfile> MemberProfiles { get; set; } = new();
+    public virtual List<MemberPreference> MemberPreferences { get; set; } = new();
+    public virtual List<MemberLeavingReason> MemberLeavingReasons { get; set; } = new();
+    public virtual List<Attendance> Attendances { get; set; } = new();
+    public virtual List<Audit> Audits { get; set; } = new();
     public virtual Region? Region { get; set; }
 
     [JsonIgnore]
