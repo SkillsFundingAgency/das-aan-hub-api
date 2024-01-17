@@ -351,3 +351,6 @@ MigrationBackup/
 
 # Git merge Files
 *.orig
+
+# Local settings
+src/SFA.DAS.AANHub.Api/appsettings.Development.json
