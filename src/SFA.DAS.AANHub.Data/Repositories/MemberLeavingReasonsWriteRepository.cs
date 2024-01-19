@@ -15,4 +15,14 @@ internal class MemberLeavingReasonsWriteRepository : IMemberLeavingReasonsWriteR
     {
         _aanDataContext.MemberLeavingReasons.AddRange(memberLeavingReasons);
     }
+
+    public void DeleteLeavingReasons(Guid memberId)
+    {
+        var leavingReasonsToRemove = _aanDataContext.MemberLeavingReasons.Where(x => x.MemberId == memberId).ToList();
+
+        if (leavingReasonsToRemove.Any())
+        {
+            _aanDataContext.MemberLeavingReasons.RemoveRange(leavingReasonsToRemove);
+        }
+    }
 }

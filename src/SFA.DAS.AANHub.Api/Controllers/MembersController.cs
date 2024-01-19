@@ -7,6 +7,7 @@ using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Members.Commands.PatchMember;
 using SFA.DAS.AANHub.Application.Members.Commands.PostMemberLeaving;
+using SFA.DAS.AANHub.Application.Members.Commands.PostMemberReinstate;
 using SFA.DAS.AANHub.Application.Members.Commands.PostMemberRemove;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMember;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
@@ -131,6 +132,27 @@ public class MembersController : ActionResponseControllerBase
         {
             MemberId = memberId,
             LeavingReasons = request.LeavingReasons
+        };
+
+        var response = await _mediator.Send(command, cancellationToken);
+
+        if (response.Result is { IsSuccess: false }) return NotFound();
+        if (response.IsValidResponse) return NoContent();
+
+        return new BadRequestObjectResult(FormatErrors(response.Errors));
+    }
+
+
+    [HttpPost]
+    [Route("{memberId}/reinstate")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    [ProducesResponseType(typeof(NoContentResult), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(NotFoundResult), StatusCodes.Status404NotFound)]
+    public async Task<IActionResult> PostMemberReinstate([FromRoute] Guid memberId, CancellationToken cancellationToken)
+    {
+        PostMemberReinstateCommand command = new()
+        {
+            MemberId = memberId
         };
 
         var response = await _mediator.Send(command, cancellationToken);
