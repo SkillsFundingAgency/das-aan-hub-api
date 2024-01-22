@@ -23,15 +23,12 @@ public class PostMemberReinstateCommandValidator : AbstractValidator<PostMemberR
             {
                 member = await membersReadRepository.GetMember(memberId);
                 return
-                    member != null &&
-                    (
-                        member!.Status == MembershipStatusType.Withdrawn.ToString()
-                        || member.Status == MembershipStatusType.Deleted.ToString()
-                    );
+                    member is { UserType: UserType.Apprentice or UserType.Employer };
             })
-            .WithMessage(MemberIdMustBeWithdrawnOrDeleted)
+            .WithMessage(MemberIdMustBeApprenticeOrEmployer)
             .Must((_) =>
-                member is { UserType: UserType.Apprentice or UserType.Employer })
-            .WithMessage(MemberIdMustBeApprenticeOrEmployer);
+                  (member!.Status == MembershipStatusType.Withdrawn.ToString()
+                                 || member.Status == MembershipStatusType.Deleted.ToString()))
+            .WithMessage(MemberIdMustBeWithdrawnOrDeleted);
     }
 }

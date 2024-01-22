@@ -1,4 +1,5 @@
-﻿using FluentValidation.TestHelper;
+﻿using FluentAssertions;
+using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Members.Commands.PostMemberReinstate;
@@ -11,7 +12,7 @@ public class PostMemberReinstateCommandValidatorTests
 {
     [TestCase(null, UserType.Apprentice, false)]
     [TestCase("00000000-0000-0000-0000-000000000000", UserType.Apprentice, false)]
-    [TestCase("ac44a17b-f843-4e1f-979b-aa95c0fe44f2", UserType.Apprentice, false, PostMemberReinstateCommandValidator.MemberIdMustBeWithdrawnOrDeleted)]
+    [TestCase("ac44a17b-f843-4e1f-979b-aa95c0fe44f2", UserType.Apprentice, false, PostMemberReinstateCommandValidator.MemberIdMustBeApprenticeOrEmployer)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Apprentice, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Employer, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, false, PostMemberReinstateCommandValidator.MemberIdMustBeApprenticeOrEmployer)]
@@ -27,7 +28,8 @@ public class PostMemberReinstateCommandValidatorTests
 
         if (isValid)
         {
-            result.ShouldNotHaveValidationErrorFor(s => s.MemberId);
+            // result.ShouldNotHaveValidationErrorFor(s => s.MemberId);
+            result.ShouldNotHaveAnyValidationErrors();
         }
         else
         {
@@ -39,6 +41,8 @@ public class PostMemberReinstateCommandValidatorTests
                     string.IsNullOrWhiteSpace(errorMessage)
                     ? PostMemberReinstateCommandValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
+
+                result.Errors.Count.Should().Be(1);
             }
             else
             {
@@ -48,6 +52,7 @@ public class PostMemberReinstateCommandValidatorTests
                     string.IsNullOrWhiteSpace(errorMessage)
                     ? PostMemberReinstateCommandValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
+                result.Errors.Count.Should().Be(1);
             }
         }
     }
@@ -76,6 +81,8 @@ public class PostMemberReinstateCommandValidatorTests
             result
                 .ShouldHaveValidationErrorFor(s => s.MemberId)
                 .WithErrorMessage(PostMemberReinstateCommandValidator.MemberIdMustBeWithdrawnOrDeleted);
+
+            result.Errors.Count.Should().Be(1);
         }
     }
 }

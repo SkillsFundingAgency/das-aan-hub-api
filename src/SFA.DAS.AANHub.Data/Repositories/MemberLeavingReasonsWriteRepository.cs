@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
@@ -16,13 +17,9 @@ internal class MemberLeavingReasonsWriteRepository : IMemberLeavingReasonsWriteR
         _aanDataContext.MemberLeavingReasons.AddRange(memberLeavingReasons);
     }
 
-    public void DeleteLeavingReasons(Guid memberId)
+    public async Task DeleteLeavingReasons(Guid memberId, CancellationToken cancellationToken)
     {
-        var leavingReasonsToRemove = _aanDataContext.MemberLeavingReasons.Where(x => x.MemberId == memberId).ToList();
-
-        if (leavingReasonsToRemove.Any())
-        {
-            _aanDataContext.MemberLeavingReasons.RemoveRange(leavingReasonsToRemove);
-        }
+        var leavingReasonsToRemove = await _aanDataContext.MemberLeavingReasons.Where(x => x.MemberId == memberId).ToListAsync(cancellationToken);
+        _aanDataContext.MemberLeavingReasons.RemoveRange(leavingReasonsToRemove);
     }
 }

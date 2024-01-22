@@ -73,7 +73,7 @@ public class PostMemberReinstateCommandHandlerTests
         membersWriteRepository.Setup(x => x.Get(member.Id)).ReturnsAsync(member);
         await sut.Handle(command, new CancellationToken());
 
-        memberLeavingReasonsWriteRepository.Verify(x => x.DeleteLeavingReasons(member.Id),
+        memberLeavingReasonsWriteRepository.Verify(x => x.DeleteLeavingReasons(member.Id, It.IsAny<CancellationToken>()),
                 Times.Once);
     }
 }

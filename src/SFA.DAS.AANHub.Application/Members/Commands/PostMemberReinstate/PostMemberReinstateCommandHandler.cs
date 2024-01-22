@@ -48,7 +48,7 @@ public class PostMemberReinstateCommandHandler : IRequestHandler<PostMemberReins
 
         audit.After = JsonSerializer.Serialize(member);
 
-        _memberLeavingReasonsWriteRepository.DeleteLeavingReasons(command.MemberId);
+        await _memberLeavingReasonsWriteRepository.DeleteLeavingReasons(command.MemberId, cancellationToken);
         _auditWriteRepository.Create(audit);
 
         await _aanDataContext.SaveChangesAsync(cancellationToken);
