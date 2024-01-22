@@ -28,7 +28,6 @@ public class PostMemberReinstateCommandValidatorTests
 
         if (isValid)
         {
-            // result.ShouldNotHaveValidationErrorFor(s => s.MemberId);
             result.ShouldNotHaveAnyValidationErrors();
         }
         else
@@ -41,7 +40,6 @@ public class PostMemberReinstateCommandValidatorTests
                     string.IsNullOrWhiteSpace(errorMessage)
                     ? PostMemberReinstateCommandValidator.MemberIdEmptyErrorMessage
                     : errorMessage);
-
                 result.Errors.Count.Should().Be(1);
             }
             else
