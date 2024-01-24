@@ -39,4 +39,30 @@ public class GetMemberActivitiesQueryHandlerTests
             Assert.That(result.Result.EventsAttended.EventsDateRange, Is.Not.Null);
         });
     }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Handle_MemberWithNoActivity(
+        [Frozen] Mock<IAttendancesReadRepository> attendancesReadRepository,
+        [Frozen] Mock<IAuditReadRepository> auditReadRepository,
+        GetMemberActivitiesQueryHandler sut,
+        Audit audit,
+        Guid memberId)
+    {
+        // Arrange
+        List<Attendance> attendances = new List<Attendance>();
+        attendancesReadRepository.Setup(a => a.GetAttendances(It.IsAny<Guid>(), It.IsAny<DateTime>(), It.IsAny<DateTime>(), It.IsAny<CancellationToken>())).ReturnsAsync(attendances);
+        auditReadRepository.Setup(a => a.GetLastAttendanceAuditByMemberId(It.IsAny<Guid>(), It.IsAny<CancellationToken>())).ReturnsAsync(audit);
+
+        // Act
+        var result = await sut.Handle(new GetMemberActivitiesQuery(memberId), new CancellationToken());
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Result.EventsPlanned.Events, Is.Not.Null);
+            Assert.That(result.Result.EventsPlanned.Events.Count, Is.EqualTo(0));
+            Assert.That(result.Result.EventsAttended.Events, Is.Not.Null);
+            Assert.That(result.Result.EventsAttended.Events.Count, Is.EqualTo(0));
+        });
+    }
 }
