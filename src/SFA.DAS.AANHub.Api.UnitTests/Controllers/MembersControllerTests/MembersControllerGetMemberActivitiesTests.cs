@@ -93,6 +93,33 @@ public class MembersControllerGetMemberActivitiesTests
     }
 
     [Test, AutoData]
+    public async Task GetMemberActivities_ReturnEmptyActivityListForMember(
+        GetMemberActivitiesResult getMemberActivitiesResult)
+    {
+        // Arrange
+        getMemberActivitiesResult.EventsAttended.Events = new();
+        getMemberActivitiesResult.EventsPlanned.Events = new();
+        var response = new ValidatedResponse<GetMemberActivitiesResult>(getMemberActivitiesResult);
+        mediatorMock.Setup(m => m.Send(It.Is<GetMemberActivitiesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(response);
+
+        // Act
+        var result = await sut.GetMemberActivities(memberId);
+        var objectResult = result as OkObjectResult;
+        var memberActivitiesResult = (GetMemberActivitiesResult)objectResult!.Value!;
+
+        // Assert
+        Assert.Multiple(() =>
+        {
+            Assert.That(memberActivitiesResult, Is.Not.Null);
+            Assert.That(memberActivitiesResult.EventsPlanned.Events, Is.Not.Null);
+            Assert.That(memberActivitiesResult.EventsPlanned.Events.Count, Is.EqualTo(0));
+            Assert.That(memberActivitiesResult.EventsAttended.Events, Is.Not.Null);
+            Assert.That(memberActivitiesResult.EventsAttended.Events.Count, Is.EqualTo(0));
+        });
+    }
+
+    [Test, AutoData]
     public async Task GetMemberActivities_HandlerReturnsData_ShouldReturnExpectedValueForEvents(
         GetMemberActivitiesResult getMemberActivitiesResult)
     {

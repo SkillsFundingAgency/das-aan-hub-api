@@ -1,9 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Diagnostics.CodeAnalysis;
+using Microsoft.EntityFrameworkCore;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
-public class AuditReadRepository : IAuditReadRepository
+
+[ExcludeFromCodeCoverage]
+internal class AuditReadRepository : IAuditReadRepository
 {
     private readonly AanDataContext _aanDataContext;
 
