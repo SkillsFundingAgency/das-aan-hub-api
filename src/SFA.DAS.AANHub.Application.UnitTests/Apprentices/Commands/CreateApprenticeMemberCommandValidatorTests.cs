@@ -26,7 +26,7 @@ public class CreateApprenticeMemberCommandValidatorTests
             new Profile{ Id = 2 }
         });
 
-        sut = new(apprenticesReadRepository.Object, profilesReadRepository.Object);
+        sut = new(apprenticesReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>());
     }
 
     [TestCase("684b9829-d882-4733-938e-bcee6d6bfe81", true)]

@@ -1,6 +1,8 @@
 ﻿using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Common.CreateMemberCommandBaseValidatorTests;
 
@@ -13,7 +15,7 @@ public class WhenValidatingLastName
     [TestCase(201, false, CreateMemberCommandBaseValidator.ExceededAllowableLengthErrorMessage)]
     public async Task ThenShouldHaveValidValue(int? stringLength, bool isValid, string? errorMessage)
     {
-        CreateMemberCommandBaseValidator sut = new();
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
         TestTarget target = new();
 
         string? value = stringLength switch

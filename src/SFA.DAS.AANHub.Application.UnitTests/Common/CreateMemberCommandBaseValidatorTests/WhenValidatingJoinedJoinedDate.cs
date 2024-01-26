@@ -1,6 +1,8 @@
 ﻿using FluentValidation.TestHelper;
+using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Common.CreateMemberCommandBaseValidatorTests;
 
@@ -9,7 +11,7 @@ public class WhenValidatingJoinedJoinedDate
     [Test]
     public async Task ThenFutureDatesAreInvalid()
     {
-        CreateMemberCommandBaseValidator sut = new();
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
         TestTarget target = new()
         {
             JoinedDate = DateTime.Today.AddDays(1)
@@ -23,7 +25,7 @@ public class WhenValidatingJoinedJoinedDate
     [Test]
     public async Task ThenTodaysDateIsValid()
     {
-        CreateMemberCommandBaseValidator sut = new();
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
         TestTarget target = new()
         {
             JoinedDate = DateTime.Today
@@ -37,7 +39,7 @@ public class WhenValidatingJoinedJoinedDate
     [Test]
     public async Task ThenPastTodaysDatesAreValid()
     {
-        CreateMemberCommandBaseValidator sut = new();
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
         TestTarget target = new()
         {
             JoinedDate = DateTime.Today.AddDays(-1)

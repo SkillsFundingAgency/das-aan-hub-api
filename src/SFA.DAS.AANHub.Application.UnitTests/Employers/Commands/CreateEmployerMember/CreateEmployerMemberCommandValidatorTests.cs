@@ -26,7 +26,7 @@ public class CreateEmployerMemberCommandValidatorTests
             new Profile{ Id = 2 }
         });
 
-        sut = new(employersReadRepository.Object, profilesReadRepository.Object);
+        sut = new(employersReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>());
     }
 
     [TestCase("00000000-0000-0000-0000-000000000000", false)]

@@ -8,6 +8,6 @@ public class CreateAdminMemberCommandValidator : AbstractValidator<CreateAdminMe
 {
     public CreateAdminMemberCommandValidator(IMembersReadRepository membersReadRepository)
     {
-        Include(new CreateMemberCommandBaseValidator());
+        Include(new CreateMemberCommandBaseValidator(membersReadRepository));
     }
 }
