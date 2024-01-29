@@ -10,6 +10,7 @@ using SFA.DAS.AANHub.Application.Members.Commands.PostMemberLeaving;
 using SFA.DAS.AANHub.Application.Members.Commands.PostMemberReinstate;
 using SFA.DAS.AANHub.Application.Members.Commands.PostMemberRemove;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMember;
+using SFA.DAS.AANHub.Application.Members.Queries.GetMemberActivities;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMemberByEmail;
 using SFA.DAS.AANHub.Application.Members.Queries.GetMembers;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -161,5 +162,18 @@ public class MembersController : ActionResponseControllerBase
         if (response.IsValidResponse) return NoContent();
 
         return new BadRequestObjectResult(FormatErrors(response.Errors));
+    }
+
+    [HttpGet]
+    [Route("{memberId:guid}/activities")]
+    [ProducesResponseType(typeof(GetMemberActivitiesResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(StatusCodes.Status400BadRequest)]
+    public async Task<IActionResult> GetMemberActivities(Guid memberId)
+    {
+        _logger.LogInformation("AAN Hub API: Received command to get member activities by memberId: {memberId}", memberId);
+
+        var response = await _mediator.Send(new GetMemberActivitiesQuery(memberId));
+
+        return GetResponse(response);
     }
 }
