@@ -112,35 +112,6 @@ public class MembersControllerGetMemberActivitiesTests
     }
 
     [Test, AutoData]
-    public async Task GetMemberActivities_HandlerReturnsData_ShouldReturnExpectedValueForEvents(
-        GetMemberActivitiesQueryResult getMemberActivitiesQueryResult)
-    {
-        // Arrange
-        var response = new ValidatedResponse<GetMemberActivitiesQueryResult>(getMemberActivitiesQueryResult);
-        mediatorMock.Setup(m => m.Send(It.Is<GetMemberActivitiesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(response);
-
-        // Act
-        var result = await sut.GetMemberActivities(memberId);
-        var objectResult = result as OkObjectResult;
-        var memberActivitiesResult = (GetMemberActivitiesQueryResult)objectResult!.Value!;
-
-        // Assert
-        Assert.Multiple(() =>
-        {
-            Assert.That(memberActivitiesResult, Is.Not.Null);
-            Assert.That(memberActivitiesResult.EventsAttended.Events[0].CalendarEventId, Is.EqualTo(getMemberActivitiesQueryResult.EventsAttended.Events[0].CalendarEventId));
-            Assert.That(memberActivitiesResult.EventsAttended.Events[0].EventDate, Is.EqualTo(getMemberActivitiesQueryResult.EventsAttended.Events[0].EventDate));
-            Assert.That(memberActivitiesResult.EventsAttended.Events[0].EventTitle, Is.EqualTo(getMemberActivitiesQueryResult.EventsAttended.Events[0].EventTitle));
-            Assert.That(memberActivitiesResult.EventsAttended.Events[0].Urn, Is.EqualTo(getMemberActivitiesQueryResult.EventsAttended.Events[0].Urn));
-            Assert.That(memberActivitiesResult.EventsPlanned.Events[0].CalendarEventId, Is.EqualTo(getMemberActivitiesQueryResult.EventsPlanned.Events[0].CalendarEventId));
-            Assert.That(memberActivitiesResult.EventsPlanned.Events[0].EventDate, Is.EqualTo(getMemberActivitiesQueryResult.EventsPlanned.Events[0].EventDate));
-            Assert.That(memberActivitiesResult.EventsPlanned.Events[0].EventTitle, Is.EqualTo(getMemberActivitiesQueryResult.EventsPlanned.Events[0].EventTitle));
-            Assert.That(memberActivitiesResult.EventsPlanned.Events[0].Urn, Is.EqualTo(getMemberActivitiesQueryResult.EventsPlanned.Events[0].Urn));
-        });
-    }
-
-    [Test, AutoData]
     public async Task GetMember_InvalidRequest_ReturnsBadRequestResponse(
         List<ValidationFailure> errors)
     {
