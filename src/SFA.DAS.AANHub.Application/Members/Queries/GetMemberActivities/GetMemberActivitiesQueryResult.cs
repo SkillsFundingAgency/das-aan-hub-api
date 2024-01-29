@@ -1,5 +1,5 @@
 ﻿namespace SFA.DAS.AANHub.Application.Members.Queries.GetMemberActivities;
-public class GetMemberActivitiesResult
+public class GetMemberActivitiesQueryResult
 {
     public DateTime? LastSignedUpDate { get; set; }
 

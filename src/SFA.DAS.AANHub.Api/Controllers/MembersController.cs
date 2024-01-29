@@ -166,7 +166,7 @@ public class MembersController : ActionResponseControllerBase
 
     [HttpGet]
     [Route("{memberId:guid}/activities")]
-    [ProducesResponseType(typeof(GetMemberActivitiesResult), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(GetMemberActivitiesQueryResult), StatusCodes.Status200OK)]
     [ProducesResponseType(StatusCodes.Status400BadRequest)]
     public async Task<IActionResult> GetMemberActivities(Guid memberId)
     {
