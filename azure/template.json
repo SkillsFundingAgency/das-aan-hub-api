@@ -135,6 +135,9 @@
                     },
                     "attachedService": {
                         "value": "[variables('apiAppServiceName')]"
+                    },
+                    "logAnalyticsWorkspaceId": {
+                        "value": "[resourceId(parameters('logAnalyticsSubscriptionId'),parameters('sharedManagementResourceGroup'),'Microsoft.OperationalInsights/workspaces',parameters('logAnalyticsWorkspaceName'))]"
                     }
                 }
             },
@@ -186,8 +189,8 @@
                               "value": "1.0"
                             },
                             {
-                              "name": "APPINSIGHTS_INSTRUMENTATIONKEY",
-                              "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.InstrumentationKey.value]"
+                              "name": "APPLICATIONINSIGHTS_CONNECTION_STRING",
+                              "value": "[reference(concat(variables('apiAppServiceName'), '-application-insights-', parameters('utcValue'))).outputs.ConnectionString.value]"
                             },
                             {
                               "name": "LoggingRedisConnectionString",
