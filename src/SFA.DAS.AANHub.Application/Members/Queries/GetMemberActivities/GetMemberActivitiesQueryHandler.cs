@@ -36,10 +36,10 @@ public class GetMemberActivitiesQueryHandler : IRequestHandler<GetMemberActiviti
             FromDate = rangeStartDate,
             ToDate = currentDate
         };
-        getMemberActivitiesQueryResult.EventsAttended.Events = memberActivities.Where(x => x.AddedDate <= currentDate).AsEnumerable().Select(x => new EventAttendanceModel()
+        getMemberActivitiesQueryResult.EventsAttended.Events = memberActivities.Where(x => x.CalendarEvent.StartDate <= currentDate).AsEnumerable().Select(x => new EventAttendanceModel()
         {
             CalendarEventId = x.CalendarEventId,
-            EventDate = x.AddedDate,
+            EventDate = x.CalendarEvent.StartDate,
             EventTitle = x.CalendarEvent.Title,
             Urn = x.CalendarEvent.Urn
         }).ToList();
@@ -50,10 +50,10 @@ public class GetMemberActivitiesQueryHandler : IRequestHandler<GetMemberActiviti
             FromDate = currentDate.AddDays(1),
             ToDate = rangeEndDate
         };
-        getMemberActivitiesQueryResult.EventsPlanned.Events = memberActivities.Where(x => x.AddedDate > currentDate).AsEnumerable().Select(x => new EventAttendanceModel()
+        getMemberActivitiesQueryResult.EventsPlanned.Events = memberActivities.Where(x => x.CalendarEvent.StartDate > currentDate).AsEnumerable().Select(x => new EventAttendanceModel()
         {
             CalendarEventId = x.CalendarEventId,
-            EventDate = x.AddedDate,
+            EventDate = x.CalendarEvent.StartDate,
             EventTitle = x.CalendarEvent.Title,
             Urn = x.CalendarEvent.Urn
         }).ToList();
