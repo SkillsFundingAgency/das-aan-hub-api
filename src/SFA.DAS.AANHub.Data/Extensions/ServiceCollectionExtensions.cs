@@ -1,4 +1,5 @@
-﻿using Azure.Core;
+﻿using System.Diagnostics.CodeAnalysis;
+using Azure.Core;
 using Azure.Identity;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Data.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Data.Extensions;
 
@@ -77,5 +77,6 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IEventGuestsWriteRepository, EventGuestsWriteRepository>();
         services.AddTransient<ILeavingReasonsReadRepository, LeavingReasonsReadRepository>();
         services.AddTransient<IMemberLeavingReasonsWriteRepository, MemberLeavingReasonsWriteRepository>();
+        services.AddTransient<IAuditReadRepository, AuditReadRepository>();
     }
 }

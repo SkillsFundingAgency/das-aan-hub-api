@@ -25,4 +25,8 @@ public static class Constants
         public const string AANAdminEventUpdate = nameof(AANAdminEventUpdate);
         public const string AANAdminEventCancel = nameof(AANAdminEventCancel);
     }
+    public static class RangeDuration
+    {
+        public const int EventsRangePeriod = 12;
+    }
 }
