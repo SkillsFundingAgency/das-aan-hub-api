@@ -14,12 +14,12 @@ public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmpl
     private readonly IEmployersReadRepository _employersReadRepository;
     private readonly IProfilesReadRepository _profilesReadRepository;
 
-    public CreateEmployerMemberCommandValidator(IEmployersReadRepository employersReadRepository, IProfilesReadRepository profilesReadRepository)
+    public CreateEmployerMemberCommandValidator(IEmployersReadRepository employersReadRepository, IProfilesReadRepository profilesReadRepository, IMembersReadRepository membersReadRepository)
     {
         _employersReadRepository = employersReadRepository;
         _profilesReadRepository = profilesReadRepository;
 
-        Include(new CreateMemberCommandBaseValidator());
+        Include(new CreateMemberCommandBaseValidator(membersReadRepository));
 
         RuleFor(c => c.UserRef)
             .NotEmpty()

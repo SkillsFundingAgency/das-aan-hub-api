@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.Common;
 
@@ -8,8 +9,9 @@ public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCo
     public const string InvalidEmailFormatErrorMessage = "Email value is not in correct format";
     public const string ValueIsRequiredErrorMessage = "A valid value for {0} is required";
     public const string ExceededAllowableLengthErrorMessage = "Value for {0} cannot exceed character length of {1}";
+    public const string EmailAlreadyExistsErrorMessage = "This email already exists";
 
-    public CreateMemberCommandBaseValidator()
+    public CreateMemberCommandBaseValidator(IMembersReadRepository membersReadRepository)
     {
         RuleFor(x => x.Email)
             .NotEmpty()
@@ -17,7 +19,14 @@ public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCo
             .MaximumLength(256)
             .WithMessage(string.Format(ExceededAllowableLengthErrorMessage, nameof(CreateMemberCommandBase.Email), 256))
             .Matches(Constants.RegularExpressions.EmailRegex)
-            .WithMessage(InvalidEmailFormatErrorMessage);
+            .WithMessage(InvalidEmailFormatErrorMessage)
+            .MustAsync(async (email, cancellation) =>
+            {
+                var member = await membersReadRepository.GetMemberByEmail(email);
+                return member == null;
+            })
+            .WithMessage(EmailAlreadyExistsErrorMessage);
+
         RuleFor(c => c.FirstName)
             .NotEmpty()
             .WithMessage(string.Format(ValueIsRequiredErrorMessage, nameof(CreateMemberCommandBase.FirstName)))
