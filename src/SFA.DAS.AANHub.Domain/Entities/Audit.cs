@@ -13,4 +13,5 @@ public class Audit
     public string? Before { get; set; }
     public string? After { get; set; }
     public Guid EntityId { get; set; }
+    public virtual Member Member { get; set; } = null!;
 }

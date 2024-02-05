@@ -7,10 +7,13 @@
     [Resource] NVARCHAR(256) NOT NULL, 
     [Before] NVARCHAR(MAX) NULL, 
     [After] NVARCHAR(MAX) NULL,
-    [EntityId] UniqueIdentifier NULL
+    [EntityId] UniqueIdentifier NULL,
+    CONSTRAINT [FK_Audit_Member] FOREIGN KEY ([ActionedBy]) REFERENCES [Member]([Id])
 )
 
 GO 
 
 CREATE INDEX IX_AuditResourceActionedByEntityId ON [dbo].[Audit] ( [Resource], [ActionedBy], [EntityId]) INCLUDE ( [Id] , [AuditTime] , [Action])
 GO
+
+CREATE INDEX IX_AuditActionedBy ON [dbo].[Audit] ([ActionedBy]) INCLUDE ([Id], [Resource])

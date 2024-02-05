@@ -26,11 +26,11 @@ public class CalendarEvent
     public DateTime? CreatedDate { get; set; }
     public DateTime? LastUpdatedDate { get; set; }
     [JsonIgnore]
-    public List<Attendance> Attendees { get; set; } = new();
+    public virtual List<Attendance> Attendees { get; set; } = new();
 
     [JsonIgnore]
     public Calendar Calendar { get; set; } = null!;
 
     [JsonIgnore]
-    public List<EventGuest> EventGuests { get; set; } = new();
+    public virtual List<EventGuest> EventGuests { get; set; } = new();
 }
