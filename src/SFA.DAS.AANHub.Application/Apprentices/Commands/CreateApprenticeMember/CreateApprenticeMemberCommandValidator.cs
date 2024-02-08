@@ -11,9 +11,9 @@ public class CreateApprenticeMemberCommandValidator : AbstractValidator<CreateAp
     public const string InvalidProfileIdsErrorMessage = "Some of the profile ids are invalid for Apprentice user type";
     public const string ProfileValuesMustNotBeEmptyErrorMessage = "ProfileValues cannot be empty";
 
-    public CreateApprenticeMemberCommandValidator(IApprenticesReadRepository apprenticesReadRepository, IProfilesReadRepository profilesReadRepository, IMembersReadRepository membersReadRepository)
+    public CreateApprenticeMemberCommandValidator(IApprenticesReadRepository apprenticesReadRepository, IProfilesReadRepository profilesReadRepository, IMembersReadRepository membersReadRepository, IRegionsReadRepository regionsReadRepository)
     {
-        Include(new CreateMemberCommandBaseValidator(membersReadRepository));
+        Include(new CreateMemberCommandBaseValidator(membersReadRepository, regionsReadRepository));
 
         RuleFor(c => c.ApprenticeId)
             .NotEmpty()

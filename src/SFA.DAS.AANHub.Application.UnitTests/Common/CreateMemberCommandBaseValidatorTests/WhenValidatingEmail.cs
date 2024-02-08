@@ -11,12 +11,23 @@ public class WhenValidatingEmail
 {
     private const string ExistingEmail = "existing.email@test.com";
 
+    private readonly int _validRegionId = 1;
+    private Mock<IRegionsReadRepository> _regionsReadRepositoryMock = null!;
+    [SetUp]
+    public void Init()
+    {
+        _regionsReadRepositoryMock = new Mock<IRegionsReadRepository>();
+        _regionsReadRepositoryMock.Setup(x => x.GetAllRegions(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Region> { new() { Id = _validRegionId, Area = "test" } });
+    }
+
+
     [TestCase("")]
     [TestCase(" ")]
     [TestCase(null)]
     public async Task ThenEmptyNullAndWhiteSpaceAreNotAllowed(string? email)
     {
-        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>(), _regionsReadRepositoryMock.Object);
         TestTarget target = new()
         {
             Email = email
@@ -32,7 +43,7 @@ public class WhenValidatingEmail
     [Test]
     public async Task ThenValueCannotExceedAllowableLength()
     {
-        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>(), _regionsReadRepositoryMock.Object);
         TestTarget target = new()
         {
             Email = new string('a', 257)
@@ -51,7 +62,7 @@ public class WhenValidatingEmail
     [TestCase("sfsfv@sdfd", false)]
     public async Task ThenOnlyAcceptsEmailsInCorrectFormat(string email, bool isValid)
     {
-        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>(), _regionsReadRepositoryMock.Object);
         TestTarget target = new()
         {
             Email = email
@@ -77,7 +88,7 @@ public class WhenValidatingEmail
         var membersReadRepository = new Mock<IMembersReadRepository>();
         membersReadRepository.Setup(x => x.GetMemberByEmail(ExistingEmail)).ReturnsAsync(new Member { Email = ExistingEmail });
 
-        CreateMemberCommandBaseValidator sut = new(membersReadRepository.Object);
+        CreateMemberCommandBaseValidator sut = new(membersReadRepository.Object, _regionsReadRepositoryMock.Object);
         TestTarget target = new()
         {
             Email = email

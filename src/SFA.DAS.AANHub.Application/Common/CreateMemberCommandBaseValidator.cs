@@ -5,13 +5,13 @@ namespace SFA.DAS.AANHub.Application.Common;
 
 public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCommandBase>
 {
-    private const string InvalidRegionErrorMessage = "Region value must be in between 1 and 9";
+    private const string InvalidRegionErrorMessage = "Region value is invalid";
     public const string InvalidEmailFormatErrorMessage = "Email value is not in correct format";
     public const string ValueIsRequiredErrorMessage = "A valid value for {0} is required";
     public const string ExceededAllowableLengthErrorMessage = "Value for {0} cannot exceed character length of {1}";
     public const string EmailAlreadyExistsErrorMessage = "This email already exists";
 
-    public CreateMemberCommandBaseValidator(IMembersReadRepository membersReadRepository)
+    public CreateMemberCommandBaseValidator(IMembersReadRepository membersReadRepository, IRegionsReadRepository regionsReadRepository)
     {
         RuleFor(x => x.Email)
             .NotEmpty()
@@ -43,7 +43,12 @@ public class CreateMemberCommandBaseValidator : AbstractValidator<CreateMemberCo
             .LessThan(DateTime.Today.AddDays(1).Date);
         RuleFor(x => x.RegionId)
             .Cascade(CascadeMode.Stop)
-            .InclusiveBetween(1, 9)
+            .MustAsync(async (regionId, cancellation) =>
+            {
+                if (regionId == null) return true;
+                var regions = await regionsReadRepository.GetAllRegions(cancellation);
+                return regions.Exists(x => x.Id == regionId);
+            })
             .WithMessage(InvalidRegionErrorMessage);
         RuleFor(x => x.OrganisationName)
             .NotEmpty()

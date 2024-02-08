@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Common.CreateMemberCommandBaseValidatorTests;
@@ -22,7 +23,18 @@ public class WhenValidatingRegionId
     [TestCase(10, false)]
     public async Task ThenOnlySpecificValuesAreAllowed(int? value, bool isValid)
     {
-        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>());
+        var validRegionId = 500;
+
+        if (isValid && value != null)
+        {
+            validRegionId = value.Value;
+
+        }
+        var regionsReadRepositoryMock = new Mock<IRegionsReadRepository>();
+
+        regionsReadRepositoryMock.Setup(x => x.GetAllRegions(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Region> { new() { Id = validRegionId, Area = "test" } });
+        CreateMemberCommandBaseValidator sut = new(Mock.Of<IMembersReadRepository>(), regionsReadRepositoryMock.Object);
         TestTarget target = new()
         {
             RegionId = value
