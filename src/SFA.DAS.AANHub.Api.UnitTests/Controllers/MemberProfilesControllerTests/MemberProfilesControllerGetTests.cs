@@ -22,7 +22,7 @@ public class MemberProfilesControllerGetTests
         Guid requestedByMemberId,
         CancellationToken cancellationToken)
     {
-        await sut.GetMemberProfileWithPreferences(memberId, requestedByMemberId, cancellationToken);
+        await sut.GetMemberProfileWithPreferences(memberId, cancellationToken);
 
         mediatorMock.Verify(m => m.Send(It.Is<GetMemberProfilesWithPreferencesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()));
     }
@@ -40,7 +40,7 @@ public class MemberProfilesControllerGetTests
         var notFoundResponse = ValidatedResponse<GetMemberProfilesWithPreferencesQueryResult>.EmptySuccessResponse();
         mediatorMock.Setup(m => m.Send(It.Is<GetMemberProfilesWithPreferencesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>())).ReturnsAsync(notFoundResponse);
 
-        var result = await sut.GetMemberProfileWithPreferences(memberId, requestedByMemberId, cancellationToken, IsPublicView);
+        var result = await sut.GetMemberProfileWithPreferences(memberId, cancellationToken, IsPublicView);
 
         result.As<NotFoundResult>().Should().NotBeNull();
     }
@@ -60,7 +60,7 @@ public class MemberProfilesControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetMemberProfilesWithPreferencesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetMemberProfileWithPreferences(memberId, requestedByMemberId, cancellationToken, IsPublicView);
+        var result = await sut.GetMemberProfileWithPreferences(memberId, cancellationToken, IsPublicView);
 
         result.As<OkObjectResult>().Should().NotBeNull();
         result.As<OkObjectResult>().Value.Should().Be(getMemberProfilesWithPreferencesQueryResult);
@@ -81,7 +81,7 @@ public class MemberProfilesControllerGetTests
         mediatorMock.Setup(m => m.Send(It.Is<GetMemberProfilesWithPreferencesQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()))
             .ReturnsAsync(response);
 
-        var result = await sut.GetMemberProfileWithPreferences(memberId, requestedByMemberId, cancellationToken, IsPublicView);
+        var result = await sut.GetMemberProfileWithPreferences(memberId, cancellationToken, IsPublicView);
 
         result.As<BadRequestObjectResult>().Should().NotBeNull();
         result.As<BadRequestObjectResult>().Value.As<List<ValidationError>>().Count.Should().Be(errors.Count);

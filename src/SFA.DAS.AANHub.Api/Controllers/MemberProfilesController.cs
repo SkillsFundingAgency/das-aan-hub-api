@@ -27,13 +27,12 @@ public class MemberProfilesController : ActionResponseControllerBase
     [ProducesResponseType(StatusCodes.Status200OK)]
     public async Task<IActionResult> GetMemberProfileWithPreferences(
             [FromRoute] Guid memberId,
-            [FromHeader(Name = Constants.RequestHeaders.RequestedByMemberIdHeader)] Guid requestedByMemberId,
             CancellationToken cancellationToken,
             bool @public = true)
     {
         _logger.LogInformation("AAN Hub API: Received command to get members profile and preferences by MemberId: {memberId}", memberId);
 
-        var response = await _mediator.Send(new GetMemberProfilesWithPreferencesQuery() { RequestedByMemberId = requestedByMemberId, MemberId = memberId, IsPublicView = @public }, cancellationToken);
+        var response = await _mediator.Send(new GetMemberProfilesWithPreferencesQuery() { MemberId = memberId, IsPublicView = @public }, cancellationToken);
 
         return GetResponse(response);
     }

@@ -49,7 +49,7 @@ public class GetMemberProfilesWithPreferencesQueryHandlerTests
     //Action
     private async Task InvokeHandler(bool isPublicView)
     {
-        _response = await _sut.Handle(new GetMemberProfilesWithPreferencesQuery() { RequestedByMemberId = requestedByMemberId, MemberId = memberId, IsPublicView = isPublicView }, new CancellationToken());
+        _response = await _sut.Handle(new GetMemberProfilesWithPreferencesQuery() { MemberId = memberId, IsPublicView = isPublicView }, new CancellationToken());
     }
 
     [Test]
