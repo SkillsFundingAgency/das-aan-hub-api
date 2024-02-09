@@ -91,6 +91,7 @@ public class PutAttendanceCommandHandlerTests
                     && !string.IsNullOrWhiteSpace(a.Before)
                     && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId
+                    && a.EntityId == command.CalendarEventId
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
                     && a.Resource == nameof(Attendance))),
                         Times.Once);
@@ -142,6 +143,7 @@ public class PutAttendanceCommandHandlerTests
                     && a.Before == null
                     && !string.IsNullOrWhiteSpace(a.After)
                     && a.ActionedBy == command.RequestedByMemberId
+                    && a.EntityId == command.CalendarEventId
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
                     && a.Resource == nameof(Attendance))),
                         Times.Once);
