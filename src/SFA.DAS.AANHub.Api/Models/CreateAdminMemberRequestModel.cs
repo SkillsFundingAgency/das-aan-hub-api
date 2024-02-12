@@ -10,7 +10,6 @@ public record CreateAdminMemberRequestModel(string Email, string FirstName, stri
         FirstName = model.FirstName!,
         LastName = model.LastName!,
         JoinedDate = DateTime.UtcNow,
-        RegionId = null,
         OrganisationName = "DFE"
     };
 }
