@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Admins.Commands.CreateAdminMember;
+using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Admins.Commands.CreateAdminMember;
@@ -12,6 +13,11 @@ public class CreateAdminMemberCommandValidatorTests
     public async Task Validate_BaseClassFields()
     {
         Mock<IMembersReadRepository> membersReadRepository = new();
+        Mock<IRegionsReadRepository> regionsReadRepository = new();
+
+        regionsReadRepository.Setup(x => x.GetAllRegions(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Region> { new() { Id = 1, Area = "test" } });
+
         CreateAdminMemberCommand command = new()
         {
             Email = "bad email",
@@ -21,7 +27,7 @@ public class CreateAdminMemberCommandValidatorTests
             RegionId = 999,
             OrganisationName = new string('a', 251)
         };
-        CreateAdminMemberCommandValidator sut = new(membersReadRepository.Object);
+        CreateAdminMemberCommandValidator sut = new(membersReadRepository.Object, regionsReadRepository.Object);
 
         var result = await sut.TestValidateAsync(command);
 

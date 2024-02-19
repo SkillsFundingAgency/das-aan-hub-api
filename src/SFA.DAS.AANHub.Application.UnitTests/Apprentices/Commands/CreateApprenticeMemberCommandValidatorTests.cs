@@ -12,6 +12,7 @@ public class CreateApprenticeMemberCommandValidatorTests
 {
     private Mock<IApprenticesReadRepository> apprenticesReadRepository = null!;
     private Mock<IProfilesReadRepository> profilesReadRepository = null!;
+    private Mock<IRegionsReadRepository> regionsReadRepository = null!;
     CreateApprenticeMemberCommandValidator sut = null!;
 
     [SetUp]
@@ -26,7 +27,10 @@ public class CreateApprenticeMemberCommandValidatorTests
             new Profile{ Id = 2 }
         });
 
-        sut = new(apprenticesReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>());
+        regionsReadRepository = new();
+        regionsReadRepository.Setup(r => r.GetAllRegions(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Region>());
+        sut = new(apprenticesReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>(), regionsReadRepository.Object);
     }
 
     [TestCase("684b9829-d882-4733-938e-bcee6d6bfe81", true)]

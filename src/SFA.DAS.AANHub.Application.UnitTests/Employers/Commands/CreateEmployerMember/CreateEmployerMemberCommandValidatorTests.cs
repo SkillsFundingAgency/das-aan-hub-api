@@ -12,21 +12,26 @@ public class CreateEmployerMemberCommandValidatorTests
 {
     private Mock<IEmployersReadRepository> employersReadRepository = null!;
     private Mock<IProfilesReadRepository> profilesReadRepository = null!;
+    private Mock<IRegionsReadRepository> regionsReadRepository = null!;
     private CreateEmployerMemberCommandValidator sut = null!;
+    const int ValidRegionId = 1;
 
     [SetUp]
     public void Init()
     {
         employersReadRepository = new();
         profilesReadRepository = new();
+        regionsReadRepository = new();
 
+        regionsReadRepository.Setup(x => x.GetAllRegions(It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new List<Region> { new() { Id = ValidRegionId, Area = "test" } });
         profilesReadRepository.Setup(r => r.GetProfilesByUserType(UserType.Employer)).ReturnsAsync(new List<Profile>
         {
             new Profile{ Id = 1 },
             new Profile{ Id = 2 }
         });
 
-        sut = new(employersReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>());
+        sut = new(employersReadRepository.Object, profilesReadRepository.Object, Mock.Of<IMembersReadRepository>(), regionsReadRepository.Object);
     }
 
     [TestCase("00000000-0000-0000-0000-000000000000", false)]
