@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Queries;
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 
 public class GetApprenticeMemberQueryValidator : AbstractValidator<GetApprenticeMemberQuery>
 {

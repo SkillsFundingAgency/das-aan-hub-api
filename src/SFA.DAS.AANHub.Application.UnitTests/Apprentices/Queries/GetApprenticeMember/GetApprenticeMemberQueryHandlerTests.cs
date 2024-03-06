@@ -2,17 +2,16 @@
 using FluentAssertions;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries.GetApprenticeMember;
 
 public class GetApprenticeMemberQueryHandlerTests
 {
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_ApprenticeFound_ReturnsMember(
         [Frozen] Mock<IApprenticesReadRepository> apprenticesReadRepositoryMock,
         GetApprenticeMemberQueryHandler sut,
@@ -25,8 +24,7 @@ public class GetApprenticeMemberQueryHandlerTests
         result.Result.Should().BeEquivalentTo(apprentice.Member, c => c.ExcludingMissingMembers());
     }
 
-    [Test]
-    [RecursiveMoqAutoData]
+    [Test, RecursiveMoqAutoData]
     public async Task Handle_ApprenticeNotFound_ReturnsNull(
         [Frozen] Mock<IApprenticesReadRepository> apprenticesReadRepositoryMock,
         GetApprenticeMemberQueryHandler sut,

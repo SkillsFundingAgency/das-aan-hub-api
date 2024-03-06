@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 using SFA.DAS.AANHub.Application.Common;
 
 namespace SFA.DAS.AANHub.Api.Controllers;

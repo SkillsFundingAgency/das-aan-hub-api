@@ -3,7 +3,7 @@ using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.Apprentices.Queries;
+namespace SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 
 public class GetApprenticeMemberQueryHandler : IRequestHandler<GetApprenticeMemberQuery, ValidatedResponse<GetMemberResult>>
 {
