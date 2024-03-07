@@ -22,4 +22,8 @@ internal class RegionsReadRepository : IRegionsReadRepository
             .AsNoTracking()
             .Where(r => r.Id == Id)
             .SingleAsync(cancellationToken);
+
+    public async Task<int> GetRegionsCount(CancellationToken cancellationToken) => await _aanDataContext
+        .Regions
+        .CountAsync(cancellationToken);
 }

@@ -3,12 +3,15 @@ using System.Text.Json.Serialization;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Versioning;
+using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SFA.DAS.AANHub.Api.HealthCheck;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Extensions;
+using SFA.DAS.AANHub.Data;
 using SFA.DAS.AANHub.Data.Extensions;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Configuration;
@@ -19,7 +22,6 @@ using SFA.DAS.Api.Common.Infrastructure;
 using SFA.DAS.Configuration.AzureTableStorage;
 using SFA.DAS.Telemetry.Startup;
 using Swashbuckle.AspNetCore.Filters;
-
 namespace SFA.DAS.AANHub.Api
 {
     [ExcludeFromCodeCoverage]
@@ -70,7 +72,12 @@ namespace SFA.DAS.AANHub.Api
                 services.AddAuthentication(azureAdConfiguration, policies);
             }
 
-            services.AddHealthChecks();
+            services
+            .AddHealthChecks()
+            .AddDbContextCheck<AanDataContext>()
+            .AddCheck<RegionsHealthCheck>(RegionsHealthCheck.HealthCheckResultDescription,
+                failureStatus: HealthStatus.Unhealthy,
+                tags: new[] { "ready" });
 
             services
                 .AddApplicationInsightsTelemetry()
