@@ -54,6 +54,8 @@ namespace SFA.DAS.AANHub.Api
             _environmentName.Equals("LOCAL", StringComparison.CurrentCultureIgnoreCase)
             || _environmentName.Equals("DEV", StringComparison.CurrentCultureIgnoreCase);
 
+        private static readonly string[] tags = new[] { "ready" };
+
         public void ConfigureServices(IServiceCollection services)
         {
             if (!IsEnvironmentLocalOrDev)
@@ -77,7 +79,7 @@ namespace SFA.DAS.AANHub.Api
             .AddDbContextCheck<AanDataContext>()
             .AddCheck<RegionsHealthCheck>(RegionsHealthCheck.HealthCheckResultDescription,
                 failureStatus: HealthStatus.Unhealthy,
-                tags: new[] { "ready" });
+                tags: tags);
 
             services
                 .AddApplicationInsightsTelemetry()
