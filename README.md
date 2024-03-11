@@ -6,6 +6,7 @@
 
 [![Build Status](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_apis/build/status%2Fdas-aan-hub-api?repoName=SkillsFundingAgency%2Fdas-aan-hub-api&branchName=refs%2Fpull%2F169%2Fmerge)](https://sfa-gov-uk.visualstudio.com/Digital%20Apprenticeship%20Service/_build/latest?definitionId=2974&repoName=SkillsFundingAgency%2Fdas-aan-hub-api&branchName=refs%2Fpull%2F169%2Fmerge)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=SkillsFundingAgency_das-aan-hub-api&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=SkillsFundingAgency_das-aan-hub-api)
+[![Confluence Page](https://img.shields.io/badge/Confluence-Project-blue)](https://skillsfundingagency.atlassian.net/wiki/spaces/NDL/pages/3848175632/AAN+Hub+Solution+Architecture)
 [![License](https://img.shields.io/badge/license-MIT-lightgrey.svg?longCache=true&style=flat-square)](https://en.wikipedia.org/wiki/MIT_License)
 
 This API solution is part of Apprentice Ambassador Network (AAN) project. This API encapsulates the backend SQL store for AAN. 
@@ -40,7 +41,7 @@ In the API project, if not exist already, add appSettings.Development.json file 
 ```
 
 ## Technologies
-* .NetCore 6.0
+* .Net 8.0
 * SQL Server
 * Azure Table Storage
 * NUnit

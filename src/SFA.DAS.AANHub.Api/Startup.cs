@@ -31,12 +31,12 @@ namespace SFA.DAS.AANHub.Api
 
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
         {
-            _environmentName = configuration["EnvironmentName"];
+            _environmentName = configuration["EnvironmentName"]!;
             var config = new ConfigurationBuilder()
                 .AddConfiguration(configuration)
                 .AddAzureTableStorage(options =>
                 {
-                    options.ConfigurationKeys = configuration["ConfigNames"].Split(",");
+                    options.ConfigurationKeys = configuration["ConfigNames"]!.Split(",");
                     options.StorageConnectionString = configuration["ConfigurationStorageConnectionString"];
                     options.EnvironmentName = _environmentName;
                     options.PreFixConfigurationKeys = false;
@@ -122,7 +122,7 @@ namespace SFA.DAS.AANHub.Api
             services.Configure<ApplicationSettings>(Configuration.GetSection("ApplicationSettings"));
             services.AddSingleton(s => s.GetRequiredService<IOptions<ApplicationSettings>>().Value);
 
-            services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"], _environmentName);
+            services.AddAanDataContext(Configuration["ApplicationSettings:DbConnectionString"]!, _environmentName);
             services.AddApplicationRegistrations();
             services.AddTransient<IDateTimeProvider, DateTimeProvider>();
         }

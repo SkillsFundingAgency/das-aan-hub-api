@@ -1,8 +1,8 @@
-﻿using FluentValidation;
+﻿using System.Diagnostics.CodeAnalysis;
+using FluentValidation;
 using MediatR;
 using Microsoft.Extensions.DependencyInjection;
 using SFA.DAS.AANHub.Application.Mediatr.Behaviours;
-using System.Diagnostics.CodeAnalysis;
 
 namespace SFA.DAS.AANHub.Application.Extensions
 {
@@ -11,7 +11,7 @@ namespace SFA.DAS.AANHub.Application.Extensions
     {
         public static void AddApplicationRegistrations(this IServiceCollection services)
         {
-            services.AddMediatR(typeof(ServiceCollectionExtensions));
+            services.AddMediatR(cfg => cfg.RegisterServicesFromAssemblies(typeof(ServiceCollectionExtensions).Assembly));
             services.AddValidatorsFromAssembly(typeof(ServiceCollectionExtensions).Assembly);
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
 
