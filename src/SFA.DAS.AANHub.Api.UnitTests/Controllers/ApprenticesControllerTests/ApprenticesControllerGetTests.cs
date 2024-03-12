@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Common;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
@@ -16,8 +16,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers.ApprenticesControllerTests;
 
 public class ApprenticesControllerGetTests
 {
-    [Test]
-    [MoqAutoData]
+    [Test, MoqAutoData]
     public async Task GetApprentice_InvokesQueryHandler(
        [Frozen] Mock<IMediator> mediatorMock,
        [Greedy] ApprenticesController sut,
@@ -28,8 +27,7 @@ public class ApprenticesControllerGetTests
         mediatorMock.Verify(m => m.Send(It.Is<GetApprenticeMemberQuery>(q => q.ApprenticeId == apprenticeId), It.IsAny<CancellationToken>()));
     }
 
-    [Test]
-    [MoqAutoData]
+    [Test, MoqAutoData]
     public async Task GetApprentice_HandlerReturnsNullResult_ReturnsNotFoundResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] ApprenticesController sut,
@@ -43,8 +41,7 @@ public class ApprenticesControllerGetTests
         result.As<NotFoundResult>().Should().NotBeNull();
     }
 
-    [Test]
-    [MoqAutoData]
+    [Test, MoqAutoData]
     public async Task GetApprentice_HandlerReturnsData_ReturnsOkResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] ApprenticesController sut,
@@ -61,8 +58,7 @@ public class ApprenticesControllerGetTests
         result.As<OkObjectResult>().Value.Should().Be(getMemberResult);
     }
 
-    [Test]
-    [MoqAutoData]
+    [Test, MoqAutoData]
     public async Task GetApprentice_InvalidRequest_ReturnsBadRequestResponse(
         [Frozen] Mock<IMediator> mediatorMock,
         [Greedy] ApprenticesController sut,

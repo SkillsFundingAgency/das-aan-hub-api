@@ -1,8 +1,8 @@
 ﻿using FluentValidation.TestHelper;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.Apprentices.Queries;
+using SFA.DAS.AANHub.Application.Apprentices.Queries.GetApprenticeMember;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries;
+namespace SFA.DAS.AANHub.Application.UnitTests.Apprentices.Queries.GetApprenticeMember;
 
 public class GetApprenticeMemberQueryValidatorTests
 {
