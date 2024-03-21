@@ -23,7 +23,7 @@ public class CalendarEvent
     public bool IsActive { get; set; }
     public int PlannedAttendees { get; set; }
     public long? Urn { get; set; }
-    public DateTime? CreatedDate { get; set; }
+    public DateTime CreatedDate { get; set; }
     public DateTime? LastUpdatedDate { get; set; }
     [JsonIgnore]
     public virtual List<Attendance> Attendees { get; set; } = new();

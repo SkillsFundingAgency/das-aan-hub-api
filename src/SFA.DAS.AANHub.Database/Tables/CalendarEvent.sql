@@ -19,7 +19,7 @@
     [ContactEmail] NVARCHAR(256) NOT NULL, 
     [IsActive] BIT NOT NULL DEFAULT 1,
     [PlannedAttendees] INT NULL,
-    [CreatedDate] DATETIME2 DEFAULT GETUTCDATE(),
+    [CreatedDate] DATETIME2 DEFAULT GETUTCDATE() NOT NULL,
     [LastUpdatedDate] DATETIME2 NULL DEFAULT GetUTCDate(), 
     CONSTRAINT [PK_CalendarEvent] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_CalendarEvent_Calendar] FOREIGN KEY ([CalendarId]) REFERENCES [Calendar]([Id])
