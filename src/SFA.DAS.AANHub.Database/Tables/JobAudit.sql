@@ -7,3 +7,6 @@
     [Notes] NVARCHAR(MAX) NULL,
     CONSTRAINT [PK_JobAudit] PRIMARY KEY ([Id])
 )
+GO
+
+CREATE NONCLUSTERED INDEX [IX_JobAudit_JobNameStartTime] ON [dbo].[JobAudit] ([JobName], [StartTime]);
