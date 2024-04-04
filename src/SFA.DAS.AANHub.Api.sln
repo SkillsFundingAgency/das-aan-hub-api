@@ -22,7 +22,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AANHub.Api.UnitTest
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AANHub.Application.UnitTests", "SFA.DAS.AANHub.Application.UnitTests\SFA.DAS.AANHub.Application.UnitTests.csproj", "{6A74BAA5-FD22-4EA0-B0AD-397795A109C6}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SFA.DAS.AANHub.Domain.UnitTests", "SFA.DAS.AANHub.Domain.UnitTests\SFA.DAS.AANHub.Domain.UnitTests.csproj", "{DD0069C4-19EB-4171-84DE-998FF2341FC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SFA.DAS.AANHub.Domain.UnitTests", "SFA.DAS.AANHub.Domain.UnitTests\SFA.DAS.AANHub.Domain.UnitTests.csproj", "{DD0069C4-19EB-4171-84DE-998FF2341FC1}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
