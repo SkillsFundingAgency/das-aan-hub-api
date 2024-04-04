@@ -1,5 +1,8 @@
-﻿namespace SFA.DAS.AANHub.Domain.Entities
+﻿using System.Diagnostics.CodeAnalysis;
+
+namespace SFA.DAS.AANHub.Domain.Entities
 {
+    [ExcludeFromCodeCoverage]
     public class JobAudit
     {
         public int Id { get; set; }
