@@ -103,8 +103,11 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
 
     private static Task<string> GetTokens(CalendarEvent calendarEvent, Member member)
     {
-        var date = calendarEvent!.StartDate.ToString("dd/MM/yyyy");
-        var time = calendarEvent!.StartDate.ToString("HH:mm");
+        var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
+        var startDate = TimeZoneInfo.ConvertTimeFromUtc(calendarEvent.StartDate, localTimeZone);
+
+        var date = startDate.ToString("dd/MM/yyyy");
+        var time = startDate.ToString("HH:mm");
         var fullname = member.FullName;
         var eventName = calendarEvent.Title;
 
