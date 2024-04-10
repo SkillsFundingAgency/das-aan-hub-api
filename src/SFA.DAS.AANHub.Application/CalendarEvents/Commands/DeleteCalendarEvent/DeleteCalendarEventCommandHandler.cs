@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -79,8 +80,9 @@ public class DeleteCalendarEventCommandHandler : IRequestHandler<DeleteCalendarE
 
     private static Task<string> GetTokens(CalendarEvent calendarEvent, Member member)
     {
-        var date = calendarEvent!.StartDate.ToString("dd/MM/yyyy");
-        var time = calendarEvent!.StartDate.ToString("HH:mm");
+        var startDate = calendarEvent.StartDate.UtcToLocalTime();
+        var date = startDate.ToString("dd/MM/yyyy");
+        var time = startDate.ToString("HH:mm");
         var fullname = member.FullName;
         var eventName = calendarEvent.Title;
 

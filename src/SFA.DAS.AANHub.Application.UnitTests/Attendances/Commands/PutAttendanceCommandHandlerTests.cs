@@ -4,11 +4,13 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.Attendances.Commands;
@@ -81,6 +83,30 @@ public class PutAttendanceCommandHandlerTests
 
         await sut.Handle(command, new CancellationToken());
 
+        var expectedTemplateName = (differentStatus, member.UserType) switch
+        {
+            (true, UserType.Apprentice) => EmailTemplateName.ApprenticeEventSignUpTemplate,
+            (false, UserType.Apprentice) => EmailTemplateName.ApprenticeEventCancelTemplate,
+            (true, UserType.Employer) => EmailTemplateName.EmployerEventSignUpTemplate,
+            (false, UserType.Employer) => EmailTemplateName.EmployerEventCancelTemplate,
+            _ => throw new NotImplementedException()
+        };
+
+        var startDate = calendarEvent.StartDate.UtcToLocalTime();
+
+        var date = startDate.ToString("dd/MM/yyyy");
+        var time = startDate.ToString("HH:mm");
+
+        var tokens = new Dictionary<string, string>
+        {
+            { "contact", $"{member.FirstName} {member.LastName}"},
+            { "eventname", calendarEvent.Title },
+            { "date", date },
+            { "time", time }
+        };
+
+        var expectedTokens = JsonSerializer.Serialize(tokens);
+
         using (new AssertionScope())
         {
             attendancesWriteRepository.Verify(a => a.Create(It.IsAny<Attendance>()), Times.Never);
@@ -97,7 +123,14 @@ public class PutAttendanceCommandHandlerTests
                         Times.Once);
             membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.Once);
             calendarEventsReadRepository.Verify(a => a.GetCalendarEvent(It.IsAny<Guid>()), Times.Once);
-            notificationWriteRepository.Verify(a => a.Create(It.IsAny<Notification>()), Times.Once);
+            //notificationWriteRepository.Verify(a => a.Create(It.IsAny<Notification>()), Times.Once);
+            notificationWriteRepository.Verify(n => n.Create(It.Is<Notification>(
+                q => q.MemberId == command.RequestedByMemberId
+                     && q.CreatedBy == command.RequestedByMemberId
+                     && q.IsSystem == true
+                     && q.TemplateName == expectedTemplateName
+                     && q.ReferenceId == calendarEvent.Id.ToString()
+                     && q.Tokens == expectedTokens)), Times.Once);
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
     }

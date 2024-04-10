@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -103,9 +104,7 @@ public class PutCalendarEventCommandHandler : IRequestHandler<PutCalendarEventCo
 
     private static Task<string> GetTokens(CalendarEvent calendarEvent, Member member)
     {
-        var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-        var startDate = TimeZoneInfo.ConvertTimeFromUtc(calendarEvent.StartDate, localTimeZone);
-
+        var startDate = calendarEvent.StartDate.UtcToLocalTime();
         var date = startDate.ToString("dd/MM/yyyy");
         var time = startDate.ToString("HH:mm");
         var fullname = member.FullName;

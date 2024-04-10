@@ -1,12 +1,13 @@
-﻿using System.Text.Json;
-using MediatR;
+﻿using MediatR;
 using SFA.DAS.AANHub.Application.Common;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Application.Mediatr.Responses;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
+using System.Text.Json;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
@@ -125,8 +126,10 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
     private async Task<string> GetTokens(PutAttendanceCommand command, Member member)
     {
         var calendarEvent = await _calendarEventReadRepository.GetCalendarEvent(command.CalendarEventId);
-        var date = calendarEvent!.StartDate.ToString("dd/MM/yyyy");
-        var time = calendarEvent!.StartDate.ToString("HH:mm");
+        var startDate = calendarEvent!.StartDate.UtcToLocalTime();
+
+        var date = startDate.ToString("dd/MM/yyyy");
+        var time = startDate.ToString("HH:mm");
 
         var emailTemplate = new EventAttendanceEmailTemplate(member.FirstName, member.LastName, calendarEvent!.Title, date, time);
         return JsonSerializer.Serialize(emailTemplate);

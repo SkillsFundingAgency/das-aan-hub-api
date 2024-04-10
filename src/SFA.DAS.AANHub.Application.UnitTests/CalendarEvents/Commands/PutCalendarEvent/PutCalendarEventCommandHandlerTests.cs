@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -52,8 +53,7 @@ public class PutCalendarEventCommandHandlerTests
 
         await sut.Handle(command, new CancellationToken());
 
-        var localTimeZone = TimeZoneInfo.FindSystemTimeZoneById("GMT Standard Time");
-        var startDate = TimeZoneInfo.ConvertTimeFromUtc(calendarEvent.StartDate, localTimeZone);
+        var startDate = calendarEvent.StartDate.UtcToLocalTime();
 
         var date = startDate.ToString("dd/MM/yyyy");
         var time = startDate.ToString("HH:mm");
