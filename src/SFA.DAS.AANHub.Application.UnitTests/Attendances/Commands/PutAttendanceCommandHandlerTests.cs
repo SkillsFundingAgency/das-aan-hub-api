@@ -123,7 +123,6 @@ public class PutAttendanceCommandHandlerTests
                         Times.Once);
             membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.Once);
             calendarEventsReadRepository.Verify(a => a.GetCalendarEvent(It.IsAny<Guid>()), Times.Once);
-            //notificationWriteRepository.Verify(a => a.Create(It.IsAny<Notification>()), Times.Once);
             notificationWriteRepository.Verify(n => n.Create(It.Is<Notification>(
                 q => q.MemberId == command.RequestedByMemberId
                      && q.CreatedBy == command.RequestedByMemberId
