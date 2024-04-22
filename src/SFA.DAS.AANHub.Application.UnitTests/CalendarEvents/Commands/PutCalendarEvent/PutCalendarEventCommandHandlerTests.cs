@@ -4,10 +4,12 @@ using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.CalendarEvents.Commands.PutCalendarEvent;
+using SFA.DAS.AANHub.Application.Extensions;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.Testing.AutoFixture;
+using System.Text.Json;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.CalendarEvents.Commands.PutCalendarEvent;
 
@@ -22,10 +24,10 @@ public class PutCalendarEventCommandHandlerTests
         [Frozen] Mock<IAuditWriteRepository> auditWriteRepository,
         [Frozen] PutCalendarEventModel model,
         [Frozen] List<Member> members,
-        Guid calendarEventId)
+        CalendarEvent calendarEvent)
     {
         var command = (PutCalendarEventCommand)model;
-        command.CalendarEventId = calendarEventId;
+        command.CalendarEventId = calendarEvent.Id;
         command.SendUpdateEventNotification = true;
         var singleMemberId = members.First().Id;
 
@@ -33,18 +35,16 @@ public class PutCalendarEventCommandHandlerTests
         {
             new()
             {
-                CalendarEventId = calendarEventId,
+                CalendarEventId = calendarEvent.Id,
                 MemberId = singleMemberId
             }
         };
 
-        var calendarEvent = new CalendarEvent { Id = calendarEventId };
-
-        calendarEventsWriteRepository.Setup(x => x.GetCalendarEvent(calendarEventId)).ReturnsAsync(calendarEvent);
+        calendarEventsWriteRepository.Setup(x => x.GetCalendarEvent(calendarEvent.Id)).ReturnsAsync(calendarEvent);
 
         var attendancesReadRepository = new Mock<IAttendancesReadRepository>();
 
-        attendancesReadRepository.Setup(x => x.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()))
+        attendancesReadRepository.Setup(x => x.GetAttendancesByEventId(calendarEvent.Id, It.IsAny<CancellationToken>()))
             .ReturnsAsync(attendances);
 
         membersReadRepository.Setup(x => x.GetMembers(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>())).ReturnsAsync(members);
@@ -53,12 +53,33 @@ public class PutCalendarEventCommandHandlerTests
 
         await sut.Handle(command, new CancellationToken());
 
+        var startDate = calendarEvent.StartDate.UtcToLocalTime();
+
+        var date = startDate.ToString("dd/MM/yyyy");
+        var time = startDate.ToString("HH:mm");
+
+        var tokens = new Dictionary<string, string>
+        {
+            { "contact", members.First().FullName },
+            { "eventname", calendarEvent.Title },
+            { "date", date },
+            { "time", time }
+        };
+
+        var expectedTokens = JsonSerializer.Serialize(tokens);
+
         using (new AssertionScope())
         {
-            calendarEventsWriteRepository.Verify(c => c.GetCalendarEvent(calendarEventId), Times.Once);
-            attendancesReadRepository.Verify(a => a.GetAttendancesByEventId(calendarEventId, It.IsAny<CancellationToken>()), Times.Once);
+            calendarEventsWriteRepository.Verify(c => c.GetCalendarEvent(calendarEvent.Id), Times.Once);
+            attendancesReadRepository.Verify(a => a.GetAttendancesByEventId(calendarEvent.Id, It.IsAny<CancellationToken>()), Times.Once);
             membersReadRepository.Verify(m => m.GetMembers(It.IsAny<List<Guid>>(), It.IsAny<CancellationToken>()), Times.Once);
-            notificationsWriteRepository.Verify(n => n.Create(It.IsAny<Notification>()), Times.Exactly(attendances.Count));
+            notificationsWriteRepository.Verify(n => n.Create(It.Is<Notification>(
+                q => q.MemberId == singleMemberId
+                     && q.TemplateName == Constants.NotificationTemplateNames.AANAdminEventUpdate
+                     && q.CreatedBy == command.AdminMemberId
+                     && q.IsSystem == true
+                     && q.ReferenceId == calendarEvent.Id.ToString()
+                     && q.Tokens == expectedTokens)), Times.Exactly(attendances.Count));
             auditWriteRepository.Verify(a => a.Create(It.IsAny<Audit>()), Times.Once);
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Once);
         }
