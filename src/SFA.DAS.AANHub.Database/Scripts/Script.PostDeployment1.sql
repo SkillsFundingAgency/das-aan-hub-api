@@ -17,4 +17,4 @@ Post-Deployment Script Template
 :r .\AddNotificationTemplateData.sql
 :r .\AddLeavingReasonData.sql
 :r .\UpdateCalendarEventLastUpdatedDate.sql
-
+:r .\RemoveDocumentTable.sql
