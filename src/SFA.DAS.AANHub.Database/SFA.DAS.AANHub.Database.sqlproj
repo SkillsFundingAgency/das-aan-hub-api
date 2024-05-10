@@ -9,8 +9,7 @@
     <ProjectGuid>{30adf3a6-0b05-4c38-aa10-ac911e3dea6f}</ProjectGuid>
     <DSP>Microsoft.Data.Tools.Schema.Sql.SqlAzureV12DatabaseSchemaProvider</DSP>
     <OutputType>Database</OutputType>
-    <RootPath>
-    </RootPath>
+    <RootPath />
     <RootNamespace>SFA.DAS.AANHub.Database</RootNamespace>
     <AssemblyName>SFA.DAS.AANHub.Database</AssemblyName>
     <ModelCollation>1033, CI</ModelCollation>
@@ -48,7 +47,6 @@
   </PropertyGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">11.0</VisualStudioVersion>
-    <!-- Default to the v11.0 targets path if the targets file for the current VS version is not found -->
     <SSDTExists Condition="Exists('$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v$(VisualStudioVersion)\SSDT\Microsoft.Data.Tools.Schema.SqlTasks.targets')">True</SSDTExists>
     <VisualStudioVersion Condition="'$(SSDTExists)' == ''">11.0</VisualStudioVersion>
   </PropertyGroup>
@@ -90,6 +88,7 @@
     <Build Include="Views\vAuditAdmin.sql" />
     <Build Include="Views\vAuditAttendance.sql" />
     <None Include="Scripts\Manual\UpdateEntityIdInAudit.sql" />
+    <Build Include="Tables\JobAudit.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
