@@ -83,7 +83,8 @@ namespace SFA.DAS.AANHub.Api
 
             services
                 .AddApplicationInsightsTelemetry()
-                .AddTelemetryUriRedaction("firstName,lastName,dateOfBirth,email");
+                .AddTelemetryUriRedaction("firstName,lastName,dateOfBirth,email")
+                .AddTelemetryNotFoundAsSuccessfulResponse();
 
             services.AddApiVersioning(opt =>
             {
