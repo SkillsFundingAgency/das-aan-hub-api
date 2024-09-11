@@ -18,6 +18,7 @@ public class GetMemberResult
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
+    public bool ReceiveNotifications { get; set; }
     public EmployerModel? Employer { get; set; }
     public ApprenticeModel? Apprentice { get; set; }
 
@@ -40,7 +41,8 @@ public class GetMemberResult
             OrganisationName = member.OrganisationName,
             LastUpdatedDate = member.LastUpdatedDate,
             IsRegionalChair = member.IsRegionalChair,
-            FullName = member.FullName
+            FullName = member.FullName,
+            ReceiveNotifications = member.ReceiveNotifications
         };
 
         if (member.Apprentice != null) getMemberResult.Apprentice = new ApprenticeModel(member.Apprentice.ApprenticeId);
