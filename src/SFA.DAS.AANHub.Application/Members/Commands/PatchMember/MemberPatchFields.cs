@@ -11,6 +11,7 @@ public static class MemberPatchFields
     public static readonly string OrganisationName = nameof(OrganisationName).ToLower();
     public static readonly string RegionId = nameof(RegionId).ToLower();
     public static readonly string Status = nameof(Status).ToLower();
+    public static readonly string ReceiveNotifications = nameof(ReceiveNotifications).ToLower();
     public static readonly string[] PatchFields = new[]
     {
         Email,
@@ -18,6 +19,7 @@ public static class MemberPatchFields
         LastName,
         OrganisationName,
         RegionId,
-        Status
+        Status,
+        ReceiveNotifications
     };
 }

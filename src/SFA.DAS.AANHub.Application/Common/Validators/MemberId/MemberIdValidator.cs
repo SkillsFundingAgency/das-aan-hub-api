@@ -9,8 +9,6 @@ public class MemberIdValidator : AbstractValidator<IMemberId>
 {
     public const string MemberIdEmptyErrorMessage = "MemberId is empty";
     public const string MemberIdMustBeLive = "MemberId must be active";
-    public const string MemberIdMustBeApprenticeOrEmployer = "MemberId must be apprentice or employer";
-
 
     public MemberIdValidator(IMembersReadRepository membersReadRepository)
     {
@@ -26,9 +24,6 @@ public class MemberIdValidator : AbstractValidator<IMemberId>
                     member != null &&
                     member!.Status == MembershipStatusType.Live.ToString();
             })
-            .WithMessage(MemberIdMustBeLive)
-            .Must((_) =>
-                member is { UserType: UserType.Apprentice or UserType.Employer })
-            .WithMessage(MemberIdMustBeApprenticeOrEmployer);
+            .WithMessage(MemberIdMustBeLive);
     }
 }
