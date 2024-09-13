@@ -27,6 +27,7 @@ public class CreateCalendarEventCommandHandler : IRequestHandler<CreateCalendarE
         calendarEvent.IsActive = true;
         calendarEvent.CreatedDate = DateTime.UtcNow;
         calendarEvent.LastUpdatedDate = DateTime.UtcNow;
+        calendarEvent.CreatedByMemberId = request.AdminMemberId;
 
         _calendarEventWriteRepository.Create(calendarEvent);
 
