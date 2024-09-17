@@ -65,6 +65,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         };
 
         existingAttendance.IsAttending = command.IsAttending;
+        existingAttendance.CancelledDate = command.IsAttending ? null : DateTime.UtcNow;
 
         audit.After = JsonSerializer.Serialize(existingAttendance);
         _auditWriteRepository.Create(audit);
