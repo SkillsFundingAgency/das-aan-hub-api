@@ -18,3 +18,4 @@ Post-Deployment Script Template
 :r .\AddLeavingReasonData.sql
 :r .\UpdateCalendarEventLastUpdatedDate.sql
 :r .\RemoveDocumentTable.sql
+:r .\UpdateCalendarEventCreatedByMemberId.sql
