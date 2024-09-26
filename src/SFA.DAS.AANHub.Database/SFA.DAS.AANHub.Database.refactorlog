@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+  <Operation Name="Rename Refactor" Key="6805feef-df6c-4edb-be5c-9fde198e9642" ChangeDateTime="09/11/2024 12:41:03">
+    <Property Name="ElementName" Value="[dbo].[Member].[[OptInToNotifications]]]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Member]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OptInToNotifications" />
+  </Operation>
+</Operations>
