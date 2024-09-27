@@ -121,7 +121,7 @@ public class PutAttendanceCommandHandlerTests
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
                     && a.Resource == nameof(Attendance))),
                         Times.Once);
-            membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.Once);
+            membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.AtLeastOnce);
             calendarEventsReadRepository.Verify(a => a.GetCalendarEvent(It.IsAny<Guid>()), Times.Once);
             notificationWriteRepository.Verify(n => n.Create(It.Is<Notification>(
                 q => q.MemberId == command.RequestedByMemberId

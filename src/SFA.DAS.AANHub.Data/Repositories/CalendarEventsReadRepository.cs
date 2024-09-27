@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using System.Diagnostics.CodeAnalysis;
+using SFA.DAS.AANHub.Domain.Dtos;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -23,6 +24,25 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
              .Include(x => x.EventGuests)
             .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
+
+    public async Task<CancelledAttendanceEventSummary?> GetCancelledAttendanceEvent(Guid id)
+    {
+        return await _aanDataContext.CalendarEvents
+            .AsNoTracking()
+            .Where(a => a.Id == id)
+            .Select(a => new CancelledAttendanceEventSummary
+            {
+                CalendarEventId = a.Id,
+                CalendarName = a.Calendar.CalendarName,
+                EventFormat = a.EventFormat,
+                EventTitle = a.Title,
+                StartDate = a.StartDate,
+                EndDate = a.EndDate,
+                AdminMemberId = a.CreatedByMemberId,
+                TotalAmbassadorsCount = _aanDataContext.Attendances.Count(att => att.CalendarEventId == a.Id)
+            })
+            .FirstOrDefaultAsync();
+    }
 
     public async Task<List<CalendarEventSummary>> GetCalendarEvents(GetCalendarEventsOptions options, CancellationToken cancellationToken)
     {

@@ -42,5 +42,6 @@ public static class Constants
         public const string ApprenticeWithdrawal = "AANApprenticeWithdrawal";
         public const string EmployerWithdrawal = "AANEmployerWithdrawal";
         public const string AANMemberRemoved = "AANMemberRemoved";
+        public const string AdminEventAttendanceCancelTemplate = "AANAdminEventAttendanceCancel";
     }
 }
