@@ -165,7 +165,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             EventName = cancelledAttendanceEventSummary.EventTitle,
             Contact = member.FirstName,
             Datetime = formattedDateTime,
-            TotalAmbassadorsCount = cancelledAttendanceEventSummary.TotalAmbassadorsCount
+            TotalAmbassadorsCount = cancelledAttendanceEventSummary.TotalAmbassadorsCount.ToString()
         };
 
         return JsonSerializer.Serialize(emailTemplate);

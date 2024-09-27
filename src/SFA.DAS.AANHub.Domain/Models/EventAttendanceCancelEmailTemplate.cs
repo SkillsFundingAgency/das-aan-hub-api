@@ -16,5 +16,5 @@ public class EventAttendanceCancelEmailTemplate
     [JsonPropertyName("datetime")]
     public string Datetime { get; set; } = null!;
     [JsonPropertyName("totalambassadors")]
-    public int TotalAmbassadorsCount { get; set; }
+    public string TotalAmbassadorsCount { get; set; } = null!;
 }
