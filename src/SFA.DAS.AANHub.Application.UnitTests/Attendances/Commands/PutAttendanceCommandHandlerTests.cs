@@ -121,7 +121,7 @@ public class PutAttendanceCommandHandlerTests
                     && DateOnly.FromDateTime(a.AuditTime) == DateOnly.FromDateTime(DateTime.UtcNow)
                     && a.Resource == nameof(Attendance))),
                         Times.Once);
-            membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.Once);
+            membersReadRepository.Verify(a => a.GetMember(It.IsAny<Guid>()), Times.AtLeastOnce);
             calendarEventsReadRepository.Verify(a => a.GetCalendarEvent(It.IsAny<Guid>()), Times.Once);
             notificationWriteRepository.Verify(n => n.Create(It.Is<Notification>(
                 q => q.MemberId == command.RequestedByMemberId
@@ -321,5 +321,41 @@ public class PutAttendanceCommandHandlerTests
             await result.Should().ThrowAsync<NotImplementedException>();
             aanDataContext.Verify(a => a.SaveChangesAsync(It.IsAny<CancellationToken>()), Times.Never);
         }
+    }
+
+    [Test]
+    [RecursiveMoqInlineAutoData(UserType.Employer)]
+    [RecursiveMoqInlineAutoData(UserType.Apprentice)]
+    public async Task Handle_WhenAttendingStatusChangesToFalse_CallsCreateAdminNotification(
+    UserType userType,
+    [Frozen] Mock<IAttendancesWriteRepository> attendancesWriteRepository,
+    [Frozen] Mock<IMembersReadRepository> membersReadRepository,
+    [Frozen] Mock<ICalendarEventsReadRepository> calendarEventsReadRepository,
+    [Frozen] Mock<ICalendarEventsReadRepository> calendarEventReadRepository,
+    [Frozen] Mock<INotificationsWriteRepository> notificationsWriteRepository,
+    [Frozen] PutAttendanceCommandHandler sut,
+    Attendance existingAttendance,
+    Member member,
+    CalendarEvent calendarEvent)
+    {
+        existingAttendance.IsAttending = true; 
+        member.Id = existingAttendance.MemberId;
+        member.UserType = userType;
+        calendarEvent.Id = existingAttendance.CalendarEventId;
+
+        attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
+                                  .ReturnsAsync(existingAttendance);
+        membersReadRepository.Setup(a => a.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
+        calendarEventsReadRepository.Setup(a => a.GetCalendarEvent(It.IsAny<Guid>())).ReturnsAsync(calendarEvent);
+
+        var command = new PutAttendanceCommand(
+            existingAttendance.CalendarEventId,
+            existingAttendance.MemberId,
+            false);  
+
+        await sut.Handle(command, new CancellationToken());
+
+        calendarEventReadRepository.Verify(x => x.GetCancelledAttendanceEvent(command.CalendarEventId), Times.Once);
+        notificationsWriteRepository.Verify(x => x.Create(It.IsAny<Notification>()), Times.Exactly(2));
     }
 }
