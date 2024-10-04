@@ -4,6 +4,7 @@ using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using System.Diagnostics.CodeAnalysis;
+using System.Security.Cryptography.X509Certificates;
 
 namespace SFA.DAS.AANHub.Data.Repositories;
 
@@ -18,9 +19,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
             .CalendarEvents
             .AsNoTracking()
             .Where(m => m.Id == id)
-            .Include(x => x.Attendees.Where(a => a.IsAttending))
-            .ThenInclude(x => x.Member)
-             .Include(x => x.EventGuests)
+            .Include(x => x.Attendees)
+                .ThenInclude(x => x.Member)
+            .Include(x => x.EventGuests)
             .Include(x => x.Calendar)
             .SingleOrDefaultAsync();
 

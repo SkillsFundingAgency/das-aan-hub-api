@@ -8,8 +8,8 @@ public class Attendance
     public Guid CalendarEventId { get; set; }
     public Guid MemberId { get; set; }
     public DateTime AddedDate { get; set; }
+    public DateTime? CancelledDate { get; set; }
     public bool IsAttending { get; set; }
-
 
     [JsonIgnore]
     public CalendarEvent CalendarEvent { get; set; } = null!;

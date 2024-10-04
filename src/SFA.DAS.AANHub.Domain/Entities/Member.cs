@@ -18,6 +18,7 @@ public class Member
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
+    public bool ReceiveNotifications { get; set; }
     public virtual List<MemberProfile> MemberProfiles { get; set; } = new();
     public virtual List<MemberPreference> MemberPreferences { get; set; } = new();
     public virtual List<MemberLeavingReason> MemberLeavingReasons { get; set; } = new();
