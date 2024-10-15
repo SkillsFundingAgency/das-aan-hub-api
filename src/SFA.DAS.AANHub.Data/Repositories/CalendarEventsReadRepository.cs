@@ -29,6 +29,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var eventFormats = GenerateEventFormatsSql(options.EventFormats);
         var eventTypes = GenerateEventTypesSql(options.CalendarIds);
         var regions = GenerateRegionsSql(options.RegionIds);
+        var radius = GenerateRadiusSql(options.Radius);
 
         var keywordSql = options.KeywordCount switch
         {
@@ -68,12 +69,12 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
  CE.Postcode,
  CE.Latitude,
  CE.Longitude,
- CASE   WHEN (EmployerDetails.Latitude is null) THEN null
-        WHEN (EmployerDetails.Longitude is null) THEN null
+ CASE   WHEN ({options.Latitude} is null) THEN null
+        WHEN ({options.Longitude} is null) THEN null
         WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
     ELSE
     ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
-    .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
+    .STDistance(geography::Point(convert(float,{options.Latitude}), convert(float,{options.Longitude}), 4326)) * 0.0006213712,1) END
     as Distance,
 CONVERT(bit,ISNULL(A.IsAttending, 0)) AS IsAttending,
 CE.IsActive,
@@ -101,6 +102,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
  {eventFormats}
  {eventTypes}
  {regions}
+ {radius}
  Order by CE.StartDate
  OFFSET {(options.Page - 1) * options.PageSize} ROWS 
  FETCH NEXT {options.PageSize} ROWS ONLY";
@@ -157,6 +159,18 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
                 eventFormats += ")";
                 return eventFormats;
 
+        }
+    }
+
+    private static string GenerateRadiusSql(int? radius)
+    {
+        if (radius is null)
+        {
+            return "";
+        }
+        else 
+        {
+            return $"AND Distance <= {radius}";
         }
     }
 }
