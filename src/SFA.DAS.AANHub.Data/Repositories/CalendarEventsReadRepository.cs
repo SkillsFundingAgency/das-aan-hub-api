@@ -55,6 +55,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         }
 
         var sql = $@"SELECT * FROM (
+SELECT
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
  C.CalendarName,
@@ -174,11 +175,11 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
         switch (orderBy.ToLower())
         {
             case "soonest":
-                return "Order by CE.StartDate";
+                return "ORDER BY CE.StartDate";
             case "closest":
-                return $"Order by Distance DESC";
+                return $"ORDER BY Distance DESC";
             default:
-                return "Order by CE.StartDate";
+                return "ORDER BY CE.StartDate";
         }
     }
 }
