@@ -30,7 +30,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var eventTypes = GenerateEventTypesSql(options.CalendarIds);
         var regions = GenerateRegionsSql(options.RegionIds);
         var radius = GenerateRadiusSql(options.Radius);
-        var orderBy = GenerateOrderBySql(options.OrderEventsBy);
+        var orderBy = GenerateOrderBySql(options.OrderBy);
 
         var keywordSql = options.KeywordCount switch
         {
@@ -177,7 +177,7 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
             case "soonest":
                 return "ORDER BY CE.StartDate";
             case "closest":
-                return $"ORDER BY Distance DESC";
+                return $"ORDER BY Distance";
             default:
                 return "ORDER BY CE.StartDate";
         }

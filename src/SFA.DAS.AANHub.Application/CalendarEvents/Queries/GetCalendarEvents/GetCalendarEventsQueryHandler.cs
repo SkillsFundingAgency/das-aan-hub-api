@@ -53,7 +53,7 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             Longitude = query.Longitude,
             Latitude = query.Latitude,
             Radius = query.Radius,
-            OrderEventsBy = query.OrderEventsBy
+            OrderBy = query.OrderBy
         };
 
         var response =
