@@ -49,7 +49,7 @@ public class GetCalendarEventsModel
     public int? Radius { get; set; }
 
     [FromQuery]
-    public string OrderEventsBy { get; set; }
+    public string? OrderEventsBy { get; set; }
 
     public static implicit operator GetCalendarEventsQuery(GetCalendarEventsModel model) => new()
     {

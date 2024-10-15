@@ -54,7 +54,7 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                  " and Audit.Resource='CalendarEvent') as Aud on Aud.EntityId = CE.Id  ";
         }
 
-        var sql = $@"select
+        var sql = $@"SELECT * FROM (
  CE.Id as CalendarEventId, 
  COUNT(*) OVER () TotalCount,
  C.CalendarName,
@@ -97,16 +97,17 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
    GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
 {showUserEventsOnly}
  WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
- AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
+ AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))A
  {isActiveSql}
  {keywordSql}
  {eventFormats}
  {eventTypes}
  {regions}
- {radius}
- {orderBy}
- OFFSET {(options.Page - 1) * options.PageSize} ROWS 
- FETCH NEXT {options.PageSize} ROWS ONLY";
+) AS CalendarEventSubquery
+WHERE 1=1 {radius}
+{orderBy}
+OFFSET {(options.Page - 1) * options.PageSize} ROWS 
+FETCH NEXT {options.PageSize} ROWS ONLY";
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlRaw(sql)
@@ -165,14 +166,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
 
     private static string GenerateRadiusSql(int? radius)
     {
-        if (radius is null)
-        {
-            return "";
-        }
-        else 
-        {
-            return $"AND Distance <= {radius}";
-        }
+        return radius.HasValue ? $"AND Distance <= {radius.Value}" : "";
     }
 
     private static string GenerateOrderBySql(string orderBy)

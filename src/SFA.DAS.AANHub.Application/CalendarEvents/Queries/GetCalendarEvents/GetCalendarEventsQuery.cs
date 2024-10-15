@@ -22,5 +22,5 @@ public class GetCalendarEventsQuery : IRequest<GetCalendarEventsQueryResult>, IR
     public double? Latitude { get; set; }
     public double? Longitude { get; set; }
     public int? Radius { get; set; }
-    public string OrderEventsBy { get; set; }
+    public string? OrderEventsBy { get; set; }
 }
