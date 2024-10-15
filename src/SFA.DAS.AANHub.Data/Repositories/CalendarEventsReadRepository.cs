@@ -98,7 +98,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
    GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
 {showUserEventsOnly}
  WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
- AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))A
+ AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
  {isActiveSql}
  {keywordSql}
  {eventFormats}
