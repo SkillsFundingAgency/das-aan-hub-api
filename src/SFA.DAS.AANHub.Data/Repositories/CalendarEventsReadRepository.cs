@@ -167,7 +167,7 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
 
     private static string GenerateRadiusSql(int? radius)
     {
-        return radius.HasValue ? $"AND Distance <= {radius.Value}" : "";
+        return (radius.HasValue && radius != 0) ? $"AND Distance <= {radius.Value}" : "";
     }
 
     private static string GenerateOrderBySql(string orderBy)
