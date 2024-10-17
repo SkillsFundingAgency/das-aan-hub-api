@@ -31,6 +31,8 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var regions = GenerateRegionsSql(options.RegionIds);
         var radius = GenerateRadiusSql(options.Radius);
         var orderBy = GenerateOrderBySql(options.OrderBy);
+        var latitude = options.Latitude?.ToString() ?? "null";
+        var longitude = options.Longitude?.ToString() ?? "null";
 
         var keywordSql = options.KeywordCount switch
         {
@@ -71,12 +73,12 @@ SELECT
  CE.Postcode,
  CE.Latitude,
  CE.Longitude,
- CASE   WHEN ({options.Latitude} is null) THEN null
-        WHEN ({options.Longitude} is null) THEN null
+ CASE   WHEN ({latitude} is null) THEN null
+        WHEN ({longitude} is null) THEN null
         WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
     ELSE
     ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
-    .STDistance(geography::Point(convert(float,{options.Latitude}), convert(float,{options.Longitude}), 4326)) * 0.0006213712,1) END
+    .STDistance(geography::Point(convert(float,{latitude}), convert(float,{longitude}), 4326)) * 0.0006213712,1) END
     as Distance,
 CONVERT(bit,ISNULL(A.IsAttending, 0)) AS IsAttending,
 CE.IsActive,
