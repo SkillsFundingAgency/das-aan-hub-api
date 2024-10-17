@@ -17,8 +17,8 @@ public class GetCalendarEventsOptions
     public int Page { get; set; }
     public int PageSize { get; set; }
     public bool ShowUserEventsOnly { get; set; }
-    public double? Latitude { get; set; }
-    public double? Longitude { get; set; }
+    public double? Latitude { get; set; } = null;
+    public double? Longitude { get; set; } = null;
     public int? Radius { get; set; }
     public string OrderBy { get; set; } = string.Empty;
 }

@@ -95,7 +95,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
           ,MAX(CASE WHEN MemberId = '{options.MemberId}' THEN isAttending ELSE 0 END)  isAttending
           ,SUM(CASE WHEN IsAttending = 1 THEN 1 ELSE 0 END) Attendees 
    FROM Attendance
-   GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
+   GROUP BY CalendarEventId) AS A on A.CalendarEventId = CE.Id
 {showUserEventsOnly}
  WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
