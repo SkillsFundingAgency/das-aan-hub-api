@@ -178,7 +178,7 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
             case "soonest":
                 return "ORDER BY [Start]";
             case "closest":
-                return $"ORDER BY Distance";
+                return $"ORDER BY Distance ASC";
             default:
                 return "ORDER BY [Start]";
         }
