@@ -163,7 +163,6 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
                 eventFormats += string.Join(",", eventFormatsList.Select(ef => "'" + ef + "'").ToList());
                 eventFormats += ")";
                 return eventFormats;
-
         }
     }
 
@@ -177,11 +176,11 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
         switch (orderBy.ToLower())
         {
             case "soonest":
-                return "ORDER BY CE.StartDate";
+                return "ORDER BY [Start]";
             case "closest":
                 return $"ORDER BY Distance";
             default:
-                return "ORDER BY CE.StartDate";
+                return "ORDER BY [Start]";
         }
     }
 }
