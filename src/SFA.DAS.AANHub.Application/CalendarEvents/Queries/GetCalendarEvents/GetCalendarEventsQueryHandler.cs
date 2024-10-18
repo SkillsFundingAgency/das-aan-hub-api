@@ -49,7 +49,11 @@ public class GetCalendarEventsQueryHandler : IRequestHandler<GetCalendarEventsQu
             IsActive = query.IsActive,
             Page = page,
             PageSize = pageSize,
-            ShowUserEventsOnly = query.ShowUserEventsOnly
+            ShowUserEventsOnly = query.ShowUserEventsOnly,
+            Longitude = query.Longitude,
+            Latitude = query.Latitude,
+            Radius = query.Radius,
+            OrderBy = query.OrderBy
         };
 
         var response =
