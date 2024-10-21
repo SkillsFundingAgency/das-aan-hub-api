@@ -56,10 +56,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                  " and Audit.Resource='CalendarEvent') as Aud on Aud.EntityId = CE.Id  ";
         }
 
-        var sql = $@"SELECT * FROM (
-SELECT
+        var sql = $@"WITH FilteredEvents as (
+ SELECT
  CE.Id as CalendarEventId, 
- COUNT(*) OVER () TotalCount,
  C.CalendarName,
  C.Id as CalendarId,
  CE.RegionId,
@@ -106,7 +105,9 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
  {eventFormats}
  {eventTypes}
  {regions}
-) AS CalendarEventSubquery
+)
+SELECT *, COUNT(1) OVER () as TotalCount
+FROM FilteredEvents
 WHERE 1=1 {radius}
 {orderBy}
 OFFSET {(options.Page - 1) * options.PageSize} ROWS 
@@ -178,7 +179,7 @@ FETCH NEXT {options.PageSize} ROWS ONLY";
             case "soonest":
                 return "ORDER BY [Start]";
             case "closest":
-                return $"ORDER BY Distance ASC";
+                return $"ORDER BY isnull(Distance,0) ASC";
             default:
                 return "ORDER BY [Start]";
         }
