@@ -25,6 +25,7 @@ public class CalendarEvent
     public long? Urn { get; set; }
     public DateTime CreatedDate { get; set; }
     public DateTime? LastUpdatedDate { get; set; }
+    public Guid? CreatedByMemberId { get; set; }
     [JsonIgnore]
     public virtual List<Attendance> Attendees { get; set; } = new();
 
