@@ -19,6 +19,7 @@ public class PatchMemberCommand : IRequest<ValidatedResponse<SuccessCommandResul
     public string? OrganisationName => PatchDoc.GetReplacementValue(MemberPatchFields.OrganisationName);
     public int? RegionId => PatchDoc.GetReplacementValueAsInt(MemberPatchFields.RegionId);
     public string? Status => PatchDoc.GetReplacementValue(MemberPatchFields.Status);
+    public string? ReceiveNotifications => PatchDoc.GetReplacementValue(MemberPatchFields.ReceiveNotifications);
 
 
     public bool HasEmail => PatchDoc.HasValue(MemberPatchFields.Email);
@@ -27,5 +28,6 @@ public class PatchMemberCommand : IRequest<ValidatedResponse<SuccessCommandResul
     public bool HasOrganisationName => PatchDoc.HasValue(MemberPatchFields.OrganisationName);
     public bool HasRegionId => PatchDoc.HasValue(MemberPatchFields.RegionId);
     public bool HasStatus => PatchDoc.HasValue(MemberPatchFields.Status);
+    public bool HasReceiveNotifications => PatchDoc.HasValue(MemberPatchFields.ReceiveNotifications);
 }
 

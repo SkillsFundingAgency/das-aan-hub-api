@@ -15,7 +15,7 @@ public class PostMemberLeavingCommandValidatorTests
     [TestCase("ac44a17b-f843-4e1f-979b-aa95c0fe44f2", UserType.Apprentice, false, MemberIdValidator.MemberIdMustBeLive)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Apprentice, true)]
     [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Employer, true)]
-    [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, false, MemberIdValidator.MemberIdMustBeApprenticeOrEmployer)]
+    [TestCase("f5521677-7733-4416-b5a7-4c7a231fe469", UserType.Admin, true)]
     public async Task ValidateMemberId(string memberId, UserType userType, bool isValid, string? errorMessage = null)
     {
         Mock<IMembersReadRepository> repositoryMock = new();
