@@ -11,6 +11,8 @@ public class GetCalendarEventByIdQueryResultTests
     [Test, RecursiveMoqAutoData]
     public void Operator_MapsFromCalendarEvent([Frozen] CalendarEvent source)
     {
+        source.Attendees.ForEach(x => x.IsAttending = true);
+
         var sut = (GetCalendarEventByIdQueryResult)source;
 
         sut.Should().BeEquivalentTo(source, c => c.ExcludingMissingMembers());

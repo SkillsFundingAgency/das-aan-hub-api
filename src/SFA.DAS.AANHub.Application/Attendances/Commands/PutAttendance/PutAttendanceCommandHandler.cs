@@ -8,7 +8,9 @@ using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Models;
 using System.Text.Json;
+using SFA.DAS.AANHub.Domain.Dtos;
 using static SFA.DAS.AANHub.Domain.Common.Constants;
+using System.Globalization;
 
 namespace SFA.DAS.AANHub.Application.Attendances.Commands.PutAttendance;
 
@@ -65,11 +67,17 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         };
 
         existingAttendance.IsAttending = command.IsAttending;
+        existingAttendance.CancelledDate = command.IsAttending ? null : DateTime.UtcNow;
+
+        existingAttendance.AddedDate = command.IsAttending ? DateTime.UtcNow : existingAttendance.AddedDate;
 
         audit.After = JsonSerializer.Serialize(existingAttendance);
         _auditWriteRepository.Create(audit);
 
         await CreateNotification(command);
+
+        if (!command.IsAttending)
+            await CreateAdminNotification(command);
 
         await _aanDataContext.SaveChangesAsync(token);
 
@@ -101,6 +109,28 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         return new ValidatedResponse<SuccessCommandResult>(new SuccessCommandResult());
     }
 
+    private async Task CreateAdminNotification(PutAttendanceCommand command)
+    {
+        var cancelledAttendanceEvent = await _calendarEventReadRepository.GetCancelledAttendanceEvent(command.CalendarEventId);
+        if (cancelledAttendanceEvent?.AdminMemberId == null) return;
+
+        var member = await _membersReadRepository.GetMember(cancelledAttendanceEvent.AdminMemberId.Value);
+        if (member == null || member.ReceiveNotifications == false) return;
+
+        var tokens = GetAdminTokens(cancelledAttendanceEvent, member);
+        var notification = NotificationHelper.CreateNotification(
+            Guid.NewGuid(),
+            cancelledAttendanceEvent.AdminMemberId.Value,
+            EmailTemplateName.AdminEventAttendanceCancelTemplate,
+            tokens,
+            command.RequestedByMemberId,
+            true,
+            command.CalendarEventId.ToString()
+        );
+
+        _notificationsWriteRepository.Create(notification);
+    }
+
     private async Task CreateNotification(PutAttendanceCommand command)
     {
         var member = await _membersReadRepository.GetMember(command.RequestedByMemberId);
@@ -121,6 +151,27 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
             (false, UserType.Employer) => EmailTemplateName.EmployerEventCancelTemplate,
             _ => throw new NotImplementedException()
         };
+    }
+
+    private string GetAdminTokens(CancelledAttendanceEventSummary cancelledAttendanceEventSummary, Member member)
+    {
+        var startDate = cancelledAttendanceEventSummary.StartDate.ToString("dd MMMM yyyy, h:mmtt", CultureInfo.InvariantCulture).ToLower();
+        var endDateHour = cancelledAttendanceEventSummary.EndDate.ToString("htt", CultureInfo.InvariantCulture).ToLower();
+
+        var formattedDateTime = $"{startDate} to {endDateHour}";
+
+        var emailTemplate = new EventAttendanceCancelEmailTemplate
+        {
+            CalendarEventId = cancelledAttendanceEventSummary.CalendarEventId.ToString(),
+            EventType = cancelledAttendanceEventSummary.CalendarName,
+            EventFormat = cancelledAttendanceEventSummary.EventFormat,
+            EventName = cancelledAttendanceEventSummary.EventTitle,
+            Contact = member.FirstName,
+            Datetime = formattedDateTime,
+            TotalAmbassadorsCount = cancelledAttendanceEventSummary.TotalAmbassadorsCount.ToString()
+        };
+
+        return JsonSerializer.Serialize(emailTemplate);
     }
 
     private async Task<string> GetTokens(PutAttendanceCommand command, Member member)

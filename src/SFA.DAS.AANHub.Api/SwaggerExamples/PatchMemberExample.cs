@@ -17,6 +17,7 @@ public class PatchMemberExample : IExamplesProvider<JsonPatchDocument>
         doc.Replace(MemberPatchFields.OrganisationName, "Apprenticeship Inc.");
         doc.Replace(MemberPatchFields.RegionId, 1);
         doc.Replace(MemberPatchFields.Status, "Deleted | Withdrawn");
+        doc.Replace(MemberPatchFields.ReceiveNotifications, "true");
         return doc;
     }
 }

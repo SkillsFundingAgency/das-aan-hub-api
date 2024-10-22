@@ -5,6 +5,7 @@
     [MemberId] UNIQUEIDENTIFIER NOT NULL,
     [AddedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [IsAttending] BIT NOT NULL DEFAULT 1, 
+    [CancelledDate] DATETIME2 NULL, 
     CONSTRAINT [FK_Attendance_CalendarEventId] FOREIGN KEY ([CalendarEventId]) REFERENCES [CalendarEvent]([Id]), 
     CONSTRAINT [FK_Attendance_MemberId] FOREIGN KEY ([MemberId]) REFERENCES [Member]([Id]), 
 )
