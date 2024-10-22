@@ -67,6 +67,7 @@ public class PutAttendanceCommandHandler : IRequestHandler<PutAttendanceCommand,
         };
 
         existingAttendance.IsAttending = command.IsAttending;
+        existingAttendance.CancelledDate = command.IsAttending ? null : DateTime.UtcNow;
 
         existingAttendance.AddedDate = command.IsAttending ? DateTime.UtcNow : existingAttendance.AddedDate;
 
