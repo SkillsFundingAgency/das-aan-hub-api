@@ -32,7 +32,7 @@ namespace SFA.DAS.AANHub.Application.Mediatr.Behaviours
                     (acc, current) => acc + string.Concat(' ', current)
                 );
 
-                _logger.LogTrace("{errors}", errors);
+                _logger.LogError("{errors}", errors);
 
                 var responseType = typeof(TResponse);
 
