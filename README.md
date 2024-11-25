@@ -39,7 +39,7 @@ In the API project, if not exist already, add appSettings.Development.json file 
   "Version": "1.0"
 } 
 ```
-### Running
+## Running
 
 * Start storage emulator e.g. using a command `C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator>AzureStorageEmulator.exe start`
 * Run the solution under Kestrel
