@@ -16,7 +16,7 @@ This API solution is part of Apprentice Ambassador Network (AAN) project. This A
 ### Pre-Requisites
 * A clone of this repository
 * A storage emulator like Azurite
-* The AAN Hub database is published
+* The AAN Hub database is published from 'SFA.DAS.AANHub.Database' project
   
 ### Config
 
@@ -39,6 +39,11 @@ In the API project, if not exist already, add appSettings.Development.json file 
   "Version": "1.0"
 } 
 ```
+### Running
+
+* Start storage emulator e.g. using a command `C:\Program Files (x86)\Microsoft SDKs\Azure\Storage Emulator>AzureStorageEmulator.exe start`
+* Run the solution under Kestrel
+* Open up a browser to https://localhost:7299 and show a Swagger API page where the endpoints can be tested. 
 
 ## Technologies
 * .Net 8.0
