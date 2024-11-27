@@ -7,15 +7,15 @@ CREATE TABLE #TempRegion
 )
 
 INSERT INTO #TempRegion VALUES 
-(1, 'East Midlands', 1),
-(2, 'East of England', 2),
-(3, 'London', 3), 
-(4, 'North East', 4),
-(5, 'North West', 5),
-(6, 'South East', 6),
-(7, 'South West', 7),
-(8, 'West Midlands', 8),
-(9, 'Yorkshire and the Humber', 9)
+(1, 'East Midlands', 4),
+(2, 'East of England', 6),
+(3, 'London', 7), 
+(4, 'North East', 1),
+(5, 'North West', 2),
+(6, 'South East', 8),
+(7, 'South West', 9),
+(8, 'West Midlands', 5),
+(9, 'Yorkshire and the Humber', 3)
 
 
 SET IDENTITY_INSERT [dbo].[Region] ON;
