@@ -39,6 +39,18 @@ public class GetCalendarEventsModel
 
     [FromQuery] public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
 
+    [FromQuery]
+    public double? Latitude { get; set; }
+
+    [FromQuery]
+    public double? Longitude { get; set; }
+
+    [FromQuery]
+    public int? Radius { get; set; }
+
+    [FromQuery]
+    public string OrderBy { get; set; } = string.Empty;
+
     public static implicit operator GetCalendarEventsQuery(GetCalendarEventsModel model) => new()
     {
         RequestedByMemberId = model.RequestedByMemberId,
@@ -51,6 +63,10 @@ public class GetCalendarEventsModel
         IsActive = model.IsActive,
         Page = model.Page,
         PageSize = model.PageSize,
-        ShowUserEventsOnly = model.ShowUserEventsOnly
+        ShowUserEventsOnly = model.ShowUserEventsOnly,
+        Latitude = model.Latitude,
+        Longitude = model.Longitude,
+        Radius = model.Radius,
+        OrderBy = model.OrderBy
     };
 }

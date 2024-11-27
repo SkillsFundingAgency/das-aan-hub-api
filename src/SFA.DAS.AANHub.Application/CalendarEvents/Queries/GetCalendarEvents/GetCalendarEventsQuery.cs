@@ -19,4 +19,8 @@ public class GetCalendarEventsQuery : IRequest<GetCalendarEventsQueryResult>, IR
 
     public int PageSize { get; set; } = Domain.Common.Constants.CalendarEvents.PageSize;
     public bool ShowUserEventsOnly { get; set; }
+    public double? Latitude { get; set; }
+    public double? Longitude { get; set; }
+    public int? Radius { get; set; }
+    public string OrderBy { get; set; } = string.Empty;
 }

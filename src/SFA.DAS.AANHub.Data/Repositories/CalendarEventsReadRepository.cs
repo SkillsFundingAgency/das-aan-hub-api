@@ -49,6 +49,10 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
         var eventFormats = GenerateEventFormatsSql(options.EventFormats);
         var eventTypes = GenerateEventTypesSql(options.CalendarIds);
         var regions = GenerateRegionsSql(options.RegionIds);
+        var radius = GenerateRadiusSql(options.Radius);
+        var orderBy = GenerateOrderBySql(options.OrderBy);
+        var latitude = options.Latitude?.ToString() ?? "null";
+        var longitude = options.Longitude?.ToString() ?? "null";
 
         var keywordSql = options.KeywordCount switch
         {
@@ -72,9 +76,9 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
                                  " and Audit.Resource='CalendarEvent') as Aud on Aud.EntityId = CE.Id  ";
         }
 
-        var sql = $@"select
+        var sql = $@"WITH FilteredEvents as (
+ SELECT
  CE.Id as CalendarEventId, 
- COUNT(*) OVER () TotalCount,
  C.CalendarName,
  C.Id as CalendarId,
  CE.RegionId,
@@ -88,12 +92,12 @@ internal class CalendarEventsReadRepository : ICalendarEventsReadRepository
  CE.Postcode,
  CE.Latitude,
  CE.Longitude,
- CASE   WHEN (EmployerDetails.Latitude is null) THEN null
-        WHEN (EmployerDetails.Longitude is null) THEN null
+ CASE   WHEN ({latitude} is null) THEN null
+        WHEN ({longitude} is null) THEN null
         WHEN (CE.Latitude is null OR CE.Longitude is null) THEN null
     ELSE
     ROUND(geography::Point(CE.Latitude, CE.Longitude, 4326)
-    .STDistance(geography::Point(convert(float,EmployerDetails.Latitude), convert(float,EmployerDetails.Longitude), 4326)) * 0.0006213712,1) END
+    .STDistance(geography::Point(convert(float,{latitude}), convert(float,{longitude}), 4326)) * 0.0006213712,1) END
     as Distance,
 CONVERT(bit,ISNULL(A.IsAttending, 0)) AS IsAttending,
 CE.IsActive,
@@ -112,7 +116,7 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
           ,MAX(CASE WHEN MemberId = '{options.MemberId}' THEN isAttending ELSE 0 END)  isAttending
           ,SUM(CASE WHEN IsAttending = 1 THEN 1 ELSE 0 END) Attendees 
    FROM Attendance
-   GROUP BY CalendarEventid ) A on A.CalendarEventId = CE.Id
+   GROUP BY CalendarEventId) AS A on A.CalendarEventId = CE.Id
 {showUserEventsOnly}
  WHERE CE.StartDate >= convert(datetime,'{options.FromDate?.ToString("yyyy-MM-dd HH:mm:ss")}') 
  AND CE.EndDate < convert(date,dateadd(day,1,'{options.ToDate?.ToString("yyyy-MM-dd")}'))
@@ -121,9 +125,13 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
  {eventFormats}
  {eventTypes}
  {regions}
- Order by CE.StartDate
- OFFSET {(options.Page - 1) * options.PageSize} ROWS 
- FETCH NEXT {options.PageSize} ROWS ONLY";
+)
+SELECT *, COUNT(1) OVER () as TotalCount
+FROM FilteredEvents
+WHERE 1=1 {radius}
+{orderBy}
+OFFSET {(options.Page - 1) * options.PageSize} ROWS 
+FETCH NEXT {options.PageSize} ROWS ONLY";
 
         var calendarEvents = await _aanDataContext.CalendarEventSummaries!
             .FromSqlRaw(sql)
@@ -176,7 +184,24 @@ ISNULL(A.Attendees,0) as NumberOfAttendees
                 eventFormats += string.Join(",", eventFormatsList.Select(ef => "'" + ef + "'").ToList());
                 eventFormats += ")";
                 return eventFormats;
+        }
+    }
 
+    private static string GenerateRadiusSql(int? radius)
+    {
+        return (radius.HasValue && radius != 0) ? $"AND (Distance IS NULL OR Distance <= {radius.Value})" : "";
+    }
+
+    private static string GenerateOrderBySql(string orderBy)
+    {
+        switch (orderBy.ToLower())
+        {
+            case "soonest":
+                return "ORDER BY [Start]";
+            case "closest":
+                return $"ORDER BY isnull(Distance,999999) ASC";
+            default:
+                return "ORDER BY [Start]";
         }
     }
 }
