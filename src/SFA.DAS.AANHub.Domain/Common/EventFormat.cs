@@ -3,5 +3,6 @@ public enum EventFormat
 {
     InPerson,
     Online,
-    Hybrid
+    Hybrid,
+    All
 }

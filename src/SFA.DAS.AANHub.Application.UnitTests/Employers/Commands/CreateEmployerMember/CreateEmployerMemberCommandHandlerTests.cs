@@ -5,6 +5,7 @@ using FluentAssertions.Execution;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Application.Services;
 using SFA.DAS.AANHub.Domain.Common;
@@ -97,6 +98,51 @@ public class CreateEmployerMemberCommandHandlerTests
             response.Result.MemberId.Should().Be(command.MemberId);
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x => x.Id == command.MemberId && x.MemberPreferences.Count == MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count)));
             memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)), Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
+        }
+    }
+
+    [Test, RecursiveMoqAutoData]
+    public async Task Handle_AddsNewEmployer_WithDefaultMemberPreferenceAndNotificationProperties(
+    CreateEmployerMemberCommand command,
+    [Frozen] Mock<IMembersWriteRepository> membersWriteRepository,
+    [Frozen] Mock<IMemberPreferenceWriteRepository> memberPreferenceWriteRepository,
+    [Greedy] CreateEmployerMemberCommandHandler sut)
+    {
+        command.MemberNotificationEventFormatValues = new List<MemberNotificationEventFormatValues>
+    {
+        new MemberNotificationEventFormatValues { EventFormat = "InPerson", Ordering = 1, ReceiveNotifications = true },
+        new MemberNotificationEventFormatValues { EventFormat = "Online", Ordering = 2, ReceiveNotifications = false }
+    };
+
+        command.MemberNotificationLocationValues = new List<MemberNotificationLocationValues>
+    {
+        new MemberNotificationLocationValues { Name = "Location 1", Radius = 5, Latitude = 51.5074, Longitude = -0.1278 },
+        new MemberNotificationLocationValues { Name = "Location 2", Radius = 10, Latitude = 40.7128, Longitude = -74.0060 }
+    };
+
+        var response = await sut.Handle(command, new CancellationToken());
+
+        using (new AssertionScope())
+        {
+            response.Result.MemberId.Should().Be(command.MemberId);
+
+            membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x =>
+                    x.Id == command.MemberId &&
+                    x.MemberPreferences.Count == MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count &&
+                    x.MemberNotificationEventFormats.Count == 2 &&
+                    x.MemberNotificationEventFormats.Any(e =>
+                        e.EventFormat == "InPerson" && e.Ordering == 1 && e.ReceiveNotifications) &&
+                    x.MemberNotificationEventFormats.Any(e =>
+                        e.EventFormat == "Online" && e.Ordering == 2 && !e.ReceiveNotifications) &&
+                    x.MemberNotificationLocations.Count == 2 &&
+                    x.MemberNotificationLocations.Any(l =>
+                        l.Name == "Location 1" && l.Radius == 5 && l.Latitude == 51.5074 && l.Longitude == -0.1278) &&
+                    x.MemberNotificationLocations.Any(l =>
+                        l.Name == "Location 2" && l.Radius == 10 && l.Latitude == 40.7128 && l.Longitude == -74.0060)
+                )), Times.Once);
+
+            memberPreferenceWriteRepository.Verify(p => p.Create(It.Is<MemberPreference>(x => x.MemberId == command.MemberId)),
+                    Times.Exactly(MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count));
         }
     }
 }

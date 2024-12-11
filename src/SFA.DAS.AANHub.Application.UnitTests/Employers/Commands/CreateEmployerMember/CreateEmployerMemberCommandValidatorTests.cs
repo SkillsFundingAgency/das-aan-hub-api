@@ -1,6 +1,7 @@
 ﻿using FluentValidation.TestHelper;
 using Moq;
 using NUnit.Framework;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
@@ -137,5 +138,54 @@ public class CreateEmployerMemberCommandValidatorTests
         result.ShouldHaveValidationErrorFor(c => c.JoinedDate);
         result.ShouldHaveValidationErrorFor(c => c.RegionId);
         result.ShouldHaveValidationErrorFor(c => c.OrganisationName);
+    }
+
+    [TestCase("InPerson", 1, "Test Location", 10, true)]
+    [TestCase("InPerson", 1, null, 0, false)]
+    [TestCase("Online", 2, null, 0, true)]
+    [TestCase("Online", 2, "Test Location", 10, true)]
+    public async Task Validate_MemberNotificationEventFormatAndLocationValues(
+      string eventFormat, int ordering, string name, int radius, bool isValid)
+    {
+        var command = new CreateEmployerMemberCommand
+        {
+            ReceiveNotifications = true,
+            MemberNotificationEventFormatValues = new List<MemberNotificationEventFormatValues>
+        {
+            new MemberNotificationEventFormatValues
+            {
+                EventFormat = eventFormat,
+                Ordering = ordering,
+                ReceiveNotifications = true
+            }
+        },
+            MemberNotificationLocationValues = string.IsNullOrEmpty(name)
+                ? new List<MemberNotificationLocationValues>()
+                : new List<MemberNotificationLocationValues>
+                {
+                new MemberNotificationLocationValues
+                {
+                    Name = name,
+                    Radius = radius,
+                    Latitude = 51.5074,
+                    Longitude = -0.1278
+                }
+                }
+        };
+
+        var result = await sut.TestValidateAsync(command);
+
+        if (isValid)
+        {
+            result.ShouldNotHaveValidationErrorFor(c => c.MemberNotificationEventFormatValues);
+            result.ShouldNotHaveValidationErrorFor(c => c.MemberNotificationLocationValues);
+        }
+        else
+        {
+            if (eventFormat != null && !string.Equals(eventFormat, "Online", StringComparison.OrdinalIgnoreCase) && string.IsNullOrEmpty(name))
+            {
+                result.ShouldHaveValidationErrorFor(c => c.MemberNotificationLocationValues);
+            }
+        }
     }
 }
