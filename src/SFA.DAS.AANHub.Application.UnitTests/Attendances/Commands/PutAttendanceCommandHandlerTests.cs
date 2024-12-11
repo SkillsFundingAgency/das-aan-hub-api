@@ -343,6 +343,8 @@ public class PutAttendanceCommandHandlerTests
         member.UserType = userType;
         calendarEvent.Id = existingAttendance.CalendarEventId;
 
+        member.ReceiveNotifications = true;
+
         attendancesWriteRepository.Setup(a => a.GetAttendance(existingAttendance.CalendarEventId, existingAttendance.MemberId))
                                   .ReturnsAsync(existingAttendance);
         membersReadRepository.Setup(a => a.GetMember(It.IsAny<Guid>())).ReturnsAsync(member);
