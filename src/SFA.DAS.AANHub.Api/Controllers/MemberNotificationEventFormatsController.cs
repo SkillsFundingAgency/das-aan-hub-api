@@ -5,8 +5,8 @@ using SFA.DAS.AANHub.Application.MemberNotificationEventFormats.Queries.GetMembe
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
+[Route("[controller]")]
 [ApiController]
-[Route("MemberNotificationEventFormats")]
 public class MemberNotificationEventFormatsController : ActionResponseControllerBase
 {
     private readonly IMediator _mediator;

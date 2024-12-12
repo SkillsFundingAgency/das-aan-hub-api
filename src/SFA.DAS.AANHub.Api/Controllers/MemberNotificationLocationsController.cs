@@ -5,8 +5,8 @@ using SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNo
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
+[Route("[controller]")]
 [ApiController]
-[Route("MemberNotificationLocations")]
 public class MemberNotificationLocationsController : ActionResponseControllerBase
 {
     private readonly IMediator _mediator;
