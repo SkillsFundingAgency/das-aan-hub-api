@@ -41,4 +41,54 @@ public class CreateEmployerMemberCommandTests
 
         result.Should().BeEquivalentTo(expected);
     }
+
+    [Test]
+    public void MemberNotificationEventFormatsConverter_ConvertsCorrectly()
+    {
+        var memberId = Guid.NewGuid();
+        var source = new MemberNotificationEventFormatValues
+        {
+            EventFormat = "InPerson",
+            Ordering = 1,
+            ReceiveNotifications = true
+        };
+
+        var expected = new MemberNotificationEventFormat
+        {
+            MemberId = memberId,
+            EventFormat = source.EventFormat,
+            Ordering = source.Ordering,
+            ReceiveNotifications = source.ReceiveNotifications
+        };
+
+        var result = CreateEmployerMemberCommand.MemberNotificationEventFormatsConverter(source, memberId);
+
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public void MemberNotificationLocationsConverter_ConvertsCorrectly()
+    {
+        var memberId = Guid.NewGuid();
+        var source = new MemberNotificationLocationValues
+        {
+            Name = "Test Location",
+            Radius = 10,
+            Latitude = 51.5074,
+            Longitude = -0.1278
+        };
+
+        var expected = new MemberNotificationLocation
+        {
+            MemberId = memberId,
+            Name = source.Name,
+            Radius = source.Radius,
+            Latitude = source.Latitude,
+            Longitude = source.Longitude
+        };
+
+        var result = CreateEmployerMemberCommand.MemberNotificationLocationsConverter(source, memberId);
+
+        result.Should().BeEquivalentTo(expected);
+    }
 }

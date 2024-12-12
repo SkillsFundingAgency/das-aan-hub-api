@@ -10,5 +10,8 @@ public abstract class CreateMemberCommandBase
     public DateTime? JoinedDate { get; set; }
     public int? RegionId { get; set; }
     public string? OrganisationName { get; set; }
+    public bool ReceiveNotifications { get; set; }
     public List<ProfileValue> ProfileValues { get; set; } = new();
+    public List<MemberNotificationEventFormatValues>? MemberNotificationEventFormatValues { get; set; }
+    public List<MemberNotificationLocationValues>? MemberNotificationLocationValues { get; set; }
 }

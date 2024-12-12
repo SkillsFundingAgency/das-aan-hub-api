@@ -25,7 +25,8 @@ public class AanDataContext : DbContext, IAanDataContext
     public DbSet<Notification> Notifications => Set<Notification>();
     public DbSet<NotificationTemplate> NotificationTemplates => Set<NotificationTemplate>();
     public DbSet<MemberPreference> MemberPreferences => Set<MemberPreference>();
-
+    public DbSet<MemberNotificationEventFormat> MemberNotificationEventFormat => Set<MemberNotificationEventFormat>();
+    public DbSet<MemberNotificationLocation> MemberNotificationLocation => Set<MemberNotificationLocation>();
     public DbSet<EventGuest> EventGuests => Set<EventGuest>();
     public DbSet<LeavingReason> LeavingReasons => Set<LeavingReason>();
     public DbSet<MemberLeavingReason> MemberLeavingReasons => Set<MemberLeavingReason>();
