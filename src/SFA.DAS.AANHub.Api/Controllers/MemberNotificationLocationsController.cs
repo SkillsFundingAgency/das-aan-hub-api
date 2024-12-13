@@ -30,6 +30,6 @@ public class MemberNotificationLocationsController : ActionResponseControllerBas
 
         var response = await _mediator.Send(new GetMemberNotificationLocationsQuery() { MemberId = memberId }, cancellationToken);
 
-        return GetResponse(response);
+        return new OkObjectResult(response);
     }
 }

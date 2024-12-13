@@ -30,6 +30,6 @@ public class MemberNotificationEventFormatsController : ActionResponseController
 
         var response = await _mediator.Send(new GetMemberNotificationEventFormatsQuery() { MemberId = memberId }, cancellationToken);
 
-        return GetResponse(response);
+        return new OkObjectResult(response);
     }
 }
