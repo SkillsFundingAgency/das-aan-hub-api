@@ -13,7 +13,7 @@
     [LastUpdatedDate] DATETIME2 NOT NULL DEFAULT GETUTCDATE(),
     [IsRegionalChair] BIT DEFAULT 0,
     [FullName] AS CONVERT(NVARCHAR(400), TRIM([FirstName]) + ' ' + TRIM([LastName])),
-    [ReceiveNotifications] BIT NOT NULL DEFAULT 0, 
+    [ReceiveNotifications] BIT NULL, 
     CONSTRAINT [PK_Member] PRIMARY KEY ([Id]),
     CONSTRAINT [FK_Member_Region] FOREIGN KEY ([RegionId]) REFERENCES [Region] ([Id])
 )
