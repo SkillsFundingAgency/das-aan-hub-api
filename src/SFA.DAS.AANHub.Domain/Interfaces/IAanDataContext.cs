@@ -18,6 +18,8 @@ public interface IAanDataContext
     DbSet<Notification> Notifications { get; }
     DbSet<NotificationTemplate> NotificationTemplates { get; }
     DbSet<MemberPreference> MemberPreferences { get; }
+    DbSet<MemberNotificationEventFormat> MemberNotificationEventFormats { get; }
+    DbSet<MemberNotificationLocation> MemberNotificationLocations { get; }
 
     DbSet<EventGuest> EventGuests { get; }
     DbSet<LeavingReason> LeavingReasons { get; }

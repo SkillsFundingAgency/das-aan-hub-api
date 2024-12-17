@@ -78,5 +78,7 @@ public static class ServiceCollectionExtensions
         services.AddTransient<ILeavingReasonsReadRepository, LeavingReasonsReadRepository>();
         services.AddTransient<IMemberLeavingReasonsWriteRepository, MemberLeavingReasonsWriteRepository>();
         services.AddTransient<IAuditReadRepository, AuditReadRepository>();
+        services.AddTransient<IMemberNotificationEventFormatsReadRepository, MemberNotificationEventFormatsReadRepository>();
+        services.AddTransient<IMemberNotificationLocationReadRepository, MemberNotificationLocationReadRepository>();
     }
 }
