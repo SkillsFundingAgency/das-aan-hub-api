@@ -5,43 +5,54 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Api.Controllers;
-using SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationLocations;
+using SFA.DAS.AANHub.Api.Models;
+using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations;
 using SFA.DAS.Testing.AutoFixture;
 
-namespace SFA.DAS.AANHub.Api.UnitTests.Controllers;
-
-public class MemberNotificationLocationsControllerTests
+namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
-    [Test, MoqAutoData]
-    public async Task GetMemberNotificationLocations_InvokesQueryHandler(
-    [Frozen] Mock<IMediator> mediatorMock,
-    [Greedy] MemberNotificationLocationsController sut,
-    Guid memberId,
-    CancellationToken cancellationToken)
+    public class MemberNotificationLocationsControllerTests
     {
-        await sut.GetMemberNotificationLocations(memberId, cancellationToken);
+        [Test, MoqAutoData]
+        public async Task PostMemberNotificationLocations_InvokesCommandHandler(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] MemberNotificationLocationsController sut,
+            Guid memberId,
+            UpdateMemberNotificationLocationsApiRequest request,
+            CancellationToken cancellationToken)
+        {
+            // Act
+            var result = await sut.PostMemberNotificationLocations(memberId, request, cancellationToken);
 
-        mediatorMock.Verify(m => m.Send(It.Is<GetMemberNotificationLocationsQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()));
-    }
+            // Assert
+            mediatorMock.Verify(m => m.Send(It.Is<UpdateMemberNotificationLocationsCommand>(cmd =>
+                cmd.MemberId == memberId &&
+                cmd.Locations.All(l => request.Locations.Any(rl =>
+                    rl.Name == l.Name &&
+                    rl.Radius == l.Radius &&
+                    rl.Latitude == l.Latitude &&
+                    rl.Longitude == l.Longitude))), It.IsAny<CancellationToken>()), Times.Once);
 
-    [Test, MoqAutoData]
-    public async Task GetMemberNotificationLocations_HandlerReturnsData_ReturnsOkResponse(
-        bool IsPublicView,
-        [Frozen] Mock<IMediator> mediatorMock,
-        [Greedy] MemberNotificationLocationsController sut,
-        Guid memberId,
-        GetMemberNotificationLocationsQueryResult queryResult,
-        CancellationToken cancellationToken)
-    {
-        ;
-        mediatorMock.Setup(m => m.Send(It.Is<GetMemberNotificationLocationsQuery>(q => q.MemberId == memberId), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(queryResult);
+            result.Should().BeOfType<OkResult>();
+        }
 
-        var result = await sut.GetMemberNotificationLocations(memberId, cancellationToken);
+        [Test, MoqAutoData]
+        public async Task PostMemberNotificationLocations_ReturnsOkResponse(
+            [Frozen] Mock<IMediator> mediatorMock,
+            [Greedy] MemberNotificationLocationsController sut,
+            Guid memberId,
+            UpdateMemberNotificationLocationsApiRequest request,
+            CancellationToken cancellationToken)
+        {
+            // Arrange
+            mediatorMock.Setup(m => m.Send(It.IsAny<UpdateMemberNotificationLocationsCommand>(), It.IsAny<CancellationToken>()))
+                .Returns(Task.CompletedTask);
 
-        result.As<OkObjectResult>().Should().NotBeNull();
-        result.As<OkObjectResult>().Value.Should().BeOfType<GetMemberNotificationLocationsQueryResult>();
-        result.As<OkObjectResult>().Value.As<GetMemberNotificationLocationsQueryResult>()
-            .MemberNotificationLocations.Should().HaveCount(queryResult.MemberNotificationLocations.Count());
+            // Act
+            var result = await sut.PostMemberNotificationLocations(memberId, request, cancellationToken);
+
+            // Assert
+            result.Should().BeOfType<OkResult>();
+        }
     }
 }
