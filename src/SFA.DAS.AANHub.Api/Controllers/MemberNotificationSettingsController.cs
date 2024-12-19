@@ -9,14 +9,14 @@ namespace SFA.DAS.AANHub.Api.Controllers;
 
 [Route("[controller]")]
 [ApiController]
-public class MemberNotificationLocationsController : ActionResponseControllerBase
+public class MemberNotificationSettingsController : ActionResponseControllerBase
 {
     private readonly IMediator _mediator;
-    private readonly ILogger<MemberNotificationLocationsController> _logger;
+    private readonly ILogger<MemberNotificationSettingsController> _logger;
 
     public override string ControllerName => "MemberNotificationLocations";
 
-    public MemberNotificationLocationsController(ILogger<MemberNotificationLocationsController> logger, IMediator mediator)
+    public MemberNotificationSettingsController(ILogger<MemberNotificationSettingsController> logger, IMediator mediator)
     {
         _logger = logger;
         _mediator = mediator;
@@ -28,6 +28,8 @@ public class MemberNotificationLocationsController : ActionResponseControllerBas
             [FromRoute] Guid memberId,
             CancellationToken cancellationToken)
     {
+        //todo: this GET should now be obsolete
+
         _logger.LogInformation("AAN Hub API: Received command to get members notification locations by MemberId: {memberId}", memberId);
 
         var response = await _mediator.Send(new GetMemberNotificationLocationsQuery() { MemberId = memberId }, cancellationToken);
@@ -37,9 +39,9 @@ public class MemberNotificationLocationsController : ActionResponseControllerBas
 
     [HttpPost("{memberId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> PostMemberNotificationLocations(
+    public async Task<IActionResult> PostMemberNotificationSettings(
         [FromRoute] Guid memberId,
-        [FromBody] UpdateMemberNotificationLocationsApiRequest request,
+        [FromBody] UpdateMemberNotificationSettingsApiRequest request,
         CancellationToken cancellationToken)
     {
         _logger.LogInformation("AAN Hub API: Received command to update notification locations by MemberId: {memberId}", memberId);
@@ -47,6 +49,13 @@ public class MemberNotificationLocationsController : ActionResponseControllerBas
         var command = new UpdateMemberNotificationLocationsCommand
         {
             MemberId = memberId,
+            ReceiveNotifications = request.ReceiveNotifications,
+            EventTypes = request.EventTypes.Select(x => new UpdateMemberNotificationLocationsCommand.NotificationEventType
+            {
+                EventType = x.EventType,
+                Ordering = x.Ordering,
+                ReceiveNotifications = x.ReceiveNotifications
+            }).ToList(),
             Locations = request.Locations.Select(x => new UpdateMemberNotificationLocationsCommand.Location
             {
                 Name = x.Name,

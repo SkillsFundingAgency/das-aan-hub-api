@@ -1,10 +1,7 @@
-﻿using MediatR;
-
-namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations
+﻿namespace SFA.DAS.AANHub.Api.Models
 {
-    public class UpdateMemberNotificationLocationsCommand : IRequest
+    public class UpdateMemberNotificationSettingsApiRequest
     {
-        public Guid MemberId { get; set; }
         public bool ReceiveNotifications { get; set; }
         public List<NotificationEventType> EventTypes = [];
         public List<Location> Locations { get; set; } = [];

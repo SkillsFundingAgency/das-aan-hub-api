@@ -11,22 +11,28 @@ using SFA.DAS.Testing.AutoFixture;
 
 namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
 {
-    public class MemberNotificationLocationsControllerTests
+    public class MemberNotificationSettingsControllerTests
     {
         [Test, MoqAutoData]
         public async Task PostMemberNotificationLocations_InvokesCommandHandler(
             [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] MemberNotificationLocationsController sut,
+            [Greedy] MemberNotificationSettingsController sut,
             Guid memberId,
-            UpdateMemberNotificationLocationsApiRequest request,
+            UpdateMemberNotificationSettingsApiRequest request,
             CancellationToken cancellationToken)
         {
             // Act
-            var result = await sut.PostMemberNotificationLocations(memberId, request, cancellationToken);
+            var result = await sut.PostMemberNotificationSettings(memberId, request, cancellationToken);
 
             // Assert
             mediatorMock.Verify(m => m.Send(It.Is<UpdateMemberNotificationLocationsCommand>(cmd =>
                 cmd.MemberId == memberId &&
+                cmd.ReceiveNotifications == request.ReceiveNotifications &&
+                cmd.EventTypes.All(e => request.EventTypes.Any(re =>
+                        re.ReceiveNotifications == e.ReceiveNotifications &&
+                        re.Ordering == e.Ordering &&
+                        re.EventType == e.EventType
+                    )) &&
                 cmd.Locations.All(l => request.Locations.Any(rl =>
                     rl.Name == l.Name &&
                     rl.Radius == l.Radius &&
@@ -39,9 +45,9 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
         [Test, MoqAutoData]
         public async Task PostMemberNotificationLocations_ReturnsOkResponse(
             [Frozen] Mock<IMediator> mediatorMock,
-            [Greedy] MemberNotificationLocationsController sut,
+            [Greedy] MemberNotificationSettingsController sut,
             Guid memberId,
-            UpdateMemberNotificationLocationsApiRequest request,
+            UpdateMemberNotificationSettingsApiRequest request,
             CancellationToken cancellationToken)
         {
             // Arrange
@@ -49,7 +55,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
                 .Returns(Task.CompletedTask);
 
             // Act
-            var result = await sut.PostMemberNotificationLocations(memberId, request, cancellationToken);
+            var result = await sut.PostMemberNotificationSettings(memberId, request, cancellationToken);
 
             // Assert
             result.Should().BeOfType<OkResult>();
