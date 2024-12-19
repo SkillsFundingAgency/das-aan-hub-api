@@ -20,6 +20,8 @@ internal class MembersReadRepository : IMembersReadRepository
         .Where(m => m.Id == id)
         .Include(x => x.Apprentice)
         .Include(x => x.Employer)
+        .Include(x => x.MemberNotificationLocations)
+        .Include(x => x.MemberNotificationEventFormats)
         .SingleOrDefaultAsync();
 
     public async Task<Member?> GetMemberByEmail(string Email) => await _aanDataContext

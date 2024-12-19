@@ -1,6 +1,6 @@
 ﻿using SFA.DAS.AANHub.Domain.Entities;
 
-namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationLocations;
+namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationSettings;
 
 public class MemberNotificationLocationModel
 {

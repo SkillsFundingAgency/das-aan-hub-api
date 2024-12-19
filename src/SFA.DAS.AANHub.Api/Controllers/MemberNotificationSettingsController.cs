@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using SFA.DAS.AANHub.Api.Common;
 using SFA.DAS.AANHub.Api.Models;
 using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations;
-using SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationLocations;
+using SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationSettings;
 
 namespace SFA.DAS.AANHub.Api.Controllers;
 
@@ -24,7 +24,7 @@ public class MemberNotificationSettingsController : ActionResponseControllerBase
 
     [HttpGet("{memberId}")]
     [ProducesResponseType(StatusCodes.Status200OK)]
-    public async Task<IActionResult> GetMemberNotificationLocations(
+    public async Task<IActionResult> GetMemberNotificationSettings(
             [FromRoute] Guid memberId,
             CancellationToken cancellationToken)
     {
@@ -32,7 +32,7 @@ public class MemberNotificationSettingsController : ActionResponseControllerBase
 
         _logger.LogInformation("AAN Hub API: Received command to get members notification locations by MemberId: {memberId}", memberId);
 
-        var response = await _mediator.Send(new GetMemberNotificationLocationsQuery() { MemberId = memberId }, cancellationToken);
+        var response = await _mediator.Send(new GetMemberNotificationSettingsQuery() { MemberId = memberId }, cancellationToken);
 
         return new OkObjectResult(response);
     }

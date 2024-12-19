@@ -80,6 +80,5 @@ public static class ServiceCollectionExtensions
         services.AddTransient<IAuditReadRepository, AuditReadRepository>();
         services.AddTransient<IMemberNotificationEventFormatsReadRepository, MemberNotificationEventFormatsReadRepository>();
         services.AddTransient<IMemberNotificationLocationWriteRepository, MemberNotificationLocationWriteRepository>();
-        services.AddTransient<IMemberNotificationLocationReadRepository, MemberNotificationLocationReadRepository>();
     }
 }
