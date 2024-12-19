@@ -46,17 +46,17 @@ public class MemberNotificationSettingsController : ActionResponseControllerBase
     {
         _logger.LogInformation("AAN Hub API: Received command to update notification locations by MemberId: {memberId}", memberId);
 
-        var command = new UpdateMemberNotificationLocationsCommand
+        var command = new UpdateMemberNotificationSettingsCommand
         {
             MemberId = memberId,
             ReceiveNotifications = request.ReceiveNotifications,
-            EventTypes = request.EventTypes.Select(x => new UpdateMemberNotificationLocationsCommand.NotificationEventType
+            EventTypes = request.EventTypes.Select(x => new UpdateMemberNotificationSettingsCommand.NotificationEventType
             {
                 EventType = x.EventType,
                 Ordering = x.Ordering,
                 ReceiveNotifications = x.ReceiveNotifications
             }).ToList(),
-            Locations = request.Locations.Select(x => new UpdateMemberNotificationLocationsCommand.Location
+            Locations = request.Locations.Select(x => new UpdateMemberNotificationSettingsCommand.Location
             {
                 Name = x.Name,
                 Radius = x.Radius,

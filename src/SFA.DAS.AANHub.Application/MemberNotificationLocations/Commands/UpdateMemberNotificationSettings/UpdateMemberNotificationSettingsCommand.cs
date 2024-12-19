@@ -2,7 +2,7 @@
 
 namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations
 {
-    public class UpdateMemberNotificationLocationsCommand : IRequest
+    public class UpdateMemberNotificationSettingsCommand : IRequest
     {
         public Guid MemberId { get; set; }
         public bool ReceiveNotifications { get; set; }

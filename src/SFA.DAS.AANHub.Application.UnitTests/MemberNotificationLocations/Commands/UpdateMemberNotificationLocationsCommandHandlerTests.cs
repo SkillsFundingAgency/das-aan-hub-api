@@ -1,106 +1,177 @@
-﻿using AutoFixture.NUnit3;
+﻿using AutoFixture;
+using AutoFixture.AutoMoq;
+using AutoFixture.NUnit3;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations;
+using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationSettings;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
-using SFA.DAS.Testing.AutoFixture;
+using SFA.DAS.AANHub.Domain.Interfaces;
+using FluentAssertions;
 
-namespace SFA.DAS.AANHub.Application.UnitTests.MemberNotificationLocations.Commands
+public class CustomAutoDataAttribute() : AutoDataAttribute(CreateFixture)
 {
-    [TestFixture]
-    public class UpdateMemberNotificationLocationsCommandHandlerTests
+    private static IFixture CreateFixture()
     {
-        [Test]
-        [MoqAutoData]
-        public async Task Handle_Removes_Deleted_Locations(
-            UpdateMemberNotificationLocationsCommand command,
-            [Frozen] Mock<IMemberNotificationLocationWriteRepository> mockWriteRepository,
-            [Frozen] Mock<IMemberNotificationLocationReadRepository> mockReadRepository,
-            [Frozen] Mock<IAanDataContext> mockAanDataContext,
-            List<MemberNotificationLocation> existingLocations,
-            UpdateMemberNotificationLocationsCommandHandler handler)
+        var fixture = new Fixture().Customize(new AutoMoqCustomization());
+
+        // Customize fixture to ignore circular references
+        fixture.Behaviors.OfType<ThrowingRecursionBehavior>().ToList()
+            .ForEach(b => fixture.Behaviors.Remove(b));
+        fixture.Behaviors.Add(new OmitOnRecursionBehavior());
+
+        return fixture;
+    }
+}
+
+[TestFixture]
+public class UpdateMemberNotificationSettingsCommandHandlerTests
+{
+    [Test, CustomAutoData]
+    public async Task Handle_Removes_Deleted_Locations(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        existingMember.MemberNotificationLocations.Add(new MemberNotificationLocation
         {
-            // Arrange
-            existingLocations.Add(new MemberNotificationLocation
+            Name = "Location to be removed",
+            Radius = 50,
+            Latitude = 0,
+            Longitude = 0
+        });
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
+        command.Locations = command.Locations.Take(1).ToList(); // Ensure command locations don't match all existing locations
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        existingMember.MemberNotificationLocations.Should().NotContain(loc => loc.Name == "Location to be removed");
+    }
+
+    [Test, CustomAutoData]
+    public async Task Handle_Adds_New_Locations(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        existingMember.MemberNotificationLocations.Clear(); // Ensure no existing locations
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        existingMember.MemberNotificationLocations.Should().BeEquivalentTo(command.Locations, options => options.ExcludingMissingMembers());
+    }
+
+    [Test, CustomAutoData]
+    public async Task Handle_Updates_Existing_Locations(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        var existingLocation = existingMember.MemberNotificationLocations.First();
+        command.Locations = new List<UpdateMemberNotificationSettingsCommand.Location>
+        {
+            new UpdateMemberNotificationSettingsCommand.Location
             {
-                Name = "Location to be removed",
-                Radius = 50,
-                Latitude = 0,
-                Longitude = 0
-            });
-            mockReadRepository.Setup(x => x.GetMemberNotificationLocationsByMember(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(existingLocations);
-            command.Locations = command.Locations.Take(1).ToList(); // Ensure command locations don't match all existing locations
+                Name = existingLocation.Name,
+                Radius = existingLocation.Radius,
+                Latitude = existingLocation.Latitude,
+                Longitude = existingLocation.Longitude
+            }
+        };
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
 
-            // Act
-            await handler.Handle(command, CancellationToken.None);
+        // Act
+        await handler.Handle(command, CancellationToken.None);
 
-            // Assert
-            mockWriteRepository.Verify(x => x.DeleteMemberNotificationLocations(It.Is<List<MemberNotificationLocation>>(list => list.Any(x => x.Name == "Location to be removed")), It.IsAny<CancellationToken>()), Times.Once);
-        }
+        // Assert
+        existingMember.MemberNotificationLocations.Should().ContainSingle(loc =>
+            loc.Name == existingLocation.Name &&
+            loc.Radius == existingLocation.Radius &&
+            loc.Latitude == existingLocation.Latitude &&
+            loc.Longitude == existingLocation.Longitude);
+    }
 
-        [Test]
-        [MoqAutoData]
-        public async Task Handle_Adds_New_Locations(
-            UpdateMemberNotificationLocationsCommand command,
-            [Frozen] Mock<IMemberNotificationLocationWriteRepository> mockWriteRepository,
-            [Frozen] Mock<IMemberNotificationLocationReadRepository> mockReadRepository,
-            [Frozen] Mock<IAanDataContext> mockAanDataContext,
-            List<MemberNotificationLocation> existingLocations,
-            UpdateMemberNotificationLocationsCommandHandler handler)
+    [Test, CustomAutoData]
+    public async Task Handle_Removes_Deleted_EventTypes(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        existingMember.MemberNotificationEventFormats.Add(new MemberNotificationEventFormat
         {
-            // Arrange
-            existingLocations.Clear(); // Ensure no existing locations
-            mockReadRepository.Setup(x => x.GetMemberNotificationLocationsByMember(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(existingLocations);
+            EventFormat = "Event to be removed"
+        });
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
+        command.EventTypes = command.EventTypes.Take(1).ToList(); // Ensure command event types don't match all existing event types
 
-            // Act
-            await handler.Handle(command, CancellationToken.None);
+        // Act
+        await handler.Handle(command, CancellationToken.None);
 
-            // Assert
-            mockWriteRepository.Verify(x => x.UpdateMemberNotificationLocations(It.Is<List<MemberNotificationLocation>>(list =>
-                list.Count == command.Locations.Count &&
-                list.All(loc => command.Locations.Any(reqLoc =>
-                    reqLoc.Name == loc.Name &&
-                    reqLoc.Radius == loc.Radius &&
-                    reqLoc.Latitude == loc.Latitude &&
-                    reqLoc.Longitude == loc.Longitude))), It.IsAny<CancellationToken>()), Times.Once);
-        }
+        // Assert
+        existingMember.MemberNotificationEventFormats.Should().NotContain(evt => evt.EventFormat == "Event to be removed");
+    }
 
-        [Test]
-        [MoqAutoData]
-        public async Task Handle_Updates_Existing_Locations(
-            UpdateMemberNotificationLocationsCommand command,
-            [Frozen] Mock<IMemberNotificationLocationWriteRepository> mockWriteRepository,
-            [Frozen] Mock<IMemberNotificationLocationReadRepository> mockReadRepository,
-            [Frozen] Mock<IAanDataContext> mockAanDataContext,
-            List<MemberNotificationLocation> existingLocations,
-            UpdateMemberNotificationLocationsCommandHandler handler)
+    [Test, CustomAutoData]
+    public async Task Handle_Adds_New_EventTypes(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        existingMember.MemberNotificationEventFormats.Clear(); // Ensure no existing event types
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
+
+        // Act
+        await handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        existingMember.MemberNotificationEventFormats.Should().BeEquivalentTo(command.EventTypes, options => options.ExcludingMissingMembers());
+    }
+
+    [Test, CustomAutoData]
+    public async Task Handle_Updates_Existing_EventTypes(
+        UpdateMemberNotificationSettingsCommand command,
+        [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+        [Frozen] Mock<IAanDataContext> mockAanDataContext,
+        Member existingMember,
+        UpdateMemberNotificationSettingsCommandHandler handler)
+    {
+        // Arrange
+        var existingEventType = existingMember.MemberNotificationEventFormats.First();
+        command.EventTypes = new List<UpdateMemberNotificationSettingsCommand.NotificationEventType>
         {
-            // Arrange
-            var existingLocation = existingLocations.First();
-            command.Locations = new List<UpdateMemberNotificationLocationsCommand.Location>
+            new UpdateMemberNotificationSettingsCommand.NotificationEventType()
             {
-                new UpdateMemberNotificationLocationsCommand.Location
-                {
-                    Name = existingLocation.Name,
-                    Radius = existingLocation.Radius,
-                    Latitude = existingLocation.Latitude,
-                    Longitude = existingLocation.Longitude
-                }
-            };
-            mockReadRepository.Setup(x => x.GetMemberNotificationLocationsByMember(It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
-                .ReturnsAsync(existingLocations);
+                EventType = existingEventType.EventFormat
+            }
+        };
+        mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
 
-            // Act
-            await handler.Handle(command, CancellationToken.None);
+        // Act
+        await handler.Handle(command, CancellationToken.None);
 
-            // Assert
-            mockWriteRepository.Verify(x => x.UpdateMemberNotificationLocations(It.Is<List<MemberNotificationLocation>>(list =>
-                list.Contains(existingLocation) &&
-                list.Count == 1), It.IsAny<CancellationToken>()), Times.Once);
-        }
+        // Assert
+        existingMember.MemberNotificationEventFormats.Should().ContainSingle(evt =>
+            evt.EventFormat == existingEventType.EventFormat);
     }
 }

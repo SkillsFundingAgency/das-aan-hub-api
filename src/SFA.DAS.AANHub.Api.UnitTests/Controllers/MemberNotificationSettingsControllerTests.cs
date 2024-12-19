@@ -25,7 +25,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             var result = await sut.PostMemberNotificationSettings(memberId, request, cancellationToken);
 
             // Assert
-            mediatorMock.Verify(m => m.Send(It.Is<UpdateMemberNotificationLocationsCommand>(cmd =>
+            mediatorMock.Verify(m => m.Send(It.Is<UpdateMemberNotificationSettingsCommand>(cmd =>
                 cmd.MemberId == memberId &&
                 cmd.ReceiveNotifications == request.ReceiveNotifications &&
                 cmd.EventTypes.All(e => request.EventTypes.Any(re =>
@@ -51,7 +51,7 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
             CancellationToken cancellationToken)
         {
             // Arrange
-            mediatorMock.Setup(m => m.Send(It.IsAny<UpdateMemberNotificationLocationsCommand>(), It.IsAny<CancellationToken>()))
+            mediatorMock.Setup(m => m.Send(It.IsAny<UpdateMemberNotificationSettingsCommand>(), It.IsAny<CancellationToken>()))
                 .Returns(Task.CompletedTask);
 
             // Act
