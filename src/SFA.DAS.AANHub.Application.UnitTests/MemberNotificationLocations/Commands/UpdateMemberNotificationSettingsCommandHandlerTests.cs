@@ -3,12 +3,12 @@ using AutoFixture.AutoMoq;
 using AutoFixture.NUnit3;
 using Moq;
 using NUnit.Framework;
-using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations;
 using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationSettings;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using FluentAssertions;
+using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.MemberNotificationLocations.Commands
 {
@@ -60,6 +60,28 @@ namespace SFA.DAS.AANHub.Application.UnitTests.MemberNotificationLocations.Comma
             // Assert
             existingMember.MemberNotificationLocations.Should()
                 .BeEquivalentTo(command.Locations, options => options.ExcludingMissingMembers());
+        }
+
+        [Test, CustomAutoData]
+        public async Task Handle_Ingores_Duplicates_When_Adding_New_Locations(
+            UpdateMemberNotificationSettingsCommand command,
+            [Frozen] Mock<IMembersWriteRepository> mockMembersWriteRepository,
+            [Frozen] Mock<IAanDataContext> mockAanDataContext,
+            Member existingMember,
+            UpdateMemberNotificationSettingsCommandHandler handler)
+        {
+            // Arrange
+            command.Locations.Clear();
+            command.Locations.Add(new UpdateMemberNotificationSettingsCommand.Location { Name = "Test location", Radius = 10, Latitude = 1, Longitude = 2 });
+            command.Locations.Add(new UpdateMemberNotificationSettingsCommand.Location { Name = "Test location", Radius = 10, Latitude = 1, Longitude = 2 });
+            existingMember.MemberNotificationLocations.Clear(); // Ensure no existing locations
+            mockMembersWriteRepository.Setup(x => x.Get(It.IsAny<Guid>())).ReturnsAsync(existingMember);
+
+            // Act
+            await handler.Handle(command, CancellationToken.None);
+
+            // Assert
+            existingMember.MemberNotificationLocations.Should().HaveCount(1);
         }
 
         [Test, CustomAutoData]

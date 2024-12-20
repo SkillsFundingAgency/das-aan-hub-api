@@ -1,5 +1,4 @@
 ﻿using MediatR;
-using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.AANHub.Domain.Interfaces;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
@@ -71,6 +70,9 @@ namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.Update
 
         private void UpdateLocations(Member member, UpdateMemberNotificationSettingsCommand request)
         {
+            request.Locations =
+                request.Locations.DistinctBy(x => HashCode.Combine(x.Name, x.Radius, x.Latitude, x.Longitude)).ToList();
+
             var existingLocations = member.MemberNotificationLocations;
 
             // Remove locations that are not in the request

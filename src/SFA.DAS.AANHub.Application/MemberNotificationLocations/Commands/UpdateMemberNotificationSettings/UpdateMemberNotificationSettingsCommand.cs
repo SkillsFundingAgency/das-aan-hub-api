@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationLocations
+namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationSettings
 {
     public class UpdateMemberNotificationSettingsCommand : IRequest
     {
