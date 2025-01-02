@@ -32,8 +32,7 @@ namespace SFA.DAS.AANHub.Application.UnitTests.MemberNotificationLocations.Queri
             result.EventTypes.Should().BeEquivalentTo(member.MemberNotificationEventFormats.Select(x => new GetMemberNotificationSettingsQueryResult.NotificationEventType
             {
                 ReceiveNotifications = x.ReceiveNotifications,
-                EventType = x.EventFormat,
-                Ordering = x.Ordering
+                EventType = x.EventFormat
             }));
             result.Locations.Should().BeEquivalentTo(member.MemberNotificationLocations.Select(x => new GetMemberNotificationSettingsQueryResult.Location
             {

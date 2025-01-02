@@ -62,7 +62,6 @@ namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.Update
                 {
                     MemberId = member.Id,
                     EventFormat = eventType.EventType,
-                    Ordering = eventType.Ordering,
                     ReceiveNotifications = eventType.ReceiveNotifications
                 });
             }

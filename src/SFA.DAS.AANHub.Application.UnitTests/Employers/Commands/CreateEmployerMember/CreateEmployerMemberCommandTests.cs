@@ -57,7 +57,6 @@ public class CreateEmployerMemberCommandTests
         {
             MemberId = memberId,
             EventFormat = source.EventFormat,
-            Ordering = source.Ordering,
             ReceiveNotifications = source.ReceiveNotifications
         };
 

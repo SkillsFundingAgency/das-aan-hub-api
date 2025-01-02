@@ -30,7 +30,6 @@ namespace SFA.DAS.AANHub.Api.UnitTests.Controllers
                 cmd.ReceiveNotifications == request.ReceiveNotifications &&
                 cmd.EventTypes.All(e => request.EventTypes.Any(re =>
                         re.ReceiveNotifications == e.ReceiveNotifications &&
-                        re.Ordering == e.Ordering &&
                         re.EventType == e.EventType
                     )) &&
                 cmd.Locations.All(l => request.Locations.Any(rl =>

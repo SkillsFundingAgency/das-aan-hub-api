@@ -41,6 +41,6 @@ public class CreateEmployerMemberCommand : CreateMemberCommandBase, IRequest<Val
     };
 
     public static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
-    public static MemberNotificationEventFormat MemberNotificationEventFormatsConverter(MemberNotificationEventFormatValues source, Guid memberId) => new() { MemberId = memberId, EventFormat = source.EventFormat, Ordering = source.Ordering, ReceiveNotifications = source.ReceiveNotifications };
+    public static MemberNotificationEventFormat MemberNotificationEventFormatsConverter(MemberNotificationEventFormatValues source, Guid memberId) => new() { MemberId = memberId, EventFormat = source.EventFormat, ReceiveNotifications = source.ReceiveNotifications };
     public static MemberNotificationLocation MemberNotificationLocationsConverter(MemberNotificationLocationValues source, Guid memberId) => new() { MemberId = memberId, Name = source.Name, Radius = source.Radius, Latitude = source.Latitude, Longitude = source.Longitude };
 }

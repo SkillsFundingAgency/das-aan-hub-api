@@ -21,8 +21,7 @@ public class GetMemberNotificationSettingsQueryHandler(IMembersReadRepository me
             EventTypes = member.MemberNotificationEventFormats.Select(x =>  new GetMemberNotificationSettingsQueryResult.NotificationEventType
             {
                 ReceiveNotifications = x.ReceiveNotifications,
-                EventType = x.EventFormat,
-                Ordering = x.Ordering
+                EventType = x.EventFormat
             }).ToList(),
             Locations = member.MemberNotificationLocations.Select(x => new GetMemberNotificationSettingsQueryResult.Location
             {
