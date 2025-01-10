@@ -52,6 +52,7 @@ public class CreateEmployerMemberCommandValidator : AbstractValidator<CreateEmpl
         RuleFor(x => x.MemberNotificationLocationValues)
             .NotEmpty()
             .When(x => x.MemberNotificationEventFormatValues?.Any(eventFormat =>
+                eventFormat.ReceiveNotifications &&
                 !string.Equals(eventFormat.EventFormat, EventFormat.Online.ToString(), StringComparison.OrdinalIgnoreCase)) == true)
             .WithMessage(LocationCannotBeEmptyForNonOnlineEventErrorMessage);
 
