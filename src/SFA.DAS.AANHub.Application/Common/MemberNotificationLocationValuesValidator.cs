@@ -16,7 +16,7 @@ namespace SFA.DAS.AANHub.Application.Common
 
         private bool BeAValidName(string name)
         {
-            return Regex.IsMatch(name, @"^[a-zA-Z0-9\s,]+$");
+            return Regex.IsMatch(name, @"^[a-zA-Z0-9\s,']+$");
         }
     }
 }
