@@ -18,7 +18,7 @@ public class GetMemberResult
     public DateTime LastUpdatedDate { get; set; }
     public bool? IsRegionalChair { get; set; }
     public string FullName { get; set; } = null!;
-    public bool ReceiveNotifications { get; set; }
+    public bool? ReceiveNotifications { get; set; }
     public EmployerModel? Employer { get; set; }
     public ApprenticeModel? Apprentice { get; set; }
 

@@ -89,6 +89,8 @@
     <Build Include="Views\vAuditAttendance.sql" />
     <None Include="Scripts\Manual\UpdateEntityIdInAudit.sql" />
     <Build Include="Tables\JobAudit.sql" />
+    <Build Include="Tables\MemberNotificationEventFormat.sql" />
+    <Build Include="Tables\MemberNotificationLocation.sql" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Scripts\AddRegionData.sql" />
