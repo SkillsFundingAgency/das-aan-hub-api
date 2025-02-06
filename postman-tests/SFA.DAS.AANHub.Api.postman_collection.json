@@ -1,9 +1,9 @@
 {
 	"info": {
-		"_postman_id": "e64640bb-1183-47c7-b569-2a6a4e67af17",
+		"_postman_id": "d8dcced0-e181-4b38-b278-1a706414b289",
 		"name": "AAN Hub API",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
-		"_exporter_id": "1035360"
+		"_exporter_id": "31157588"
 	},
 	"item": [
 		{
@@ -489,6 +489,88 @@
 					],
 					"path": [
 						"regions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Member By Id - Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/Member/{{MemberId}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"Member",
+						"{{MemberId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MemberNotificationSettings - Get",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/MemberNotificationSettings/{{MemberId}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"MemberNotificationSettings",
+						"{{MemberId}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "MemberNotificationSettings - Post",
+			"request": {
+				"method": "GET",
+				"header": [
+					{
+						"key": "X-Version",
+						"value": "1",
+						"type": "text"
+					},
+					{
+						"key": "Authorization",
+						"value": "Bearer {{AuthToken}}",
+						"type": "text"
+					}
+				],
+				"url": {
+					"raw": "{{BaseUrl}}/MemberNotificationSettings/{{MemberId}}",
+					"host": [
+						"{{BaseUrl}}"
+					],
+					"path": [
+						"MemberNotificationSettings",
+						"{{MemberId}}"
 					]
 				}
 			},
