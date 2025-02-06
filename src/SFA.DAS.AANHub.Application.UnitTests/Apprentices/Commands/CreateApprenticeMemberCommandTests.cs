@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.Testing.AutoFixture;
@@ -31,5 +32,54 @@ public class CreateApprenticeMemberCommandTests
         member.MemberProfiles.Should().NotBeEmpty().And.HaveCount(sut.ProfileValues.Count);
         member.MemberProfiles.All(p => p.MemberId == sut.MemberId).Should().BeTrue();
         member.MemberProfiles.Select(p => p.ProfileId).Should().BeSubsetOf(sut.ProfileValues.Select(v => v.Id));
+    }
+
+    [Test]
+    public void MemberNotificationEventFormatsConverter_ConvertsCorrectly()
+    {
+        var memberId = Guid.NewGuid();
+        var source = new MemberNotificationEventFormatValues
+        {
+            EventFormat = "InPerson",
+            Ordering = 1,
+            ReceiveNotifications = true
+        };
+
+        var expected = new MemberNotificationEventFormat
+        {
+            MemberId = memberId,
+            EventFormat = source.EventFormat,
+            ReceiveNotifications = source.ReceiveNotifications
+        };
+
+        var result = CreateApprenticeMemberCommand.MemberNotificationEventFormatsConverter(source, memberId);
+
+        result.Should().BeEquivalentTo(expected);
+    }
+
+    [Test]
+    public void MemberNotificationLocationsConverter_ConvertsCorrectly()
+    {
+        var memberId = Guid.NewGuid();
+        var source = new MemberNotificationLocationValues
+        {
+            Name = "Test Location",
+            Radius = 10,
+            Latitude = 51.5074,
+            Longitude = -0.1278
+        };
+
+        var expected = new MemberNotificationLocation
+        {
+            MemberId = memberId,
+            Name = source.Name,
+            Radius = source.Radius,
+            Latitude = source.Latitude,
+            Longitude = source.Longitude
+        };
+
+        var result = CreateApprenticeMemberCommand.MemberNotificationLocationsConverter(source, memberId);
+
+        result.Should().BeEquivalentTo(expected);
     }
 }

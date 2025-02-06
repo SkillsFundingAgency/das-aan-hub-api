@@ -22,14 +22,23 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
         JoinedDate = command.JoinedDate!.Value,
         RegionId = command.RegionId,
         OrganisationName = command.OrganisationName,
+        ReceiveNotifications = command.ReceiveNotifications,
         IsRegionalChair = false,
         Apprentice = new Apprentice
         {
             MemberId = command.MemberId,
             ApprenticeId = command.ApprenticeId
         },
-        MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList()
+        MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList(),
+        MemberNotificationEventFormats = command.MemberNotificationEventFormatValues?
+        .Select(p => MemberNotificationEventFormatsConverter(p, command.MemberId))
+            .ToList(),
+        MemberNotificationLocations = command.MemberNotificationLocationValues?
+            .Select(p => MemberNotificationLocationsConverter(p, command.MemberId))
+            .ToList(),
     };
 
     private static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
+    public static MemberNotificationEventFormat MemberNotificationEventFormatsConverter(MemberNotificationEventFormatValues source, Guid memberId) => new() { MemberId = memberId, EventFormat = source.EventFormat, ReceiveNotifications = source.ReceiveNotifications };
+    public static MemberNotificationLocation MemberNotificationLocationsConverter(MemberNotificationLocationValues source, Guid memberId) => new() { MemberId = memberId, Name = source.Name, Radius = source.Radius, Latitude = source.Latitude, Longitude = source.Longitude };
 }
