@@ -10,8 +10,6 @@ public class CreateApprenticeMemberCommandValidator : AbstractValidator<CreateAp
     public const string ApprenticeAlreadyExistsErrorMessage = "ApprenticeId already exists";
     public const string InvalidProfileIdsErrorMessage = "Some of the profile ids are invalid for Apprentice user type";
     public const string ProfileValuesMustNotBeEmptyErrorMessage = "ProfileValues cannot be empty";
-    public const string EventFormatCannotBeEmptyIfReceiveNotificationsErrorMessage = "EventFormat cannot be empty if ReceiveNotifications is true.";
-    public const string LocationCannotBeEmptyForNonOnlineEventErrorMessage = "Location cannot be empty if the event format is selected and is not 'Online'.";
 
     public CreateApprenticeMemberCommandValidator(IApprenticesReadRepository apprenticesReadRepository, IProfilesReadRepository profilesReadRepository, IMembersReadRepository membersReadRepository, IRegionsReadRepository regionsReadRepository)
     {
@@ -38,23 +36,5 @@ public class CreateApprenticeMemberCommandValidator : AbstractValidator<CreateAp
                 return b;
             })
             .WithMessage(InvalidProfileIdsErrorMessage);
-
-        RuleFor(x => x.MemberNotificationEventFormatValues)
-            .NotEmpty()
-            .When(x => x.ReceiveNotifications)
-            .WithMessage(EventFormatCannotBeEmptyIfReceiveNotificationsErrorMessage);
-
-        RuleFor(x => x.MemberNotificationLocationValues)
-            .NotEmpty()
-            .When(x => x.MemberNotificationEventFormatValues?.Any(eventFormat =>
-                eventFormat.ReceiveNotifications &&
-                !string.Equals(eventFormat.EventFormat, EventFormat.Online.ToString(), StringComparison.OrdinalIgnoreCase)) == true)
-            .WithMessage(LocationCannotBeEmptyForNonOnlineEventErrorMessage);
-
-        RuleFor(c => c.MemberNotificationEventFormatValues)
-            .ForEach(x => x.SetValidator(new MemberNotificationEventFormatValuesValidator()));
-
-        RuleFor(c => c.MemberNotificationLocationValues)
-            .ForEach(x => x.SetValidator(new MemberNotificationLocationValuesValidator()));
     }
 }

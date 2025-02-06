@@ -10,11 +10,11 @@ CREATE TABLE #TempProfile
 )
 
 INSERT INTO #TempProfile VALUES 
-(1,'Networking at in-person events','Events',4, 'Apprentice',null),
-(2,'Presenting at in-person events','Events',1, 'Apprentice',null),
-(3,'Presenting at hybrid events','Events',3, 'Apprentice',null),
-(4,'Presenting at online events','Events',2, 'Apprentice',null),
-(5,'Organising events','Events',5, 'Apprentice',null),
+(1,'Networking at events in person','Events',1, 'Apprentice',null),
+(2,'Presenting at events in person','Events',2, 'Apprentice',null),
+(3,'Presenting at hybrid events (online and in person)','Events',3, 'Apprentice',null),
+(4,'Presenting at online events','Events',4, 'Apprentice',null),
+(5,'Project management and delivery of regional events or playing a role in organising national events','Events',5, 'Apprentice',null),
 (10,'Carrying out and writing up case studies','Promotions',1, 'Apprentice',null),
 (11,'Designing and creating marketing materials to champion the network','Promotions',2, 'Apprentice',null),
 (12,'Distributing communications to the network','Promotions',3, 'Apprentice',null),
