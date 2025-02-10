@@ -30,15 +30,41 @@ public class CreateApprenticeMemberCommand : CreateMemberCommandBase, IRequest<V
             ApprenticeId = command.ApprenticeId
         },
         MemberProfiles = command.ProfileValues.Select(p => ProfileConverter(p, command.MemberId)).ToList(),
-        MemberNotificationEventFormats = command.MemberNotificationEventFormatValues?
-        .Select(p => MemberNotificationEventFormatsConverter(p, command.MemberId))
-            .ToList(),
+        MemberNotificationEventFormats = MapMemberNotificationEventFormats(command.MemberNotificationEventFormatValues, command.MemberId),
         MemberNotificationLocations = command.MemberNotificationLocationValues?
             .Select(p => MemberNotificationLocationsConverter(p, command.MemberId))
             .ToList(),
     };
 
     private static MemberProfile ProfileConverter(ProfileValue source, Guid memberId) => new() { MemberId = memberId, ProfileId = source.Id, ProfileValue = source.Value };
-    public static MemberNotificationEventFormat MemberNotificationEventFormatsConverter(MemberNotificationEventFormatValues source, Guid memberId) => new() { MemberId = memberId, EventFormat = source.EventFormat, ReceiveNotifications = source.ReceiveNotifications };
     public static MemberNotificationLocation MemberNotificationLocationsConverter(MemberNotificationLocationValues source, Guid memberId) => new() { MemberId = memberId, Name = source.Name, Radius = source.Radius, Latitude = source.Latitude, Longitude = source.Longitude };
+
+    private static List<MemberNotificationEventFormat>? MapMemberNotificationEventFormats(IEnumerable<MemberNotificationEventFormatValues>? source, Guid memberId)
+    {
+        if (source == null)
+        {
+            return null;
+        }
+
+        // Check if "All" is present
+        var eventTypeList = source.ToList();
+        if (eventTypeList.Any(e => e.EventFormat == "All"))
+        {
+            // Replace "All" with the specific event types
+            eventTypeList.Clear();
+            eventTypeList.AddRange(new List<MemberNotificationEventFormatValues>
+            {
+                new() { EventFormat = "InPerson", ReceiveNotifications = true },
+                new() { EventFormat = "Online", ReceiveNotifications = true },
+                new() { EventFormat = "Hybrid", ReceiveNotifications = true }
+            });
+        }
+
+        return eventTypeList.Select(p => new MemberNotificationEventFormat
+        {
+            MemberId = memberId,
+            EventFormat = p.EventFormat,
+            ReceiveNotifications = p.ReceiveNotifications
+        }).ToList();
+    }
 }

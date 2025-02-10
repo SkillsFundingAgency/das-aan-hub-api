@@ -34,27 +34,33 @@ public class CreateApprenticeMemberCommandTests
         member.MemberProfiles.Select(p => p.ProfileId).Should().BeSubsetOf(sut.ProfileValues.Select(v => v.Id));
     }
 
-    [Test]
-    public void MemberNotificationEventFormatsConverter_ConvertsCorrectly()
+
+    [Test, MoqAutoData]
+    public void Operator_Converts_All_EventType_To_Individual_Items(CreateApprenticeMemberCommand sut)
     {
-        var memberId = Guid.NewGuid();
-        var source = new MemberNotificationEventFormatValues
+        sut.MemberNotificationEventFormatValues.Clear();
+        sut.MemberNotificationEventFormatValues.Add(new MemberNotificationEventFormatValues
         {
-            EventFormat = "InPerson",
-            Ordering = 1,
+            EventFormat = "All",
+            Ordering = 0,
             ReceiveNotifications = true
-        };
+        });
 
-        var expected = new MemberNotificationEventFormat
-        {
-            MemberId = memberId,
-            EventFormat = source.EventFormat,
-            ReceiveNotifications = source.ReceiveNotifications
-        };
+        Member member = sut;
 
-        var result = CreateApprenticeMemberCommand.MemberNotificationEventFormatsConverter(source, memberId);
+        member.MemberNotificationEventFormats.Count.Should().Be(3);
 
-        result.Should().BeEquivalentTo(expected);
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "InPerson" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Online" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Hybrid" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .NotContain(format => format.EventFormat == "All");
     }
 
     [Test]
