@@ -31,6 +31,34 @@ public class CreateEmployerMemberCommandTests
     }
 
     [Test, MoqAutoData]
+    public void Operator_Converts_All_EventType_To_Individual_Items(CreateEmployerMemberCommand sut)
+    {
+        sut.MemberNotificationEventFormatValues.Clear();
+        sut.MemberNotificationEventFormatValues.Add(new MemberNotificationEventFormatValues
+        {
+            EventFormat = "All",
+            Ordering = 0,
+            ReceiveNotifications = true
+        });
+
+        Member member = sut;
+
+        member.MemberNotificationEventFormats.Count.Should().Be(3);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "InPerson" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Online" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Hybrid" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .NotContain(format => format.EventFormat == "All");
+    }
+
+    [Test, MoqAutoData]
     public void ProfileConverter_ConvertsToMember(
         ProfileValue sutProfileValue,
         Guid sutMemberId)
@@ -38,29 +66,6 @@ public class CreateEmployerMemberCommandTests
         MemberProfile expected = new MemberProfile() { MemberId = sutMemberId, ProfileId = sutProfileValue.Id, ProfileValue = sutProfileValue.Value };
 
         var result = CreateEmployerMemberCommand.ProfileConverter(sutProfileValue, sutMemberId);
-
-        result.Should().BeEquivalentTo(expected);
-    }
-
-    [Test]
-    public void MemberNotificationEventFormatsConverter_ConvertsCorrectly()
-    {
-        var memberId = Guid.NewGuid();
-        var source = new MemberNotificationEventFormatValues
-        {
-            EventFormat = "InPerson",
-            Ordering = 1,
-            ReceiveNotifications = true
-        };
-
-        var expected = new MemberNotificationEventFormat
-        {
-            MemberId = memberId,
-            EventFormat = source.EventFormat,
-            ReceiveNotifications = source.ReceiveNotifications
-        };
-
-        var result = CreateEmployerMemberCommand.MemberNotificationEventFormatsConverter(source, memberId);
 
         result.Should().BeEquivalentTo(expected);
     }

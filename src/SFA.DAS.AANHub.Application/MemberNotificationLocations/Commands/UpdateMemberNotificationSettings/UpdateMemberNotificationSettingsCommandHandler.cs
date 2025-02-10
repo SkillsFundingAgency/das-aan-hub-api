@@ -40,6 +40,17 @@ namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.Update
         {
             var existingEventTypes = member.MemberNotificationEventFormats;
 
+            // If "All" is selected, replace it with all possible event types
+            if (request.EventTypes.Any(e => e.EventType == "All"))
+            {
+                request.EventTypes =
+                [
+                    new() { EventType = "InPerson", ReceiveNotifications = true},
+                    new() { EventType = "Online", ReceiveNotifications = true },
+                    new() { EventType = "Hybrid", ReceiveNotifications = true }
+                ];
+            }
+
             // Remove event types that are not in the request
             var eventTypesToRemove = existingEventTypes
                 .Where(existingEventType => !request.EventTypes.Any(requestEventType =>
@@ -50,6 +61,15 @@ namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.Update
             {
                 member.MemberNotificationEventFormats.Remove(eventType);
             }
+
+            //Modify existing event types in the request that are set to false
+            member.MemberNotificationEventFormats.ForEach(e =>
+            {
+                if (request.EventTypes.Any(r => r.EventType == e.EventFormat))
+                {
+                    e.ReceiveNotifications = true;
+                }
+            });
 
             // Add event types that are in the request but not already in the existing event types
             var eventTypesToAdd = request.EventTypes

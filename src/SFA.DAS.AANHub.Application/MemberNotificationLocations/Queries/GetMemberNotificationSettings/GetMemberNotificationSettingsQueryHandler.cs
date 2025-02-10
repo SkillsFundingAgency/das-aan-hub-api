@@ -1,35 +1,56 @@
 ﻿using MediatR;
 using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
-namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationSettings;
-
-public class GetMemberNotificationSettingsQueryHandler(IMembersReadRepository memberRepository)
-    : IRequestHandler<GetMemberNotificationSettingsQuery, GetMemberNotificationSettingsQueryResult>
+namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Queries.GetMemberNotificationSettings
 {
-    public async Task<GetMemberNotificationSettingsQueryResult> Handle(GetMemberNotificationSettingsQuery request, CancellationToken cancellationToken)
+    public class GetMemberNotificationSettingsQueryHandler : IRequestHandler<GetMemberNotificationSettingsQuery, GetMemberNotificationSettingsQueryResult>
     {
-        var member = await memberRepository.GetMember(request.MemberId);
+        private readonly IMembersReadRepository _memberRepository;
 
-        if (member == null)
+        public GetMemberNotificationSettingsQueryHandler(IMembersReadRepository memberRepository)
         {
-            throw new InvalidOperationException($"Unable to find member {request.MemberId}");
+            _memberRepository = memberRepository;
         }
 
-        return new GetMemberNotificationSettingsQueryResult
+        public async Task<GetMemberNotificationSettingsQueryResult> Handle(GetMemberNotificationSettingsQuery request, CancellationToken cancellationToken)
         {
-            ReceiveNotifications = member.ReceiveNotifications,
-            EventTypes = member.MemberNotificationEventFormats.Select(x =>  new GetMemberNotificationSettingsQueryResult.NotificationEventType
+            var member = await _memberRepository.GetMember(request.MemberId);
+
+            if (member == null)
+            {
+                throw new InvalidOperationException($"Unable to find member {request.MemberId}");
+            }
+
+            var eventTypes = member.MemberNotificationEventFormats.Select(x => new GetMemberNotificationSettingsQueryResult.NotificationEventType
             {
                 ReceiveNotifications = x.ReceiveNotifications,
                 EventType = x.EventFormat
-            }).ToList(),
-            Locations = member.MemberNotificationLocations.Select(x => new GetMemberNotificationSettingsQueryResult.Location
+            }).ToList();
+
+            // Check if "All" is present and unpack it
+            if (eventTypes.Any(e => e.EventType == "All"))
             {
-                Name = x.Name,
-                Radius = x.Radius,
-                Latitude = x.Latitude,
-                Longitude = x.Longitude
-            }).ToList()
-        };
+                eventTypes.Clear();
+                eventTypes.AddRange(new List<GetMemberNotificationSettingsQueryResult.NotificationEventType>
+                {
+                    new() { EventType = "InPerson", ReceiveNotifications = true },
+                    new() { EventType = "Online", ReceiveNotifications = true },
+                    new() { EventType = "Hybrid", ReceiveNotifications = true }
+                });
+            }
+
+            return new GetMemberNotificationSettingsQueryResult
+            {
+                ReceiveNotifications = member.ReceiveNotifications,
+                EventTypes = eventTypes,
+                Locations = member.MemberNotificationLocations.Select(x => new GetMemberNotificationSettingsQueryResult.Location
+                {
+                    Name = x.Name,
+                    Radius = x.Radius,
+                    Latitude = x.Latitude,
+                    Longitude = x.Longitude
+                }).ToList()
+            };
+        }
     }
 }
