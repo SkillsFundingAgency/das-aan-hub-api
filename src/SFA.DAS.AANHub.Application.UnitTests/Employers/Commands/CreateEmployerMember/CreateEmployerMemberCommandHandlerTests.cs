@@ -127,11 +127,9 @@ public class CreateEmployerMemberCommandHandlerTests
             membersWriteRepository.Verify(p => p.Create(It.Is<Member>(x =>
                     x.Id == command.MemberId &&
                     x.MemberPreferences.Count == MemberPreferenceService.GetDefaultPreferencesForMember(UserType.Apprentice, Guid.NewGuid()).Count &&
-                    x.MemberNotificationEventFormats.Count == 2 &&
+                    x.MemberNotificationEventFormats.Count == 1 &&
                     x.MemberNotificationEventFormats.Any(e =>
                         e.EventFormat == "InPerson" && e.ReceiveNotifications) &&
-                    x.MemberNotificationEventFormats.Any(e =>
-                        e.EventFormat == "Online" && !e.ReceiveNotifications) &&
                     x.MemberNotificationLocations.Count == 2 &&
                     x.MemberNotificationLocations.Any(l =>
                         l.Name == "Location 1" && l.Radius == 5 && l.Latitude == 51.5074 && l.Longitude == -0.1278) &&
