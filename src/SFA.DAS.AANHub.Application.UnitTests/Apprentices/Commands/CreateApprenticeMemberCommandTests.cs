@@ -1,6 +1,7 @@
 ﻿using FluentAssertions;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.Apprentices.Commands.CreateApprenticeMember;
+using SFA.DAS.AANHub.Application.Common;
 using SFA.DAS.AANHub.Domain.Common;
 using SFA.DAS.AANHub.Domain.Entities;
 using SFA.DAS.Testing.AutoFixture;
@@ -31,5 +32,60 @@ public class CreateApprenticeMemberCommandTests
         member.MemberProfiles.Should().NotBeEmpty().And.HaveCount(sut.ProfileValues.Count);
         member.MemberProfiles.All(p => p.MemberId == sut.MemberId).Should().BeTrue();
         member.MemberProfiles.Select(p => p.ProfileId).Should().BeSubsetOf(sut.ProfileValues.Select(v => v.Id));
+    }
+
+
+    [Test, MoqAutoData]
+    public void Operator_Converts_All_EventType_To_Individual_Items(CreateApprenticeMemberCommand sut)
+    {
+        sut.MemberNotificationEventFormatValues.Clear();
+        sut.MemberNotificationEventFormatValues.Add(new MemberNotificationEventFormatValues
+        {
+            EventFormat = "All",
+            Ordering = 0,
+            ReceiveNotifications = true
+        });
+
+        Member member = sut;
+
+        member.MemberNotificationEventFormats.Count.Should().Be(3);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "InPerson" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Online" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .Contain(format => format.EventFormat == "Hybrid" && format.ReceiveNotifications);
+
+        member.MemberNotificationEventFormats.Should()
+            .NotContain(format => format.EventFormat == "All");
+    }
+
+    [Test]
+    public void MemberNotificationLocationsConverter_ConvertsCorrectly()
+    {
+        var memberId = Guid.NewGuid();
+        var source = new MemberNotificationLocationValues
+        {
+            Name = "Test Location",
+            Radius = 10,
+            Latitude = 51.5074,
+            Longitude = -0.1278
+        };
+
+        var expected = new MemberNotificationLocation
+        {
+            MemberId = memberId,
+            Name = source.Name,
+            Radius = source.Radius,
+            Latitude = source.Latitude,
+            Longitude = source.Longitude
+        };
+
+        var result = CreateApprenticeMemberCommand.MemberNotificationLocationsConverter(source, memberId);
+
+        result.Should().BeEquivalentTo(expected);
     }
 }

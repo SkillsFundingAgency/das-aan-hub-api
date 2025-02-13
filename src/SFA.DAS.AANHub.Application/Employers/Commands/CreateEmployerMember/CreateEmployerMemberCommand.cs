@@ -50,7 +50,7 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
 
             // Check if "All" is present
             var eventTypeList = source.ToList();
-            if (eventTypeList.Any(e => e.EventFormat == "All"))
+            if (eventTypeList.Any(e => e is { EventFormat: "All", ReceiveNotifications: true }))
             {
                 // Replace "All" with the specific event types
                 eventTypeList.Clear();
@@ -62,7 +62,9 @@ namespace SFA.DAS.AANHub.Application.Employers.Commands.CreateEmployerMember
                 });
             }
 
-            return eventTypeList.Select(p => new MemberNotificationEventFormat
+            return eventTypeList
+                .Where(p => p.ReceiveNotifications)
+                .Select(p => new MemberNotificationEventFormat
             {
                 MemberId = memberId,
                 EventFormat = p.EventFormat,
