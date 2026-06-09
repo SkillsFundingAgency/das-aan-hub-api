@@ -25,7 +25,7 @@ public class ValidateCalendarEventId
         if (isValid)
         {
             result.ShouldNotHaveValidationErrorFor(c => c.CalendarEventId);
-            result.ShouldHaveAnyValidationError();
+            result.ShouldHaveValidationErrorFor(c => c.CalendarId);
         }
         else
         {
