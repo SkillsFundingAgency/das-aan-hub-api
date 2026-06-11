@@ -8,6 +8,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SFA.DAS.AANHub.Api.Extensions;
 using SFA.DAS.AANHub.Api.HealthCheck;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Extensions;
@@ -82,7 +83,7 @@ namespace SFA.DAS.AANHub.Api
                 tags: tags);
 
             services
-                .AddApplicationInsightsTelemetry()
+                .AddTelemetryRegistration((IConfigurationRoot)Configuration)
                 .AddTelemetryUriRedaction("firstName,lastName,dateOfBirth,email")
                 .AddTelemetryNotFoundAsSuccessfulResponse();
 
