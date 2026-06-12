@@ -1,5 +1,5 @@
 ﻿using AutoFixture.AutoMoq;
-using AutoFixture.NUnit3;
+using AutoFixture.NUnit4;
 using AutoFixture;
 
 namespace SFA.DAS.AANHub.Application.UnitTests

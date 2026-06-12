@@ -31,7 +31,7 @@ public class ValidateAdminMemberId
         if (isValid)
         {
             result.ShouldNotHaveValidationErrorFor(c => c.AdminMemberId);
-            result.ShouldHaveAnyValidationError();
+            result.ShouldHaveValidationErrorFor(c => c.CalendarId);
         }
         else
         {

@@ -1,5 +1,5 @@
 ﻿using System.Text.Json;
-using AutoFixture.NUnit3;
+using AutoFixture.NUnit4;
 using FluentAssertions;
 using FluentAssertions.Execution;
 using Moq;

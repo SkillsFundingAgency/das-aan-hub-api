@@ -1,5 +1,5 @@
-﻿using SFA.DAS.AANHub.Domain.Common;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using SFA.DAS.AANHub.Domain.Common;
 
 namespace SFA.DAS.AANHub.Api.Models
 {
@@ -13,14 +13,14 @@ namespace SFA.DAS.AANHub.Api.Models
         {
             [Required]
             [EnumDataType(typeof(EventFormat), ErrorMessage = "Invalid EventType. Allowed values: InPerson, Online, Hybrid.")]
-            public string EventType { get; set; }
+            public string EventType { get; set; } = null!;
             public bool ReceiveNotifications { get; set; }
         }
 
         public class Location
         {
             [RegularExpression(@"^[a-zA-Z0-9\s,']+$", ErrorMessage = "Name contains invalid characters.")]
-            public string Name { get; set; }
+            public string Name { get; set; } = null!;
             public int Radius { get; set; }
             public double Latitude { get; set; }
             public double Longitude { get; set; }

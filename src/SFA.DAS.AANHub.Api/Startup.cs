@@ -1,14 +1,14 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Text.Json.Serialization;
+using Asp.Versioning;
 using Microsoft.AspNetCore.Diagnostics.HealthChecks;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Versioning;
 using Microsoft.Extensions.Diagnostics.HealthChecks;
 using Microsoft.Extensions.Logging.ApplicationInsights;
 using Microsoft.Extensions.Options;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
+using SFA.DAS.AANHub.Api.Extensions;
 using SFA.DAS.AANHub.Api.HealthCheck;
 using SFA.DAS.AANHub.Api.SwaggerExamples;
 using SFA.DAS.AANHub.Application.Extensions;
@@ -83,15 +83,14 @@ namespace SFA.DAS.AANHub.Api
                 tags: tags);
 
             services
-                .AddApplicationInsightsTelemetry()
+                .AddTelemetryRegistration((IConfigurationRoot)Configuration)
                 .AddTelemetryUriRedaction("firstName,lastName,dateOfBirth,email")
                 .AddTelemetryNotFoundAsSuccessfulResponse();
 
-            services.AddLogging(options =>
+            services.AddLogging(builder =>
             {
-                options.AddApplicationInsights();
-                options.AddFilter<ApplicationInsightsLoggerProvider>("SFA.DAS", LogLevel.Information);
-                options.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Warning);
+                builder.AddFilter<ApplicationInsightsLoggerProvider>("SFA.DAS", LogLevel.Information);
+                builder.AddFilter<ApplicationInsightsLoggerProvider>("Microsoft", LogLevel.Information);
             });
 
             services.AddApiVersioning(opt =>

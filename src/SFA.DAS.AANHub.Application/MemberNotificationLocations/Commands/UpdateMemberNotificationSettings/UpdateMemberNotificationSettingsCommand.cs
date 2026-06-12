@@ -11,13 +11,13 @@ namespace SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.Update
 
         public class NotificationEventType
         {
-            public string EventType { get; set; }
+            public string EventType { get; set; } = null!;
             public bool ReceiveNotifications { get; set; }
         }
 
         public class Location
         {
-            public string Name { get; set; }
+            public string Name { get; set; } = null!;
             public int Radius { get; set; }
             public double Latitude { get; set; }
             public double Longitude { get; set; }

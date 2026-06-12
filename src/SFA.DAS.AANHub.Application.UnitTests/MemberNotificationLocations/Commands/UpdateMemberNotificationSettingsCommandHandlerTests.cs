@@ -1,14 +1,11 @@
-﻿using AutoFixture;
-using AutoFixture.AutoMoq;
-using AutoFixture.NUnit3;
+﻿using AutoFixture.NUnit4;
+using FluentAssertions;
 using Moq;
 using NUnit.Framework;
 using SFA.DAS.AANHub.Application.MemberNotificationLocations.Commands.UpdateMemberNotificationSettings;
 using SFA.DAS.AANHub.Domain.Entities;
-using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 using SFA.DAS.AANHub.Domain.Interfaces;
-using FluentAssertions;
-using Microsoft.EntityFrameworkCore.Diagnostics;
+using SFA.DAS.AANHub.Domain.Interfaces.Repositories;
 
 namespace SFA.DAS.AANHub.Application.UnitTests.MemberNotificationLocations.Commands
 {
